@@ -1,0 +1,41 @@
+@startuml
+'https://plantuml.com/use-case-diagram
+
+left to right direction
+
+'"Tribal User" as tribe
+'"State/Territory User" as state
+'"ACF User" as acf
+"User" as user
+(Open Database) as (Open)
+(Close Database) as (Close)
+(Manage Databases) as (Manage)
+(Add Child)
+(Edit Child)
+(Delete Child)
+(Import XML) as (Import)
+(Export XML) as (Export)
+
+
+user -- (Add Child)
+user -- (Edit Child)
+user -- (Delete Child)
+user -- (Import)
+user -- (Export)
+user -- (Configure)
+user -- (Open)
+user -- (Close)
+user -- (Manage)
+
+'user <|- state
+'state <|- tribe
+'tribe <|- acf
+
+'(Add Child) .. (Add Removal)
+'(Add Child) .. (Edit Removal)
+'(Add Child) .. (Delete Removal)
+'(Edit Child) .. (Add Removal)
+'(Edit Child) .. (Edit Removal)
+'(Edit Child) .. (Delete Removal)
+
+@enduml

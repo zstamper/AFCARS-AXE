@@ -1,0 +1,293 @@
+@startuml
+'https://plantuml.com/object-diagram
+object Child {
+    first_name: str
+    last_name: str
+    e4: str
+    e5: int
+    e6: int
+    e13: int
+    e14: int
+    e15: int
+    e16: int
+    e17: int
+    e18: int
+    e19: int
+    e20: int
+    e21: int
+}
+
+object Config {
+}
+object Context {
+    e1: int
+'    e2: int
+}
+object FIPSCode {
+}
+object OOHRecord {
+    child: Child
+    context: Context
+    e7: int
+    e8: int
+    tribes: list[RecognizedTribes]
+    e10: int
+    e11: int
+    e12: int
+    e22: int
+    e23: int
+    e24: int
+    e25: int
+    e26: int
+    e27: int
+    e28: int
+    e29: int
+    e30: int
+    e31: int
+    e32: int
+    e33: int
+    e34: int
+    e35: int
+    e36: int
+    e37: int
+    e38: int
+    e39: int
+'    e40: int
+    e41: int
+    e42: int
+    e43: int
+    e44: int
+    e45: int
+    e46: int
+    e47: int
+    e48: int
+    e49: int
+    e50: int
+    e51: int
+    e52: int
+    e53: int
+    e54: int
+    e55: int
+    e56: int
+    e57: int
+'    e58: int
+    e59: int
+    e60: int
+    e61: int
+    e62: int
+    e63: int
+    second_parents: list[SecondTPRParent]
+    e65: int
+    e67: int
+    removals1993: list[Removal1993]
+    removals2020: list[Removal2020]
+    e106: int
+    e107: int
+    e108: int
+    e109: int
+    e110: int
+    e111: int
+}
+object RecognizedTribes {
+    e9: int
+}
+object SecondTPRParent {
+    e64: int
+    e66: int
+    e68: int
+}
+object Removal1993 {
+    e69: int
+    e153: int
+    e155: int
+}
+object Removal2020 {
+    e3: int
+    e69: int
+    e70: int
+    e71: int
+    e72: int
+    e73: int
+    e74: int
+    e75: int
+    e76: int
+    e77: int
+    e78: int
+    e79: int
+    e80: int
+    e81: int
+    e82: int
+    e83: int
+    e84: int
+    e85: int
+    e86: int
+    e87: int
+    e88: int
+    e89: int
+    e90: int
+    e91: int
+    e92: int
+    e93: int
+    e94: int
+    e95: int
+    e96: int
+    e97: int
+    e98: int
+    e99: int
+    e100: int
+    e101: int
+    e102: int
+    e103: int
+    e104: int
+    e105: int
+    living_arrangements: list[LivingArrangement]
+    permanency_plans: list[PermanencyPlan]
+    periodic_reviews: list[PeriodicReview]
+    permancy_hearings: list[PermanencyHearing]
+    case_worker_visits: list[CaseWorkerVisit]
+    e153: int
+    e154: int
+    e155: int
+    e156: int
+    adoptive_parents: AdoptiveParents | None
+
+}
+object LivingArrangement {
+    e40: int
+    e58: int
+    e112: int
+    e113: int
+    e114: int
+    e115: int
+    e116: int
+    e117: int
+    e118: int
+    e119: int
+    e120: int
+    e121: int
+    e122: int
+    e123: int
+    e124: int
+    e125: int
+    e126: int
+    e127: int
+    e128: int
+    e129: int
+    e130: int
+    e131: int
+    e132: int
+    e133: int
+    e134: int
+    e135: int
+    e136: int
+    e137: int
+    e138: int
+    e139: int
+    e140: int
+    e141: int
+    e142: int
+    e143: int
+    e144: int
+    e145: int
+    e146: int
+}
+object PermanencyPlan {
+    e147: int
+    e148: int
+
+}
+object PeriodicReview {
+    e149: int
+}
+object PermanencyHearing {
+    e150: int
+}
+object CaseWorkerVisit {
+    e151: int
+    e152: int
+}
+object AdoptiveParents {
+    e157: int
+    e158: int
+    e159: int
+    e160: int
+    e161: int
+    e162: int
+    e163: int
+    e164: int
+    e165: int
+    e166: int
+    e167: int
+    e168: int
+    e169: int
+    e170: int
+    e171: int
+    e172: int
+    e173: int
+    e174: int
+    e175: int
+    e176: int
+    e177: int
+    e178: int
+    e179: int
+    e180: int
+    e181: int
+    e182: int
+    e183: int
+    e184: int
+    e185: int
+    e186: int
+
+}
+
+
+object ARecord {
+    child: Child
+    context: Context
+    a5: int
+    a6: int
+    a7: int
+    a8: int
+    a9: int
+    a10: int
+    a11: int
+    a12: int
+    a13: int
+    a14: int
+    a15: int
+    a16: int
+    a17: int
+    a18: int
+    a19: int
+}
+object Tribe {
+    tribe: str
+    epa_code: str
+    states: list[State]
+}
+object State {
+    code: str
+    name: str
+}
+State "1" o-- "0..*" Tribe
+FIPSCode "1" o-- "0..*" Context
+Tribe "1" o-- "0..*" Context
+Tribe "1" o-- "0..*" RecognizedTribes
+Child "1" *--- "0..*" OOHRecord
+Context "1" *--- "0..*" OOHRecord
+FIPSCode "1" o-- "0..*" Removal2020
+RecognizedTribes "0..*" *-- "1" OOHRecord
+OOHRecord "1" *-- "0..*" SecondTPRParent
+OOHRecord "1" *-- "0..*" Removal2020
+OOHRecord "1" *-- "0..*" Removal1993
+Removal2020 "1" *-- "1..*" LivingArrangement
+Removal2020 "1" *-- "0..*" PermanencyPlan
+Removal2020 "1" *-- "0..*" PeriodicReview
+Removal2020 "1" *-- "0..*" PermanencyHearing
+Removal2020 "1" *-- "0..*" CaseWorkerVisit
+Removal2020 "1" *-- "0..1" AdoptiveParents
+
+Child "1" *--- "0..*" ARecord
+Context "1" *--- "0..*" ARecord
+
+@enduml

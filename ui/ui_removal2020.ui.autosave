@@ -1,0 +1,1843 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Removal2020Dialog</class>
+ <widget class="QDialog" name="Removal2020Dialog">
+  <property name="windowModality">
+   <enum>Qt::ApplicationModal</enum>
+  </property>
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1058</width>
+    <height>808</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Removal 2020</string>
+  </property>
+  <layout class="QHBoxLayout" name="horizontalLayout">
+   <item>
+    <widget class="QTabWidget" name="tabWidget">
+     <property name="currentIndex">
+      <number>6</number>
+     </property>
+     <widget class="QWidget" name="removal_tab">
+      <attribute name="title">
+       <string>Removal</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <layout class="QGridLayout" name="gridLayout_2">
+         <property name="bottomMargin">
+          <number>12</number>
+         </property>
+         <property name="verticalSpacing">
+          <number>-1</number>
+         </property>
+         <item row="0" column="0">
+          <widget class="QLabel" name="label">
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>Date of Removal (E69)</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QLabel" name="label_2">
+           <property name="text">
+            <string>Local Agency Code (State and&lt;br/&gt;County FIPS Code) (E3)</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="2">
+          <widget class="QLabel" name="label_3">
+           <property name="text">
+            <string>Environment at Removal (E71)</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLineEdit" name="e69">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="inputMask">
+            <string>00000000</string>
+           </property>
+           <property name="placeholderText">
+            <string>YYYYMMDD</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QLineEdit" name="e3">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="inputMask">
+            <string>00000</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="2">
+          <widget class="QComboBox" name="e71">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="currentIndex">
+            <number>-1</number>
+           </property>
+           <property name="placeholderText">
+            <string>Select</string>
+           </property>
+           <item>
+            <property name="text">
+             <string>Parent Household</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Relative Household</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Legal Guadian Household</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Relative Legal Guardian Household</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Justice Facility</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Medical/Mental Health Facility</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Other</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="family_circumstances_group_box">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="title">
+          <string>Family and Child Circumstances at the Time of Removal</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_4">
+          <property name="topMargin">
+           <number>12</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="label_4">
+            <property name="text">
+             <string>&lt;i&gt;Check all that apply&lt;/i&gt;</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <layout class="QGridLayout" name="gridLayout">
+            <item row="3" column="0">
+             <widget class="QCheckBox" name="e75">
+              <property name="text">
+               <string>Sexual Abuse (E75)</string>
+              </property>
+             </widget>
+            </item>
+            <item row="6" column="1">
+             <widget class="QCheckBox" name="e95">
+              <property name="text">
+               <string>Caretaker's Significant Imparement-Cognitive (E95)</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="0">
+             <widget class="QCheckBox" name="e72">
+              <property name="text">
+               <string>Runaway (E72)</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QCheckBox" name="e89">
+              <property name="text">
+               <string>Inadequate Access to Mental Health Services (E89)</string>
+              </property>
+             </widget>
+            </item>
+            <item row="8" column="0">
+             <widget class="QCheckBox" name="e80">
+              <property name="text">
+               <string>Abandonment (E80)</string>
+              </property>
+             </widget>
+            </item>
+            <item row="10" column="1">
+             <widget class="QCheckBox" name="e99">
+              <property name="text">
+               <string>Sex Trafficking (E99)</string>
+              </property>
+             </widget>
+            </item>
+            <item row="9" column="1">
+             <widget class="QCheckBox" name="e98">
+              <property name="text">
+               <string>Child Requested Placement (E98)</string>
+              </property>
+             </widget>
+            </item>
+            <item row="13" column="1">
+             <widget class="QCheckBox" name="e102">
+              <property name="text">
+               <string>Educational Neglect (E102)</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QCheckBox" name="e90">
+              <property name="text">
+               <string>Inadequte Access to Medical Services (E90)</string>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="0">
+             <widget class="QCheckBox" name="e76">
+              <property name="text">
+               <string>Psychological or Emotional Abuse (E76)</string>
+              </property>
+             </widget>
+            </item>
+            <item row="7" column="0">
+             <widget class="QCheckBox" name="e79">
+              <property name="text">
+               <string>Domestic Violence (E79)</string>
+              </property>
+             </widget>
+            </item>
+            <item row="13" column="0">
+             <widget class="QCheckBox" name="e85">
+              <property name="text">
+               <string>Child Drug Use (E85)</string>
+              </property>
+             </widget>
+            </item>
+            <item row="15" column="0">
+             <widget class="QCheckBox" name="e87">
+              <property name="text">
+               <string>Prenatal Drug Exposure (E87)</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QCheckBox" name="e73">
+              <property name="text">
+               <string>Whereabouts Unknown (E73)</string>
+              </property>
+             </widget>
+            </item>
+            <item row="10" column="0">
+             <widget class="QCheckBox" name="e82">
+              <property name="text">
+               <string>Caretaker's Alcohol Use (E82)</string>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="1">
+             <widget class="QCheckBox" name="e93">
+              <property name="text">
+               <string>Incarceration of Caretaker (E93)</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="0">
+             <widget class="QCheckBox" name="e74">
+              <property name="text">
+               <string>Physical Abuse (E74)</string>
+              </property>
+             </widget>
+            </item>
+            <item row="9" column="0">
+             <widget class="QCheckBox" name="e81">
+              <property name="text">
+               <string>Failure to Return (E81)</string>
+              </property>
+             </widget>
+            </item>
+            <item row="11" column="1">
+             <widget class="QCheckBox" name="e100">
+              <property name="text">
+               <string>Parental Immigration Detainment or Deportation (E100)</string>
+              </property>
+             </widget>
+            </item>
+            <item row="11" column="0">
+             <widget class="QCheckBox" name="e83">
+              <property name="text">
+               <string>Caretaker's Drug Use (E83)</string>
+              </property>
+             </widget>
+            </item>
+            <item row="14" column="1">
+             <widget class="QCheckBox" name="e103">
+              <property name="text">
+               <string>Public Agency Title IV-E Agreement (E103)</string>
+              </property>
+             </widget>
+            </item>
+            <item row="15" column="1">
+             <widget class="QCheckBox" name="e104">
+              <property name="text">
+               <string>Tribal Title IV-E Agreement (E104)</string>
+              </property>
+             </widget>
+            </item>
+            <item row="5" column="1">
+             <widget class="QCheckBox" name="e94">
+              <property name="text">
+               <string>Caretaker's Significant Imparement-Physical/Emotional (E94)</string>
+              </property>
+             </widget>
+            </item>
+            <item row="7" column="1">
+             <widget class="QCheckBox" name="e96">
+              <property name="text">
+               <string>Inadequate Housing (E96)</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="1">
+             <widget class="QCheckBox" name="e92">
+              <property name="text">
+               <string>Death of Caretaker (E92)</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <widget class="QCheckBox" name="e91">
+              <property name="text">
+               <string>Child Behavior Problem (E91)</string>
+              </property>
+             </widget>
+            </item>
+            <item row="16" column="1">
+             <widget class="QCheckBox" name="e105">
+              <property name="text">
+               <string>Homelessness (E105)</string>
+              </property>
+             </widget>
+            </item>
+            <item row="8" column="1">
+             <widget class="QCheckBox" name="e97">
+              <property name="text">
+               <string>Voluntary Relinquishment for Adoption (E97)</string>
+              </property>
+             </widget>
+            </item>
+            <item row="12" column="1">
+             <widget class="QCheckBox" name="e101">
+              <property name="text">
+               <string>Family Conflict Related to Child’s LGBTQ (E101)</string>
+              </property>
+             </widget>
+            </item>
+            <item row="6" column="0">
+             <widget class="QCheckBox" name="e78">
+              <property name="text">
+               <string>Medical Neglect (E78)</string>
+              </property>
+             </widget>
+            </item>
+            <item row="5" column="0">
+             <widget class="QCheckBox" name="e77">
+              <property name="text">
+               <string>Neglect (E77)</string>
+              </property>
+             </widget>
+            </item>
+            <item row="12" column="0">
+             <widget class="QCheckBox" name="e84">
+              <property name="text">
+               <string>Child Alcohol Use (E84)</string>
+              </property>
+             </widget>
+            </item>
+            <item row="14" column="0">
+             <widget class="QCheckBox" name="e86">
+              <property name="text">
+               <string>Prenatal Alcohol Exposture (E86)</string>
+              </property>
+             </widget>
+            </item>
+            <item row="16" column="0">
+             <widget class="QCheckBox" name="e88">
+              <property name="text">
+               <string>Dianosed Condition (E88)</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab">
+      <attribute name="title">
+       <string>Living Arrangements</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout_3">
+       <item row="0" column="0">
+        <widget class="QGroupBox" name="groupBox">
+         <property name="title">
+          <string/>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_2">
+          <item>
+           <widget class="QTableWidget" name="living_arrangements_table">
+            <column>
+             <property name="text">
+              <string>Start Date</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Type</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Last Updated</string>
+             </property>
+            </column>
+           </widget>
+          </item>
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_2">
+            <item>
+             <widget class="QPushButton" name="living_arrangement_add_button">
+              <property name="text">
+               <string>Add</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="living_arrangement_delete_button">
+              <property name="text">
+               <string>Delete</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="verticalSpacer_6">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>40</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="permanency_tab">
+      <attribute name="title">
+       <string>Permancy Plan</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout_4">
+       <item row="0" column="0">
+        <widget class="QGroupBox" name="permanency_group_box">
+         <property name="title">
+          <string/>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_15">
+          <item>
+           <widget class="QTableWidget" name="permanency_plans_table">
+            <column>
+             <property name="text">
+              <string>Plan Date</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Goal</string>
+             </property>
+            </column>
+           </widget>
+          </item>
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_19">
+            <item>
+             <widget class="QPushButton" name="permanency_plan_add_button">
+              <property name="text">
+               <string>Add</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="permanency_plan_edit">
+              <property name="text">
+               <string>Edit</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="permanency_plan_delete_button">
+              <property name="text">
+               <string>Delete</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="verticalSpacer_2">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>40</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_2">
+      <attribute name="title">
+       <string>Case Visit</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout_5">
+       <item row="0" column="0">
+        <widget class="QGroupBox" name="case_visit_group_box_2">
+         <property name="title">
+          <string/>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_24">
+          <item>
+           <widget class="QTableWidget" name="case_visits_table">
+            <column>
+             <property name="text">
+              <string>Date</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Location</string>
+             </property>
+            </column>
+           </widget>
+          </item>
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_23">
+            <item>
+             <widget class="QPushButton" name="case_visit_add_button">
+              <property name="text">
+               <string>Add</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="case_visit_edit_button">
+              <property name="text">
+               <string>Edit</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="case_visit_delete_button">
+              <property name="text">
+               <string>Delete</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="verticalSpacer_7">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>40</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_3">
+      <attribute name="title">
+       <string>Permanency Hearing</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout_6">
+       <item row="0" column="0">
+        <widget class="QGroupBox" name="periodic_review_group_box_2">
+         <property name="title">
+          <string/>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_25">
+          <item>
+           <widget class="QTableWidget" name="permanency_hearings_table">
+            <column>
+             <property name="text">
+              <string>Date</string>
+             </property>
+            </column>
+           </widget>
+          </item>
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_24">
+            <item>
+             <widget class="QPushButton" name="permanency_hearing_add_button">
+              <property name="text">
+               <string>Add</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="permanency_hearing_edit_button">
+              <property name="text">
+               <string>Edit</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="permanency_hearing_delete_button">
+              <property name="text">
+               <string>Delete</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="verticalSpacer_8">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>40</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_4">
+      <attribute name="title">
+       <string>Periodic Review</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout_7">
+       <item row="0" column="0">
+        <widget class="QGroupBox" name="permaqncy_hearing_group_box_2">
+         <property name="title">
+          <string/>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_26">
+          <item>
+           <widget class="QTableWidget" name="periodic_reviews_table">
+            <column>
+             <property name="text">
+              <string>Date</string>
+             </property>
+            </column>
+           </widget>
+          </item>
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_25">
+            <item>
+             <widget class="QPushButton" name="periodic_review_add_button">
+              <property name="text">
+               <string>Add</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="periodic_review_edit_button">
+              <property name="text">
+               <string>Edit</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="periodic_review_delete_button">
+              <property name="text">
+               <string>Delete</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="verticalSpacer_9">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>40</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_5">
+      <attribute name="title">
+       <string>Exit Reason</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_27">
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_3">
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_3">
+           <property name="bottomMargin">
+            <number>6</number>
+           </property>
+           <item>
+            <widget class="QLabel" name="label_5">
+             <property name="text">
+              <string>Date of Exit (E153)</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="e153">
+             <property name="maxLength">
+              <number>8</number>
+             </property>
+             <property name="placeholderText">
+              <string>YYYYMMDD</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_5">
+           <property name="bottomMargin">
+            <number>6</number>
+           </property>
+           <item>
+            <widget class="QLabel" name="label_7">
+             <property name="text">
+              <string>Date of Exit Transaction (E154)&lt;br/&gt;
+&lt;i&gt;Date the Exit was recorded &lt;br/&gt;
+in the system of record.&lt;/i&gt;</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="e154">
+             <property name="maxLength">
+              <number>8</number>
+             </property>
+             <property name="placeholderText">
+              <string>YYYYMMDD</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_6">
+           <item>
+            <widget class="QLabel" name="label_6">
+             <property name="text">
+              <string>Exit Reason (E155)</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QComboBox" name="e155">
+             <property name="currentIndex">
+              <number>-1</number>
+             </property>
+             <property name="placeholderText">
+              <string>Select</string>
+             </property>
+             <item>
+              <property name="text">
+               <string>Reunify with parent or legal guardian</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Live with other relative</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Adoption</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Emancipation</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Guardianship</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Runaway or whereabouts unknown</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Death of child</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Transfer to another agency</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Not applicable</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_7">
+           <item>
+            <widget class="QLabel" name="label_8">
+             <property name="text">
+              <string>Jurisdiction Transfer (E156)&lt;br/&gt;
+&lt;i&gt;Only select value when Exit Reason&lt;br/&gt;
+is Jurisdiction Transfer&lt;/i&gt;</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QComboBox" name="e156">
+             <property name="currentIndex">
+              <number>-1</number>
+             </property>
+             <property name="placeholderText">
+              <string>Select</string>
+             </property>
+             <item>
+              <property name="text">
+               <string>State title IV-E agency</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Tribal title IV-E agency</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Indian Tribe or Tribal agency (non-IV-E)</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Juvenile justice agency</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Mental health agency</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Other public agency</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Private agency</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_19">
+         <property name="frameShape">
+          <enum>QFrame::NoFrame</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Plain</enum>
+         </property>
+         <property name="text">
+          <string>&lt;i&gt;Only complete this section if the Exit Reason is Adoption or Guardianship&lt;/i&gt;</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+         <property name="margin">
+          <number>2</number>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupBox_2">
+         <property name="title">
+          <string>Adoption and Guardianship Exit Data</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_26">
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_18">
+            <item>
+             <widget class="QGroupBox" name="groupBox_3">
+              <property name="title">
+               <string>Adopt or Guardian Parent 1</string>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_11">
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout_8">
+                 <item>
+                  <widget class="QLabel" name="label_9">
+                   <property name="text">
+                    <string>Date of Birth (E162)</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLineEdit" name="e162">
+                   <property name="maxLength">
+                    <number>8</number>
+                   </property>
+                   <property name="placeholderText">
+                    <string>YYYYMMDD</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <spacer name="horizontalSpacer_7">
+                   <property name="orientation">
+                    <enum>Qt::Horizontal</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>40</width>
+                     <height>20</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                </layout>
+               </item>
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout_9">
+                 <item>
+                  <widget class="QLabel" name="label_10">
+                   <property name="text">
+                    <string>Sex (E172)</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <layout class="QHBoxLayout" name="horizontalLayout_6">
+                   <item>
+                    <widget class="QRadioButton" name="e172_m">
+                     <property name="text">
+                      <string>Male</string>
+                     </property>
+                     <attribute name="buttonGroup">
+                      <string notr="true">e172</string>
+                     </attribute>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QRadioButton" name="e172_f">
+                     <property name="text">
+                      <string>Female</string>
+                     </property>
+                     <attribute name="buttonGroup">
+                      <string notr="true">e172</string>
+                     </attribute>
+                    </widget>
+                   </item>
+                   <item>
+                    <spacer name="horizontalSpacer">
+                     <property name="orientation">
+                      <enum>Qt::Horizontal</enum>
+                     </property>
+                     <property name="sizeHint" stdset="0">
+                      <size>
+                       <width>40</width>
+                       <height>20</height>
+                      </size>
+                     </property>
+                    </spacer>
+                   </item>
+                  </layout>
+                 </item>
+                </layout>
+               </item>
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout_7">
+                 <item>
+                  <widget class="QLabel" name="label_11">
+                   <property name="text">
+                    <string>Tribal Member (E163)</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <layout class="QHBoxLayout" name="horizontalLayout_5">
+                   <item>
+                    <widget class="QRadioButton" name="e163_y">
+                     <property name="text">
+                      <string>Yes</string>
+                     </property>
+                     <attribute name="buttonGroup">
+                      <string notr="true">e163</string>
+                     </attribute>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QRadioButton" name="e163_n">
+                     <property name="text">
+                      <string>No</string>
+                     </property>
+                     <attribute name="buttonGroup">
+                      <string notr="true">e163</string>
+                     </attribute>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QRadioButton" name="e163_u">
+                     <property name="text">
+                      <string>Unknown</string>
+                     </property>
+                     <attribute name="buttonGroup">
+                      <string notr="true">e163</string>
+                     </attribute>
+                    </widget>
+                   </item>
+                   <item>
+                    <spacer name="horizontalSpacer_2">
+                     <property name="orientation">
+                      <enum>Qt::Horizontal</enum>
+                     </property>
+                     <property name="sizeHint" stdset="0">
+                      <size>
+                       <width>40</width>
+                       <height>20</height>
+                      </size>
+                     </property>
+                    </spacer>
+                   </item>
+                  </layout>
+                 </item>
+                </layout>
+               </item>
+               <item>
+                <layout class="QVBoxLayout" name="verticalLayout_9">
+                 <item>
+                  <widget class="QLabel" name="label_12">
+                   <property name="text">
+                    <string>Race</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <layout class="QVBoxLayout" name="verticalLayout_8">
+                   <item>
+                    <widget class="QCheckBox" name="e164">
+                     <property name="text">
+                      <string>American Indian/Alaska Native (E164)</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QCheckBox" name="e165">
+                     <property name="text">
+                      <string>Asian (E165)</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QCheckBox" name="e166">
+                     <property name="text">
+                      <string>Black or African American (E166)</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QCheckBox" name="e167">
+                     <property name="text">
+                      <string>Native Hawaiian or other Pacific Islander (E167)</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QCheckBox" name="e168">
+                     <property name="text">
+                      <string>White (E168)</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QCheckBox" name="e169">
+                     <property name="text">
+                      <string>Unknown (E169)</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QCheckBox" name="e170">
+                     <property name="text">
+                      <string>Declined (E170)</string>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </item>
+                </layout>
+               </item>
+               <item>
+                <layout class="QVBoxLayout" name="verticalLayout_10">
+                 <item>
+                  <widget class="QLabel" name="label_13">
+                   <property name="text">
+                    <string>Hispanic or Latino Origin? (E171)</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <layout class="QHBoxLayout" name="horizontalLayout_4">
+                   <item>
+                    <widget class="QRadioButton" name="e171_y">
+                     <property name="text">
+                      <string>Yes</string>
+                     </property>
+                     <attribute name="buttonGroup">
+                      <string notr="true">e171</string>
+                     </attribute>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QRadioButton" name="e171_n">
+                     <property name="text">
+                      <string>No</string>
+                     </property>
+                     <attribute name="buttonGroup">
+                      <string notr="true">e171</string>
+                     </attribute>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QRadioButton" name="e171_u">
+                     <property name="text">
+                      <string>Unknown</string>
+                     </property>
+                     <attribute name="buttonGroup">
+                      <string notr="true">e171</string>
+                     </attribute>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QRadioButton" name="e171_d">
+                     <property name="text">
+                      <string>Declined</string>
+                     </property>
+                     <attribute name="buttonGroup">
+                      <string notr="true">e171</string>
+                     </attribute>
+                    </widget>
+                   </item>
+                   <item>
+                    <spacer name="horizontalSpacer_3">
+                     <property name="orientation">
+                      <enum>Qt::Horizontal</enum>
+                     </property>
+                     <property name="sizeHint" stdset="0">
+                      <size>
+                       <width>40</width>
+                       <height>20</height>
+                      </size>
+                     </property>
+                    </spacer>
+                   </item>
+                  </layout>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item>
+             <widget class="QGroupBox" name="groupBox_4">
+              <property name="title">
+               <string>Adopt or Guardian Parent 2</string>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_22">
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout_16">
+                 <item>
+                  <widget class="QLabel" name="label_18">
+                   <property name="text">
+                    <string>Date of Birth (E173)</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLineEdit" name="e173">
+                   <property name="maxLength">
+                    <number>8</number>
+                   </property>
+                   <property name="placeholderText">
+                    <string>YYYYMMDD</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <spacer name="horizontalSpacer_8">
+                   <property name="orientation">
+                    <enum>Qt::Horizontal</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>40</width>
+                     <height>20</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                </layout>
+               </item>
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout_11">
+                 <item>
+                  <widget class="QLabel" name="label_16">
+                   <property name="text">
+                    <string>Sex (E183)</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <layout class="QHBoxLayout" name="horizontalLayout_12">
+                   <item>
+                    <widget class="QRadioButton" name="e183_m">
+                     <property name="text">
+                      <string>Male</string>
+                     </property>
+                     <attribute name="buttonGroup">
+                      <string notr="true">e183</string>
+                     </attribute>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QRadioButton" name="e183_f">
+                     <property name="text">
+                      <string>Female</string>
+                     </property>
+                     <attribute name="buttonGroup">
+                      <string notr="true">e183</string>
+                     </attribute>
+                    </widget>
+                   </item>
+                   <item>
+                    <spacer name="horizontalSpacer_5">
+                     <property name="orientation">
+                      <enum>Qt::Horizontal</enum>
+                     </property>
+                     <property name="sizeHint" stdset="0">
+                      <size>
+                       <width>40</width>
+                       <height>20</height>
+                      </size>
+                     </property>
+                    </spacer>
+                   </item>
+                  </layout>
+                 </item>
+                </layout>
+               </item>
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout_13">
+                 <item>
+                  <widget class="QLabel" name="label_17">
+                   <property name="text">
+                    <string>Tribal Member (E174)</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <layout class="QHBoxLayout" name="horizontalLayout_14">
+                   <item>
+                    <widget class="QRadioButton" name="e174_y">
+                     <property name="text">
+                      <string>Yes</string>
+                     </property>
+                     <attribute name="buttonGroup">
+                      <string notr="true">e174</string>
+                     </attribute>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QRadioButton" name="e174_n">
+                     <property name="text">
+                      <string>No</string>
+                     </property>
+                     <attribute name="buttonGroup">
+                      <string notr="true">e174</string>
+                     </attribute>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QRadioButton" name="e174_u">
+                     <property name="text">
+                      <string>Unknown</string>
+                     </property>
+                     <attribute name="buttonGroup">
+                      <string notr="true">e174</string>
+                     </attribute>
+                    </widget>
+                   </item>
+                   <item>
+                    <spacer name="horizontalSpacer_6">
+                     <property name="orientation">
+                      <enum>Qt::Horizontal</enum>
+                     </property>
+                     <property name="sizeHint" stdset="0">
+                      <size>
+                       <width>40</width>
+                       <height>20</height>
+                      </size>
+                     </property>
+                    </spacer>
+                   </item>
+                  </layout>
+                 </item>
+                </layout>
+               </item>
+               <item>
+                <layout class="QVBoxLayout" name="verticalLayout_13">
+                 <item>
+                  <widget class="QLabel" name="label_15">
+                   <property name="text">
+                    <string>Race</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <layout class="QVBoxLayout" name="verticalLayout_14">
+                   <item>
+                    <widget class="QCheckBox" name="e175">
+                     <property name="text">
+                      <string>American Indian/Alaska Native (E175)</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QCheckBox" name="e176">
+                     <property name="text">
+                      <string>Asian (E176)</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QCheckBox" name="e177">
+                     <property name="text">
+                      <string>Black or African American (E177)</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QCheckBox" name="e178">
+                     <property name="text">
+                      <string>Native Hawaiian or other Pacific Islander (E178)</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QCheckBox" name="e179">
+                     <property name="text">
+                      <string>White (E179)</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QCheckBox" name="e180">
+                     <property name="text">
+                      <string>Unknown (E180)</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QCheckBox" name="e181">
+                     <property name="text">
+                      <string>Declined (E181)</string>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </item>
+                </layout>
+               </item>
+               <item>
+                <layout class="QVBoxLayout" name="verticalLayout_12">
+                 <item>
+                  <widget class="QLabel" name="label_14">
+                   <property name="text">
+                    <string>Hispanic or Latino Origin? (E182)</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <layout class="QHBoxLayout" name="horizontalLayout_10">
+                   <item>
+                    <widget class="QRadioButton" name="e182_y">
+                     <property name="text">
+                      <string>Yes</string>
+                     </property>
+                     <attribute name="buttonGroup">
+                      <string notr="true">e182</string>
+                     </attribute>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QRadioButton" name="e182_n">
+                     <property name="text">
+                      <string>No</string>
+                     </property>
+                     <attribute name="buttonGroup">
+                      <string notr="true">e182</string>
+                     </attribute>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QRadioButton" name="e182_u">
+                     <property name="text">
+                      <string>Unknown</string>
+                     </property>
+                     <attribute name="buttonGroup">
+                      <string notr="true">e182</string>
+                     </attribute>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QRadioButton" name="e182_d">
+                     <property name="text">
+                      <string>Declined</string>
+                     </property>
+                     <attribute name="buttonGroup">
+                      <string notr="true">e182</string>
+                     </attribute>
+                    </widget>
+                   </item>
+                   <item>
+                    <spacer name="horizontalSpacer_4">
+                     <property name="orientation">
+                      <enum>Qt::Horizontal</enum>
+                     </property>
+                     <property name="sizeHint" stdset="0">
+                      <size>
+                       <width>40</width>
+                       <height>20</height>
+                      </size>
+                     </property>
+                    </spacer>
+                   </item>
+                  </layout>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_19">
+            <item>
+             <layout class="QVBoxLayout" name="verticalLayout_21">
+              <item>
+               <layout class="QVBoxLayout" name="verticalLayout_15">
+                <item>
+                 <widget class="QLabel" name="label_20">
+                  <property name="text">
+                   <string>Marital Status (E157)</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QComboBox" name="e157">
+                  <property name="currentIndex">
+                   <number>-1</number>
+                  </property>
+                  <property name="placeholderText">
+                   <string>Select</string>
+                  </property>
+                  <item>
+                   <property name="text">
+                    <string>Married couple</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>Unmarried couple</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>Separated</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>Single adult</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>Married but individually adopting or obtaining legal guardianship</string>
+                   </property>
+                  </item>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_17">
+                <item>
+                 <widget class="QLabel" name="label_21">
+                  <property name="text">
+                   <string>Number of siblings in the Guardian or Adopt Home? (E186)</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLineEdit" name="e186">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>50</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="maxLength">
+                   <number>2</number>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QVBoxLayout" name="verticalLayout_16">
+                <item>
+                 <widget class="QLabel" name="label_22">
+                  <property name="text">
+                   <string>Jurisdiction of the Adoption or Guardianship (E184)</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QComboBox" name="e184">
+                  <property name="currentIndex">
+                   <number>-1</number>
+                  </property>
+                  <property name="placeholderText">
+                   <string>Select</string>
+                  </property>
+                  <item>
+                   <property name="text">
+                    <string>Within tribal area</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>Outside of tribal area</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>Outside of the country</string>
+                   </property>
+                  </item>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QVBoxLayout" name="verticalLayout_20">
+              <item>
+               <layout class="QVBoxLayout" name="verticalLayout_17">
+                <item>
+                 <widget class="QLabel" name="label_23">
+                  <property name="text">
+                   <string>Child's relationship to the Adoptive/Guadian Parents</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <layout class="QGridLayout" name="gridLayout_8">
+                  <item row="0" column="1">
+                   <widget class="QCheckBox" name="e160">
+                    <property name="text">
+                     <string>Non-relative (E160)</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="0">
+                   <widget class="QCheckBox" name="e158">
+                    <property name="text">
+                     <string>Relative (E158)</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="1">
+                   <widget class="QCheckBox" name="e161">
+                    <property name="text">
+                     <string>Foster Parent (E161)</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="0">
+                   <widget class="QCheckBox" name="e159">
+                    <property name="text">
+                     <string>Kin (E159)</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QVBoxLayout" name="verticalLayout_18">
+                <item>
+                 <widget class="QLabel" name="label_24">
+                  <property name="text">
+                   <string>Adoption or Guardianship Type (E185)</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QComboBox" name="e185">
+                  <property name="currentIndex">
+                   <number>-1</number>
+                  </property>
+                  <property name="placeholderText">
+                   <string>Select</string>
+                  </property>
+                  <item>
+                   <property name="text">
+                    <string>No agreement</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>Title IV-E adoption assistance agreement</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>State/tribal adoption assistance agreement</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>Adoption-Title IV-E agreement non-recurring expenses only</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>Adoption-Title IV-E agreement Medicaid only</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>Title IV-E guardianship assistance agreement</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>State/Tribal guardianship assistance agreement</string>
+                   </property>
+                  </item>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+   <item>
+    <widget class="QDialogButtonBox" name="form_action">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Save</set>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>form_action</sender>
+   <signal>accepted()</signal>
+   <receiver>Removal2020Dialog</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>248</x>
+     <y>254</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>157</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>form_action</sender>
+   <signal>rejected()</signal>
+   <receiver>Removal2020Dialog</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>316</x>
+     <y>260</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>286</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <buttongroups>
+  <buttongroup name="e172"/>
+  <buttongroup name="e171"/>
+  <buttongroup name="e163"/>
+  <buttongroup name="e182"/>
+  <buttongroup name="e174"/>
+  <buttongroup name="e183"/>
+ </buttongroups>
+</ui>
