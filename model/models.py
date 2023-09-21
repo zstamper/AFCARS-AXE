@@ -1,316 +1,364 @@
-from dataclasses import dataclass, field
+from datetime import datetime
 
-from peewee import IntegerField, TextField
-
-
-@dataclass(kw_only=True)
-class Context:
-    id: int | None = field(default=None)
-    e1: int | IntegerField | None = field(default=None)
-    e2: int | IntegerField | None = field(default=None)
+from pydantic import BaseModel, field_validator, model_validator, Field
+from pydantic_core.core_schema import FieldValidationInfo
 
 
-@dataclass(kw_only=True)
-class Child:
-    id: int | None = field(default=None)
-    first_name: str | TextField | None = field(default=None)
-    last_name: str | TextField | None = field(default=None)
-    e4: str | TextField | None = field(default=None)
-    e5: int | IntegerField | None = field(default=None)
-    e6: int | IntegerField | None = field(default=None)
-    e13: int | IntegerField | None = field(default=None)
-    e14: int | IntegerField | None = field(default=None)
-    e15: int | IntegerField | None = field(default=None)
-    e16: int | IntegerField | None = field(default=None)
-    e17: int | IntegerField | None = field(default=None)
-    e18: int | IntegerField | None = field(default=None)
-    e19: int | IntegerField | None = field(default=None)
-    e20: int | IntegerField | None = field(default=None)
-    e21: int | IntegerField | None = field(default=None)
+class MyBaseModel(BaseModel):
+    def scatter(self, obj):
+        "Copy model fields into another object"
+        for fld in self.model_fields_set:
+            setattr(obj, fld, getattr(self, fld))
+
+    def gather(self, obj):
+        "Copy model fields from another object"
+        for fld in self.model_fields_set:
+            setattr(self, fld, getattr(obj, fld))
+
+    @classmethod
+    def crib(cls, obj):
+        "Create a new model based on values found in another object"
+        d = {}
+        for fld in cls.model_fields:
+            try:
+                if hasattr(obj, fld) and isinstance(getattr(obj, fld), cls.model_fields[fld].annotation):
+                    d[fld] = getattr(obj, fld)
+            except TypeError:
+                pass
+        # print(f"cribbing {cls.__name__} with {d}")
+        return cls(**d)
+
+    def kwds(self) -> dict:
+        "Represent the model's fields as a set unpackable keyword/value pairs"
+        d = {}
+        for fld in self.model_fields:
+            d[fld] = getattr(self, fld)
+        # print(f"{self.__class__.__name__} kwds={d}")
+        return d
 
 
-@dataclass(kw_only=True)
-class RecognizedTribe:
-    id: int | None = field(default=None)
-    ooh: int | None = field(default=None)
-    e9: int | IntegerField | None = field(default=None)
-
-
-@dataclass(kw_only=True)
-class SecondParent:
-    id: int | None = field(default=None)
-    ooh: int | None = field(default=None)
-    e64: int | IntegerField | None = field(default=None)
-    e66: int | IntegerField | None = field(default=None)
-    e68: int | IntegerField | None = field(default=None)
-
-
-@dataclass(kw_only=True)
-class PermanencyPlan:
-    id: int | None = field(default=None)
-    removal: int | None = field(default=None)
-    e147: int | IntegerField | None = field(default=None)
-    e148: int | IntegerField | None = field(default=None)
-
-
-@dataclass(kw_only=True)
-class PeriodicReview:
-    id: int | None = field(default=None)
-    removal: int | None = field(default=None)
-    e149: int | IntegerField | None = field(default=None)
-
-
-@dataclass(kw_only=True)
-class PermanencyHearing:
-    id: int | None = field(default=None)
-    removal: int | None = field(default=None)
-    e150: int | IntegerField | None = field(default=None)
-
-
-@dataclass(kw_only=True)
-class CaseVisit:
-    id: int | None = field(default=None)
-    removal: int | None = field(default=None)
-    e151: int | IntegerField | None = field(default=None)
-    e152: int | IntegerField | None = field(default=None)
-
-
-@dataclass(kw_only=True)
-class LivingArrangement:
-    id: int | None = field(default=None)
-    removal: int | None = field(default=None)
-    e40: int | IntegerField | None = field(default=None)
-    e58: int | IntegerField | None = field(default=None)
-    e112: int | IntegerField | None = field(default=None)
-    e113: int | IntegerField | None = field(default=None)
-    e114: int | IntegerField | None = field(default=None)
-    e115: int | IntegerField | None = field(default=None)
-    e116: int | IntegerField | None = field(default=None)
-    e117: int | IntegerField | None = field(default=None)
-    e118: int | IntegerField | None = field(default=None)
-    e119: int | IntegerField | None = field(default=None)
-    e120: int | IntegerField | None = field(default=None)
-    e121: int | IntegerField | None = field(default=None)
-    e122: int | IntegerField | None = field(default=None)
-    e123: int | IntegerField | None = field(default=None)
-    e124: int | IntegerField | None = field(default=None)
-    e125: int | IntegerField | None = field(default=None)
-    e126: int | IntegerField | None = field(default=None)
-    e127: int | IntegerField | None = field(default=None)
-    e128: int | IntegerField | None = field(default=None)
-    e129: int | IntegerField | None = field(default=None)
-    e130: int | IntegerField | None = field(default=None)
-    e131: int | IntegerField | None = field(default=None)
-    e132: int | IntegerField | None = field(default=None)
-    e133: int | IntegerField | None = field(default=None)
-    e134: int | IntegerField | None = field(default=None)
-    e135: int | IntegerField | None = field(default=None)
-    e136: int | IntegerField | None = field(default=None)
-    e137: int | IntegerField | None = field(default=None)
-    e138: int | IntegerField | None = field(default=None)
-    e139: int | IntegerField | None = field(default=None)
-    e140: int | IntegerField | None = field(default=None)
-    e141: int | IntegerField | None = field(default=None)
-    e142: int | IntegerField | None = field(default=None)
-    e143: int | IntegerField | None = field(default=None)
-    e144: int | IntegerField | None = field(default=None)
-    e145: int | IntegerField | None = field(default=None)
-    e146: int | IntegerField | None = field(default=None)
-
-
-@dataclass(kw_only=True)
-class Removal1993:
-    id: int | None = field(default=None)
-    ooh: int | None = field(default=None)
-    e69: int | IntegerField | None = field(default=None)
-    e153: int | IntegerField | None = field(default=None)
-    e155: int | IntegerField | None = field(default=None)
-
-
-@dataclass(kw_only=True)
-class Removal2020:
-    id: int | None = field(default=None)
-    ooh: int | None = field(default=None)
-    e3: int | IntegerField | None = field(default=None)
-    e69: int | IntegerField | None = field(default=None)
-    e70: int | IntegerField | None = field(default=None)
-    e71: int | IntegerField | None = field(default=None)
-    e72: int | IntegerField | None = field(default=None)
-    e73: int | IntegerField | None = field(default=None)
-    e74: int | IntegerField | None = field(default=None)
-    e75: int | IntegerField | None = field(default=None)
-    e76: int | IntegerField | None = field(default=None)
-    e77: int | IntegerField | None = field(default=None)
-    e78: int | IntegerField | None = field(default=None)
-    e79: int | IntegerField | None = field(default=None)
-    e80: int | IntegerField | None = field(default=None)
-    e81: int | IntegerField | None = field(default=None)
-    e82: int | IntegerField | None = field(default=None)
-    e83: int | IntegerField | None = field(default=None)
-    e84: int | IntegerField | None = field(default=None)
-    e85: int | IntegerField | None = field(default=None)
-    e86: int | IntegerField | None = field(default=None)
-    e87: int | IntegerField | None = field(default=None)
-    e88: int | IntegerField | None = field(default=None)
-    e89: int | IntegerField | None = field(default=None)
-    e90: int | IntegerField | None = field(default=None)
-    e91: int | IntegerField | None = field(default=None)
-    e92: int | IntegerField | None = field(default=None)
-    e93: int | IntegerField | None = field(default=None)
-    e94: int | IntegerField | None = field(default=None)
-    e95: int | IntegerField | None = field(default=None)
-    e96: int | IntegerField | None = field(default=None)
-    e97: int | IntegerField | None = field(default=None)
-    e98: int | IntegerField | None = field(default=None)
-    e99: int | IntegerField | None = field(default=None)
-    e100: int | IntegerField | None = field(default=None)
-    e101: int | IntegerField | None = field(default=None)
-    e102: int | IntegerField | None = field(default=None)
-    e103: int | IntegerField | None = field(default=None)
-    e104: int | IntegerField | None = field(default=None)
-    e105: int | IntegerField | None = field(default=None)
-    living_arrangements: list[LivingArrangement] = field(default_factory=list)
-    permanency_plans: list[PermanencyPlan] = field(default_factory=list)
-    periodic_reviews: list[PeriodicReview] = field(default_factory=list)
-    permanency_hearings: list[PermanencyHearing] = field(default_factory=list)
-    case_worker_visits: list[CaseVisit] = field(default_factory=list)
-    e153: int | IntegerField | None = field(default=None)
-    e154: int | IntegerField | None = field(default=None)
-    e155: int | IntegerField | None = field(default=None)
-    e156: int | IntegerField | None = field(default=None)
-    e157: int | IntegerField | None = field(default=None)
-    e158: int | IntegerField | None = field(default=None)
-    e159: int | IntegerField | None = field(default=None)
-    e160: int | IntegerField | None = field(default=None)
-    e161: int | IntegerField | None = field(default=None)
-    e162: int | IntegerField | None = field(default=None)
-    e163: int | IntegerField | None = field(default=None)
-    e164: int | IntegerField | None = field(default=None)
-    e165: int | IntegerField | None = field(default=None)
-    e166: int | IntegerField | None = field(default=None)
-    e167: int | IntegerField | None = field(default=None)
-    e168: int | IntegerField | None = field(default=None)
-    e169: int | IntegerField | None = field(default=None)
-    e170: int | IntegerField | None = field(default=None)
-    e171: int | IntegerField | None = field(default=None)
-    e172: int | IntegerField | None = field(default=None)
-    e173: int | IntegerField | None = field(default=None)
-    e174: int | IntegerField | None = field(default=None)
-    e175: int | IntegerField | None = field(default=None)
-    e176: int | IntegerField | None = field(default=None)
-    e177: int | IntegerField | None = field(default=None)
-    e178: int | IntegerField | None = field(default=None)
-    e179: int | IntegerField | None = field(default=None)
-    e180: int | IntegerField | None = field(default=None)
-    e181: int | IntegerField | None = field(default=None)
-    e182: int | IntegerField | None = field(default=None)
-    e183: int | IntegerField | None = field(default=None)
-    e184: int | IntegerField | None = field(default=None)
-    e185: int | IntegerField | None = field(default=None)
-    e186: int | IntegerField | None = field(default=None)
-
-
-@dataclass(kw_only=True)
-class OOHRecord:
-    id: int | None = field(default=None)
-    child: Child
-    context: Context
-    funding: int | IntegerField | None = field(default=None)
-    e7: int | IntegerField | None = field(default=None)
-    e8: int | IntegerField | None = field(default=None)
-    e10: int | IntegerField | None = field(default=None)
-    e11: int | IntegerField | None = field(default=None)
-    e12: int | IntegerField | None = field(default=None)
-    e22: int | IntegerField | None = field(default=None)
-    e23: int | IntegerField | None = field(default=None)
-    e24: int | IntegerField | None = field(default=None)
-    e25: int | IntegerField | None = field(default=None)
-    e26: int | IntegerField | None = field(default=None)
-    e27: int | IntegerField | None = field(default=None)
-    e28: int | IntegerField | None = field(default=None)
-    e29: int | IntegerField | None = field(default=None)
-    e30: int | IntegerField | None = field(default=None)
-    e31: int | IntegerField | None = field(default=None)
-    e32: int | IntegerField | None = field(default=None)
-    e33: int | IntegerField | None = field(default=None)
-    e34: int | IntegerField | None = field(default=None)
-    e35: int | IntegerField | None = field(default=None)
-    e36: int | IntegerField | None = field(default=None)
-    e37: int | IntegerField | None = field(default=None)
-    e38: int | IntegerField | None = field(default=None)
-    e39: int | IntegerField | None = field(default=None)
-    # e40: int | IntegerField | None = field(default=None)
-    e41: int | IntegerField | None = field(default=None)
-    e42: int | IntegerField | None = field(default=None)
-    e43: int | IntegerField | None = field(default=None)
-    e44: int | IntegerField | None = field(default=None)
-    e45: int | IntegerField | None = field(default=None)
-    e46: int | IntegerField | None = field(default=None)
-    e47: int | IntegerField | None = field(default=None)
-    e48: int | IntegerField | None = field(default=None)
-    e49: int | IntegerField | None = field(default=None)
-    e50: int | IntegerField | None = field(default=None)
-    e51: int | IntegerField | None = field(default=None)
-    e52: int | IntegerField | None = field(default=None)
-    e53: int | IntegerField | None = field(default=None)
-    e54: int | IntegerField | None = field(default=None)
-    e55: int | IntegerField | None = field(default=None)
-    e56: int | IntegerField | None = field(default=None)
-    e57: int | IntegerField | None = field(default=None)
-    # e58: int | IntegerField | None = field(default=None)
-    e59: int | IntegerField | None = field(default=None)
-    e60: int | IntegerField | None = field(default=None)
-    e61: int | IntegerField | None = field(default=None)
-    e62: int | IntegerField | None = field(default=None)
-    e63: int | IntegerField | None = field(default=None)
-    e65: int | IntegerField | None = field(default=None)
-    e67: int | IntegerField | None = field(default=None)
-    e106: int | IntegerField | None = field(default=None)
-    e107: int | IntegerField | None = field(default=None)
-    e108: int | IntegerField | None = field(default=None)
-    e109: int | IntegerField | None = field(default=None)
-    e110: int | IntegerField | None = field(default=None)
-    e111: int | IntegerField | None = field(default=None)
-    tribes: list[RecognizedTribe] = field(default_factory=list)
-    second_parents: list[SecondParent] = field(default_factory=list)
-    removals1993: list[Removal1993] = field(default_factory=list)
-    removals2020: list[Removal2020] = field(default_factory=list)
-
-
-@dataclass(kw_only=True)
-class ARecord:
-    id: int | None = field(default=None)
-    child: Child
-    context: Context
-    a5: int | IntegerField | None = field(default=None)
-    a6: int | IntegerField | None = field(default=None)
-    a7: int | IntegerField | None = field(default=None)
-    a8: int | IntegerField | None = field(default=None)
-    a9: int | IntegerField | None = field(default=None)
-    a10: int | IntegerField | None = field(default=None)
-    a11: int | IntegerField | None = field(default=None)
-    a12: int | IntegerField | None = field(default=None)
-    a13: int | IntegerField | None = field(default=None)
-    a14: int | IntegerField | None = field(default=None)
-    a15: int | IntegerField | None = field(default=None)
-    a16: int | IntegerField | None = field(default=None)
-    a17: int | IntegerField | None = field(default=None)
-    a18: int | IntegerField | None = field(default=None)
-    a19: int | IntegerField | None = field(default=None)
-
-
-@dataclass(kw_only=True)
-class Tribe:
+class Tribe(MyBaseModel):
     id: int
-    tribe: str | TextField
-    epa_code: int | TextField
-    states: list[str] | None
+    tribe: str
+    epa_code: int
+    states: list[str] = Field(default_factory=list)
 
-@dataclass(kw_only=True)
-class State:
+
+class State(MyBaseModel):
     id: int
-    state: str | TextField
-    name: str | TextField
-    fips_code: int | IntegerField
-    tribes: list[str] | None
+    state: str
+    name: str
+    fips_code: int
+    tribes: list[str] = Field(default_factory=list)
 
+
+class Removal1993(MyBaseModel):
+    id: int | None
+    ooh_id: int | None
+    e69: int | None
+    e153: int | None
+    e155: int | None
+
+    @field_validator('e69', 'e153')
+    @classmethod
+    def check_date(cls, v: int, info: FieldValidationInfo) -> int:
+        s = str(v)
+        y = s[0:4]
+        m = s[4:6]
+        d = s[6:]
+        err_msg = f"{d} is not a valid date in YYYYMMDD format for {info.field_name}"
+        if len(s) != 8 or \
+                int(y) <= 1980 or \
+                int(y) > datetime.today().year or \
+                not ("01" <= m <= "12") or \
+                not ("01" <= m <=
+                     {"01": "31", "02": "29", "03": "31", "04": "30", "05": "31", "06": "30", "07": "31", "08": "31",
+                      "09": "30", "10": "31", "11": "30", "12": "31"}[m]):
+            raise ValueError(err_msg)
+        return v
+
+    @field_validator('e155')
+    @classmethod
+    def e155_valid(cls, v: int, info: FieldValidationInfo) -> int:
+        if v not in (1, 2, 3, 4, 5, 6, 8):
+            raise ValueError(f"Invalid selection for {info.field_name}")
+        return v
+
+    @model_validator(mode='after')
+    def e69_e155(self):
+        if self.e69 >= self.e153:
+            raise ValueError(f"Date of Removal (e69) must be prior to the Date of Exit (e153) for the same removal")
+        return self
+
+
+class PermanencyPlan(MyBaseModel):
+    id: int | None
+    removal_id: int | None
+    e147: int | None
+    e148: int | None
+
+
+class PermanencyHearing(MyBaseModel):
+    id: int | None
+    removal_id: int | None
+    e150: int | None
+
+
+class PeriodicReview(MyBaseModel):
+    id: int | None
+    removal_id: int | None
+    e149: int | None
+
+
+class CaseVisit(MyBaseModel):
+    id: int | None
+    removal_id: int | None
+    e151: int | None
+    e152: int | None
+
+
+class LivingArrangement(MyBaseModel):
+    id: int | None
+    removal_id: int | None
+    e40: int | None
+    e58: int | None
+    e112: int | None
+    e113: int | None
+    e114: int | None
+    e115: int | None
+    e116: int | None
+    e117: int | None
+    e118: int | None
+    e119: int | None
+    e120: int | None
+    e121: int | None
+    e122: int | None
+    e123: int | None
+    e124: int | None
+    e125: int | None
+    e126: int | None
+    e127: int | None
+    e128: int | None
+    e129: int | None
+    e130: int | None
+    e131: int | None
+    e132: int | None
+    e133: int | None
+    e134: int | None
+    e135: int | None
+    e136: int | None
+    e137: int | None
+    e138: int | None
+    e139: int | None
+    e140: int | None
+    e141: int | None
+    e142: int | None
+    e143: int | None
+    e144: int | None
+    e145: int | None
+    e146: int | None
+
+
+class Removal2020(MyBaseModel):
+    id: int | None
+    ooh_id: int | None
+    e3: int | None
+    e69: int | None
+    e70: int | None
+    e71: int | None
+    e72: int | None
+    e73: int | None
+    e74: int | None
+    e75: int | None
+    e76: int | None
+    e77: int | None
+    e78: int | None
+    e79: int | None
+    e80: int | None
+    e81: int | None
+    e82: int | None
+    e83: int | None
+    e84: int | None
+    e85: int | None
+    e86: int | None
+    e87: int | None
+    e88: int | None
+    e89: int | None
+    e90: int | None
+    e91: int | None
+    e92: int | None
+    e93: int | None
+    e94: int | None
+    e95: int | None
+    e96: int | None
+    e97: int | None
+    e98: int | None
+    e99: int | None
+    e100: int | None
+    e101: int | None
+    e102: int | None
+    e103: int | None
+    e104: int | None
+    e105: int | None
+    living_arrangements: list[LivingArrangement] = Field(default_factory=list)
+    permanency_plans: list[PermanencyPlan] = Field(default_factory=list)
+    periodic_reviews: list[PeriodicReview] = Field(default_factory=list)
+    permanency_hearings: list[PermanencyHearing] = Field(default_factory=list)
+    case_worker_visits: list[CaseVisit] = Field(default_factory=list)
+    e153: int | None
+    e154: int | None
+    e155: int | None
+    e156: int | None
+    e157: int | None
+    e158: int | None
+    e159: int | None
+    e160: int | None
+    e161: int | None
+    e162: int | None
+    e163: int | None
+    e164: int | None
+    e165: int | None
+    e166: int | None
+    e167: int | None
+    e168: int | None
+    e169: int | None
+    e170: int | None
+    e171: int | None
+    e172: int | None
+    e173: int | None
+    e174: int | None
+    e175: int | None
+    e176: int | None
+    e177: int | None
+    e178: int | None
+    e179: int | None
+    e180: int | None
+    e181: int | None
+    e182: int | None
+    e183: int | None
+    e184: int | None
+    e185: int | None
+    e186: int | None
+
+
+class SecondParent(MyBaseModel):
+    id: int | None
+    ooh_id: int | None
+    e64: int | None
+    e66: int | None
+    e68: int | None
+
+
+class RecognizedTribe(MyBaseModel):
+    id: int | None
+    ooh_id: int | None
+    e9: int | None
+
+
+class OOHRecord(MyBaseModel):
+    id: int | None
+    funding: int | None
+    e7: int | None
+    e8: int | None
+    e10: int | None
+    e11: int | None
+    e12: int | None
+    e22: int | None
+    e23: int | None
+    e24: int | None
+    e25: int | None
+    e26: int | None
+    e27: int | None
+    e28: int | None
+    e29: int | None
+    e30: int | None
+    e31: int | None
+    e32: int | None
+    e33: int | None
+    e34: int | None
+    e35: int | None
+    e36: int | None
+    e37: int | None
+    e38: int | None
+    e39: int | None
+    # e40: int | None
+    e41: int | None
+    e42: int | None
+    e43: int | None
+    e44: int | None
+    e45: int | None
+    e46: int | None
+    e47: int | None
+    e48: int | None
+    e49: int | None
+    e50: int | None
+    e51: int | None
+    e52: int | None
+    e53: int | None
+    e54: int | None
+    e55: int | None
+    e56: int | None
+    e57: int | None
+    # e58: int | None
+    e59: int | None
+    e60: int | None
+    e61: int | None
+    e62: int | None
+    e63: int | None
+    e65: int | None
+    e67: int | None
+    e106: int | None
+    e107: int | None
+    e108: int | None
+    e109: int | None
+    e110: int | None
+    e111: int | None
+    tribes: list[RecognizedTribe] = Field(default_factory=list)
+    second_parents: list[SecondParent] = Field(default_factory=list)
+    removals1993: list[Removal1993] = Field(default_factory=list)
+    removals2020: list[Removal2020] = Field(default_factory=list)
+
+
+class ARecord(MyBaseModel):
+    id: int | None
+    # a5: int | None
+    # a6: int | None
+    # a7: int | None
+    # a8: int | None
+    # a9: int | None
+    # a10: int | None
+    # a11: int | None
+    # a12: int | None
+    # a13: int | None
+    # a14: int | None
+    a15: int | None
+    a16: int | None
+    a17: int | None
+    a18: int | None
+    a19: int | None
+
+
+class Context(MyBaseModel):
+    id: int | None
+    e1: int | None
+
+
+class Child(MyBaseModel):
+    id: int | None
+    context_id: int  # = Field(default=None)
+    first_name: str | None
+    last_name: str | None
+    e4: str | None
+    e5: int | None
+    e6: int | None
+    e13: int | None
+    e14: int | None
+    e15: int | None
+    e16: int | None
+    e17: int | None
+    e18: int | None
+    e19: int | None
+    e20: int | None
+    e21: int | None
+    ooh: OOHRecord | None = Field(default=None)
+    a: ARecord | None = Field(default=None)

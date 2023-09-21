@@ -20,7 +20,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>6</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="removal_tab">
       <attribute name="title">
@@ -1833,10 +1833,10 @@ is Jurisdiction Transfer&lt;/i&gt;</string>
   </connection>
  </connections>
  <buttongroups>
-  <buttongroup name="e172"/>
   <buttongroup name="e171"/>
-  <buttongroup name="e163"/>
   <buttongroup name="e182"/>
+  <buttongroup name="e172"/>
+  <buttongroup name="e163"/>
   <buttongroup name="e174"/>
   <buttongroup name="e183"/>
  </buttongroups>

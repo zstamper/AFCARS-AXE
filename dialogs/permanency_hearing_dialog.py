@@ -1,7 +1,6 @@
 from PySide6.QtWidgets import QWidget
 
 from dialogs import BaseDialog
-from model import PermanencyHearing
 
 
 class PermanencyHearingDialog(BaseDialog):
@@ -12,21 +11,16 @@ class PermanencyHearingDialog(BaseDialog):
         self._wire_ui()
         self.setLayout(self.ui.layout())
         self.setFixedSize(self.ui.size())
-        self.obj: PermanencyHearing | None = None
 
     def _wire_ui(self):
         self.setModal(True)
         self.ui.form_action.accepted.connect(self.accept)
         self.ui.form_action.rejected.connect(self.reject)
 
-    def populate(self, obj: PermanencyHearing):
-        self.obj = obj
-        self._from_obj()
-        self.errors = []
-        self.is_dirty = False
+    @property
+    def e150(self) -> int | None:
+        return self._get_int_field(self.ui.e150)
 
-    def _from_obj(self):
-        self._set_text_field(self.ui.e150, self.obj.e150)
-
-    def _to_obj(self):
-        self.obj.e150 = self.ui.e150.text()
+    @e150.setter
+    def e150(self, v: int) -> None:
+        self._set_int_field(self.ui.e150, v)

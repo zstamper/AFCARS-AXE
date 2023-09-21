@@ -1,7 +1,6 @@
 from PySide6.QtWidgets import QWidget
 
 from dialogs import BaseDialog
-from model import LivingArrangement
 
 
 class LivingArrangementDialog(BaseDialog):
@@ -12,7 +11,7 @@ class LivingArrangementDialog(BaseDialog):
         self._wire_ui()
         self.setLayout(self.ui.layout())
         self.setFixedSize(self.ui.size())
-        self.obj: LivingArrangement | None = None
+        self.id = None
 
     def _wire_ui(self) -> None:
         self.setModal(True)
@@ -33,98 +32,303 @@ class LivingArrangementDialog(BaseDialog):
         # field interactions
         ...
 
-    def populate(self, obj: LivingArrangement):
-        self.obj = obj
-        self._from_obj()
-        self.errors = []
-        self.is_dirty = False
 
-    def validate(self):
-        self._validate()
-        return len(self.errors) == 0
+    @property
+    def e40(self) -> int:
+        return self._get_radio_button(self.ui.e40)
 
-    def _validate(self) -> None:
+    @e40.setter
+    def e40(self, v: int) -> None:
+        self._set_radio_button(self.ui.e40, v)
+
+    @property
+    def e58(self) -> int:
+        return self._get_int_field(self.ui.e58)
+
+    @e58.setter
+    def e58(self, v: int) -> None:
+        self._set_int_field(self.ui.e58, v)
+
+    @property
+    def e112(self) -> int:
+        return self._get_int_field(self.ui.e112)
+
+    @e112.setter
+    def e112(self, v: int) -> None:
+        self._set_int_field(self.ui.e112, v)
+
+    @property
+    def e113(self) -> int:
+        return 1 if self.ui.e120.currentIndex == 0 else 0
+
+    @e113.setter
+    def e113(self, v: int) -> None:
+        if v:
+            self.ui.e120.setCurrentIndex(0)
+
+    @property
+    def e114(self) -> int:
+        return 1 if self.ui.e114.isChecked() else 0
+
+    @e114.setter
+    def e114(self, v: int):
+        self.ui.e114.setChecked(v == 1)
+
+    @property
+    def e115(self) -> int:
+        return 1 if self.ui.e115.isChecked() else 0
+
+    @e115.setter
+    def e115(self, v: int):
+        self.ui.e115.setChecked(v == 1)
+
+    @property
+    def e116(self) -> int:
+        return 1 if self.ui.e116.isChecked() else 0
+
+    @e116.setter
+    def e116(self, v: int):
+        self.ui.e116.setChecked(v == 1)
+
+    @property
+    def e117(self) -> int:
+        return 1 if self.ui.e124.currentText() == 'Relative' else 0
+
+    @e117.setter
+    def e117(self, v: int) -> None:
+        # e117 is essentially a read-only field; it's derived from e124. defining an empty setter ensures our automation
+        # works properly.
         pass
 
-    def _to_obj(self):
-        ui = self.ui
-        obj = self.obj
+    @property
+    def e118(self) -> int:
+        return 1 if self.ui.e118.isChecked() else 0
 
-        obj.e40 = self._get_radio_button(ui.e40)
-        obj.e58 = self._to_int(ui.e58.text())
-        obj.e112 = self._to_int(ui.e112.text())
-        obj.e113 = ui.e120.currentIndex == 0
-        obj.e114 = 1 if ui.e114.isChecked() else 0
-        obj.e115 = 1 if ui.e115.isChecked() else 0
-        obj.e116 = 1 if ui.e116.isChecked() else 0
-        obj.e117 = 1 if ui.e124.currentText() == 'Relative' else 0
-        obj.e118 = 1 if ui.e118.isChecked() else 0
-        obj.e119 = 1 if ui.e124.currentText() == 'Kin' else 0
-        obj.e120 = ui.e120.currentIndex if ui.e120.currentIndex > 0 else None
-        obj.e121 = self._get_combobox_selection(ui.e121, 1)
-        obj.e122 = self._to_int(ui.e122.text())
-        obj.e123 = self._get_combobox_selection(ui.e123, 1)
-        obj.e124 = self._get_combobox_selection(ui.e124, 1)
-        obj.e125 = self._to_int(ui.e125.text())
-        obj.e126 = self._get_radio_button(ui.e126)
-        obj.e127 = 1 if ui.e127.isChecked() else 0
-        obj.e128 = 1 if ui.e128.isChecked() else 0
-        obj.e129 = 1 if ui.e129.isChecked() else 0
-        obj.e130 = 1 if ui.e130.isChecked() else 0
-        obj.e131 = 1 if ui.e131.isChecked() else 0
-        obj.e132 = 1 if ui.e132.isChecked() else 0
-        obj.e133 = 1 if ui.e133.isChecked() else 0
-        obj.e134 = self._get_radio_button(ui.e134)
-        obj.e135 = self._get_radio_button(ui.e135)
-        obj.e136 = self._to_int(ui.e136.text())
-        obj.e137 = self._get_radio_button(ui.e137)
-        obj.e138 = 1 if ui.e138.isChecked() else 0
-        obj.e139 = 1 if ui.e139.isChecked() else 0
-        obj.e140 = 1 if ui.e140.isChecked() else 0
-        obj.e141 = 1 if ui.e141.isChecked() else 0
-        obj.e142 = 1 if ui.e142.isChecked() else 0
-        obj.e143 = 1 if ui.e143.isChecked() else 0
-        obj.e144 = 1 if ui.e144.isChecked() else 0
-        obj.e145 = self._get_radio_button(ui.e145)
-        obj.e146 = self._get_radio_button(ui.e146)
+    @e118.setter
+    def e118(self, v: int) -> None:
+        self.ui.e118.setChecked(v == 1)
 
-    def _from_obj(self):
-        ui = self.ui
-        obj = self.obj
+    @property
+    def e119(self) -> int:
+        return 1 if self.ui.e124.currentText() == 'Kin' else 0
 
-        self._set_radio_button(ui.e40, obj.e40)
-        self._set_int_field(ui.e58, obj.e58)
-        self._set_int_field(ui.e112, obj.e112)
-        ui.e114.setChecked(obj.e114 == 1)
-        ui.e115.setChecked(obj.e115 == 1)
-        ui.e116.setChecked(obj.e116 == 1)
-        # ui.e117.setChecked(obj.e117 == 1)
-        ui.e118.setChecked(obj.e118 == 1)
-        # ui.e119.setChecked(obj.e119 == 1)
-        ui.e120.setCurrentIndex(0 if obj.e113 == 1 else obj.e120 if obj.e120 is not None else -1)
-        self._set_combobox_selection(ui.e121, obj.e121, -1)
-        self._set_int_field(ui.e122, obj.e122)
-        self._set_combobox_selection(ui.e123, obj.e123, -1)
-        self._set_combobox_selection(ui.e124, obj.e124, -1)
-        self._set_int_field(ui.e125, obj.e125)
-        self._set_radio_button(ui.e126, obj.e126)
-        ui.e127.setChecked(obj.e127 == 1)
-        ui.e128.setChecked(obj.e128 == 1)
-        ui.e129.setChecked(obj.e129 == 1)
-        ui.e130.setChecked(obj.e130 == 1)
-        ui.e131.setChecked(obj.e131 == 1)
-        ui.e132.setChecked(obj.e132 == 1)
-        ui.e133.setChecked(obj.e133 == 1)
-        self._set_radio_button(ui.e134, obj.e134)
-        self._set_radio_button(ui.e135, obj.e135)
-        self._set_int_field(ui.e136, obj.e136)
-        self._set_radio_button(ui.e137, obj.e137)
-        ui.e138.setChecked(obj.e138 == 1)
-        ui.e139.setChecked(obj.e139 == 1)
-        ui.e140.setChecked(obj.e140 == 1)
-        ui.e141.setChecked(obj.e141 == 1)
-        ui.e142.setChecked(obj.e142 == 1)
-        ui.e143.setChecked(obj.e143 == 1)
-        ui.e144.setChecked(obj.e144 == 1)
-        self._set_radio_button(ui.e145, obj.e145)
-        self._set_radio_button(ui.e146, obj.e146)
+    @e119.setter
+    def e119(self, v: int) -> None:
+        pass
+
+    @property
+    def e120(self) -> int:
+        return self.ui.e120.currentIndex if self.ui.e120.currentIndex > 0 else None
+
+    @e120.setter
+    def e120(self, v: int) -> None:
+        if v is not None and v != 0:
+            self.ui.e120.setCurrentIndex(v)
+
+    @property
+    def e121(self) -> int:
+        return self._get_combobox_selection(self.ui.e121, 1)
+
+    @e121.setter
+    def e121(self, v: int) -> None:
+        self._set_combobox_selection(self.ui.e121, v, -1)
+
+    @property
+    def e122(self) -> int:
+        return self._get_int_field(self.ui.e122)
+
+    @e122.setter
+    def e122(self, v: int) -> None:
+        self._set_int_field(self.ui.e122, v)
+
+    @property
+    def e123(self) -> int:
+        return self._get_combobox_selection(self.ui.e123, 1)
+
+    @e123.setter
+    def e123(self, v: int) -> None:
+        self._set_combobox_selection(self.ui.e123, v, -1)
+
+    @property
+    def e124(self) -> int:
+        return self._get_combobox_selection(self.ui.e124, 1)
+
+    @e124.setter
+    def e124(self, v: int) -> None:
+        self._set_combobox_selection(self.ui.e124, v, -1)
+
+    @property
+    def e125(self) -> int:
+        return self._get_int_field(self.ui.e125)
+
+    @e125.setter
+    def e125(self, v: int) -> None:
+        self._set_int_field(self.ui.e125, v)
+
+    @property
+    def e126(self) -> int:
+        return self._get_radio_button(self.ui.e126)
+
+    @e126.setter
+    def e126(self, v: int) -> None:
+        self._set_radio_button(self.ui.e126, v)
+
+    @property
+    def e127(self) -> int:
+        return 1 if self.ui.e127.isChecked() else 0
+
+    @e127.setter
+    def e127(self, v: int) -> None:
+        self.ui.e127.setChecked(v == 1)
+
+    @property
+    def e128(self) -> int:
+        return 1 if self.ui.e128.isChecked() else 0
+
+    @e128.setter
+    def e128(self, v: int) -> None:
+        self.ui.e128.setChecked(v == 1)
+
+    @property
+    def e129(self) -> int:
+        return 1 if self.ui.e129.isChecked() else 0
+
+    @e129.setter
+    def e129(self, v: int) -> None:
+        self.ui.e129.setChecked(v == 1)
+
+    @property
+    def e130(self) -> int:
+        return 1 if self.ui.e130.isChecked() else 0
+
+    @e130.setter
+    def e130(self, v: int) -> None:
+        self.ui.e130.setChecked(v == 1)
+
+    @property
+    def e131(self) -> int:
+        return 1 if self.ui.e131.isChecked() else 0
+
+    @e131.setter
+    def e131(self, v: int) -> None:
+        self.ui.e131.setChecked(v == 1)
+
+    @property
+    def e132(self) -> int:
+        return 1 if self.ui.e132.isChecked() else 0
+
+    @e132.setter
+    def e132(self, v: int) -> None:
+        self.ui.e132.setChecked(v == 1)
+
+    @property
+    def e133(self) -> int:
+        return 1 if self.ui.e133.isChecked() else 0
+
+    @e133.setter
+    def e133(self, v: int) -> None:
+        self.ui.e133.setChecked(v == 1)
+
+    @property
+    def e134(self) -> int:
+        return self._get_radio_button(self.ui.e134)
+
+    @e134.setter
+    def e134(self, v: int) -> None:
+        self._set_radio_button(self.ui.e134, v)
+
+    @property
+    def e135(self) -> int:
+        return self._get_radio_button(self.ui.e135)
+
+    @e135.setter
+    def e135(self, v: int) -> None:
+        self._set_radio_button(self.ui.e135, v)
+
+    @property
+    def e136(self) -> int:
+        return self._get_int_field(self.ui.e136)
+
+    @e136.setter
+    def e136(self, v: int) -> None:
+        self._set_int_field(self.ui.e136)
+
+    @property
+    def e137(self) -> int:
+        return self._get_radio_button(self.ui.e137)
+
+    @e137.setter
+    def e137(self, v: int) -> None:
+        self._set_radio_button(self.ui.e137, v)
+
+    @property
+    def e138(self) -> int:
+        return 1 if self.ui.e138.isChecked() else 0
+
+    @e138.setter
+    def e138(self, v: int) -> None:
+        self.ui.e138.setChecked(v == 1)
+
+    @property
+    def e139(self) -> int:
+        return 1 if self.ui.e139.isChecked() else 0
+
+    @e139.setter
+    def e139(self, v: int) -> None:
+        self.ui.e139.setChecked(v == 1)
+
+    @property
+    def e140(self) -> int:
+        return 1 if self.ui.e140.isChecked() else 0
+
+    @e140.setter
+    def e140(self, v: int) -> None:
+        self.ui.e140.setChecked(v == 1)
+
+    @property
+    def e141(self) -> int:
+        return 1 if self.ui.e141.isChecked() else 0
+
+    @e141.setter
+    def e141(self, v: int) -> None:
+        self.ui.e141.setChecked(v == 1)
+
+    @property
+    def e142(self) -> int:
+        return 1 if self.ui.e142.isChecked() else 0
+
+    @e142.setter
+    def e142(self, v: int) -> None:
+        self.ui.e142.setChecked(v == 1)
+
+    @property
+    def e143(self) -> int:
+        return 1 if self.ui.e143.isChecked() else 0
+
+    @e143.setter
+    def e143(self, v: int) -> None:
+        self.ui.e143.setChecked(v == 1)
+
+    @property
+    def e144(self) -> int:
+        return 1 if self.ui.e144.isChecked() else 0
+
+    @e144.setter
+    def e144(self, v: int) -> None:
+        self.ui.e144.setChecked(v == 1)
+
+    @property
+    def e145(self) -> int:
+        return self._get_radio_button(self.ui.e145)
+
+    @e145.setter
+    def e145(self, v: int) -> None:
+        self._set_radio_button(self.ui.e145, v)
+
+    @property
+    def e146(self) -> int:
+        return self._get_radio_button(self.ui.e146)
+
+    @e146.setter
+    def e146(self, v: int) -> None:
+        self._set_radio_button(self.ui.e146, v)

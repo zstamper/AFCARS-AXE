@@ -1,7 +1,6 @@
 from PySide6.QtWidgets import QWidget
 
 from dialogs import BaseDialog
-from model import CaseVisit
 
 
 class CaseVisitDialog(BaseDialog):
@@ -14,35 +13,24 @@ class CaseVisitDialog(BaseDialog):
         self._wire_ui()
         self.setLayout(self.ui.layout())
         self.setFixedSize(self.ui.size())
-        self.obj: CaseVisit | None = None
-
-    def populate(self, obj: CaseVisit):
-        self.obj = obj
-        self._from_obj()
-        self.errors = []
-        self.is_dirty = False
-
-    def validate(self):
-        self._validate()
-        return len(self.errors) == 0
 
     def _wire_ui(self):
         self.setModal(True)
         self.ui.form_action.accepted.connect(self.accept)
         self.ui.form_action.rejected.connect(self.reject)
 
-    def _validate(self):
-        return None
+    @property
+    def e151(self) -> int:
+        return self._get_int_field(self.ui.e151)
 
-    def _from_obj(self):
-        ui = self.ui
-        obj = self.obj
-        self._set_text_field(ui.e151, obj.e151)
-        self._set_combobox_selection(ui.e152, obj.e152, self.obj_to_e152_mapping)
+    @e151.setter
+    def e151(self, v: int) -> None:
+        self._set_int_field(self.ui.e151, v)
 
-    def _to_obj(self):
-        ui = self.ui
-        obj = self.obj
+    @property
+    def e152(self) -> int:
+        return self._get_combobox_selection(self.ui.e152, self.e152_to_obj_mapping)
 
-        obj.e151 = ui.e151.text()
-        obj.e152 = self._get_combobox_selection(ui.e152, self.e152_to_obj_mapping)
+    @e152.setter
+    def e152(self, v: int) -> None:
+        self._set_combobox_selection(self.ui.e152, v, self.obj_to_e152_mapping)

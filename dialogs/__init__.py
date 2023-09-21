@@ -1,12 +1,13 @@
 import os
 from datetime import datetime
-from typing import Optional
+from typing import Optional, Any, Callable
 
 from PySide6.QtCore import QFile, Qt, QDate
 from PySide6.QtUiTools import QUiLoader
 from PySide6.QtWidgets import QDialog, QWidget, QErrorMessage, QCheckBox, QRadioButton, QLineEdit, QDateEdit, QComboBox, \
-    QButtonGroup
+    QButtonGroup, QTableWidget, QListWidget
 from PySide6.QtWidgets import QMessageBox
+from pydantic import ValidationError
 
 
 class BaseDialog(QDialog):
@@ -18,9 +19,15 @@ class BaseDialog(QDialog):
         if flags is None:
             flags = Qt.WindowType()
         super().__init__(parent, flags)
+        self.id: int = None
         self.is_dirty: bool = False
         self.errors: list[str] = []
         self.relaxed_rules = relaxed_rules
+
+    def _on_accept(self, v: Callable):
+        self._on_accept = v
+
+    on_accept = property(None, _on_accept, None)
 
     def load_ui(self, file_name: str) -> QWidget:
         ui_file_path = os.path.join(os.path.dirname(__file__), '..', 'ui', file_name)
@@ -32,12 +39,8 @@ class BaseDialog(QDialog):
         return ui
 
     def accept(self):
-        if not self.relaxed_rules:
-            if not self.validate():
-                error_message_dialog(self, self.errors)
-                return
-        self._to_obj()
-        super().accept()
+        if self._on_accept and self._on_accept():
+            super().accept()
 
     def reject(self):
         if self.is_dirty:
@@ -49,23 +52,51 @@ class BaseDialog(QDialog):
                 return
         super().reject()
 
-    # TODO: figure out a method that wires up all of the change detection logic for the 'is_dirty' functionality
+    def clear(self) -> None:
+        self.id = None
+        for name in dir(self.ui):
+            widget = getattr(self.ui, name)
+            match widget:
+                case QLineEdit():
+                    widget.clear()
+                case QComboBox():
+                    widget.setCurrentIndex(-1)
+                case QButtonGroup():
+                    for button in widget.buttons():
+                        button.setChecked(False)
+                case QRadioButton():
+                    widget.setChecked(False)
+                case QCheckBox():
+                    widget.setChecked(False)
+                case QTableWidget():
+                    widget.clearContents()
+                case QListWidget():
+                    widget.clear()
 
-    def validate(self) -> bool:
-        raise NotImplementedError("method validate is not implemented")
-
-    def _to_obj(self):
-        raise NotImplementedError("method _to_obj is not implemented")
-
-    def _to_int(self, value: any) -> int | None:
-        try:
-            return int(value)
-        except ValueError:
-            return None
+    # def validate(self) -> bool:
+    #     self._validate()
+    #     return len(self.errors) == 0
+    #
+    # def _validate(self) -> None:
+    #     pass
+    #
+    # def _to_obj(self):
+    #     raise NotImplementedError("method _to_obj is not implemented")
+    #
+    # def _to_int(self, value: any) -> int | None:
+    #     try:
+    #         return int(value)
+    #     except ValueError:
+    #         return None
 
     @staticmethod
     def _set_text_field(ui, obj) -> None:
         ui.setText(obj if obj is not None else '')
+
+    @staticmethod
+    def _get_text_field(ui) -> str:
+        v: str = ui.text()
+        return v if v != '' else None
 
     @staticmethod
     def _set_date_field(ui, obj: datetime | None) -> None:
@@ -138,17 +169,17 @@ class BaseDialog(QDialog):
         return ui.checkedId() if ui.checkedId() >= 0 else None
 
     @staticmethod
-    def _set_combobox_selection(ui: QWidget, obj: int, mapping: int | dict | None = None) -> None:
+    def _set_combobox_selection(widget: QWidget, obj: int, mapping: int | dict | None = None) -> None:
         if obj is None:
-            ui.setCurrentIndex(-1)
+            widget.setCurrentIndex(-1)
         elif mapping is None:
-            ui.setCurrentIndex(obj)
+            widget.setCurrentIndex(obj)
         elif type(mapping) == int:
-            ui.setCurrentIndex(obj + mapping)
+            widget.setCurrentIndex(obj + mapping)
         elif obj in mapping:
-            ui.setCurrentIndex(mapping[obj])
+            widget.setCurrentIndex(mapping[obj])
         else:
-            ui.setCurrentIndex(-1)
+            widget.setCurrentIndex(-1)
 
     @staticmethod
     def _get_combobox_selection(ui: QComboBox, mapping: int | dict | None = None) -> int | None:

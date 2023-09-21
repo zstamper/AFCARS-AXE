@@ -1,5 +1,8 @@
-from PySide6.QtWidgets import QWidget, QCheckBox, QLineEdit, QDateEdit, QRadioButton, QTableWidgetItem
+from typing import Optional, Callable
 
+from PySide6.QtWidgets import QWidget, QTableWidgetItem
+
+from controllers import GenericController
 from model import Removal2020, LivingArrangement, PermanencyPlan, CaseVisit, PermanencyHearing, PeriodicReview
 from . import BaseDialog
 from .case_worker_visit import CaseVisitDialog
@@ -62,16 +65,102 @@ class Removal2020Dialog(BaseDialog):
         self.setLayout(self.ui.layout())
         self.setFixedSize(self.ui.size())
         self.obj: Removal2020 | None = None
+        # self.on_accept: Optional[Callable] = None
+        self.living_arrangements = []
+        self.permanency_plans = []
+        self.periodic_reviews = []
+        self.permanency_hearings = []
+        self.case_worker_visits = []
 
-    def populate(self, obj: Removal2020):
-        self.obj = obj
-        self._from_obj()
-        self.errors = []
-        self.is_dirty = False
+    # def accept(self):
+    #     if self.on_accept and self.on_accept():
+    #         super().accept()
 
-    def validate(self):
-        self._validate()
-        return len(self.errors) == 0
+    # def clear(self) -> None:
+    #     self.id = None
+    #     self.ui.e3.clear()
+    #     self.ui.e69.clear()
+    #     # self.ui.e70.clear()
+    #     self.ui.e71.setCurrentIndex(-1)
+    #     self.ui.e72.setChecked(False)
+    #     self.ui.e73.setChecked(False)
+    #     self.ui.e74.setChecked(False)
+    #     self.ui.e75.setChecked(False)
+    #     self.ui.e76.setChecked(False)
+    #     self.ui.e77.setChecked(False)
+    #     self.ui.e78.setChecked(False)
+    #     self.ui.e79.setChecked(False)
+    #     self.ui.e80.setChecked(False)
+    #     self.ui.e81.setChecked(False)
+    #     self.ui.e82.setChecked(False)
+    #     self.ui.e83.setChecked(False)
+    #     self.ui.e84.setChecked(False)
+    #     self.ui.e85.setChecked(False)
+    #     self.ui.e86.setChecked(False)
+    #     self.ui.e87.setChecked(False)
+    #     self.ui.e88.setChecked(False)
+    #     self.ui.e89.setChecked(False)
+    #     self.ui.e90.setChecked(False)
+    #     self.ui.e91.setChecked(False)
+    #     self.ui.e92.setChecked(False)
+    #     self.ui.e93.setChecked(False)
+    #     self.ui.e94.setChecked(False)
+    #     self.ui.e95.setChecked(False)
+    #     self.ui.e96.setChecked(False)
+    #     self.ui.e97.setChecked(False)
+    #     self.ui.e98.setChecked(False)
+    #     self.ui.e99.setChecked(False)
+    #     self.ui.e100.setChecked(False)
+    #     self.ui.e101.setChecked(False)
+    #     self.ui.e102.setChecked(False)
+    #     self.ui.e103.setChecked(False)
+    #     self.ui.e104.setChecked(False)
+    #     self.ui.e105.setChecked(False)
+    #     self.living_arrangements = []
+    #     self.permanency_plans = []
+    #     self.periodic_reviews = []
+    #     self.permanency_hearings = []
+    #     self.case_worker_visits = []
+    #     self.ui.e153.clear()
+    #     self.ui.e154.clear()
+    #     self.ui.e155.setCurrentIndex(-1)
+    #     self.ui.e156.setCurrentIndex(-1)
+    #     self.ui.e157.setCurrentIndex(-1)
+    #     self.ui.e158.setChecked(False)
+    #     self.ui.e159.setChecked(False)
+    #     self.ui.e160.setChecked(False)
+    #     self.ui.e161.setChecked(False)
+    #     self.ui.e162.clear()
+    #     for button in self.ui.e163.buttons():
+    #         button.setChecked(False)
+    #     self.ui.e164.setChecked(False)
+    #     self.ui.e165.setChecked(False)
+    #     self.ui.e166.setChecked(False)
+    #     self.ui.e167.setChecked(False)
+    #     self.ui.e168.setChecked(False)
+    #     self.ui.e169.setChecked(False)
+    #     self.ui.e170.setChecked(False)
+    #     for button in self.ui.e171.buttons():
+    #         button.setChecked(False)
+    #     for button in self.ui.e172.buttons():
+    #         button.setChecked(False)
+    #     self.ui.e173.clear()
+    #     for button in self.ui.e174.buttons():
+    #         button.setChecked(False)
+    #     self.ui.e175.setChecked(False)
+    #     self.ui.e176.setChecked(False)
+    #     self.ui.e177.setChecked(False)
+    #     self.ui.e178.setChecked(False)
+    #     self.ui.e179.setChecked(False)
+    #     self.ui.e180.setChecked(False)
+    #     self.ui.e181.setChecked(False)
+    #     for button in self.ui.e182.buttons():
+    #         button.setChecked(False)
+    #     for button in self.ui.e183.buttons():
+    #         button.setChecked(False)
+    #     self.ui.e184.setCurrentIndex(-1)
+    #     self.ui.e185.setCurrentIndex(-1)
+    #     self.ui.e186.clear()
 
     # ------------------------------------------------------------------------
 
@@ -91,9 +180,10 @@ class Removal2020Dialog(BaseDialog):
         ui.permanency_plan_delete_button.clicked.connect(self.delete_permanency_plan)
         ui.permanency_plans_table.cellDoubleClicked.connect(self.edit_permanency_plan)
 
-        ui.case_visit_add_button.clicked.connect(self.add_case_visit)
-        ui.case_visit_delete_button.clicked.connect(self.delete_case_visit)
-        ui.case_visits_table.cellDoubleClicked.connect(self.edit_case_visit)
+        ui.case_visit_add_button.clicked.connect(self.add_case_worker_visit)
+        ui.case_visit_edit_button.clicked.connect(self.edit_case_worker_visit)
+        ui.case_visit_delete_button.clicked.connect(self.delete_case_worker_visit)
+        ui.case_visits_table.cellDoubleClicked.connect(self.edit_case_worker_visit)
 
         ui.permanency_hearing_add_button.clicked.connect(self.add_permanency_hearing)
         ui.permanency_hearing_delete_button.clicked.connect(self.delete_permanency_hearing)
@@ -115,264 +205,765 @@ class Removal2020Dialog(BaseDialog):
         self._init_radio_ynud(ui, 'e182')
         self._init_radio_mf(ui, 'e183')
 
-    def add_living_arrangement(self):
-        living_arrangement: LivingArrangement = LivingArrangement(removal=self.obj)
-        dialog: LivingArrangementDialog = LivingArrangementDialog(self, relaxed_rules=self.relaxed_rules)
-        dialog.populate(living_arrangement)
-        dialog.show()
-        if dialog.exec():
-            if self.obj.living_arrangements is None:
-                self.obj.living_arrangements = []
-            self.obj.living_arrangements.append(living_arrangement)
-            row: int = self.ui.living_arrangements.rowCount()
-            self.ui.living_arrangements_table.insertRow(row)
-            self.ui.living_arrangements_table.setItem(row, 0, QTableWidgetItem(str(living_arrangement.e112)))
-            self.ui.living_arrangements_table.setItem(row, 1, QTableWidgetItem(e120_to_str(living_arrangement.e120)))
-            self.ui.living_arrangements_table.setItem(row, 2, QTableWidgetItem(""))
+    # ----- Living Arrangements Automation ------------------------------------
 
-    def delete_living_arrangement(self):
-        # if the livint_arrangement_table has a current row, delete it from the obj and refresh the table
-        current_row = self.ui.living_arrangements_table.currentRow()
-        if 0 <= current_row < len(self.obj.living_arrangements):
-            self.obj.living_arrangements.remove(current_row)
-            self.ui.living_arrangements_table.removeRow(current_row)
+    def add_living_arrangement(self):
+        dialog = LivingArrangementDialog(self)
+        dialog.setWindowTitle("Living Arrangement")
+        controller = GenericController(dialog, LivingArrangement)
+        data: LivingArrangement = controller.add()
+        if data is not None:
+            self.living_arrangements.append(data)
+            self._add_living_arrangement_table_row(data)
 
     def edit_living_arrangement(self):
         # if the living_arrangement_table has a current row, pass the corresponding obj item to the dialog
         current_row = self.ui.living_arrangements_table.currentRow()
+        if current_row >= 0:
+            dialog = LivingArrangementDialog(self)
+            dialog.setWindowTitle("Living Arrangement")
+            controller = GenericController(dialog, LivingArrangement)
+            data = self.living_arrangements[current_row]
+            controller.edit(data)
+            self._update_living_arrangement_table_row(current_row, data)
+
+    def delete_living_arrangement(self):
+        # if the living_arrangement_table has a current row, delete it from the obj and refresh the table
+        current_row = self.ui.living_arrangements_table.currentRow()
         if 0 <= current_row < len(self.obj.living_arrangements):
-            living_arrangement: LivingArrangement = self.obj.living_arrangements[current_row]
-            dialog: LivingArrangementDialog = LivingArrangementDialog(self, relaxed_rules=self.relaxed_rules)
-            dialog.populate(living_arrangement)
-            dialog.show()
-            if dialog.exec():
-                self.obj.living_arrangements[current_row] = living_arrangement
-                self.ui.living_arrangements_table.setItem(current_row, 0,
-                                                          QTableWidgetItem(str(living_arrangement.e112)))
-                self.ui.living_arrangements_table.setItem(current_row, 1,
-                                                          QTableWidgetItem(e120_to_str(living_arrangement.e120)))
-                self.ui.living_arrangements_table.setItem(current_row, 2, QTableWidgetItem(""))
+            del self.obj.living_arrangements[current_row]
+            self.ui.living_arrangements_table.removeRow(current_row)
+
+    def _add_living_arrangement_table_row(self, living_arrangement: LivingArrangement) -> None:
+        row: int = self.ui.living_arrangements_table.rowCount()
+        self.ui.living_arrangements_table.insertRow(row)
+        self._update_living_arrangement_table_row(row, living_arrangement)
+
+    def _update_living_arrangement_table_row(self, row: int, living_arrangement: LivingArrangement) -> None:
+        self.ui.living_arrangements_table.setItem(row, 0, QTableWidgetItem(str(living_arrangement.e112)))
+        self.ui.living_arrangements_table.setItem(row, 1, QTableWidgetItem(e120_to_str(living_arrangement.e120)))
+        self.ui.living_arrangements_table.setItem(row, 2, QTableWidgetItem(""))
+
+    # ----- Permanency Plan Automation ----------------------------------------
 
     def add_permanency_plan(self):
-        permanency_plan: PermanencyPlan = PermanencyPlan(removal=self.obj)
-        dialog: PermanencyPlanDialog = PermanencyPlanDialog(self, relaxed_rules=self.relaxed_rules)
-        dialog.populate(permanency_plan)
-        dialog.show()
-        if dialog.exec():
-            if self.obj.permanency_plans is None:
-                self.obj.permanency_plans = []
-            self.obj.permanency_plans.append(permanency_plan)
-            row: int = self.ui.permanency_plans.rowCount()
-            self.ui.permanency_plans_table.insertRow(row)
-            self.ui.permanency_plans_table.setItem(row, 0, QTableWidgetItem(str(permanency_plan.e147)))
-            self.ui.permanency_plans_table.setItem(row, 1, QTableWidgetItem(e148_to_str(permanency_plan.e148)))
-
-    def delete_permanency_plan(self):
-        # if the livint_arrangement_table has a current row, delete it from the obj and refresh the table
-        current_row = self.ui.permanency_plans_table.currentRow()
-        if 0 <= current_row < len(self.obj.living_arrangements):
-            self.obj.living_arrangements.remove(current_row)
-            self.ui.permanency_plans_table.removeRow(current_row)
+        dialog = PermanencyPlanDialog(self)
+        dialog.setWindowTitle("Permanency Plan")
+        controller = GenericController(dialog, PermanencyPlan)
+        data: PermanencyPlan = controller.add()
+        if data is not None:
+            self.permanency_plans.append(data)
+            self._add_permanency_plan_table_row(data)
 
     def edit_permanency_plan(self):
-        # if the living_arrangement_table has a current row, pass the corresponding obj item to the dialog
+        # if the permanency_plan_table has a current row, pass the corresponding obj item to the dialog
         current_row = self.ui.permanency_plans_table.currentRow()
-        if 0 <= current_row < len(self.obj.living_arrangements):
-            permanency_plan: PermanencyPlan = self.obj.permanency_plans[current_row]
-            dialog: PermanencyPlanDialog = PermanencyPlanDialog(self, relaxed_rules=self.relaxed_rules)
-            dialog.populate(permanency_plan)
-            dialog.show()
-            if dialog.exec():
-                self.obj.living_arrangements[current_row] = permanency_plan
-                self.ui.permanency_plans_table.setItem(current_row, 0,
-                                                       QTableWidgetItem(str(permanency_plan.e147)))
-                self.ui.permanency_plans_table.setItem(current_row, 1,
-                                                       QTableWidgetItem(e148_to_str(permanency_plan.e148)))
+        if current_row >= 0:
+            dialog = PermanencyPlanDialog(self)
+            dialog.setWindowTitle("Permanency Plan")
+            controller = GenericController(dialog, PermanencyPlan)
+            data = self.permanency_plans[current_row]
+            controller.edit(data)
+            self._update_permanency_plan_table_row(current_row, data)
 
-    def add_case_visit(self):
-        case_visit: CaseVisit = CaseVisit(removal=self.obj)
-        dialog: CaseVisitDialog = CaseVisitDialog(self, relaxed_rules=self.relaxed_rules)
-        dialog.populate(case_visit)
-        dialog.show()
-        if dialog.exec():
-            if self.obj.case_worker_visits is None:
-                self.obj.case_worker_visits = []
-            self.obj.case_visits.append(case_visit)
-            row: int = self.ui.case_visits.rowCount()
-            self.ui.case_visits_table.insertRow(row)
-            self.ui.case_visits_table.setItem(row, 0, QTableWidgetItem(str(case_visit.e151)))
-            self.ui.case_visits_table.setItem(row, 1, QTableWidgetItem(e152_to_str(case_visit.e152)))
+    def delete_permanency_plan(self):
+        # if the permanency_plan_table has a current row, delete it from the obj and refresh the table
+        current_row = self.ui.permanency_plans_table.currentRow()
+        if 0 <= current_row < len(self.obj.permanency_plans):
+            del self.obj.permanency_plans[current_row]
+            self.ui.permanency_plans_table.removeRow(current_row)
 
-    def delete_case_visit(self):
-        # if the livint_arrangement_table has a current row, delete it from the obj and refresh the table
+    def _add_permanency_plan_table_row(self, permanency_plan: PermanencyPlan) -> None:
+        row: int = self.ui.permanency_plans_table.rowCount()
+        self.ui.permanency_plans_table.insertRow(row)
+        self._update_permanency_plan_table_row(row, permanency_plan)
+
+    def _update_permanency_plan_row(self, row: int, data: PermanencyPlan):
+        self.ui.permanency_plans_table.setItem(row, 0, QTableWidgetItem(str(data.e147)))
+        self.ui.permanency_plans_table.setItem(row, 1, QTableWidgetItem(e148_to_str(data.e148)))
+
+    # ----- Case Visit Automation ---------------------------------------------
+
+    def add_case_worker_visit(self):
+        dialog = CaseVisitDialog(self)
+        dialog.setWindowTitle("Case Worker Visit")
+        controller = GenericController(dialog, CaseVisit)
+        data: CaseVisit = controller.add()
+        if data is not None:
+            self.case_worker_visits.append(data)
+            self._add_case_worker_visit_table_row(data)
+
+    def edit_case_worker_visit(self):
+        # if the case_worker_visit_table has a current row, pass the corresponding obj item to the dialog
         current_row = self.ui.case_visits_table.currentRow()
-        if 0 <= current_row < len(self.obj.living_arrangements):
-            self.obj.living_arrangements.remove(current_row)
+        if current_row >= 0:
+            dialog = CaseVisitDialog(self)
+            dialog.setWindowTitle("Case Worker Visit")
+            controller = GenericController(dialog, CaseVisit)
+            data = self.case_worker_visits[current_row]
+            controller.edit(data)
+            self._update_case_worker_visit_table_row(current_row, data)
+
+    def delete_case_worker_visit(self):
+        # if the case_worker_visit_table has a current row, delete it from the obj and refresh the table
+        current_row = self.ui.case_visits_table.currentRow()
+        if 0 <= current_row < len(self.obj.case_worker_visits):
+            del self.case_worker_visits[current_row]
             self.ui.case_visits_table.removeRow(current_row)
 
-    def edit_case_visit(self):
-        # if the living_arrangement_table has a current row, pass the corresponding obj item to the dialog
-        current_row = self.ui.case_visits_table.currentRow()
-        if 0 <= current_row < len(self.obj.living_arrangements):
-            case_visit: CaseVisit = self.obj.case_visits[current_row]
-            dialog: CaseVisitDialog = CaseVisitDialog(self, relaxed_rules=self.relaxed_rules)
-            dialog.populate(case_visit)
-            dialog.show()
-            if dialog.exec():
-                self.obj.living_arrangements[current_row] = case_visit
-                self.ui.case_visits_table.setItem(current_row, 0,
-                                                  QTableWidgetItem(str(case_visit.e151)))
-                self.ui.case_visits_table.setItem(current_row, 1,
-                                                  QTableWidgetItem(e152_to_str(case_visit.e152)))
+    def _add_case_worker_visit_table_row(self, case_worker_visit: CaseVisit) -> None:
+        row: int = self.ui.case_visits_table.rowCount()
+        self.ui.case_visits_table.insertRow(row)
+        self._update_case_worker_visit_table_row(row, case_worker_visit)
+
+    def _update_case_worker_visit_table_row(self, row: int, data: CaseVisit):
+        self.ui.case_visits_table.setItem(row, 0,
+                                          QTableWidgetItem(str(data.e151)))
+        self.ui.case_visits_table.setItem(row, 1,
+                                          QTableWidgetItem(e152_to_str(data.e152)))
+
+    # ----- Permanency Hearing Automation -------------------------------------
 
     def add_permanency_hearing(self):
-        permanency_hearing: PermanencyHearing = PermanencyHearing(removal=self.obj)
-        dialog: PermanencyHearingDialog = PermanencyHearingDialog(self, relaxed_rules=self.relaxed_rules)
-        dialog.populate(permanency_hearing)
-        dialog.show()
-        if dialog.exec():
-            if self.obj.permanency_hearings is None:
-                self.obj.permanency_hearings = []
-            self.obj.permanency_hearings.append(permanency_hearing)
-            row: int = self.ui.permanency_hearings.rowCount()
-            self.ui.permanency_hearings_table.insertRow(row)
-            self.ui.permanency_hearings_table.setItem(row, 0, QTableWidgetItem(str(permanency_hearing.e150)))
-
-    def delete_permanency_hearing(self):
-        # if the livint_arrangement_table has a current row, delete it from the obj and refresh the table
-        current_row = self.ui.permanency_hearings_table.currentRow()
-        if 0 <= current_row < len(self.obj.living_arrangements):
-            self.obj.living_arrangements.remove(current_row)
-            self.ui.permanency_hearings_table.removeRow(current_row)
+        dialog = PermanencyHearingDialog(self)
+        dialog.setWindowTitle("Permanency Hearing")
+        controller = GenericController(dialog, PermanencyHearing)
+        data: PermanencyHearing = controller.add()
+        if data is not None:
+            self.permanency_hearings.append(data)
+            self._add_permanency_hearing_table_row(data)
 
     def edit_permanency_hearing(self):
-        # if the living_arrangement_table has a current row, pass the corresponding obj item to the dialog
+        # if the permanency_hearing_table has a current row, pass the corresponding obj item to the dialog
         current_row = self.ui.permanency_hearings_table.currentRow()
-        if 0 <= current_row < len(self.obj.living_arrangements):
-            permanency_hearing: PermanencyHearing = self.obj.permanency_hearings[current_row]
-            dialog: PermanencyHearingDialog = PermanencyHearingDialog(self, relaxed_rules=self.relaxed_rules)
-            dialog.populate(permanency_hearing)
-            dialog.show()
-            if dialog.exec():
-                self.obj.living_arrangements[current_row] = permanency_hearing
-                self.ui.permanency_hearings_table.setItem(current_row, 0,
-                                                          QTableWidgetItem(str(permanency_hearing.e150)))
+        if current_row >= 0:
+            dialog = PermanencyHearingDialog(self)
+            dialog.setWindowTitle("Permanency Hearing")
+            controller = GenericController(dialog, PermanencyHearing)
+            data = self.permanency_hearings[current_row]
+            controller.edit(data)
+            self._update_permanency_hearing_table_row(current_row, data)
+
+    def delete_permanency_hearing(self):
+        # if the permanency_hearing_table has a current row, delete it from the obj and refresh the table
+        current_row = self.ui.permanency_hearings_table.currentRow()
+        if 0 <= current_row < len(self.obj.permanency_hearings):
+            del self.permanency_hearings[current_row]
+            self.ui.permanency_hearings_table.removeRow(current_row)
+
+    def _add_permanency_hearing_table_row(self, permanency_hearing: PermanencyHearing) -> None:
+        row: int = self.ui.permanency_hearings_table.rowCount()
+        self.ui.permanency_hearings_table.insertRow(row)
+        self._update_permanency_hearing_table_row(row, permanency_hearing)
+
+    def _update_permanency_hearing_table_row(self, row: int, data: PermanencyHearing):
+        self.ui.permanency_hearings_table.setItem(row, 0, QTableWidgetItem(str(data.e150)))
+
+    # ----- Period Review Automation ------------------------------------------
 
     def add_periodic_review(self):
-        periodic_review: PeriodicReview = PeriodicReview(removal=self.obj)
-        dialog: PeriodicReviewDialog = PeriodicReviewDialog(self, relaxed_rules=self.relaxed_rules)
-        dialog.populate(periodic_review)
-        dialog.show()
-        if dialog.exec():
-            if self.obj.periodic_reviews is None:
-                self.obj.periodic_reviews = []
-            self.obj.periodic_reviews.append(periodic_review)
-            row: int = self.ui.periodic_reviews.rowCount()
-            self.ui.periodic_reviews_table.insertRow(row)
-            self.ui.periodic_reviews_table.setItem(row, 0, QTableWidgetItem(str(periodic_review.e149)))
-
-    def delete_periodic_review(self):
-        # if the livint_arrangement_table has a current row, delete it from the obj and refresh the table
-        current_row = self.ui.periodic_reviews_table.currentRow()
-        if 0 <= current_row < len(self.obj.living_arrangements):
-            self.obj.living_arrangements.remove(current_row)
-            self.ui.periodic_reviews_table.removeRow(current_row)
+        dialog = PeriodicReviewDialog(self)
+        dialog.setWindowTitle("Periodic Review")
+        controller = GenericController(dialog, PeriodicReview)
+        data: PeriodicReview = controller.add()
+        if data is not None:
+            self.periodic_reviews.append(data)
+            self._add_periodic_review_table_row(data)
 
     def edit_periodic_review(self):
-        # if the living_arrangement_table has a current row, pass the corresponding obj item to the dialog
+        # if the periodic_review_table has a current row, pass the corresponding obj item to the dialog
         current_row = self.ui.periodic_reviews_table.currentRow()
-        if 0 <= current_row < len(self.obj.living_arrangements):
-            periodic_review: PeriodicReview = self.obj.periodic_reviews[current_row]
-            dialog: PeriodicReviewDialog = PeriodicReviewDialog(self, relaxed_rules=self.relaxed_rules)
-            dialog.populate(periodic_review)
-            dialog.show()
-            if dialog.exec():
-                self.obj.living_arrangements[current_row] = periodic_review
-                self.ui.periodic_reviews_table.setItem(current_row, 0,
-                                                       QTableWidgetItem(str(periodic_review.e149)))
+        if current_row >= 0:
+            dialog = PeriodicReviewDialog(self)
+            dialog.setWindowTitle("Periodic Review")
+            controller = GenericController(dialog, PeriodicReview)
+            data = self.periodic_reviews[current_row]
+            controller.edit(data)
+            self._update_periodic_review_table_row(current_row, data)
 
-    def _validate(self):
-        """validates the form by iterating over the validation rules, return true if the error message list is empty"""
-        ...
+    def delete_periodic_review(self):
+        # if the periodic_review_table has a current row, delete it from the obj and refresh the table
+        current_row = self.ui.periodic_reviews_table.currentRow()
+        if 0 <= current_row < len(self.obj.periodic_reviews):
+            del self.periodic_reviews[current_row]
+            self.ui.periodic_reviews_table.removeRow(current_row)
 
-    def _to_obj(self):
-        """copy form field contents into the model"""
-        ...
+    def _add_periodic_review_table_row(self, periodic_review: PeriodicReview) -> None:
+        row: int = self.ui.periodic_reviews_table.rowCount()
+        self.ui.periodic_reviews_table.insertRow(row)
+        self._update_periodic_review_table_row(row, periodic_review)
 
-    def _from_obj(self):
-        """copy model fields into the form"""
-        ui = self.ui
-        obj = self.obj
+    def _update_periodic_review_table_row(self, row: int, data: PeriodicReview):
+        self.ui.periodic_reviews_table.setItem(row, 0, QTableWidgetItem(str(data.e149)))
 
-        self._set_int_field(ui.e3, obj.e3)
-        self._set_int_field(ui.e69, obj.e69)
-        self._set_combobox_selection(ui.e71, obj.e71, -1)
-        ui.e72.setChecked(obj.e72 == 1)
-        ui.e73.setChecked(obj.e73 == 1)
-        ui.e74.setChecked(obj.e74 == 1)
-        ui.e75.setChecked(obj.e75 == 1)
-        ui.e76.setChecked(obj.e76 == 1)
-        ui.e77.setChecked(obj.e77 == 1)
-        ui.e78.setChecked(obj.e78 == 1)
-        ui.e79.setChecked(obj.e79 == 1)
-        ui.e80.setChecked(obj.e80 == 1)
-        ui.e81.setChecked(obj.e81 == 1)
-        ui.e82.setChecked(obj.e82 == 1)
-        ui.e83.setChecked(obj.e83 == 1)
-        ui.e84.setChecked(obj.e84 == 1)
-        ui.e85.setChecked(obj.e85 == 1)
-        ui.e86.setChecked(obj.e86 == 1)
-        ui.e87.setChecked(obj.e87 == 1)
-        ui.e88.setChecked(obj.e88 == 1)
-        ui.e89.setChecked(obj.e89 == 1)
-        ui.e90.setChecked(obj.e90 == 1)
-        ui.e91.setChecked(obj.e91 == 1)
-        ui.e92.setChecked(obj.e92 == 1)
-        ui.e93.setChecked(obj.e93 == 1)
-        ui.e94.setChecked(obj.e94 == 1)
-        ui.e95.setChecked(obj.e95 == 1)
-        ui.e96.setChecked(obj.e96 == 1)
-        ui.e97.setChecked(obj.e97 == 1)
-        ui.e98.setChecked(obj.e98 == 1)
-        ui.e99.setChecked(obj.e99 == 1)
-        ui.e100.setChecked(obj.e100 == 1)
-        ui.e101.setChecked(obj.e101 == 1)
-        ui.e102.setChecked(obj.e102 == 1)
-        ui.e103.setChecked(obj.e103 == 1)
-        ui.e104.setChecked(obj.e104 == 1)
-        ui.e105.setChecked(obj.e105 == 1)
-        self._set_int_field(ui.e153, obj.e153)
-        self._set_int_field(ui.e154, obj.e154)
-        self._set_combobox_selection(ui.e155, obj.e155, -1)
-        self._set_combobox_selection(ui.e156, obj.e156, -1)
-        self._set_combobox_selection(ui.e157, obj.e157, -1)
-        ui.e158.setChecked(obj.e158 == 1)
-        ui.e159.setChecked(obj.e159 == 1)
-        ui.e160.setChecked(obj.e160 == 1)
-        ui.e161.setChecked(obj.e161 == 1)
-        self._set_int_field(ui.e162, obj.e162)
-        self._set_radio_button(ui.e163, obj.e163)
-        ui.e164.setChecked(obj.e164 == 1)
-        ui.e165.setChecked(obj.e165 == 1)
-        ui.e166.setChecked(obj.e166 == 1)
-        ui.e167.setChecked(obj.e167 == 1)
-        ui.e168.setChecked(obj.e168 == 1)
-        ui.e169.setChecked(obj.e169 == 1)
-        ui.e170.setChecked(obj.e170 == 1)
-        self._set_radio_button(ui.e171, obj.e171)
-        self._set_radio_button(ui.e172, obj.e172)
-        self._set_int_field(ui.e173, obj.e173)
-        self._set_radio_button(ui.e174, obj.e174)
-        ui.e175.setChecked(obj.e175 == 1)
-        ui.e176.setChecked(obj.e176 == 1)
-        ui.e177.setChecked(obj.e177 == 1)
-        ui.e178.setChecked(obj.e178 == 1)
-        ui.e179.setChecked(obj.e179 == 1)
-        ui.e180.setChecked(obj.e180 == 1)
-        ui.e181.setChecked(obj.e181 == 1)
-        self._set_radio_button(ui.e182, obj.e182)
-        self._set_radio_button(ui.e183, obj.e183)
-        self._set_combobox_selection(ui.e184, obj.e184, -1)
-        self._set_combobox_selection(ui.e185, obj.e185)
-        self._set_int_field(ui.e186, obj.e186)
+    # -------------------------------------------------------------------------
+    #                       Form Fields As Properties
+    # -------------------------------------------------------------------------
 
+    @property
+    def e3(self) -> int:
+        return self._get_int_field(self.ui.e3)
+
+    @e3.setter
+    def e3(self, e3: int) -> None:
+        self._set_int_field(self.ui.e3, e3)
+
+    @property
+    def e69(self) -> int:
+        return self._get_int_field(self.ui.e69)
+
+    @e69.setter
+    def e69(self, e69: int) -> None:
+        self._set_int_field(self.ui.e69, e69)
+
+    @property
+    def e71(self) -> int:
+        return self._get_combobox_selection(self.ui.e71, 1)
+
+    @e71.setter
+    def e71(self, e71) -> None:
+        self._set_combobox_selection(self.ui.e71, e71, -1)
+
+    @property
+    def e72(self) -> int:
+        return 1 if self.ui.e72.isChecked() else 0
+
+    @e72.setter
+    def e72(self, e72: int) -> None:
+        self.ui.e72.setChecked(e72 == 1)
+
+    @property
+    def e73(self) -> int:
+        return 1 if self.ui.e73.isChecked() else 0
+
+    @e73.setter
+    def e73(self, e73: int) -> None:
+        self.ui.e73.setChecked(e73 == 1)
+
+    @property
+    def e74(self) -> int:
+        return 1 if self.ui.e74.isChecked() else 0
+
+    @e74.setter
+    def e74(self, e74: int) -> None:
+        self.ui.e74.setChecked(e74 == 1)
+
+    @property
+    def e75(self) -> int:
+        return 1 if self.ui.e75.isChecked() else 0
+
+    @e75.setter
+    def e75(self, e75: int) -> None:
+        self.ui.e75.setChecked(e75 == 1)
+
+    @property
+    def e76(self) -> int:
+        return 1 if self.ui.e76.isChecked() else 0
+
+    @e76.setter
+    def e76(self, e76: int) -> None:
+        self.ui.e76.setChecked(e76 == 1)
+
+    @property
+    def e77(self) -> int:
+        return 1 if self.ui.e77.isChecked() else 0
+
+    @e77.setter
+    def e77(self, e77: int) -> None:
+        self.ui.e77.setChecked(e77 == 1)
+
+    @property
+    def e78(self) -> int:
+        return 1 if self.ui.e78.isChecked() else 0
+
+    @e78.setter
+    def e78(self, e78: int) -> None:
+        self.ui.e78.setChecked(e78 == 1)
+
+    @property
+    def e79(self) -> int:
+        return 1 if self.ui.e79.isChecked() else 0
+
+    @e79.setter
+    def e79(self, e79: int) -> None:
+        self.ui.e79.setChecked(e79 == 1)
+
+    @property
+    def e80(self) -> int:
+        return 1 if self.ui.e80.isChecked() else 0
+
+    @e80.setter
+    def e80(self, e80: int) -> None:
+        self.ui.e80.setChecked(e80 == 1)
+
+    @property
+    def e81(self) -> int:
+        return 1 if self.ui.e81.isChecked() else 0
+
+    @e81.setter
+    def e81(self, e81: int) -> None:
+        self.ui.e81.setChecked(e81 == 1)
+
+    @property
+    def e82(self) -> int:
+        return 1 if self.ui.e82.isChecked() else 0
+
+    @e82.setter
+    def e82(self, e82: int) -> None:
+        self.ui.e82.setChecked(e82 == 1)
+
+    @property
+    def e83(self) -> int:
+        return 1 if self.ui.e83.isChecked() else 0
+
+    @e83.setter
+    def e83(self, e83: int) -> None:
+        self.ui.e83.setChecked(e83 == 1)
+
+    @property
+    def e84(self) -> int:
+        return 1 if self.ui.e84.isChecked() else 0
+
+    @e84.setter
+    def e84(self, e84: int) -> None:
+        self.ui.e84.setChecked(e84 == 1)
+
+    @property
+    def e85(self) -> int:
+        return 1 if self.ui.e85.isChecked() else 0
+
+    @e85.setter
+    def e85(self, e85: int) -> None:
+        self.ui.e85.setChecked(e85 == 1)
+
+    @property
+    def e86(self) -> int:
+        return 1 if self.ui.e86.isChecked() else 0
+
+    @e86.setter
+    def e86(self, e86: int) -> None:
+        self.ui.e86.setChecked(e86 == 1)
+
+    @property
+    def e87(self) -> int:
+        return 1 if self.ui.e87.isChecked() else 0
+
+    @e87.setter
+    def e87(self, e87: int) -> None:
+        self.ui.e87.setChecked(e87 == 1)
+
+    @property
+    def e88(self) -> int:
+        return 1 if self.ui.e88.isChecked() else 0
+
+    @e88.setter
+    def e88(self, e88: int) -> None:
+        self.ui.e88.setChecked(e88 == 1)
+
+    @property
+    def e89(self) -> int:
+        return 1 if self.ui.e89.isChecked() else 0
+
+    @e89.setter
+    def e89(self, e89: int) -> None:
+        self.ui.e89.setChecked(e89 == 1)
+
+    @property
+    def e90(self) -> int:
+        return 1 if self.ui.e90.isChecked() else 0
+
+    @e90.setter
+    def e90(self, e90: int) -> None:
+        self.ui.e90.setChecked(e90 == 1)
+
+    @property
+    def e91(self) -> int:
+        return 1 if self.ui.e91.isChecked() else 0
+
+    @e91.setter
+    def e91(self, e91: int) -> None:
+        self.ui.e91.setChecked(e91 == 1)
+
+    @property
+    def e92(self) -> int:
+        return 1 if self.ui.e92.isChecked() else 0
+
+    @e92.setter
+    def e92(self, e92: int) -> None:
+        self.ui.e92.setChecked(e92 == 1)
+
+    @property
+    def e93(self) -> int:
+        return 1 if self.ui.e93.isChecked() else 0
+
+    @e93.setter
+    def e93(self, e93: int) -> None:
+        self.ui.e93.setChecked(e93 == 1)
+
+    @property
+    def e94(self) -> int:
+        return 1 if self.ui.e94.isChecked() else 0
+
+    @e94.setter
+    def e94(self, e94: int) -> None:
+        self.ui.e94.setChecked(e94 == 1)
+
+    @property
+    def e95(self) -> int:
+        return 1 if self.ui.e95.isChecked() else 0
+
+    @e95.setter
+    def e95(self, e95: int) -> None:
+        self.ui.e95.setChecked(e95 == 1)
+
+    @property
+    def e96(self) -> int:
+        return 1 if self.ui.e96.isChecked() else 0
+
+    @e96.setter
+    def e96(self, e96: int) -> None:
+        self.ui.e96.setChecked(e96 == 1)
+
+    @property
+    def e97(self) -> int:
+        return 1 if self.ui.e97.isChecked() else 0
+
+    @e97.setter
+    def e97(self, e97: int) -> None:
+        self.ui.e97.setChecked(e97 == 1)
+
+    @property
+    def e98(self) -> int:
+        return 1 if self.ui.e98.isChecked() else 0
+
+    @e98.setter
+    def e98(self, e98: int) -> None:
+        self.ui.e98.setChecked(e98 == 1)
+
+    @property
+    def e99(self) -> int:
+        return 1 if self.ui.e99.isChecked() else 0
+
+    @e99.setter
+    def e99(self, e99: int) -> None:
+        self.ui.e99.setChecked(e99 == 1)
+
+    @property
+    def e100(self) -> int:
+        return 1 if self.ui.e100.isChecked() else 0
+
+    @e100.setter
+    def e100(self, e100: int) -> None:
+        self.ui.e100.setChecked(e100 == 1)
+
+    @property
+    def e101(self) -> int:
+        return 1 if self.ui.e101.isChecked() else 0
+
+    @e101.setter
+    def e101(self, e101: int) -> None:
+        self.ui.e101.setChecked(e101 == 1)
+
+    @property
+    def e102(self) -> int:
+        return 1 if self.ui.e102.isChecked() else 0
+
+    @e102.setter
+    def e102(self, e102: int) -> None:
+        self.ui.e102.setChecked(e102 == 1)
+
+    @property
+    def e103(self) -> int:
+        return 1 if self.ui.e103.isChecked() else 0
+
+    @e103.setter
+    def e103(self, e103: int) -> None:
+        self.ui.e103.setChecked(e103 == 1)
+
+    @property
+    def e104(self) -> int:
+        return 1 if self.ui.e104.isChecked() else 0
+
+    @e104.setter
+    def e104(self, e104: int) -> None:
+        self.ui.e104.setChecked(e104 == 1)
+
+    @property
+    def e105(self) -> int:
+        return 1 if self.ui.e105.isChecked() else 0
+
+    @e105.setter
+    def e105(self, e105: int) -> None:
+        self.ui.e105.setChecked(e105 == 1)
+
+    @property
+    def e153(self) -> int:
+        return self._get_int_field(self.ui.e153)
+
+    @e153.setter
+    def e153(self, e153: int) -> None:
+        self._set_int_field(self.ui.e153, e153)
+
+    @property
+    def e154(self) -> int:
+        return self._get_int_field(self.ui.e154)
+
+    @e154.setter
+    def e154(self, e154: int) -> None:
+        self._set_int_field(self.ui.e154, e154)
+
+    @property
+    def e155(self) -> int:
+        return self._get_combobox_selection(self.ui.e155, 1)
+
+    @e155.setter
+    def e155(self, e155: int) -> None:
+        self._set_combobox_selection(self.ui.e155, e155, -1)
+
+    @property
+    def e156(self) -> int:
+        return self._get_combobox_selection(self.ui.e156, 1)
+
+    @e156.setter
+    def e156(self, e156: int):
+        self._set_combobox_selection(self.ui.e156, e156, -1)
+
+    @property
+    def e157(self) -> int:
+        return self._get_combobox_selection(self.ui.e157, 1)
+
+    @e157.setter
+    def e157(self, e157: int) -> None:
+        self._set_combobox_selection(self.ui.e157, e157, -1)
+
+    @property
+    def e158(self) -> int:
+        return 1 if self.ui.e158.isChecked() else 0
+
+    @e158.setter
+    def e158(self, e158: int) -> None:
+        self.ui.e158.setChecked(e158 == 1)
+
+    @property
+    def e159(self) -> int:
+        return 1 if self.ui.e159.isChecked() else 0
+
+    @e159.setter
+    def e159(self, e159: int) -> None:
+        self.ui.e159.setChecked(e159 == 1)
+
+    @property
+    def e160(self) -> int:
+        return 1 if self.ui.e160.isChecked() else 0
+
+    @e160.setter
+    def e160(self, e160: int) -> None:
+        self.ui.e160.setChecked(e160 == 1)
+
+    @property
+    def e161(self) -> int:
+        return 1 if self.ui.e161.isChecked() else 0
+
+    @e161.setter
+    def e161(self, e161: int) -> None:
+        self.ui.e161.setChecked(e161 == 1)
+
+    @property
+    def e162(self) -> int:
+        return self._get_int_field(self.ui.e162)
+
+    @e162.setter
+    def e162(self, e162: int) -> None:
+        self._set_int_field(self.ui.e162, e162)
+
+    @property
+    def e163(self) -> int:
+        return self._get_radio_button(self.ui.e163)
+
+    @e163.setter
+    def e163(self, e163: int) -> None:
+        self._set_radio_button(self.ui.e163, e163)
+
+    @property
+    def e164(self) -> int:
+        return 1 if self.ui.e164.isChecked() else 0
+
+    @e164.setter
+    def e164(self, e164: int) -> None:
+        self.ui.e164.setChecked(e164 == 1)
+
+    @property
+    def e165(self) -> int:
+        return 1 if self.ui.e165.isChecked() else 0
+
+    @e165.setter
+    def e165(self, e165: int) -> None:
+        self.ui.e165.setChecked(e165 == 1)
+
+    @property
+    def e166(self) -> int:
+        return 1 if self.ui.e166.isChecked() else 0
+
+    @e166.setter
+    def e166(self, e166: int) -> None:
+        self.ui.e166.setChecked(e166 == 1)
+
+    @property
+    def e167(self) -> int:
+        return 1 if self.ui.e167.isChecked() else 0
+
+    @e167.setter
+    def e167(self, e167: int) -> None:
+        self.ui.e167.setChecked(e167 == 1)
+
+    @property
+    def e168(self) -> int:
+        return 1 if self.ui.e168.isChecked() else 0
+
+    @e168.setter
+    def e168(self, e168: int) -> None:
+        self.ui.e168.setChecked(e168 == 1)
+
+    @property
+    def e169(self) -> int:
+        return 1 if self.ui.e169.isChecked() else 0
+
+    @e169.setter
+    def e169(self, e169: int) -> None:
+        self.ui.e169.setChecked(e169 == 1)
+
+    @property
+    def e170(self) -> int:
+        return 1 if self.ui.e170.isChecked() else 0
+
+    @e170.setter
+    def e170(self, e170: int) -> None:
+        self.ui.e170.setChecked(e170 == 1)
+
+    @property
+    def e171(self) -> int:
+        return self._get_radio_button(self.ui.e171)
+
+    @e171.setter
+    def e171(self, e171: int) -> None:
+        self._set_radio_button(self.ui.e171, e171)
+
+    @property
+    def e172(self) -> None:
+        return self._get_radio_button(self.ui.e172)
+
+    @e172.setter
+    def e172(self, e172: int) -> None:
+        self._set_radio_button(self.ui.e172, e172)
+
+    @property
+    def e173(self) -> int:
+        return self._get_int_field(self.ui.e173)
+
+    @e173.setter
+    def e173(self, e173: int) -> None:
+        self._set_int_field(self.ui.e173, e173)
+
+    @property
+    def e174(self) -> int:
+        return self._get_radio_button(self.ui.e174)
+
+    @e174.setter
+    def e174(self, e174) -> None:
+        self._set_radio_button(self.ui.e174, e174)
+
+    @property
+    def e175(self) -> int:
+        return 1 if self.ui.e175.isChecked() else 0
+
+    @e175.setter
+    def e175(self, e175: int) -> None:
+        self.ui.e175.setChecked(e175 == 1)
+
+    @property
+    def e176(self) -> int:
+        return 1 if self.ui.e176.isChecked() else 0
+
+    @e176.setter
+    def e176(self, e176: int) -> None:
+        self.ui.e176.setChecked(e176 == 1)
+
+    @property
+    def e177(self) -> int:
+        return 1 if self.ui.e177.isChecked() else 0
+
+    @e177.setter
+    def e177(self, e177: int) -> None:
+        self.ui.e177.setChecked(e177 == 1)
+
+    @property
+    def e178(self) -> int:
+        return 1 if self.ui.e178.isChecked() else 0
+
+    @e178.setter
+    def e178(self, e178: int) -> None:
+        self.ui.e178.setChecked(e178 == 1)
+
+    @property
+    def e179(self) -> int:
+        return 1 if self.ui.e179.isChecked() else 0
+
+    @e179.setter
+    def e179(self, e179: int) -> None:
+        self.ui.e179.setChecked(e179 == 1)
+
+    @property
+    def e180(self) -> int:
+        return 1 if self.ui.e180.isChecked() else 0
+
+    @e180.setter
+    def e180(self, e180: int) -> None:
+        self.ui.e180.setChecked(e180 == 1)
+
+    @property
+    def e181(self) -> int:
+        return 1 if self.ui.e181.isChecked() else 0
+
+    @e181.setter
+    def e181(self, e181: int) -> None:
+        self.ui.e181.setChecked(e181 == 1)
+
+    @property
+    def e182(self) -> int:
+        return self._get_radio_button(self.ui.e182)
+
+    @e182.setter
+    def e182(self, e182: int) -> None:
+        self._set_radio_button(self.ui.e182, e182)
+
+    @property
+    def e183(self) -> int:
+        return self._get_radio_button(self.ui.e183)
+
+    @e183.setter
+    def e183(self, e183: int) -> None:
+        return self._set_radio_button(self.ui.e183, e183)
+
+    @property
+    def e184(self) -> int:
+        return self._get_combobox_selection(self.ui.e184, 1)
+
+    @e184.setter
+    def e184(self, e184: int) -> None:
+        self._set_combobox_selection(self.ui.e184, e184, -1)
+
+    @property
+    def e185(self) -> None:
+        self._get_combobox_selection(self.ui.e185)
+
+    @e185.setter
+    def e185(self, e185: int) -> None:
+        self._set_combobox_selection(self.ui.e185, e185)
+
+    @property
+    def e186(self) -> int:
+        return self._get_int_field(self.ui.e186)
+
+    @e186.setter
+    def e186(self, e186: int) -> None:
+        self._set_int_field(self.ui.e186, e186)

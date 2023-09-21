@@ -1,6 +1,7 @@
+from typing import Callable, Optional, Any
+
 from PySide6.QtWidgets import QWidget
 
-from model import Removal2020, Removal1993
 from . import BaseDialog
 
 
@@ -12,17 +13,60 @@ class Removal1993Dialog(BaseDialog):
         self._wire_ui()
         self.setLayout(self.ui.layout())
         self.setFixedSize(self.ui.size())
-        self.obj: Removal2020 | None = None
+        # self.on_accept: Optional[Callable] = None
 
-    def populate(self, obj: Removal1993):
-        self.obj = obj
-        self._from_obj()
-        self.errors = []
-        self.is_dirty = False
+    # def accept(self):
+    #     if self.on_accept and self.on_accept():
+    #         super().accept()
 
-    def validate(self):
-        self._validate()
-        return len(self.errors) == 0
+    # ------------------------------------------------------------------------
+
+    # def clear(self) -> None:
+    #     self.id = None
+    #     self.ooh = None
+    #     self.ui.e69.clear()
+    #     self.ui.e153.clear()
+    #     self.ui.e155.clear()
+
+    @property
+    def id(self) -> int:
+        return self.__id
+
+    @id.setter
+    def id(self, id: int) -> None:
+        self.__id = id
+
+    @property
+    def ooh(self) -> Any:
+        return self.__ooh
+
+    @ooh.setter
+    def ooh(self, ooh: Any) -> None:
+        self.__ooh = ooh
+
+    @property
+    def e69(self) -> int:
+        return self._get_int_field(self.ui.e69)
+
+    @e69.setter
+    def e69(self, v: int) -> None:
+        self._set_int_field(self.ui.e69, v)
+
+    @property
+    def e153(self) -> int:
+        return self._get_int_field(self.ui.e153)
+
+    @e153.setter
+    def e153(self, v: int):
+        self._set_int_field(self.ui.e153, v)
+
+    @property
+    def e155(self) -> int:
+        return self._get_combobox_selection(self.ui.e155, mapping={0: 1, 1: 2, 2: 3, 3: 4, 4: 5, 5: 6, 6: 8})
+
+    @e155.setter
+    def e155(self, v: int):
+        self._set_combobox_selection(self.ui.e155, v, mapping={1: 0, 2: 1, 3: 2, 4: 3, 5: 4, 6: 5, 8: 6})
 
     # ------------------------------------------------------------------------
 
@@ -33,24 +77,3 @@ class Removal1993Dialog(BaseDialog):
         """add event handlers to the form"""
         ui.form_action.accepted.connect(self.accept)
         ui.form_action.rejected.connect(self.reject)
-
-    def _validate(self):
-        """validates the form by iterating over the validation rules, return true if the error message list is empty"""
-        ...
-
-    def _to_obj(self):
-        """copy form field contents into the model"""
-        ui = self.ui
-        obj = self.obj
-        obj.e69 = self._get_int_field(ui.e69)
-        obj.e153 = self._get_int_field(ui.e153)
-        obj.e155 = self._get_combobox_selection(ui.e155, mapping={0: 1, 1: 2, 2: 3, 3: 4, 4: 5, 5: 6, 6: 8})
-
-    def _from_obj(self):
-        """copy model fields into the form"""
-        ui = self.ui
-        obj = self.obj
-
-        self._set_int_field(ui.e69, obj.e69)
-        self._set_int_field(ui.e153, obj.e153)
-        self._set_combobox_selection(ui.e155, obj.e155, mapping={1: 0, 2: 1, 3: 2, 4: 3, 5: 4, 6: 5, 8: 6})

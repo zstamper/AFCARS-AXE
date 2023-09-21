@@ -1,7 +1,6 @@
 from PySide6.QtWidgets import QWidget
 
 from dialogs import BaseDialog
-from model import PermanencyPlan
 
 
 class PermanencyPlanDialog(BaseDialog):
@@ -14,20 +13,6 @@ class PermanencyPlanDialog(BaseDialog):
         self._wire_ui()
         self.setLayout(self.ui.layout())
         self.setFixedSize(self.ui.size())
-        self.obj: PermanencyPlan | None = None
-
-    def populate(self, obj: PermanencyPlan):
-        self.obj = obj
-        self._from_obj()
-        self.errors = []
-        self.is_dirty = False
-
-    def validate(self):
-        self._validate()
-        return len(self.errors) == 0
-
-    def _validate(self):
-        return None
 
     def _wire_ui(self):
         self.setModal(True)
@@ -35,10 +20,18 @@ class PermanencyPlanDialog(BaseDialog):
         self.ui.form_action.accepted.connect(self.accept)
         self.ui.form_action.rejected.connect(self.reject)
 
-    def _from_obj(self):
-        self._set_text_field(self.ui.e147, self.obj.e147)
-        self._set_combobox_selection(self.ui.e148, self.obj.e148, self.obj_to_e148_mapping)
+    @property
+    def e147(self) -> int:
+        return self._get_int_field(self.ui.e147)
 
-    def _to_obj(self):
-        self.obj.e147 = self.ui.e147.text()
-        self.obj.e148 = self._get_combobox_selection(self.ui.e148, self.e148_to_obj_mapping)
+    @e147.setter
+    def e147(self, v: int) -> None:
+        self._set_int_field(self.ui.e147)
+
+    @property
+    def e148(self) -> int:
+        return self._get_combobox_selection(self.ui.e148, self.e148_to_obj_mapping)
+
+    @e148.setter
+    def e148(self, v: int) -> None:
+        self._set_combobox_selection(self.ui.e148, v, self.obj_to_e148_mapping)
