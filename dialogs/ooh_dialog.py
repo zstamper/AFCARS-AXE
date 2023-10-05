@@ -7,12 +7,12 @@ from PySide6.QtGui import (QRegularExpressionValidator)
 from PySide6.QtWidgets import (QAbstractButton, QWidget, QListWidgetItem, QTableWidgetItem)
 
 from controllers import GenericController
-from model import SecondParent, Removal1993, Removal2020, Child
-from utils import generate_id, coalesce
+from model import SecondParent, Removal1993, Removal2020
+from utils import generate_id
 from . import BaseDialog
-from .second_parent_dialog import Parent2Dialog
 from .removal1993 import Removal1993Dialog
 from .removal2020 import Removal2020Dialog
+from .second_parent_dialog import Parent2Dialog
 
 
 class ChildModelMappings:
@@ -113,23 +113,9 @@ class OOHDialog(BaseDialog):
         ui.e20.toggled.connect(self._e20_toggled)
 
         ui.e23.currentIndexChanged.connect(self._e23_current_index_changed)
-        ui.e24.currentIndexChanged.connect(self._e24_error_refresh)
-        ui.e25.currentIndexChanged.connect(self._e24_error_refresh)
-        ui.e26.currentIndexChanged.connect(self._e24_error_refresh)
-        ui.e27.currentIndexChanged.connect(self._e24_error_refresh)
-        ui.e28.currentIndexChanged.connect(self._e24_error_refresh)
-        ui.e29.currentIndexChanged.connect(self._e24_error_refresh)
-        ui.e30.currentIndexChanged.connect(self._e24_error_refresh)
-        ui.e31.currentIndexChanged.connect(self._e24_error_refresh)
-        ui.e32.currentIndexChanged.connect(self._e24_error_refresh)
-        ui.e33.currentIndexChanged.connect(self._e24_error_refresh)
-        ui.e34.currentIndexChanged.connect(self._e24_error_refresh)
 
         ui.e42.textChanged.connect(self._e42_text_changed)
         ui.e45.textChanged.connect(self._e45_text_changed)
-
-        ui.e56.textChanged.connect(self._set_state_e57)
-        ui.e57.textChanged.connect(self._set_state_e57)
 
         ui.parent2_add_button.clicked.connect(self._add_parent2)
         ui.parent2_edit_button.clicked.connect(self._edit_parent2)
@@ -219,7 +205,7 @@ class OOHDialog(BaseDialog):
         else:
             self.e41 = 1 if self.ui.e42.text() != "" else 0
             self.e44 = 1 if self.ui.e45.text() != "" else 0
-        self._e43_error_refresh()
+        # self._e43_error_refresh()
 
     def _e20_toggled(self, checked: bool):
         # If E20 is checked, E13, E14, E15, E16, E17, E18, E19 should be unchecked and disabled.
@@ -251,46 +237,12 @@ class OOHDialog(BaseDialog):
         self.ui.e32.setEnabled(index == 1)
         self.ui.e33.setEnabled(index == 1)
         self.ui.e34.setEnabled(index == 1)
-        self._e24_error_refresh()
-
-    def _e24_error_refresh(self, *args):
-        if self.ui.e23.currentIndex() == 1 and \
-                (self.ui.e24.isEnabled() and self.ui.e24.currentIndex() <= 0) and \
-                (self.ui.e25.isEnabled() and self.ui.e25.currentIndex() <= 0) and \
-                (self.ui.e26.isEnabled() and self.ui.e26.currentIndex() <= 0) and \
-                (self.ui.e27.isEnabled() and self.ui.e27.currentIndex() <= 0) and \
-                (self.ui.e28.isEnabled() and self.ui.e28.currentIndex() <= 0) and \
-                (self.ui.e29.isEnabled() and self.ui.e29.currentIndex() <= 0) and \
-                (self.ui.e30.isEnabled() and self.ui.e30.currentIndex() <= 0) and \
-                (self.ui.e31.isEnabled() and self.ui.e31.currentIndex() <= 0) and \
-                (self.ui.e32.isEnabled() and self.ui.e32.currentIndex() <= 0) and \
-                (self.ui.e33.isEnabled() and self.ui.e33.currentIndex() <= 0) and \
-                (self.ui.e34.isEnabled() and self.ui.e34.currentIndex() <= 0):
-            self.ui.e24_error.setText(self.ERROR_TEMPLATE.substitute(message=self.E24_ERROR_MESSAGE))
-        else:
-            self.ui.e24_error.setText('')
 
     def _e42_text_changed(self, text: str):
         self.e41 = 1 if text != "" else 0
-        self._e43_error_refresh()
-
-    def _e43_error_refresh(self):
-        # adoption_in_another_country_is_required_when_prior_adoption_date_is_entered (and the child is not abandoned)
-        if not self.ui.e19.isChecked() and self.ui.e42.text() != "" and self.ui.e43.currentIndex() == -1:
-            self.ui.e43_error.setText(self.ERROR_TEMPLATE.substitute(message=self.E43_ERROR_MESSAGE))
-        else:
-            self.ui.e43_error.setText("")
 
     def _e45_text_changed(self, text: str):
         self.e44 = 1 if text != "" else 0
-
-    def _set_state_e57(self):
-        visible: bool = coalesce(self.ui.e57.text(), 0) > coalesce(self.ui.e56.text(), 0)
-        if visible:
-            self.ui.e57_error.setText(self.ERROR_TEMPLATE.substitute(message=self.E57_ERROR_MESSAGE))
-        else:
-            self.ui.e57_error.setText("")
-        self.ui.e57_error.setVisible(visible)
 
     # ===== Removals ==========================================================
 
@@ -721,11 +673,12 @@ class OOHDialog(BaseDialog):
 
     @property
     def e43(self) -> int:
-        return self._get_radio_button(self.ui.e43)
+        # FIXME: e43 is currently a combobox
+        return self._get_combobox_selection(self.ui.e43)
 
     @e43.setter
     def e43(self, v: int) -> None:
-        self._set_radio_button(self.ui.e43, v)
+        self._set_combobox_selection(self.ui.e43, v)
 
     @property
     def e45(self) -> int:
@@ -737,11 +690,20 @@ class OOHDialog(BaseDialog):
 
     @property
     def e46(self) -> int:
-        return self._get_combobox_selection(self.ui.e46)
+        return 1 if (self.e47 == 1 or self.e48 == 1 or self.e49 == 1 or self.e50 == 1 or
+                     self.e51 == 1 or self.e52 == 1 or self.e53 == 1 or self.e54 == 1) else 0
 
     @e46.setter
     def e46(self, v: int) -> None:
-        self._set_combobox_selection(self.ui.e46, v)
+        if v == 0:
+            self.e47 = 0
+            self.e48 = 0
+            self.e49 = 0
+            self.e50 = 0
+            self.e51 = 0
+            self.e52 = 0
+            self.e53 = 0
+            self.e54 = 0
 
     @property
     def e47(self) -> int:
@@ -886,6 +848,14 @@ class OOHDialog(BaseDialog):
     @e67.setter
     def e67(self, v: int) -> None:
         self._set_int_field(self.ui.e67, v)
+
+    @property
+    def e106(self) -> int:
+        return self._get_radio_button(self.ui.e106)
+
+    @e106.setter
+    def e106(self, v: int) -> None:
+        self._set_radio_button(self.ui.e106, v)
 
     @property
     def e107(self) -> int:

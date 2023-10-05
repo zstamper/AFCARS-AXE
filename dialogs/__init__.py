@@ -1,13 +1,24 @@
-import os
+import sys
 from datetime import datetime
-from typing import Optional, Any, Callable
+from pathlib import Path
+from typing import Optional, Callable
 
 from PySide6.QtCore import QFile, Qt, QDate
 from PySide6.QtUiTools import QUiLoader
-from PySide6.QtWidgets import QDialog, QWidget, QErrorMessage, QCheckBox, QRadioButton, QLineEdit, QDateEdit, QComboBox, \
+from PySide6.QtWidgets import QDialog, QWidget, QErrorMessage, QCheckBox, QRadioButton, QLineEdit, QComboBox, \
     QButtonGroup, QTableWidget, QListWidget
 from PySide6.QtWidgets import QMessageBox
-from pydantic import ValidationError
+
+
+class BasePath:
+    _base_path: str = None
+
+    @staticmethod
+    def path(new_path: str = None) -> str:
+        if new_path is not None:
+            print(f"{new_path=}")
+            BasePath._base_path = Path(new_path).resolve().parent
+        return BasePath._base_path
 
 
 class BaseDialog(QDialog):
@@ -30,7 +41,14 @@ class BaseDialog(QDialog):
     on_accept = property(None, _on_accept, None)
 
     def load_ui(self, file_name: str) -> QWidget:
-        ui_file_path = os.path.join(os.path.dirname(__file__), '..', 'ui', file_name)
+        if getattr(sys, 'frozen', False):
+            # we are running in a bundle
+            bundle_dir = sys._MEIPASS
+        else:
+            # we are running in a normal Python environment
+            bundle_dir = Path(__file__).resolve().parent.parent
+        ui_file_path = Path(bundle_dir) / 'ui' / file_name
+        print(f"{ui_file_path=}")
         loader = QUiLoader()
         ui_file = QFile(ui_file_path)
         ui_file.open(QFile.ReadOnly)
@@ -72,22 +90,6 @@ class BaseDialog(QDialog):
                     widget.clearContents()
                 case QListWidget():
                     widget.clear()
-
-    # def validate(self) -> bool:
-    #     self._validate()
-    #     return len(self.errors) == 0
-    #
-    # def _validate(self) -> None:
-    #     pass
-    #
-    # def _to_obj(self):
-    #     raise NotImplementedError("method _to_obj is not implemented")
-    #
-    # def _to_int(self, value: any) -> int | None:
-    #     try:
-    #         return int(value)
-    #     except ValueError:
-    #         return None
 
     @staticmethod
     def _set_text_field(ui, obj) -> None:
