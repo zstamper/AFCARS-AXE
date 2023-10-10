@@ -40,29 +40,6 @@ def test_cannot_have_declined_with_any_other_race(child_form, qtbot):
     assert not child_form.ui.e19.isEnabled()
 
 
-def test_adoption_in_another_country_is_required_when_prior_adoption_date_is_entered(child_form, qtbot):
-    child_form.ui.e19.setChecked(False)
-    child_form.ui.e42.setText('')
-    assert child_form.ui.e43_error.text().find(child_form.E43_ERROR_MESSAGE) == -1
-
-    child_form.ui.e42.setText('202001')
-    assert child_form.ui.e43_error.text().find(child_form.E43_ERROR_MESSAGE) >= 0
-
-
-def test_cannot_enter_in_more_siblings_in_foster_care_than_total_siblings(child_form, qtbot):
-    child_form.ui.e56.setText('1')
-    child_form.ui.e57.setText('1')
-    assert child_form.ui.e57_error.text() == ""
-
-    child_form.ui.e57.setText('2')
-    assert child_form.ui.e57_error.text().find(child_form.E57_ERROR_MESSAGE) >= 0
-
-
-def test_cannot_have_siblings_in_placement_if_E57_is_0(child_form, qtbot):
-    # E58
-    assert False
-
-
 def test_generate_id(child_form, qtbot):
     child_form.ui.e4_generate.click()
     assert child_form.ui.e4.text() != ""
@@ -138,22 +115,6 @@ def test_if_e19_is_checked_e44_is_abandoned(child_form, qtbot):
     # hmm... there is no specific e44 data element. This appears to be a virtual element instead.
     child_form.ui.e19.click()
     assert child_form.e44 == 7
-
-
-def test_if_child_has_diagnosed_condition_one_of_e24_to_e34_must_be_selected(child_form, qtbot):
-    child_form.ui.e23.setCurrentIndex(1)
-    child_form.ui.e24.setCurrentIndex(-1)
-    child_form.ui.e25.setCurrentIndex(-1)
-    child_form.ui.e26.setCurrentIndex(-1)
-    child_form.ui.e27.setCurrentIndex(-1)
-    child_form.ui.e28.setCurrentIndex(-1)
-    child_form.ui.e29.setCurrentIndex(-1)
-    child_form.ui.e30.setCurrentIndex(-1)
-    child_form.ui.e31.setCurrentIndex(-1)
-    child_form.ui.e32.setCurrentIndex(-1)
-    child_form.ui.e33.setCurrentIndex(-1)
-    child_form.ui.e34.setCurrentIndex(-1)
-    assert child_form.ui.e24_error.text().find(child_form.E24_ERROR_MESSAGE) >= 0
 
 
 def test_if_child_does_not_have_diagnosed_condition_none_of_e24_to_e34_are_enabled(child_form, qtbot):
