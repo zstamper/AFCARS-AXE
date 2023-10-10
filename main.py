@@ -50,6 +50,7 @@ try:
 
         def add_a(self):
             a_dialog = ADialog(self)
+            a_dialog.child_name = ""
             controller = AController(a_dialog, self.context_id)
             data: Child = controller.add()
             if data is not None:
@@ -61,6 +62,7 @@ try:
             if current_row >= 0:
                 data = self._children[current_row]
                 dialog = ADialog(self)
+                dialog.child_name = f"{data.last_name}, {data.first_name}"
                 controller = AController(dialog, self.context_id)
                 controller.edit(data)
                 self.__update_child_row(current_row, data)
@@ -78,6 +80,7 @@ try:
 
         def add_ooh(self):
             ooh_dialog = OOHDialog(self)
+            ooh_dialog.child_name = ""
             controller = OOHController(ooh_dialog, self.context_id)
             data: Child = controller.add()
             if data is not None:
@@ -89,7 +92,7 @@ try:
             if current_row >= 0:
                 data = self._children[current_row]
                 dialog = OOHDialog(self)
-                dialog.setWindowTitle(f"{data.last_name}, {data.first_name}")
+                dialog.child_name = f"{data.last_name}, {data.first_name}"
                 controller = OOHController(dialog, self.context_id)
                 controller.edit(data)
                 self.__update_child_row(current_row, data)
