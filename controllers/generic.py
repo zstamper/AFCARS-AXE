@@ -26,7 +26,6 @@ class GenericController:
         """Shows an empty dialog, lets the user do what they will, then returns either a new model instance or None,
         depending on whether the form contents are "valid" or not. The "valid" determination is handled by the model
         as a feature of pydantic."""
-        self.dialog.clear()
         self.dialog.exec()
         if self.dialog.result() == QDialog.Accepted:
             return self.new_data
@@ -36,7 +35,6 @@ class GenericController:
         """Pushes the model data into the form, shows the form, and lets the user do what they will. If the form
         contents are valid, the model instance is modified with the new form contents. Otherwise, the model contents are
         left unchanged. Like the add() method, "valid" is determined by rules in the model using pydantic."""
-        self.dialog.clear()
         data.scatter(self.dialog)
         self.dialog.exec()
         if self.dialog.result() == QDialog.Accepted:
@@ -47,5 +45,5 @@ class GenericController:
             self.new_data = self.data_class.crib(self.dialog)
             return True
         except ValidationError as ve:
-            show_error_dialog(ve)
+            show_error_dialog(self.dialog, ve)
         return False

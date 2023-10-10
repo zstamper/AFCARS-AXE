@@ -13,6 +13,9 @@ class Removal1993Dialog(BaseDialog):
         self._wire_ui()
         self.setLayout(self.ui.layout())
         self.setFixedSize(self.ui.size())
+        self.id: int | None = None
+        self.ooh_id: int | None = None
+        self._child_name: str = ""
         # self.on_accept: Optional[Callable] = None
 
     # def accept(self):
@@ -21,12 +24,11 @@ class Removal1993Dialog(BaseDialog):
 
     # ------------------------------------------------------------------------
 
-    # def clear(self) -> None:
-    #     self.id = None
-    #     self.ooh = None
-    #     self.ui.e69.clear()
-    #     self.ui.e153.clear()
-    #     self.ui.e155.clear()
+    def clear(self) -> None:
+        super().clear()
+        self.child_name = ""
+        self.id = None
+        self.ooh = None
 
     @property
     def id(self) -> int:
@@ -43,6 +45,18 @@ class Removal1993Dialog(BaseDialog):
     @ooh.setter
     def ooh(self, ooh: Any) -> None:
         self.__ooh = ooh
+
+    @property
+    def child_name(self) -> str:
+        return self._child_name
+
+    @child_name.setter
+    def child_name(self, v: str):
+        self._child_name = v
+        if v:
+            self.setWindowTitle(f"1993 Removal : {v}")
+        else:
+            self.setWindowTitle("")
 
     @property
     def e69(self) -> int:

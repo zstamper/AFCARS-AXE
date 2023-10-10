@@ -11,7 +11,9 @@ class LivingArrangementDialog(BaseDialog):
         self._wire_ui()
         self.setLayout(self.ui.layout())
         self.setFixedSize(self.ui.size())
-        self.id = None
+        self.id: int | None = None
+        self.removal_id: int | None = None
+        self._child_name: str = ""
 
     def _wire_ui(self) -> None:
         self.setModal(True)
@@ -32,6 +34,17 @@ class LivingArrangementDialog(BaseDialog):
         # field interactions
         ...
 
+    @property
+    def child_name(self) -> str:
+        return self._child_name
+
+    @child_name.setter
+    def child_name(self, v: str):
+        self._child_name = v
+        if v:
+            self.setWindowTitle(f"Living Arrangement : {v}")
+        else:
+            self.setWindowTitle("")
 
     @property
     def e40(self) -> int:
@@ -59,12 +72,12 @@ class LivingArrangementDialog(BaseDialog):
 
     @property
     def e113(self) -> int:
-        return 1 if self.ui.e120.currentIndex == 0 else 0
+        return 1 if self.e120 == 0 else 0
 
     @e113.setter
     def e113(self, v: int) -> None:
         if v:
-            self.ui.e120.setCurrentIndex(0)
+            self.e120 = 0
 
     @property
     def e114(self) -> int:
@@ -117,13 +130,14 @@ class LivingArrangementDialog(BaseDialog):
         pass
 
     @property
-    def e120(self) -> int:
-        return self.ui.e120.currentIndex if self.ui.e120.currentIndex > 0 else None
+    def e120(self) -> int | None:
+        idx = self._get_combobox_selection(self.ui.e120)
+        return idx if idx > 0 else None
 
     @e120.setter
     def e120(self, v: int) -> None:
         if v is not None and v != 0:
-            self.ui.e120.setCurrentIndex(v)
+            self._set_combobox_selection(self.ui.e120, v)
 
     @property
     def e121(self) -> int:
@@ -251,7 +265,7 @@ class LivingArrangementDialog(BaseDialog):
 
     @e136.setter
     def e136(self, v: int) -> None:
-        self._set_int_field(self.ui.e136)
+        self._set_int_field(self.ui.e136, v)
 
     @property
     def e137(self) -> int:

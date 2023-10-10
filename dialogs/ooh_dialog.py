@@ -15,16 +15,6 @@ from .removal2020 import Removal2020Dialog
 from .second_parent_dialog import Parent2Dialog
 
 
-class ChildModelMappings:
-    MALE_FEMALE: dict = {'M': 1, 'F': 2, 'Male': 1, 'Female': 2}
-    NA_A: dict = {'Does not apply': 0, 'Applies': 1}
-    TPR: dict = {'Not applicable': 0, 'Voluntary': 1, 'Involuntary': 2}
-    YES_NO: dict = {'No': 0, 'Yes': 1}
-    YES_NO_ABANDONED: dict = {'No': 0, 'Yes': 1, 'Abandoned': 7}
-    YES_NO_NA: dict = {'No': 0, 'Yes': 1, 'Not applicable': 9}
-    YES_NO_UNKNOWN: dict = {'No': 0, 'Yes': 0, 'Unknown': 9}
-
-
 class OOHDialog(BaseDialog):
     ERROR_TEMPLATE: Template = Template(
         '<html><head/><body><p><span style="font-weight:700; color: #ff2600;">$message</span></p></body></html>')
@@ -49,6 +39,8 @@ class OOHDialog(BaseDialog):
         self.setLayout(self.ui.layout())
         self.setFixedSize(self.ui.size())
         self.context_id: int = None
+        self.id: int | None = None
+        self.child_id: int | None = None
         # Virtual elements:
         # e41 & e44 default to 'no' (0) because the corresponding line edit fields default to empty
         self.e41: int = 0
@@ -58,6 +50,7 @@ class OOHDialog(BaseDialog):
         self._second_parents: list[SecondParent] = []
         self._removals1993: list[Removal1993] = []
         self._removals2020: list[Removal2020] = []
+        self._child_name: str = ""
 
     def clear(self):
         super().clear()
@@ -131,17 +124,13 @@ class OOHDialog(BaseDialog):
         ui.removal_2020_table.cellDoubleClicked.connect(self._edit_removal2020)
 
     def _last_name_text_changed(self, text: str):
-        self._refresh_title()
+        self.child_name = f"{self.last_name if self.last_name else ''}{', ' if self.last_name and self.first_name else ''}{self.first_name if self.first_name else ''}"
 
     def _first_name_text_changed(self, text: str):
-        self._refresh_title()
+        self.child_name = f"{self.last_name if self.last_name else ''}{', ' if self.last_name and self.first_name else ''}{self.first_name if self.first_name else ''}"
 
     def _refresh_title(self):
-        title: str = self.ui.last_name.text()
-        title = f"{title}, {self.ui.first_name.text()}" if self.ui.first_name.text() != '' else title
-        title = f"{title}, {self.ui.e4.text()}" if self.ui.e4.text() != '' else title
-
-        self.setWindowTitle(title)
+        self.setWindowTitle(f"{self.child_name}{' : ' if self.e4 else ''}{self.e4 if self.e4 else ''}")
 
     def _e4_text_changed(self, text: str):
         if self.ui.e4.hasAcceptableInput():
@@ -248,7 +237,8 @@ class OOHDialog(BaseDialog):
 
     def _add_removal1993(self):
         dialog = Removal1993Dialog(self)
-        dialog.setWindowTitle(f"1993 Removal for {self.last_name}, {self.first_name}")
+        dialog.clear()
+        dialog.child_name = self.child_name
         controller = GenericController(dialog, Removal1993)
         data: Removal1993 = controller.add()
         if data is not None:
@@ -260,7 +250,8 @@ class OOHDialog(BaseDialog):
         current_row = self.ui.removal_1993_table.currentRow()
         if current_row >= 0:
             dialog = Removal1993Dialog(self)
-            dialog.setWindowTitle(f"1993 Removal for {self.last_name}, {self.first_name}")
+            dialog.clear()
+            dialog.child_name = self.child_name
             controller = GenericController(dialog, Removal1993)
             data = self._removals1993[current_row]
             controller.edit(data)
@@ -285,7 +276,8 @@ class OOHDialog(BaseDialog):
 
     def _add_removal2020(self):
         dialog = Removal2020Dialog(self)
-        dialog.setWindowTitle(f"2020 Removal for {self.last_name}, {self.first_name}")
+        dialog.clear()
+        dialog.child_name = self.child_name
         controller = GenericController(dialog, Removal2020)
         data: Removal2020 = controller.add()
         if data is not None:
@@ -296,7 +288,8 @@ class OOHDialog(BaseDialog):
         current_row = self.ui.removal_2020_table.currentRow()
         if current_row >= 0:
             dialog = Removal2020Dialog(self)
-            dialog.setWindowTitle(f"2020 Removal for {self.last_name}, {self.first_name}")
+            dialog.clear()
+            dialog.child_name = self.child_name
             controller = GenericController(dialog, Removal2020)
             data = self._removals2020[current_row]
             controller.edit(data)
@@ -323,7 +316,8 @@ class OOHDialog(BaseDialog):
 
     def _add_parent2(self):
         dialog = Parent2Dialog(self)
-        dialog.setWindowTitle(f"Putative Parent/Guardian for {self.last_name}, {self.first_name}")
+        dialog.clear()
+        dialog.child_name = self.child_name
         controller = GenericController(dialog, SecondParent)
         data: SecondParent = controller.add()
         if data is not None:
@@ -334,7 +328,8 @@ class OOHDialog(BaseDialog):
         current_row = self.ui.parent2tpr.currentRow()
         if current_row >= 0:
             dialog = Parent2Dialog(self)
-            dialog.setWindowTitle(f"Putative Parent/Guardian for {self.last_name}, {self.first_name}")
+            dialog.clear()
+            dialog.child_name = self.child_name
             controller = GenericController(dialog, SecondParent)
             data = self._second_parents[current_row]
             controller.edit(data)
@@ -358,6 +353,15 @@ class OOHDialog(BaseDialog):
         self.ui.parent2tpr.setItem(row, 2, QTableWidgetItem(str(data.e68)))
 
     # ==================================================================================================================
+
+    @property
+    def child_name(self) -> str:
+        return self._child_name
+
+    @child_name.setter
+    def child_name(self, v: str) -> None:
+        self._child_name = v
+        self._refresh_title()
 
     @property
     def first_name(self):

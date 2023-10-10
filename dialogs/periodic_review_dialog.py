@@ -11,11 +11,26 @@ class PeriodicReviewDialog(BaseDialog):
         self._wire_ui()
         self.setLayout(self.ui.layout())
         self.setFixedSize(self.ui.size())
+        self.id: int | None = None
+        self.removal_id: int | None = None
+        self._child_name: str = ""
 
     def _wire_ui(self):
         self.setModal(True)
         self.ui.form_action.accepted.connect(self.accept)
         self.ui.form_action.rejected.connect(self.reject)
+
+    @property
+    def child_name(self) -> str:
+        return self._child_name
+
+    @child_name.setter
+    def child_name(self, v: str):
+        self._child_name = v
+        if v:
+            self.setWindowTitle(f"Periodic Review : {v}")
+        else:
+            self.setWindowTitle("")
 
     @property
     def e149(self) -> int:
