@@ -71,98 +71,17 @@ class Removal2020Dialog(BaseDialog):
         self.periodic_reviews = []
         self.permanency_hearings = []
         self.case_worker_visits = []
-
-    # def accept(self):
-    #     if self.on_accept and self.on_accept():
-    #         super().accept()
-
-    # def clear(self) -> None:
-    #     self.id = None
-    #     self.ui.e3.clear()
-    #     self.ui.e69.clear()
-    #     # self.ui.e70.clear()
-    #     self.ui.e71.setCurrentIndex(-1)
-    #     self.ui.e72.setChecked(False)
-    #     self.ui.e73.setChecked(False)
-    #     self.ui.e74.setChecked(False)
-    #     self.ui.e75.setChecked(False)
-    #     self.ui.e76.setChecked(False)
-    #     self.ui.e77.setChecked(False)
-    #     self.ui.e78.setChecked(False)
-    #     self.ui.e79.setChecked(False)
-    #     self.ui.e80.setChecked(False)
-    #     self.ui.e81.setChecked(False)
-    #     self.ui.e82.setChecked(False)
-    #     self.ui.e83.setChecked(False)
-    #     self.ui.e84.setChecked(False)
-    #     self.ui.e85.setChecked(False)
-    #     self.ui.e86.setChecked(False)
-    #     self.ui.e87.setChecked(False)
-    #     self.ui.e88.setChecked(False)
-    #     self.ui.e89.setChecked(False)
-    #     self.ui.e90.setChecked(False)
-    #     self.ui.e91.setChecked(False)
-    #     self.ui.e92.setChecked(False)
-    #     self.ui.e93.setChecked(False)
-    #     self.ui.e94.setChecked(False)
-    #     self.ui.e95.setChecked(False)
-    #     self.ui.e96.setChecked(False)
-    #     self.ui.e97.setChecked(False)
-    #     self.ui.e98.setChecked(False)
-    #     self.ui.e99.setChecked(False)
-    #     self.ui.e100.setChecked(False)
-    #     self.ui.e101.setChecked(False)
-    #     self.ui.e102.setChecked(False)
-    #     self.ui.e103.setChecked(False)
-    #     self.ui.e104.setChecked(False)
-    #     self.ui.e105.setChecked(False)
-    #     self.living_arrangements = []
-    #     self.permanency_plans = []
-    #     self.periodic_reviews = []
-    #     self.permanency_hearings = []
-    #     self.case_worker_visits = []
-    #     self.ui.e153.clear()
-    #     self.ui.e154.clear()
-    #     self.ui.e155.setCurrentIndex(-1)
-    #     self.ui.e156.setCurrentIndex(-1)
-    #     self.ui.e157.setCurrentIndex(-1)
-    #     self.ui.e158.setChecked(False)
-    #     self.ui.e159.setChecked(False)
-    #     self.ui.e160.setChecked(False)
-    #     self.ui.e161.setChecked(False)
-    #     self.ui.e162.clear()
-    #     for button in self.ui.e163.buttons():
-    #         button.setChecked(False)
-    #     self.ui.e164.setChecked(False)
-    #     self.ui.e165.setChecked(False)
-    #     self.ui.e166.setChecked(False)
-    #     self.ui.e167.setChecked(False)
-    #     self.ui.e168.setChecked(False)
-    #     self.ui.e169.setChecked(False)
-    #     self.ui.e170.setChecked(False)
-    #     for button in self.ui.e171.buttons():
-    #         button.setChecked(False)
-    #     for button in self.ui.e172.buttons():
-    #         button.setChecked(False)
-    #     self.ui.e173.clear()
-    #     for button in self.ui.e174.buttons():
-    #         button.setChecked(False)
-    #     self.ui.e175.setChecked(False)
-    #     self.ui.e176.setChecked(False)
-    #     self.ui.e177.setChecked(False)
-    #     self.ui.e178.setChecked(False)
-    #     self.ui.e179.setChecked(False)
-    #     self.ui.e180.setChecked(False)
-    #     self.ui.e181.setChecked(False)
-    #     for button in self.ui.e182.buttons():
-    #         button.setChecked(False)
-    #     for button in self.ui.e183.buttons():
-    #         button.setChecked(False)
-    #     self.ui.e184.setCurrentIndex(-1)
-    #     self.ui.e185.setCurrentIndex(-1)
-    #     self.ui.e186.clear()
+        self.id: int | None = None
+        self.ooh_id: int | None = None
+        self._child_name: str = ""
 
     # ------------------------------------------------------------------------
+
+    def clear(self):
+        super().clear()
+        self.child_name = ""
+        self.ui = None
+        self.ooh_id = None
 
     def _wire_ui(self):
         self.setModal(True)
@@ -209,7 +128,8 @@ class Removal2020Dialog(BaseDialog):
 
     def add_living_arrangement(self):
         dialog = LivingArrangementDialog(self)
-        dialog.setWindowTitle("Living Arrangement")
+        dialog.clear()
+        dialog.child_name = self.child_name
         controller = GenericController(dialog, LivingArrangement)
         data: LivingArrangement = controller.add()
         if data is not None:
@@ -221,7 +141,8 @@ class Removal2020Dialog(BaseDialog):
         current_row = self.ui.living_arrangements_table.currentRow()
         if current_row >= 0:
             dialog = LivingArrangementDialog(self)
-            dialog.setWindowTitle("Living Arrangement")
+            dialog.clear()
+            dialog.child_name = self.child_name
             controller = GenericController(dialog, LivingArrangement)
             data = self.living_arrangements[current_row]
             controller.edit(data)
@@ -248,7 +169,8 @@ class Removal2020Dialog(BaseDialog):
 
     def add_permanency_plan(self):
         dialog = PermanencyPlanDialog(self)
-        dialog.setWindowTitle("Permanency Plan")
+        dialog.clear()
+        dialog.child_name = self.child_name
         controller = GenericController(dialog, PermanencyPlan)
         data: PermanencyPlan = controller.add()
         if data is not None:
@@ -260,7 +182,8 @@ class Removal2020Dialog(BaseDialog):
         current_row = self.ui.permanency_plans_table.currentRow()
         if current_row >= 0:
             dialog = PermanencyPlanDialog(self)
-            dialog.setWindowTitle("Permanency Plan")
+            dialog.clear()
+            dialog.child_name = self.child_name
             controller = GenericController(dialog, PermanencyPlan)
             data = self.permanency_plans[current_row]
             controller.edit(data)
@@ -276,7 +199,7 @@ class Removal2020Dialog(BaseDialog):
     def _add_permanency_plan_table_row(self, permanency_plan: PermanencyPlan) -> None:
         row: int = self.ui.permanency_plans_table.rowCount()
         self.ui.permanency_plans_table.insertRow(row)
-        self._update_permanency_plan_table_row(row, permanency_plan)
+        self._update_permanency_plan_row(row, permanency_plan)
 
     def _update_permanency_plan_row(self, row: int, data: PermanencyPlan):
         self.ui.permanency_plans_table.setItem(row, 0, QTableWidgetItem(str(data.e147)))
@@ -286,7 +209,8 @@ class Removal2020Dialog(BaseDialog):
 
     def add_case_worker_visit(self):
         dialog = CaseVisitDialog(self)
-        dialog.setWindowTitle("Case Worker Visit")
+        dialog.clear()
+        dialog.child_name = self.child_name
         controller = GenericController(dialog, CaseVisit)
         data: CaseVisit = controller.add()
         if data is not None:
@@ -298,7 +222,8 @@ class Removal2020Dialog(BaseDialog):
         current_row = self.ui.case_visits_table.currentRow()
         if current_row >= 0:
             dialog = CaseVisitDialog(self)
-            dialog.setWindowTitle("Case Worker Visit")
+            dialog.clear()
+            dialog.child_name = self.child_name
             controller = GenericController(dialog, CaseVisit)
             data = self.case_worker_visits[current_row]
             controller.edit(data)
@@ -326,7 +251,8 @@ class Removal2020Dialog(BaseDialog):
 
     def add_permanency_hearing(self):
         dialog = PermanencyHearingDialog(self)
-        dialog.setWindowTitle("Permanency Hearing")
+        dialog.clear()
+        dialog.child_name = self.child_name
         controller = GenericController(dialog, PermanencyHearing)
         data: PermanencyHearing = controller.add()
         if data is not None:
@@ -338,7 +264,8 @@ class Removal2020Dialog(BaseDialog):
         current_row = self.ui.permanency_hearings_table.currentRow()
         if current_row >= 0:
             dialog = PermanencyHearingDialog(self)
-            dialog.setWindowTitle("Permanency Hearing")
+            dialog.clear()
+            dialog.child_name = self.child_name
             controller = GenericController(dialog, PermanencyHearing)
             data = self.permanency_hearings[current_row]
             controller.edit(data)
@@ -363,7 +290,8 @@ class Removal2020Dialog(BaseDialog):
 
     def add_periodic_review(self):
         dialog = PeriodicReviewDialog(self)
-        dialog.setWindowTitle("Periodic Review")
+        dialog.clear()
+        dialog.child_name = self.child_name
         controller = GenericController(dialog, PeriodicReview)
         data: PeriodicReview = controller.add()
         if data is not None:
@@ -375,7 +303,8 @@ class Removal2020Dialog(BaseDialog):
         current_row = self.ui.periodic_reviews_table.currentRow()
         if current_row >= 0:
             dialog = PeriodicReviewDialog(self)
-            dialog.setWindowTitle("Periodic Review")
+            dialog.clear()
+            dialog.child_name = self.child_name
             controller = GenericController(dialog, PeriodicReview)
             data = self.periodic_reviews[current_row]
             controller.edit(data)
@@ -401,6 +330,19 @@ class Removal2020Dialog(BaseDialog):
     # -------------------------------------------------------------------------
 
     @property
+    def child_name(self) -> str:
+        return self._child_name
+
+    @child_name.setter
+    def child_name(self, v: str):
+        self._child_name = v
+        print(f"removal2020: child_name={v}")
+        if v:
+            self.setWindowTitle(f"2020 Removal : {v}")
+        else:
+            self.setWindowTitle("")
+
+    @property
     def e3(self) -> int:
         return self._get_int_field(self.ui.e3)
 
@@ -415,6 +357,14 @@ class Removal2020Dialog(BaseDialog):
     @e69.setter
     def e69(self, e69: int) -> None:
         self._set_int_field(self.ui.e69, e69)
+
+    @property
+    def e70(self) -> int:
+        return self.e69
+
+    @e70.setter
+    def e70(self, v: int | None) -> None:
+        pass
 
     @property
     def e71(self) -> int:
