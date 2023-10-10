@@ -85,7 +85,7 @@ class Removal1993(MyBaseModel):
         return v
 
     @model_validator(mode='after')
-    def e69_e155(self):
+    def e69_e153(self):
         if self.e69 >= self.e153:
             raise ValueError(f"Date of Removal (e69) must be prior to the Date of Exit (e153) for the same removal")
         return self
@@ -240,6 +240,39 @@ class Removal2020(MyBaseModel):
     e185: int | None
     e186: int | None
 
+    @field_validator('e69', 'e153')
+    @classmethod
+    def check_date(cls, v: int | None, info: FieldValidationInfo) -> int | None:
+        if v is not None:
+            s = str(v)
+            y = s[0:4]
+            m = s[4:6]
+            d = s[6:]
+            err_msg = f"{d} is not a valid date in YYYYMMDD format for {info.field_name}"
+            if len(s) != 8 or \
+                    int(y) <= 1980 or \
+                    int(y) > datetime.today().year or \
+                    not ("01" <= m <= "12") or \
+                    not ("01" <= m <=
+                         {"01": "31", "02": "29", "03": "31", "04": "30", "05": "31", "06": "30", "07": "31", "08": "31",
+                          "09": "30", "10": "31", "11": "30", "12": "31"}[m]):
+                raise ValueError(err_msg)
+        return v
+
+    @field_validator('e155')
+    @classmethod
+    def e155_valid(cls, v: int, info: FieldValidationInfo) -> int:
+        if v not in (1, 2, 3, 4, 5, 6, 7, 8, 9):
+            raise ValueError(f"Invalid selection for {info.field_name}")
+        return v
+
+    @model_validator(mode='after')
+    def e69_e153(self):
+        if self.e69 is not None and self.e153 is not None:
+            if self.e69 >= self.e153:
+                raise ValueError(f"Date of Removal (e69) must be prior to the Date of Exit (e153) for the same removal")
+        return self
+
 
 class SecondParent(MyBaseModel):
     id: int | None
@@ -257,6 +290,7 @@ class RecognizedTribe(MyBaseModel):
 
 class OOHRecord(MyBaseModel):
     id: int | None
+    child_id: int | None
     funding: int | None
     e7: int | None
     e8: int | None
