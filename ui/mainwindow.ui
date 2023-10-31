@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>921</width>
-    <height>596</height>
+    <width>985</width>
+    <height>629</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -195,7 +195,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QToolButton" name="exportButton">
+        <widget class="QToolButton" name="export_button">
          <property name="text">
           <string>Export</string>
          </property>
@@ -231,7 +231,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>921</width>
+     <width>985</width>
      <height>24</height>
     </rect>
    </property>

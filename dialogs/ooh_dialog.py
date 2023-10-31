@@ -2,12 +2,12 @@
 from string import Template
 
 # from .childform import Ui_ChildForm
-from PySide6.QtCore import (QRegularExpression)
+from PySide6.QtCore import (QRegularExpression, Qt)
 from PySide6.QtGui import (QRegularExpressionValidator)
 from PySide6.QtWidgets import (QAbstractButton, QWidget, QListWidgetItem, QTableWidgetItem)
 
 from controllers import GenericController
-from model import SecondParent, Removal1993, Removal2020
+from model import SecondParent, Removal1993, Removal2020, RecognizedTribe, ARecord
 from utils import generate_id
 from . import BaseDialog
 from .removal1993 import Removal1993Dialog
@@ -38,37 +38,41 @@ class OOHDialog(BaseDialog):
         self._wire_ui()
         self.setLayout(self.ui.layout())
         self.setFixedSize(self.ui.size())
-        self.context_id: int = None
-        self.id: int | None = None
+        self.context_id: int | None = None
+        self.ooh_id: int | None = None
         self.child_id: int | None = None
+        self.a: ARecord | None = None
         # Virtual elements:
         # e41 & e44 default to 'no' (0) because the corresponding line edit fields default to empty
         self.e41: int = 0
         self.e44: int = 0
-        self.tribes: iter = None
-        self.recognized_tribes: list = []
+        self._tribes: list[str] = []
+        self._epa_tribe_ids: dict = {}
+        self._epa_tribe_names: dict = {}
+        self._reverse_epa_tribes: dict = {}
+        self._recognized_tribes: list[RecognizedTribe] = []
         self._second_parents: list[SecondParent] = []
         self._removals1993: list[Removal1993] = []
         self._removals2020: list[Removal2020] = []
         self._child_name: str = ""
 
-    def clear(self):
+    def clear(self) -> None:
         super().clear()
         self.setWindowTitle("")
         self.context_id = None
 
     # ==================================================================================================================
 
-    def set_epa_ids(self, tribe_iterator: iter):
+    def set_epa_ids(self, tribe_iterator: iter) -> None:
         self.tribes = tribe_iterator
         for state, tribes in tribe_iterator:
             for tribe in tribes:
                 item = QListWidgetItem(f"{state} - {tribe.tribe}")
-                self.ui.e9.addItem(QListWidgetItem(item))
+                self.ui.tribes.addItem(QListWidgetItem(item))
 
     # ==================================================================================================================
 
-    def _wire_ui(self):
+    def _wire_ui(self) -> None:
         ui = self.ui
 
         self._init_radio_mf(ui, 'e6')
@@ -102,6 +106,9 @@ class OOHDialog(BaseDialog):
         # ui.e7.buttonClicked.connect(self._e7_button_clicked)
         # ui.e8.buttonClicked.connect(self._e8_button_clicked)
 
+        ui.add_tribe_button.clicked.connect(self._add_tribe)
+        ui.remove_tribe_button.clicked.connect(self._remove_tribe)
+
         ui.e19.toggled.connect(self._e19_toggled)
         ui.e20.toggled.connect(self._e20_toggled)
 
@@ -123,27 +130,45 @@ class OOHDialog(BaseDialog):
         ui.removal_2020_delete_button.clicked.connect(self._delete_removal2020)
         ui.removal_2020_table.cellDoubleClicked.connect(self._edit_removal2020)
 
-    def _last_name_text_changed(self, text: str):
+    def _last_name_text_changed(self, text: str) -> None:
         self.child_name = f"{self.last_name if self.last_name else ''}{', ' if self.last_name and self.first_name else ''}{self.first_name if self.first_name else ''}"
 
-    def _first_name_text_changed(self, text: str):
+    def _first_name_text_changed(self, text: str) -> None:
         self.child_name = f"{self.last_name if self.last_name else ''}{', ' if self.last_name and self.first_name else ''}{self.first_name if self.first_name else ''}"
 
-    def _refresh_title(self):
+    def _refresh_title(self) -> None:
         self.setWindowTitle(f"{self.child_name}{' : ' if self.e4 else ''}{self.e4 if self.e4 else ''}")
 
-    def _e4_text_changed(self, text: str):
+    def _add_tribe(self):
+        selected_item = self.ui.epa_tribes.currentItem()
+        if selected_item:
+            if not self.ui.tribes.findItems(selected_item.text(), Qt.MatchExactly):
+                self._recognized_tribes.append(
+                    RecognizedTribe(id=None, ooh_id=None, e9=self._epa_tribe_names[selected_item.text()])
+                )
+                self.ui.tribes.addItem(selected_item.text())
+
+    def _remove_tribe(self):
+        selected_item = self.ui.tribes.currentItem()
+        if selected_item:
+            for row in range(len(self._recognized_tribes)):
+                if self._recognized_tribes[row].e9 == self._epa_tribe_names[selected_item.text()]:
+                    del self._recognized_tribes[row]
+                    self.ui.tribes.takeItem(row)
+                    break
+
+    def _e4_text_changed(self, text: str) -> None:
         if self.ui.e4.hasAcceptableInput():
             enabled = self.ui.e4.text() == ""
             self.ui.e4.setEnabled(enabled)
             self.ui.e4_generate.setEnabled(enabled)
             self._refresh_title()
 
-    def _e4_generate_clicked(self):
+    def _e4_generate_clicked(self) -> None:
         id_value: str = generate_id()
         self.ui.e4.setText(id_value)
 
-    def _e6_button_clicked(self, button: QAbstractButton):
+    def _e6_button_clicked(self, button: QAbstractButton) -> None:
         self.ui.e38.setEnabled(button.text() == 'Female')
 
     # def _e7_button_clicked(self, button: QAbstractButton):
@@ -154,25 +179,28 @@ class OOHDialog(BaseDialog):
     #     self.ui.e8_required.setVisible(self.ui.e8.checkedButton() is None)
     #     self.ui.e9_required.setVisible(required)
 
-    def _e9_set_up(self):
+    def _e9_set_up(self) -> None:
         """sets the 'checked' status of the selected tribes"""
         # TODO: figure out how to set the checked status of the tribes
         ...
 
-    def _funding_button_clicked(self, button: QAbstractButton):
+    def _funding_button_clicked(self, button: QAbstractButton) -> None:
         enabled: bool = button.text() == 'No'
         for btn in self.ui.e7.buttons():
             btn.setEnabled(enabled)
         for btn in self.ui.e8.buttons():
             btn.setEnabled(enabled)
-        self.ui.e9.setEnabled(enabled)
+        self.ui.tribes.setEnabled(enabled)
+        self.ui.epa_tribes.setEnabled(enabled)
+        self.ui.add_tribe_button.setEnabled(enabled)
+        self.ui.remove_tribe_button.setEnabled(enabled)
         for btn in self.ui.e10.buttons():
             btn.setEnabled(enabled)
         self.ui.e11.setEnabled(enabled)
         for btn in self.ui.e12.buttons():
             btn.setEnabled(enabled)
 
-    def _e19_toggled(self, checked: bool):
+    def _e19_toggled(self, checked: bool) -> None:
         # If E19 is checked, E13, E14, E15, E16, E17, E18, E20 should be unchecked and disabled.
         self.ui.e13.setEnabled(not checked)
         self.ui.e14.setEnabled(not checked)
@@ -196,7 +224,7 @@ class OOHDialog(BaseDialog):
             self.e44 = 1 if self.ui.e45.text() != "" else 0
         # self._e43_error_refresh()
 
-    def _e20_toggled(self, checked: bool):
+    def _e20_toggled(self, checked: bool) -> None:
         # If E20 is checked, E13, E14, E15, E16, E17, E18, E19 should be unchecked and disabled.
         self.ui.e13.setEnabled(not checked)
         self.ui.e14.setEnabled(not checked)
@@ -214,7 +242,7 @@ class OOHDialog(BaseDialog):
             self.ui.e18.setChecked(False)
             self.ui.e19.setChecked(False)
 
-    def _e23_current_index_changed(self, index: int):
+    def _e23_current_index_changed(self, index: int) -> None:
         self.ui.e24.setEnabled(index == 1)
         self.ui.e25.setEnabled(index == 1)
         self.ui.e26.setEnabled(index == 1)
@@ -227,15 +255,15 @@ class OOHDialog(BaseDialog):
         self.ui.e33.setEnabled(index == 1)
         self.ui.e34.setEnabled(index == 1)
 
-    def _e42_text_changed(self, text: str):
+    def _e42_text_changed(self, text: str) -> None:
         self.e41 = 1 if text != "" else 0
 
-    def _e45_text_changed(self, text: str):
+    def _e45_text_changed(self, text: str) -> None:
         self.e44 = 1 if text != "" else 0
 
     # ===== Removals ==========================================================
 
-    def _add_removal1993(self):
+    def _add_removal1993(self) -> None:
         dialog = Removal1993Dialog(self)
         dialog.clear()
         dialog.child_name = self.child_name
@@ -244,9 +272,8 @@ class OOHDialog(BaseDialog):
         if data is not None:
             self._removals1993.append(data)
             self.__add_removal1993_row(data)
-        ...
 
-    def _edit_removal1993(self):
+    def _edit_removal1993(self) -> None:
         current_row = self.ui.removal_1993_table.currentRow()
         if current_row >= 0:
             dialog = Removal1993Dialog(self)
@@ -257,24 +284,24 @@ class OOHDialog(BaseDialog):
             controller.edit(data)
             self.__update_removal_1993_row(current_row, data)
 
-    def _delete_removal1993(self):
+    def _delete_removal1993(self) -> None:
         current_row = self.ui.removal_1993_table.currentRow()
         if 0 <= current_row < len(self._removals1993):
             del self._removals1993[current_row]
             self.ui.removal_1993_table.removeRow(current_row)
 
-    def __add_removal1993_row(self, data: Removal1993):
+    def __add_removal1993_row(self, data: Removal1993) -> None:
         row: int = self.ui.removal_1993_table.rowCount()
         self.ui.removal_1993_table.insertRow(row)
         self.__update_removal_1993_row(row, data)
 
-    def __update_removal_1993_row(self, row: int, data: Removal1993):
+    def __update_removal_1993_row(self, row: int, data: Removal1993) -> None:
         self.ui.removal_1993_table.setItem(row, 0, QTableWidgetItem(str(data.e69)))
         self.ui.removal_1993_table.setItem(row, 1, QTableWidgetItem(str(data.e153)))
         self.ui.removal_1993_table.setItem(row, 2, QTableWidgetItem(
             self.E155_MESSAGES[data.e155] if data.e155 in self.E155_MESSAGES else ''))
 
-    def _add_removal2020(self):
+    def _add_removal2020(self) -> None:
         dialog = Removal2020Dialog(self)
         dialog.clear()
         dialog.child_name = self.child_name
@@ -284,7 +311,7 @@ class OOHDialog(BaseDialog):
             self._removals2020.append(data)
             self.__add_removal2020_row(data)
 
-    def _edit_removal2020(self):
+    def _edit_removal2020(self) -> None:
         current_row = self.ui.removal_2020_table.currentRow()
         if current_row >= 0:
             dialog = Removal2020Dialog(self)
@@ -295,18 +322,18 @@ class OOHDialog(BaseDialog):
             controller.edit(data)
             self.__update_removal_2020_row(current_row, data)
 
-    def _delete_removal2020(self):
+    def _delete_removal2020(self) -> None:
         current_row = self.ui.removal_2020_table.currentRow()
         if 0 <= current_row < len(self._removals2020):
             del self._removals2020[current_row]
             self.ui.removal_2020_table.removeRow(current_row)
 
-    def __add_removal2020_row(self, data: Removal2020):
+    def __add_removal2020_row(self, data: Removal2020) -> None:
         row: int = self.ui.removal_2020_table.rowCount()
         self.ui.removal_2020_table.insertRow(row)
         self.__update_removal_2020_row(row, data)
 
-    def __update_removal_2020_row(self, row: int, data: Removal2020):
+    def __update_removal_2020_row(self, row: int, data: Removal2020) -> None:
         self.ui.removal_2020_table.setItem(row, 0, QTableWidgetItem(str(data.e69)))
         self.ui.removal_2020_table.setItem(row, 1, QTableWidgetItem(str(data.e153)))
         self.ui.removal_2020_table.setItem(row, 2, QTableWidgetItem(
@@ -314,7 +341,7 @@ class OOHDialog(BaseDialog):
 
     # ===== SecondParent ======================================================
 
-    def _add_parent2(self):
+    def _add_parent2(self) -> None:
         dialog = Parent2Dialog(self)
         dialog.clear()
         dialog.child_name = self.child_name
@@ -324,7 +351,7 @@ class OOHDialog(BaseDialog):
             self._second_parents.append(data)
             self.__add_parent2_row(data)
 
-    def _edit_parent2(self):
+    def _edit_parent2(self) -> None:
         current_row = self.ui.parent2tpr.currentRow()
         if current_row >= 0:
             dialog = Parent2Dialog(self)
@@ -335,18 +362,18 @@ class OOHDialog(BaseDialog):
             controller.edit(data)
             self.__update_parent2_row(current_row, data)
 
-    def _delete_parent2(self):
+    def _delete_parent2(self) -> None:
         current_row = self.ui.parent2tpr.currentRow()
         if 0 <= current_row < len(self._second_parents):
             del self._second_parents[current_row]
             self.ui.parent2tpr.removeRow(current_row)
 
-    def __add_parent2_row(self, data: SecondParent):
+    def __add_parent2_row(self, data: SecondParent) -> None:
         row: int = self.ui.parent2tpr.rowCount()
         self.ui.parent2tpr.insertRow(row)
-        self.__update_removal_2020_row(row, data)
+        self.__update_parent2_row(row, data)
 
-    def __update_parent2_row(self, row: int, data: SecondParent):
+    def __update_parent2_row(self, row: int, data: SecondParent) -> None:
         self.ui.parent2tpr.setItem(row, 0, QTableWidgetItem(
             self.E64_MESSAGES[data.e64] if data.e64 in self.E64_MESSAGES else ''))
         self.ui.parent2tpr.setItem(row, 1, QTableWidgetItem(str(data.e66)))
@@ -388,7 +415,7 @@ class OOHDialog(BaseDialog):
         self._set_text_field(self.ui.e4, v)
 
     @property
-    def e5(self) -> int:
+    def e5(self) -> int | None:
         return self._get_int_field(self.ui.e5)
 
     @e5.setter
@@ -420,6 +447,29 @@ class OOHDialog(BaseDialog):
         self._set_radio_button(self.ui.e8, v)
 
     @property
+    def tribes(self) -> list:
+        return self._recognized_tribes
+
+    @tribes.setter
+    def tribes(self, v: list[RecognizedTribe]) -> None:
+        self._recognized_tribes = v
+        for tribe in v:
+            self.ui.tribes.addItem(self._epa_tribe_ids[tribe.e9])
+
+    @property
+    def epa_tribes(self) -> dict:
+        return self._epa_tribe_ids
+
+    @epa_tribes.setter
+    def epa_tribes(self, v: dict):
+        self._epa_tribe_ids = v
+        self._epa_tribe_names = {v: k for k, v in self._epa_tribe_ids.items()}
+
+        self.ui.epa_tribes.clear()
+        for tribe in self._epa_tribe_names:
+            self.ui.epa_tribes.addItem(tribe)
+
+    @property
     def funding(self) -> int:
         return self._get_radio_button(self.ui.funding)
 
@@ -436,7 +486,7 @@ class OOHDialog(BaseDialog):
         self._set_radio_button(self.ui.e10, v)
 
     @property
-    def e11(self) -> int:
+    def e11(self) -> int | None:
         return self._get_int_field(self.ui.e11)
 
     @e11.setter
@@ -508,7 +558,7 @@ class OOHDialog(BaseDialog):
         self.ui.e19.setChecked(v == 1)
 
     @property
-    def e20(self) -> int:
+    def e20(self) -> int | None:
         return 1 if self.ui.e20.isChecked() else 0
 
     @e20.setter
@@ -516,7 +566,7 @@ class OOHDialog(BaseDialog):
         self.ui.e20.setChecked(v == 1)
 
     @property
-    def e21(self) -> int:
+    def e21(self) -> int | None:
         return self._get_combobox_selection(self.ui.e21, {0: 0, 1: 1, 2: 7, 3: 8, 4: 9})
 
     @e21.setter
@@ -524,7 +574,7 @@ class OOHDialog(BaseDialog):
         self._set_combobox_selection(self.ui.e21, v, {0: 0, 1: 1, 7: 2, 8: 3, 9: 4})
 
     @property
-    def e22(self) -> int:
+    def e22(self) -> int | None:
         return self._get_radio_button(self.ui.e22)
 
     @e22.setter
@@ -532,7 +582,7 @@ class OOHDialog(BaseDialog):
         self._set_radio_button(self.ui.e22, v)
 
     @property
-    def e23(self) -> int:
+    def e23(self) -> int | None:
         return self._get_combobox_selection(self.ui.e23)
 
     @e23.setter
@@ -540,7 +590,7 @@ class OOHDialog(BaseDialog):
         self._set_combobox_selection(self.ui.e23, v)
 
     @property
-    def e24(self) -> int:
+    def e24(self) -> int | None:
         return self._get_combobox_selection(self.ui.e24)
 
     @e24.setter
@@ -548,7 +598,7 @@ class OOHDialog(BaseDialog):
         self._set_combobox_selection(self.ui.e24, v)
 
     @property
-    def e25(self) -> int:
+    def e25(self) -> int | None:
         return self._get_combobox_selection(self.ui.e25)
 
     @e25.setter
@@ -556,7 +606,7 @@ class OOHDialog(BaseDialog):
         self._set_combobox_selection(self.ui.e25, v)
 
     @property
-    def e26(self) -> int:
+    def e26(self) -> int | None:
         return self._get_combobox_selection(self.ui.e26)
 
     @e26.setter
@@ -564,7 +614,7 @@ class OOHDialog(BaseDialog):
         self._set_combobox_selection(self.ui.e26, v)
 
     @property
-    def e27(self) -> int:
+    def e27(self) -> int | None:
         return self._get_combobox_selection(self.ui.e27)
 
     @e27.setter
@@ -572,7 +622,7 @@ class OOHDialog(BaseDialog):
         self._set_combobox_selection(self.ui.e27, v)
 
     @property
-    def e28(self) -> int:
+    def e28(self) -> int | None:
         return self._get_combobox_selection(self.ui.e28)
 
     @e28.setter
@@ -580,7 +630,7 @@ class OOHDialog(BaseDialog):
         self._set_combobox_selection(self.ui.e28, v)
 
     @property
-    def e29(self) -> int:
+    def e29(self) -> int | None:
         return self._get_combobox_selection(self.ui.e29)
 
     @e29.setter
@@ -588,7 +638,7 @@ class OOHDialog(BaseDialog):
         self._set_combobox_selection(self.ui.e29, v)
 
     @property
-    def e30(self) -> int:
+    def e30(self) -> int | None:
         return self._get_combobox_selection(self.ui.e30)
 
     @e30.setter
@@ -596,7 +646,7 @@ class OOHDialog(BaseDialog):
         self._set_combobox_selection(self.ui.e30, v)
 
     @property
-    def e31(self) -> int:
+    def e31(self) -> int | None:
         return self._get_combobox_selection(self.ui.e31)
 
     @e31.setter
@@ -604,7 +654,7 @@ class OOHDialog(BaseDialog):
         self._set_combobox_selection(self.ui.e31, v)
 
     @property
-    def e32(self) -> int:
+    def e32(self) -> int | None:
         return self._get_combobox_selection(self.ui.e32)
 
     @e32.setter
@@ -612,7 +662,7 @@ class OOHDialog(BaseDialog):
         self._set_combobox_selection(self.ui.e32, v)
 
     @property
-    def e33(self) -> int:
+    def e33(self) -> int | None:
         return self._get_combobox_selection(self.ui.e33)
 
     @e33.setter
@@ -620,7 +670,7 @@ class OOHDialog(BaseDialog):
         self._set_combobox_selection(self.ui.e33, v)
 
     @property
-    def e34(self) -> int:
+    def e34(self) -> int | None:
         return self._get_combobox_selection(self.ui.e34)
 
     @e34.setter
@@ -628,7 +678,7 @@ class OOHDialog(BaseDialog):
         self._set_combobox_selection(self.ui.e34, v)
 
     @property
-    def e35(self) -> int:
+    def e35(self) -> int | None:
         return self._get_combobox_selection(self.ui.e35)
 
     @e35.setter
@@ -636,7 +686,7 @@ class OOHDialog(BaseDialog):
         self._set_combobox_selection(self.ui.e35, v)
 
     @property
-    def e36(self) -> int:
+    def e36(self) -> int | None:
         return self._get_combobox_selection(self.ui.e36)
 
     @e36.setter
@@ -644,7 +694,7 @@ class OOHDialog(BaseDialog):
         self._set_combobox_selection(self.ui.e36, v)
 
     @property
-    def e37(self) -> int:
+    def e37(self) -> int | None:
         return self._get_combobox_selection(self.ui.e37)
 
     @e37.setter
@@ -652,7 +702,7 @@ class OOHDialog(BaseDialog):
         self._set_combobox_selection(self.ui.e37, v)
 
     @property
-    def e38(self) -> int:
+    def e38(self) -> int | None:
         return self._get_combobox_selection(self.ui.e38) if self.ui.e38.isEnabled() else None
 
     @e38.setter
@@ -660,7 +710,7 @@ class OOHDialog(BaseDialog):
         self._set_combobox_selection(self.ui.e38, v)
 
     @property
-    def e39(self) -> int:
+    def e39(self) -> int | None:
         return self._get_combobox_selection(self.ui.e39)
 
     @e39.setter
@@ -668,7 +718,7 @@ class OOHDialog(BaseDialog):
         self._set_combobox_selection(self.ui.e39, v)
 
     @property
-    def e42(self) -> int:
+    def e42(self) -> int | None:
         return self._get_int_field(self.ui.e42)
 
     @e42.setter
@@ -676,7 +726,7 @@ class OOHDialog(BaseDialog):
         self._set_int_field(self.ui.e42, v)
 
     @property
-    def e43(self) -> int:
+    def e43(self) -> int | None:
         # FIXME: e43 is currently a combobox
         return self._get_combobox_selection(self.ui.e43)
 
@@ -685,7 +735,7 @@ class OOHDialog(BaseDialog):
         self._set_combobox_selection(self.ui.e43, v)
 
     @property
-    def e45(self) -> int:
+    def e45(self) -> int | None:
         return self._get_int_field(self.ui.e45)
 
     @e45.setter
@@ -782,7 +832,7 @@ class OOHDialog(BaseDialog):
         self._set_radio_button(self.ui.e55, v)
 
     @property
-    def e56(self) -> int:
+    def e56(self) -> int | None:
         return self._get_int_field(self.ui.e56)
 
     @e56.setter
@@ -790,7 +840,7 @@ class OOHDialog(BaseDialog):
         self._set_int_field(self.ui.e56, v)
 
     @property
-    def e57(self) -> int:
+    def e57(self) -> int | None:
         return self._get_int_field(self.ui.e57)
 
     @e57.setter
@@ -798,7 +848,7 @@ class OOHDialog(BaseDialog):
         self._set_int_field(self.ui.e57, v)
 
     @property
-    def e59(self) -> int:
+    def e59(self) -> int | None:
         return self._get_int_field(self.ui.e59)
 
     @e59.setter
@@ -806,7 +856,7 @@ class OOHDialog(BaseDialog):
         self._set_int_field(self.ui.e59, v)
 
     @property
-    def e60(self) -> int:
+    def e60(self) -> int | None:
         return self._get_int_field(self.ui.e60)
 
     @e60.setter
@@ -838,7 +888,7 @@ class OOHDialog(BaseDialog):
         self._set_radio_button(self.ui.e63, v)
 
     @property
-    def e65(self) -> int:
+    def e65(self) -> int | None:
         return self._get_int_field(self.ui.e65)
 
     @e65.setter
@@ -846,7 +896,7 @@ class OOHDialog(BaseDialog):
         self._set_int_field(self.ui.e65, v)
 
     @property
-    def e67(self) -> int:
+    def e67(self) -> int | None:
         return self._get_int_field(self.ui.e67)
 
     @e67.setter
@@ -870,7 +920,7 @@ class OOHDialog(BaseDialog):
         self._set_radio_button(self.ui.e107, v)
 
     @property
-    def e108(self) -> int:
+    def e108(self) -> int | None:
         return self._get_int_field(self.ui.e108)
 
     @e108.setter
@@ -894,7 +944,7 @@ class OOHDialog(BaseDialog):
         self._set_radio_button(self.ui.e110, v)
 
     @property
-    def e111(self) -> int:
+    def e111(self) -> int | None:
         return self._get_int_field(self.ui.e111)
 
     @e111.setter

@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="utf-8"?>
+<acf:data xmlns:acf="http://www.acf.hhs.gov"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://www.acf.hhs.gov schema_ooh.xsd">
+    <E1_title_iv_agency>{{ context.e1|no_null }}</E1_title_iv_agency>
+    <E2_report_date>{{ e2|no_null }}</E2_report_date>
+    <records>
+        {%- for record in data %}
+        <record>
+            <E4_child_record_number>{{ record.child.e4|no_null }}</E4_child_record_number>
+            <E5_date_of_birth>{{ record.child.e5|no_null }}</E5_date_of_birth>
+            <E6_sex>{{ record.child.e6|no_null }}</E6_sex>
+            <E7_E12_tribal_information>
+                <E7_agency_made_inquiries>{{ record.e7|no_null }}</E7_agency_made_inquiries>
+                <E8_tribal_membership>{{ record.e8|no_null }}</E8_tribal_membership>
+                {%- if record['tribes'] %}
+                <E9_recognized_tribes>
+                    {%- for e9 in record['tribes'] %}
+                    <E9_recognized_tribe>{{ e9 }}</E9_recognized_tribe>
+                    {%- endfor %}
+                </E9_recognized_tribes>
+                {%- else %}
+                <E9_recognized_tribes/>
+                {%- endif %}
+                <E10_icwa>{{ record.e10|no_null }}</E10_icwa>
+                <E11_icwa_date>{{ record.e11|no_null }}</E11_icwa_date>
+                <E12_icwa_notification>{{ record.e12|no_null }}</E12_icwa_notification>
+            </E7_E12_tribal_information>
+            <E13_child_race_american_indian_alaska_native>{{ record.e13|no_null }}</E13_child_race_american_indian_alaska_native>
+            <E14_child_race_asian>{{ record.e14|no_null }}</E14_child_race_asian>
+            <E15_child_race_black>{{ record.e15|no_null }}</E15_child_race_black>
+            <E16_child_race_native_hawaiian_pacific_islander>{{ record.e16|no_null }}</E16_child_race_native_hawaiian_pacific_islander>
+            <E17_child_race_white>{{ record.e17|no_null }}</E17_child_race_white>
+            <E18_child_race_unknown>{{ record.e18|no_null }}</E18_child_race_unknown>
+            <E19_child_race_abandoned>{{ record.e19|no_null }}</E19_child_race_abandoned>
+            <E20_child_race_declined>{{ record.e20|no_null }}</E20_child_race_declined>
+            <E21_child_hispanic_latino>{{ record.e21|no_null }}</E21_child_hispanic_latino>
+            <E22_health_assessment>{{ record.e22|no_null }}</E22_health_assessment>
+            <E23_health_conditions>{{ record.e23|no_null }}</E23_health_conditions>
+            <E24_34_specific_health_conditions>
+                <E24_health_intellectual_disability>{{ record.e24|no_null }}</E24_health_intellectual_disability>
+                <E25_health_autism_spectrum_disorder>{{ record.e25|no_null }}</E25_health_autism_spectrum_disorder>
+                <E26_health_visual_impairment>{{ record.e26|no_null }}</E26_health_visual_impairment>
+                <E27_health_hearing_impairment>{{ record.e27|no_null }}</E27_health_hearing_impairment>
+                <E28_health_orthopedic_impairment>{{ record.e28|no_null }}</E28_health_orthopedic_impairment>
+                <E29_health_mental_disorder>{{ record.e29|no_null }}</E29_health_mental_disorder>
+                <E30_health_adhd_add>{{ record.e30|no_null }}</E30_health_adhd_add>
+                <E31_health_serious_mental_disorder>{{ record.e31|no_null }}</E31_health_serious_mental_disorder>
+                <E32_health_developmental_delay>{{ record.e32|no_null }}</E32_health_developmental_delay>
+                <E33_health_developmental_disability>{{ record.e33|no_null }}</E33_health_developmental_disability>
+                <E34_health_other_condition>{{ record.e34|no_null }}</E34_health_other_condition>
+            </E24_34_specific_health_conditions>
+            <E35_school_enrollment>{{ record.e35|no_null }}</E35_school_enrollment>
+            <E36_school_highest_completed>{{ record.e36|no_null }}</E36_school_highest_completed>
+            <E37_school_special_education>{{ record.e37|no_null }}</E37_school_special_education>
+            <E38_pregnant>{{ record.e38|no_null }}</E38_pregnant>
+            <E39_fathered_or_bore_child>{{ record.e39|no_null }}</E39_fathered_or_bore_child>
+            <E40_child_and_children_together>{{ record.e40|no_null }}</E40_child_and_children_together>
+            <E41_prior_adoption>{{ record.e41|no_null }}</E41_prior_adoption>
+            <E42_E43_prior_adoption_information>
+                <E42_prior_adoption_date>{{ record.e42|no_null }}</E42_prior_adoption_date>
+                <E43_prior_adoption_intercountry>{{ record.e43|no_null }}</E43_prior_adoption_intercountry>
+            </E42_E43_prior_adoption_information>
+            <E44_prior_guardianship>{{ record.e44|no_null }}</E44_prior_guardianship>
+            <E45_prior_guardianship_date>{{ record.e45|no_null }}</E45_prior_guardianship_date>
+            <E46_support_assistance>{{ record.e46|no_null }}</E46_support_assistance>
+            <E47_E54_type_financial_assistance>
+                <E47_state_tribal_adoption_assistance>{{ record.e47|no_null }}</E47_state_tribal_adoption_assistance>
+                <E48_state_tribal_foster_care>{{ record.e48|no_null }}</E48_state_tribal_foster_care>
+                <E49_adoption_subsidy>{{ record.e49|no_null }}</E49_adoption_subsidy>
+                <E50_guardianship_assistance>{{ record.e50|no_null }}</E50_guardianship_assistance>
+                <E51_tanf_assistance>{{ record.e51|no_null }}</E51_tanf_assistance>
+                <E52_title_iv_b>{{ record.e52|no_null }}</E52_title_iv_b>
+                <E53_chafee_foster_program>{{ record.e53|no_null }}</E53_chafee_foster_program>
+                <E54_other_financial_support>{{ record.e54|no_null }}</E54_other_financial_support>
+            </E47_E54_type_financial_assistance>
+            <E55_foster_care_payment>{{ record.e55|no_null }}</E55_foster_care_payment>
+            <E56_total_siblings>{{ record.e56|no_null }}</E56_total_siblings>
+            <E57_E58_siblings_in_foster_care>
+                <E57_siblings_in_foster_care>{{ record.e57|no_null }}</E57_siblings_in_foster_care>
+                <E58_siblings_in_living_arrangement>{{ record.e58|no_null }}</E58_siblings_in_living_arrangement>
+            </E57_E58_siblings_in_foster_care>
+            <E59_first_parent_birth_year>{{ record.e59|no_null }}</E59_first_parent_birth_year>
+            <E60_second_parent_birth_year>{{ record.e60|no_null }}</E60_second_parent_birth_year>
+            <E61_tribal_membership_mother>{{ record.e61|no_null }}</E61_tribal_membership_mother>
+            <E62_tribal_membership_father>{{ record.e62|no_null }}</E62_tribal_membership_father>
+            <E63_E68_termination_of_parental_rights>
+                <tpr_first_parent>
+                    <E63_tpr_parent1>{{ record.e63|no_null }}</E63_tpr_parent1>
+                    <E65_tpr_petition_date_parent1>{{ record.e65|no_null }}</E65_tpr_petition_date_parent1>
+                    <E67_tpr_date_parent1>{{ record.e67|no_null }}</E67_tpr_date_parent1>
+                </tpr_first_parent>
+                {%- for tpr_second_parent in record.second_parent %}
+                {%- if tpr_second_parent.e64 %}
+                <tpr_second_parent>
+                    <E64_tpr_parent2>{{ tpr_second_parent.e64|no_null }}</E64_tpr_parent2>
+                    <E66_tpr_petition_date_parent2>{{ tpr_second_parent.e66|no_null }}</E66_tpr_petition_date_parent2>
+                    <E68_tpr_date_parent2>{{ tpr_second_parent.e68|no_null }}</E68_tpr_date_parent2>
+                </tpr_second_parent>
+                {%- endif %}
+                {%- endfor %}
+            </E63_E68_termination_of_parental_rights>
+            <E69_E186_removals>
+                {%- for removal_2020 in record.removals_2020 %}
+                <removal_2020>
+                    <E69_removal_date>{{ removal_2020.e69|no_null }}</E69_removal_date>
+                    <E70_removal_transaction_date>{{ removal_2020.e70|no_null }}</E70_removal_transaction_date>
+                    <E71_removal_environment>{{ removal_2020.e71|no_null }}</E71_removal_environment>
+                    <E3_local_agency>{{ removal_2020.e3|no_null }}</E3_local_agency>
+                    <E72_runaway>{{ removal_2020.e72|no_null }}</E72_runaway>
+                    <E73_whereabouts_unknown>{{ removal_2020.e73|no_null }}</E73_whereabouts_unknown>
+                    <E74_physical_abuse>{{ removal_2020.e74|no_null }}</E74_physical_abuse>
+                    <E75_sexual_abuse>{{ removal_2020.e75|no_null }}</E75_sexual_abuse>
+                    <E76_psychological_abuse>{{ removal_2020.e76|no_null }}</E76_psychological_abuse>
+                    <E77_neglect>{{ removal_2020.e77|no_null }}</E77_neglect>
+                    <E78_medical_neglect>{{ removal_2020.e78|no_null }}</E78_medical_neglect>
+                    <E79_domestic_violence>{{ removal_2020.e79|no_null }}</E79_domestic_violence>
+                    <E80_abandonment>{{ removal_2020.e80|no_null }}</E80_abandonment>
+                    <E81_failure_to_return>{{ removal_2020.e81|no_null }}</E81_failure_to_return>
+                    <E82_caretaker_alcohol_use>{{ removal_2020.e82|no_null }}</E82_caretaker_alcohol_use>
+                    <E83_caretaker_drug_use>{{ removal_2020.e83|no_null }}</E83_caretaker_drug_use>
+                    <E84_child_alcohol_use>{{ removal_2020.e84|no_null }}</E84_child_alcohol_use>
+                    <E85_child_drug_use>{{ removal_2020.e85|no_null }}</E85_child_drug_use>
+                    <E86_prenatal_alcohol_exposure>{{ removal_2020.e86|no_null }}</E86_prenatal_alcohol_exposure>
+                    <E87_prenatal_drug_exposure>{{ removal_2020.e87|no_null }}</E87_prenatal_drug_exposure>
+                    <E88_diagnosed_condition>{{ removal_2020.e88|no_null }}</E88_diagnosed_condition>
+                    <E89_inadequate_access_to_mental_health>{{ removal_2020.e89|no_null }}</E89_inadequate_access_to_mental_health>
+                    <E90_inadequate_access_to_medical_service>{{ removal_2020.e90|no_null }}</E90_inadequate_access_to_medical_service>
+                    <E91_child_behavior_problem>{{ removal_2020.e91|no_null }}</E91_child_behavior_problem>
+                    <E92_death_of_caretaker>{{ removal_2020.e92|no_null }}</E92_death_of_caretaker>
+                    <E93_incarceration_of_caretaker>{{ removal_2020.e93|no_null }}</E93_incarceration_of_caretaker>
+                    <E94_caretaker_impairment_physical_emotional>{{ removal_2020.e94|no_null }}</E94_caretaker_impairment_physical_emotional>
+                    <E95_caretaker_impairment_cognitive>{{ removal_2020.e95|no_null }}</E95_caretaker_impairment_cognitive>
+                    <E96_inadequate_housing>{{ removal_2020.e96|no_null }}</E96_inadequate_housing>
+                    <E97_voluntary_adoption>{{ removal_2020.e97|no_null }}</E97_voluntary_adoption>
+                    <E98_child_requested_placement>{{ removal_2020.e98|no_null }}</E98_child_requested_placement>
+                    <E99_sex_trafficking>{{ removal_2020.e99|no_null }}</E99_sex_trafficking>
+                    <E100_parental_immigration_detainment_deportation>{{ removal_2020.e100|no_null }}</E100_parental_immigration_detainment_deportation>
+                    <E101_family_conflict_gender_orientation>{{ removal_2020.e101|no_null }}</E101_family_conflict_gender_orientation>
+                    <E102_educational_neglect>{{ removal_2020.e102|no_null }}</E102_educational_neglect>
+                    <E103_public_agency_title_iv_agreement>{{ removal_2020.e103|no_null }}</E103_public_agency_title_iv_agreement>
+                    <E104_tribal_agreement>{{ removal_2020.e104|no_null }}</E104_tribal_agreement>
+                    <E105_homelessness>{{ removal_2020.e105|no_null }}</E105_homelessness>
+                    <E112_E146_living_arrangements>
+                        {%- for living_arrangement in removal_2020.living_arrangements %}
+                        <living_arrangement>
+                            <E112_date_living_arrangement>{{ living_arrangement.e112|no_null }}</E112_date_living_arrangement>
+                            <E113_foster_family_home>{{ living_arrangement.e113|no_null }}</E113_foster_family_home>
+                            <E114_E146_foster_family_home_type>
+                                <E114_licensed_home>{{ living_arrangement.e114|no_null }}</E114_licensed_home>
+                                <E115_therapeutic_home>{{ living_arrangement.e115|no_null }}</E115_therapeutic_home>
+                                <E116_shelter_care_home>{{ living_arrangement.e116|no_null }}</E116_shelter_care_home>
+                                <E117_relative_foster_family>{{ living_arrangement.e117|no_null }}</E117_relative_foster_family>
+                                <E118_pre_adopt_home>{{ living_arrangement.e118|no_null }}</E118_pre_adopt_home>
+                                <E119_kin_foster_family>{{ living_arrangement.e119|no_null }}</E119_kin_foster_family>
+                                {%- if living_arrangement.e123 %}
+                                <E123_E146_foster_parent_information>
+                                    <E123_marital_status_of_foster_parents>{{ living_arrangement.e123|no_null }}</E123_marital_status_of_foster_parents>
+                                    <E124_relationship_to_foster_parents>{{ living_arrangement.e124|no_null }}</E124_relationship_to_foster_parents>
+                                    <E125_E135_first_foster_parent_information>
+                                        <E125_foster_parent1_birth_year>{{ living_arrangement.e125|no_null }}</E125_foster_parent1_birth_year>
+                                        <E126_foster_parent1_tribal_membership>{{ living_arrangement.e126|no_null }}</E126_foster_parent1_tribal_membership>
+                                        <E127_foster_parent1_race_american_indian_alaska_native>{{ living_arrangement.e127|no_null }}</E127_foster_parent1_race_american_indian_alaska_native>
+                                        <E128_foster_parent1_race_asian>{{ living_arrangement.e128|no_null }}</E128_foster_parent1_race_asian>
+                                        <E129_foster_parent1_race_black>{{ living_arrangement.e129|no_null }}</E129_foster_parent1_race_black>
+                                        <E130_foster_parent1_race_native_hawaiian_pacific_islander>{{ living_arrangement.e130|no_null }}</E130_foster_parent1_race_native_hawaiian_pacific_islander>
+                                        <E131_foster_parent1_race_white>{{ living_arrangement.e131|no_null }}</E131_foster_parent1_race_white>
+                                        <E132_foster_parent1_race_unknown>{{ living_arrangement.e132|no_null }}</E132_foster_parent1_race_unknown>
+                                        <E133_foster_parent1_race_declined>{{ living_arrangement.e133|no_null }}</E133_foster_parent1_race_declined>
+                                        <E134_foster_parent1_hispanic_latino>{{ living_arrangement.e134|no_null }}</E134_foster_parent1_hispanic_latino>
+                                        <E135_foster_parent1_sex>{{ living_arrangement.e135|no_null }}</E135_foster_parent1_sex>
+                                    </E125_E135_first_foster_parent_information>
+                                    <E136_E146_second_foster_parent_information>
+                                        {%- if living_arrangement.e136 %}
+                                        <E136_foster_parent2_birth_year>{{ living_arrangement.e136|no_null }}</E136_foster_parent2_birth_year>
+                                        <E137_foster_parent2_tribal_membership>{{ living_arrangement.e137|no_null }}</E137_foster_parent2_tribal_membership>
+                                        <E138_foster_parent2_race_american_indian_alaska_native>{{ living_arrangement.e138|no_null }}</E138_foster_parent2_race_american_indian_alaska_native>
+                                        <E139_foster_parent2_race_asian>{{ living_arrangement.e139|no_null }}</E139_foster_parent2_race_asian>
+                                        <E140_foster_parent2_race_black>{{ living_arrangement.e140|no_null }}</E140_foster_parent2_race_black>
+                                        <E141_foster_parent2_race_native_hawaiian_pacific_islander>{{ living_arrangement.e141|no_null }}</E141_foster_parent2_race_native_hawaiian_pacific_islander>
+                                        <E142_foster_parent2_race_white>{{ living_arrangement.e142|no_null }}</E142_foster_parent2_race_white>
+                                        <E143_foster_parent2_race_unknown>{{ living_arrangement.e143|no_null }}</E143_foster_parent2_race_unknown>
+                                        <E144_foster_parent2_race_declined>{{ living_arrangement.e144|no_null }}</E144_foster_parent2_race_declined>
+                                        <E145_foster_parent2_hispanic_latino>{{ living_arrangement.e145|no_null }}</E145_foster_parent2_hispanic_latino>
+                                        <E146_foster_parent2_sex>{{ living_arrangement.e146|no_null }}</E146_foster_parent2_sex>
+                                        {%- endif %}
+                                    </E136_E146_second_foster_parent_information>
+                                </E123_E146_foster_parent_information>
+                                {%- endif %}
+                            </E114_E146_foster_family_home_type>
+                            <E120_other_living_arrangement_type>{{ living_arrangement.e120|no_null }}</E120_other_living_arrangement_type>
+                            <E121_location_of_living_arrangement>{{ living_arrangement.e121|no_null }}</E121_location_of_living_arrangement>
+                            <E122_jurisdiction_or_country>{{ living_arrangement.e122|no_null }}</E122_jurisdiction_or_country>
+                        </living_arrangement>
+                        {%- endfor %}
+                    </E112_E146_living_arrangements>
+                    <E147_E148_permanency_plans>
+                        {%- for permanency_plan in removal_2020.permanency_plans %}
+                        <permanency_plan>
+                            <E147_permanency_plan_date>{{ permanency_plan.e147|no_null }}</E147_permanency_plan_date>
+                            <E148_permanency_plan_type>{{ permanency_plan.e148|no_null }}</E148_permanency_plan_type>
+                        </permanency_plan>
+                        {%- endfor %}
+                    </E147_E148_permanency_plans>
+                    <E149_periodic_reviews>
+                    {%- for periodic_review in removal_2020.periodic_reviews %}
+                    {%- if periodic_review %}
+                        <E149_periodic_review_date>{{ periodic_review.e149|no_null }}</E149_periodic_review_date>
+                    {%- endif %}
+                    {%- endfor %}
+                    </E149_periodic_reviews>
+                    <E150_permanency_hearings>
+                    {%- for permanency_hearing in removal_2020.permanency_hearings %}
+                    {%- if permanency_hearing %}
+                        <E150_permanency_hearing_date>{{ permanency_hearing.e150|no_null }}</E150_permanency_hearing_date>
+                    {%- endif %}
+                    {%- endfor %}
+                    </E150_permanency_hearings>
+                    <E151_E152_case_worker_visits>
+                        {%- for case_worker_visit in removal_2020.case_worker_visits %}
+                        {%- if case_worker_visit.e151 %}
+                        <case_worker_visit>
+                            <E151_case_worker_visit_date>{{ case_worker_visit.e151|no_null }}</E151_case_worker_visit_date>
+                            <E152_case_worker_visit_location>{{ case_worker_visit.e152|no_null }}</E152_case_worker_visit_location>
+                        </case_worker_visit>
+                        {%- endif %}
+                        {%- endfor %}
+                    </E151_E152_case_worker_visits>
+                    <E153_exit_date>{{ removal_2020.e153|no_null }}</E153_exit_date>
+                    <E154_exit_transaction_date>{{ removal_2020.e154|no_null }}</E154_exit_transaction_date>
+                    <E155_exit_reason>{{ removal_2020.e155|no_null }}</E155_exit_reason>
+                    <E156_transfer_to_another_agency>{{ removal_2020.e156|no_null }}</E156_transfer_to_another_agency>
+                    <E157_E186_adoptive_parents_information>
+                        {%- if removal_2020.e162 %}
+                        <E157_marital_status_of_adoptive_parents>{{ removal_2020.e157|no_null }}</E157_marital_status_of_adoptive_parents>
+                        <E158_relationship_to_adoptive_parents_relative>{{ removal_2020.e158|no_null }}</E158_relationship_to_adoptive_parents_relative>
+                        <E159_relationship_to_adoptive_parents_kin>{{ removal_2020.e159|no_null }}</E159_relationship_to_adoptive_parents_kin>
+                        <E160_relationship_to_adoptive_parents_non_relative>{{ removal_2020.e160|no_null }}</E160_relationship_to_adoptive_parents_non_relative>
+                        <E161_relationship_to_adoptive_parents_foster_parent>{{ removal_2020.e161|no_null }}</E161_relationship_to_adoptive_parents_foster_parent>
+                        <E162_E172_first_adoptive_parent_information>
+                            <E162_adoptive_parent1_birth_date>{{ removal_2020.e162|no_null }}</E162_adoptive_parent1_birth_date>
+                            <E163_adoptive_parent1_tribal_membership>{{ removal_2020.e163|no_null }}</E163_adoptive_parent1_tribal_membership>
+                            <E164_adoptive_parent1_race_american_indian_alaska_native>{{ removal_2020.e164|no_null }}</E164_adoptive_parent1_race_american_indian_alaska_native>
+                            <E165_adoptive_parent1_race_asian>{{ removal_2020.e165|no_null }}</E165_adoptive_parent1_race_asian>
+                            <E166_adoptive_parent1_race_black>{{ removal_2020.e166|no_null }}</E166_adoptive_parent1_race_black>
+                            <E167_adoptive_parent1_race_native_hawaiian_pacific_islander>{{ removal_2020.e167|no_null }}</E167_adoptive_parent1_race_native_hawaiian_pacific_islander>
+                            <E168_adoptive_parent1_race_white>{{ removal_2020.e168|no_null }}</E168_adoptive_parent1_race_white>
+                            <E169_adoptive_parent1_race_unknown>{{ removal_2020.e169|no_null }}</E169_adoptive_parent1_race_unknown>
+                            <E170_adoptive_parent1_race_declined>{{ removal_2020.e170|no_null }}</E170_adoptive_parent1_race_declined>
+                            <E171_adoptive_parent1_hispanic_latino>{{ removal_2020.e171|no_null }}</E171_adoptive_parent1_hispanic_latino>
+                            <E172_adoptive_parent1_sex>{{ removal_2020.e172|no_null }}</E172_adoptive_parent1_sex>
+                        </E162_E172_first_adoptive_parent_information>
+                        <E173_E183_second_adoptive_parent_information>
+                            {%- if removal_2020.e173 %}
+                            <E173_adoptive_parent2_birth_date>{{ removal_2020.e173|no_null }}</E173_adoptive_parent2_birth_date>
+                            <E174_adoptive_parent2_tribal_membership>{{ removal_2020.e174|no_null }}</E174_adoptive_parent2_tribal_membership>
+                            <E175_adoptive_parent2_race_american_indian_alaska_native>{{ removal_2020.e175|no_null }}</E175_adoptive_parent2_race_american_indian_alaska_native>
+                            <E176_adoptive_parent2_race_asian>{{ removal_2020.e176|no_null }}</E176_adoptive_parent2_race_asian>
+                            <E177_adoptive_parent2_race_black>{{ removal_2020.e177|no_null }}</E177_adoptive_parent2_race_black>
+                            <E178_adoptive_parent2_race_native_hawaiian_pacific_islander>{{ removal_2020.e178|no_null }}</E178_adoptive_parent2_race_native_hawaiian_pacific_islander>
+                            <E179_adoptive_parent2_race_white>{{ removal_2020.e179|no_null }}</E179_adoptive_parent2_race_white>
+                            <E180_adoptive_parent2_race_unknown>{{ removal_2020.e180|no_null }}</E180_adoptive_parent2_race_unknown>
+                            <E181_adoptive_parent2_race_declined>{{ removal_2020.e181|no_null }}</E181_adoptive_parent2_race_declined>
+                            <E182_adoptive_parent2_hispanic_latino>{{ removal_2020.e182|no_null }}</E182_adoptive_parent2_hispanic_latino>
+                            <E183_adoptive_parent2_sex>{{ removal_2020.e183|no_null }}</E183_adoptive_parent2_sex>
+                            {%- endif %}
+                        </E173_E183_second_adoptive_parent_information>
+                        <E184_inter_intrajurisdictional_adoption>{{ removal_2020.e184|no_null }}</E184_inter_intrajurisdictional_adoption>
+                        <E185_assistance_agreement_type>{{ removal_2020.e185|no_null }}</E185_assistance_agreement_type>
+                        <E186_siblings_in_adoptive_home>{{ removal_2020.e186|no_null }}</E186_siblings_in_adoptive_home>
+                        {%- endif %}
+                    </E157_E186_adoptive_parents_information>
+                </removal_2020>
+                {%- endfor %}
+                {%- for removal_1993 in record.removals_1993 %}
+                <removal_1993>
+                    <E69_removal_date>{{ removal_1993.e69|no_null }}</E69_removal_date>
+                    <E153_exit_date>{{ removal_1993.e153|no_null }}</E153_exit_date>
+                    <E155_exit_reason>{{ removal_1993.e155|no_null }}</E155_exit_reason>
+                </removal_1993>
+                {%- endfor %}
+            </E69_E186_removals>
+            <E106_prior_victim_sex_trafficking>{{ record.e106|no_null }}</E106_prior_victim_sex_trafficking>
+            <E107_E108_prior_victim_sex_trafficking_reporting>
+                <E107_prior_victim_sex_trafficking_reported>{{ record.e107|no_null }}</E107_prior_victim_sex_trafficking_reported>
+                <E108_prior_victim_sex_trafficking_reported_date>{{ record.e108|no_null }}</E108_prior_victim_sex_trafficking_reported_date>
+            </E107_E108_prior_victim_sex_trafficking_reporting>
+            <E109_victim_sex_trafficking>{{ record.e109|no_null }}</E109_victim_sex_trafficking>
+            <E110_E111_victim_sex_trafficking_reporting>
+                <E110_victim_sex_trafficking_reported>{{ record.e110|no_null }}</E110_victim_sex_trafficking_reported>
+                <E111_victim_sex_trafficking_reported_date>{{ record.e111|no_null }}</E111_victim_sex_trafficking_reported_date>
+            </E110_E111_victim_sex_trafficking_reporting>
+        </record>
+        {%- endfor %}
+    </records>
+</acf:data>

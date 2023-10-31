@@ -17,11 +17,11 @@ class CaseVisitDialog(BaseDialog):
         self.removal_id: int | None = None
         self._child_name: str = ""
 
-    def clear(self):
+    def clear(self) -> None:
         super().clear()
         self.child_name = ""
 
-    def _wire_ui(self):
+    def _wire_ui(self) -> None:
         self.setModal(True)
         self.ui.form_action.accepted.connect(self.accept)
         self.ui.form_action.rejected.connect(self.reject)
@@ -39,7 +39,7 @@ class CaseVisitDialog(BaseDialog):
             self.setWindowTitle("")
 
     @property
-    def e151(self) -> int:
+    def e151(self) -> int | None:
         return self._get_int_field(self.ui.e151)
 
     @e151.setter
@@ -47,7 +47,7 @@ class CaseVisitDialog(BaseDialog):
         self._set_int_field(self.ui.e151, v)
 
     @property
-    def e152(self) -> int:
+    def e152(self) -> int | None:
         return self._get_combobox_selection(self.ui.e152, 1)
 
     @e152.setter

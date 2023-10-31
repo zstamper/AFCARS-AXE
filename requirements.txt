@@ -27,6 +27,7 @@ PySide6==6.5.2
 PySide6-Addons==6.5.2
 PySide6-Essentials==6.5.2
 pytest==7.4.2
+pytest-mock==3.11.1
 pytest-qt==4.2.0
 python-lsp-jsonrpc==1.0.0
 python-lsp-server==1.7.4
@@ -44,3 +45,5 @@ yapf==0.40.1
 zipp==3.16.2
 
 pydantic==2.3
+
+jinja2==3.1.2

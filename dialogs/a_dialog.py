@@ -3,6 +3,7 @@ from PySide6.QtGui import QRegularExpressionValidator
 from PySide6.QtWidgets import QWidget
 
 from dialogs import BaseDialog
+from model import OOHRecord
 from utils import generate_id
 
 
@@ -13,10 +14,14 @@ class ADialog(BaseDialog):
         self._wire_ui()
         self.setLayout(self.ui.layout())
         self.setFixedSize(self.ui.size())
-        self.context_id: int = None
+        self.a_id: int | None = None
+        self.child_id: int | None = None
+        self.context_id: int | None = None
         self._child_name: str = ""
+        self.ooh: OOHRecord | None = None
 
-    def _wire_ui(self):
+
+    def _wire_ui(self) -> None:
         ui = self.ui
         self._init_radio_mf(ui, 'e6')
         self._init_radio(ui, 'a15', {'a': 1, 'g': 2})
@@ -32,13 +37,13 @@ class ADialog(BaseDialog):
         ui.e4.setValidator(QRegularExpressionValidator(QRegularExpression(r'[0-9a-zA-Z]{12}')))
         ui.e4_generate.clicked.connect(self._e4_generate_clicked)
 
-    def _last_name_text_changed(self, text: str):
+    def _last_name_text_changed(self, text: str) -> None:
         self.child_name = f"{self.last_name}{', ' if self.last_name and self.first_name else ''}{self.first_name}"
 
-    def _first_name_text_changed(self, text: str):
+    def _first_name_text_changed(self, text: str) -> None:
         self.child_name = f"{self.last_name}{', ' if self.last_name and self.first_name else ''}{self.first_name}"
 
-    def clear(self):
+    def clear(self) -> None:
         super().clear()
         self.child_name = ""
         self.id = None
@@ -58,13 +63,13 @@ class ADialog(BaseDialog):
         else:
             self.setWindowTitle('')
 
-    def _e4_text_changed(self, text: str):
+    def _e4_text_changed(self, text: str) -> None:
         if self.ui.e4.hasAcceptableInput():
             enabled = self.ui.e4.text() == ""
             self.ui.e4.setEnabled(enabled)
             self.ui.e4_generate.setEnabled(enabled)
 
-    def _e4_generate_clicked(self):
+    def _e4_generate_clicked(self) -> None:
         id_value: str = generate_id()
         self.ui.e4.setText(id_value)
 
@@ -175,7 +180,7 @@ class ADialog(BaseDialog):
         self.ui.e20.setChecked(v == 1)
 
     @property
-    def e21(self) -> int:
+    def e21(self) -> int | None:
         return self._get_combobox_selection(self.ui.e21, {0: 0, 1: 1, 2: 7, 3: 8, 4: 9})
 
     @e21.setter
@@ -191,7 +196,7 @@ class ADialog(BaseDialog):
         self._set_radio_button(self.ui.a15, v)
 
     @property
-    def a16(self) -> int:
+    def a16(self) -> int | None:
         return self._get_int_field(self.ui.a16)
 
     @a16.setter
@@ -199,7 +204,7 @@ class ADialog(BaseDialog):
         self._set_int_field(self.ui.a16, v)
 
     @property
-    def a17(self) -> int:
+    def a17(self) -> int | None:
         return self._get_int_field(self.ui.a17)
 
     @a17.setter
@@ -207,7 +212,7 @@ class ADialog(BaseDialog):
         self._set_int_field(self.ui.a17, v)
 
     @property
-    def a18(self) -> int:
+    def a18(self) -> int | None:
         return self._get_int_field(self.ui.a18)
 
     @a18.setter

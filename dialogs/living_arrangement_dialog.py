@@ -7,7 +7,7 @@ class LivingArrangementDialog(BaseDialog):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.ui: QWidget = self.load_ui('ui_living_arrangement.ui')
+        self.ui = self.load_ui('ui_living_arrangement.ui')
         self._wire_ui()
         self.setLayout(self.ui.layout())
         self.setFixedSize(self.ui.size())
@@ -132,7 +132,7 @@ class LivingArrangementDialog(BaseDialog):
     @property
     def e120(self) -> int | None:
         idx = self._get_combobox_selection(self.ui.e120)
-        return idx if idx > 0 else None
+        return idx if idx is not None and idx > 0 else None
 
     @e120.setter
     def e120(self, v: int) -> None:

@@ -1,19 +1,22 @@
 from datetime import datetime
+from typing import Optional
 
 from pydantic import BaseModel, field_validator, model_validator, Field
 from pydantic_core.core_schema import FieldValidationInfo
 
 
 class MyBaseModel(BaseModel):
-    def scatter(self, obj):
+    def scatter(self, obj, ignore: Optional[list[str]] = None):
         "Copy model fields into another object"
         for fld in self.model_fields_set:
-            setattr(obj, fld, getattr(self, fld))
+            if not ignore or fld not in ignore:
+                setattr(obj, fld, getattr(self, fld))
 
-    def gather(self, obj):
+    def gather(self, obj, ignore: Optional[list[str]] = None):
         "Copy model fields from another object"
         for fld in self.model_fields_set:
-            setattr(self, fld, getattr(obj, fld))
+            if not ignore or fld not in ignore:
+                setattr(self, fld, getattr(obj, fld))
 
     @classmethod
     def crib(cls, obj):
@@ -38,14 +41,14 @@ class MyBaseModel(BaseModel):
 
 
 class Tribe(MyBaseModel):
-    id: int
+    id: int = Field(default=None)
     tribe: str
     epa_code: int
     states: list[str] = Field(default_factory=list)
 
 
 class State(MyBaseModel):
-    id: int
+    id: int = Field(default=None)
     state: str
     name: str
     fips_code: int
@@ -53,7 +56,7 @@ class State(MyBaseModel):
 
 
 class Removal1993(MyBaseModel):
-    id: int | None
+    id: int | None = Field(default=None)
     ooh_id: int | None
     e69: int | None
     e153: int | None
@@ -92,20 +95,20 @@ class Removal1993(MyBaseModel):
 
 
 class PermanencyPlan(MyBaseModel):
-    id: int | None
+    id: int | None = Field(default=None)
     removal_id: int | None
     e147: int | None
     e148: int | None
 
 
 class PermanencyHearing(MyBaseModel):
-    id: int | None
+    id: int | None = Field(default=None)
     removal_id: int | None
     e150: int | None
 
 
 class PeriodicReview(MyBaseModel):
-    id: int | None
+    id: int | None = Field(default=None)
     removal_id: int | None
     e149: int | None
 
@@ -118,7 +121,7 @@ class CaseVisit(MyBaseModel):
 
 
 class LivingArrangement(MyBaseModel):
-    id: int | None
+    id: int | None = Field(default=None)
     removal_id: int | None
     e40: int | None
     e58: int | None
@@ -160,7 +163,7 @@ class LivingArrangement(MyBaseModel):
 
 
 class Removal2020(MyBaseModel):
-    id: int | None
+    id: int | None = Field(default=None)
     ooh_id: int | None
     e3: int | None
     e69: int | None
@@ -254,7 +257,8 @@ class Removal2020(MyBaseModel):
                     int(y) > datetime.today().year or \
                     not ("01" <= m <= "12") or \
                     not ("01" <= m <=
-                         {"01": "31", "02": "29", "03": "31", "04": "30", "05": "31", "06": "30", "07": "31", "08": "31",
+                         {"01": "31", "02": "29", "03": "31", "04": "30", "05": "31", "06": "30", "07": "31",
+                          "08": "31",
                           "09": "30", "10": "31", "11": "30", "12": "31"}[m]):
                 raise ValueError(err_msg)
         return v
@@ -275,7 +279,7 @@ class Removal2020(MyBaseModel):
 
 
 class SecondParent(MyBaseModel):
-    id: int | None
+    id: int | None = Field(default=None)
     ooh_id: int | None
     e64: int | None
     e66: int | None
@@ -283,13 +287,13 @@ class SecondParent(MyBaseModel):
 
 
 class RecognizedTribe(MyBaseModel):
-    id: int | None
+    id: int | None = Field(default=None)
     ooh_id: int | None
     e9: int | None
 
 
 class OOHRecord(MyBaseModel):
-    id: int | None
+    ooh_id: int | None = Field(default=None)
     child_id: int | None
     funding: int | None
     e7: int | None
@@ -354,7 +358,8 @@ class OOHRecord(MyBaseModel):
 
 
 class ARecord(MyBaseModel):
-    id: int | None
+    a_id: int | None = Field(default=None)
+    child_id: int | None
     # a5: int | None
     # a6: int | None
     # a7: int | None
@@ -378,7 +383,7 @@ class Context(MyBaseModel):
 
 
 class Child(MyBaseModel):
-    id: int | None
+    child_id: int | None = Field(default=None)
     context_id: int  # = Field(default=None)
     first_name: str | None
     last_name: str | None
@@ -396,3 +401,25 @@ class Child(MyBaseModel):
     e21: int | None
     ooh: OOHRecord | None = Field(default=None)
     a: ARecord | None = Field(default=None)
+
+
+class Agency(MyBaseModel):
+    fips_code: str | None
+    epa_code: str | None
+
+    @property
+    def e1(self) -> str | None:
+        return self.fips_code if self.fips_code else self.epa_code if self.epa_code else None
+
+    @model_validator(mode='after')
+    def fips_code_epa_code(self):
+        if self.fips_code is None and self.epa_code is None:
+            raise ValueError("Select either a FIPS code or an EPA Tribal code.")
+        if self.fips_code and self.epa_code:
+            raise ValueError("Select either a FIPS code or an EPA Tribal code, but not both.")
+        return self
+
+
+class Export(MyBaseModel):
+    e2: int | None
+    file_name: str | None

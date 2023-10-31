@@ -12,7 +12,7 @@ from .permanency_hearing_dialog import PermanencyHearingDialog
 from .permency_plan_dialog import PermanencyPlanDialog
 
 
-def e120_to_str(v: int) -> str:
+def e120_to_str(v: int | None) -> str:
     # FIXME: hmm... wonder if this should just be captured from the form?
     mapper: dict = {0: 'Foster Family Home',
                     1: 'Group home-family operated',
@@ -35,7 +35,7 @@ def e120_to_str(v: int) -> str:
     return mapper[v]
 
 
-def e148_to_str(v: int) -> str:
+def e148_to_str(v: int | None) -> str:
     mapper: dict = {1: "Reunify with parent(s) or legal guardian(s)",
                     2: "Live with other relatives",
                     3: "Adoption",
@@ -47,7 +47,7 @@ def e148_to_str(v: int) -> str:
     return mapper[v]
 
 
-def e152_to_str(v: int) -> str:
+def e152_to_str(v: int | None) -> str:
     mapper: dict = {0: "Child's Residence",
                     1: "Other Location"
                     }
@@ -77,13 +77,13 @@ class Removal2020Dialog(BaseDialog):
 
     # ------------------------------------------------------------------------
 
-    def clear(self):
+    def clear(self) -> None:
         super().clear()
         self.child_name = ""
         self.ui = None
         self.ooh_id = None
 
-    def _wire_ui(self):
+    def _wire_ui(self) -> None:
         self.setModal(True)
 
         ui = self.ui
@@ -126,7 +126,7 @@ class Removal2020Dialog(BaseDialog):
 
     # ----- Living Arrangements Automation ------------------------------------
 
-    def add_living_arrangement(self):
+    def add_living_arrangement(self) -> None:
         dialog = LivingArrangementDialog(self)
         dialog.clear()
         dialog.child_name = self.child_name
@@ -136,7 +136,7 @@ class Removal2020Dialog(BaseDialog):
             self.living_arrangements.append(data)
             self._add_living_arrangement_table_row(data)
 
-    def edit_living_arrangement(self):
+    def edit_living_arrangement(self) -> None:
         # if the living_arrangement_table has a current row, pass the corresponding obj item to the dialog
         current_row = self.ui.living_arrangements_table.currentRow()
         if current_row >= 0:
@@ -148,7 +148,7 @@ class Removal2020Dialog(BaseDialog):
             controller.edit(data)
             self._update_living_arrangement_table_row(current_row, data)
 
-    def delete_living_arrangement(self):
+    def delete_living_arrangement(self) -> None:
         # if the living_arrangement_table has a current row, delete it from the obj and refresh the table
         current_row = self.ui.living_arrangements_table.currentRow()
         if 0 <= current_row < len(self.obj.living_arrangements):
@@ -167,7 +167,7 @@ class Removal2020Dialog(BaseDialog):
 
     # ----- Permanency Plan Automation ----------------------------------------
 
-    def add_permanency_plan(self):
+    def add_permanency_plan(self) -> None:
         dialog = PermanencyPlanDialog(self)
         dialog.clear()
         dialog.child_name = self.child_name
@@ -177,7 +177,7 @@ class Removal2020Dialog(BaseDialog):
             self.permanency_plans.append(data)
             self._add_permanency_plan_table_row(data)
 
-    def edit_permanency_plan(self):
+    def edit_permanency_plan(self) -> None:
         # if the permanency_plan_table has a current row, pass the corresponding obj item to the dialog
         current_row = self.ui.permanency_plans_table.currentRow()
         if current_row >= 0:
@@ -189,7 +189,7 @@ class Removal2020Dialog(BaseDialog):
             controller.edit(data)
             self._update_permanency_plan_table_row(current_row, data)
 
-    def delete_permanency_plan(self):
+    def delete_permanency_plan(self) -> None:
         # if the permanency_plan_table has a current row, delete it from the obj and refresh the table
         current_row = self.ui.permanency_plans_table.currentRow()
         if 0 <= current_row < len(self.obj.permanency_plans):
@@ -201,13 +201,13 @@ class Removal2020Dialog(BaseDialog):
         self.ui.permanency_plans_table.insertRow(row)
         self._update_permanency_plan_row(row, permanency_plan)
 
-    def _update_permanency_plan_row(self, row: int, data: PermanencyPlan):
+    def _update_permanency_plan_row(self, row: int, data: PermanencyPlan) -> None:
         self.ui.permanency_plans_table.setItem(row, 0, QTableWidgetItem(str(data.e147)))
         self.ui.permanency_plans_table.setItem(row, 1, QTableWidgetItem(e148_to_str(data.e148)))
 
     # ----- Case Visit Automation ---------------------------------------------
 
-    def add_case_worker_visit(self):
+    def add_case_worker_visit(self) -> None:
         dialog = CaseVisitDialog(self)
         dialog.clear()
         dialog.child_name = self.child_name
@@ -217,7 +217,7 @@ class Removal2020Dialog(BaseDialog):
             self.case_worker_visits.append(data)
             self._add_case_worker_visit_table_row(data)
 
-    def edit_case_worker_visit(self):
+    def edit_case_worker_visit(self) -> None:
         # if the case_worker_visit_table has a current row, pass the corresponding obj item to the dialog
         current_row = self.ui.case_visits_table.currentRow()
         if current_row >= 0:
@@ -229,7 +229,7 @@ class Removal2020Dialog(BaseDialog):
             controller.edit(data)
             self._update_case_worker_visit_table_row(current_row, data)
 
-    def delete_case_worker_visit(self):
+    def delete_case_worker_visit(self) -> None:
         # if the case_worker_visit_table has a current row, delete it from the obj and refresh the table
         current_row = self.ui.case_visits_table.currentRow()
         if 0 <= current_row < len(self.obj.case_worker_visits):
@@ -241,7 +241,7 @@ class Removal2020Dialog(BaseDialog):
         self.ui.case_visits_table.insertRow(row)
         self._update_case_worker_visit_table_row(row, case_worker_visit)
 
-    def _update_case_worker_visit_table_row(self, row: int, data: CaseVisit):
+    def _update_case_worker_visit_table_row(self, row: int, data: CaseVisit) -> None:
         self.ui.case_visits_table.setItem(row, 0,
                                           QTableWidgetItem(str(data.e151)))
         self.ui.case_visits_table.setItem(row, 1,
@@ -249,7 +249,7 @@ class Removal2020Dialog(BaseDialog):
 
     # ----- Permanency Hearing Automation -------------------------------------
 
-    def add_permanency_hearing(self):
+    def add_permanency_hearing(self) -> None:
         dialog = PermanencyHearingDialog(self)
         dialog.clear()
         dialog.child_name = self.child_name
@@ -259,7 +259,7 @@ class Removal2020Dialog(BaseDialog):
             self.permanency_hearings.append(data)
             self._add_permanency_hearing_table_row(data)
 
-    def edit_permanency_hearing(self):
+    def edit_permanency_hearing(self) -> None:
         # if the permanency_hearing_table has a current row, pass the corresponding obj item to the dialog
         current_row = self.ui.permanency_hearings_table.currentRow()
         if current_row >= 0:
@@ -271,7 +271,7 @@ class Removal2020Dialog(BaseDialog):
             controller.edit(data)
             self._update_permanency_hearing_table_row(current_row, data)
 
-    def delete_permanency_hearing(self):
+    def delete_permanency_hearing(self) -> None:
         # if the permanency_hearing_table has a current row, delete it from the obj and refresh the table
         current_row = self.ui.permanency_hearings_table.currentRow()
         if 0 <= current_row < len(self.obj.permanency_hearings):
@@ -283,12 +283,12 @@ class Removal2020Dialog(BaseDialog):
         self.ui.permanency_hearings_table.insertRow(row)
         self._update_permanency_hearing_table_row(row, permanency_hearing)
 
-    def _update_permanency_hearing_table_row(self, row: int, data: PermanencyHearing):
+    def _update_permanency_hearing_table_row(self, row: int, data: PermanencyHearing) -> None:
         self.ui.permanency_hearings_table.setItem(row, 0, QTableWidgetItem(str(data.e150)))
 
     # ----- Period Review Automation ------------------------------------------
 
-    def add_periodic_review(self):
+    def add_periodic_review(self) -> None:
         dialog = PeriodicReviewDialog(self)
         dialog.clear()
         dialog.child_name = self.child_name
@@ -298,7 +298,7 @@ class Removal2020Dialog(BaseDialog):
             self.periodic_reviews.append(data)
             self._add_periodic_review_table_row(data)
 
-    def edit_periodic_review(self):
+    def edit_periodic_review(self) -> None:
         # if the periodic_review_table has a current row, pass the corresponding obj item to the dialog
         current_row = self.ui.periodic_reviews_table.currentRow()
         if current_row >= 0:
@@ -310,7 +310,7 @@ class Removal2020Dialog(BaseDialog):
             controller.edit(data)
             self._update_periodic_review_table_row(current_row, data)
 
-    def delete_periodic_review(self):
+    def delete_periodic_review(self) -> None:
         # if the periodic_review_table has a current row, delete it from the obj and refresh the table
         current_row = self.ui.periodic_reviews_table.currentRow()
         if 0 <= current_row < len(self.obj.periodic_reviews):
@@ -322,7 +322,7 @@ class Removal2020Dialog(BaseDialog):
         self.ui.periodic_reviews_table.insertRow(row)
         self._update_periodic_review_table_row(row, periodic_review)
 
-    def _update_periodic_review_table_row(self, row: int, data: PeriodicReview):
+    def _update_periodic_review_table_row(self, row: int, data: PeriodicReview) -> None:
         self.ui.periodic_reviews_table.setItem(row, 0, QTableWidgetItem(str(data.e149)))
 
     # -------------------------------------------------------------------------
@@ -334,16 +334,16 @@ class Removal2020Dialog(BaseDialog):
         return self._child_name
 
     @child_name.setter
-    def child_name(self, v: str):
+    def child_name(self, v: str) -> None:
         self._child_name = v
-        print(f"removal2020: child_name={v}")
+        # print(f"removal2020: child_name={v}")
         if v:
             self.setWindowTitle(f"2020 Removal : {v}")
         else:
             self.setWindowTitle("")
 
     @property
-    def e3(self) -> int:
+    def e3(self) -> int | None:
         return self._get_int_field(self.ui.e3)
 
     @e3.setter
@@ -351,7 +351,7 @@ class Removal2020Dialog(BaseDialog):
         self._set_int_field(self.ui.e3, e3)
 
     @property
-    def e69(self) -> int:
+    def e69(self) -> int | None:
         return self._get_int_field(self.ui.e69)
 
     @e69.setter
@@ -359,7 +359,7 @@ class Removal2020Dialog(BaseDialog):
         self._set_int_field(self.ui.e69, e69)
 
     @property
-    def e70(self) -> int:
+    def e70(self) -> int | None:
         return self.e69
 
     @e70.setter
@@ -367,7 +367,7 @@ class Removal2020Dialog(BaseDialog):
         pass
 
     @property
-    def e71(self) -> int:
+    def e71(self) -> int | None:
         return self._get_combobox_selection(self.ui.e71, 1)
 
     @e71.setter
@@ -647,7 +647,7 @@ class Removal2020Dialog(BaseDialog):
         self.ui.e105.setChecked(e105 == 1)
 
     @property
-    def e153(self) -> int:
+    def e153(self) -> int | None:
         return self._get_int_field(self.ui.e153)
 
     @e153.setter
@@ -655,7 +655,7 @@ class Removal2020Dialog(BaseDialog):
         self._set_int_field(self.ui.e153, e153)
 
     @property
-    def e154(self) -> int:
+    def e154(self) -> int | None:
         return self._get_int_field(self.ui.e154)
 
     @e154.setter
@@ -663,7 +663,7 @@ class Removal2020Dialog(BaseDialog):
         self._set_int_field(self.ui.e154, e154)
 
     @property
-    def e155(self) -> int:
+    def e155(self) -> int | None:
         return self._get_combobox_selection(self.ui.e155, 1)
 
     @e155.setter
@@ -671,15 +671,15 @@ class Removal2020Dialog(BaseDialog):
         self._set_combobox_selection(self.ui.e155, e155, -1)
 
     @property
-    def e156(self) -> int:
+    def e156(self) -> int | None:
         return self._get_combobox_selection(self.ui.e156, 1)
 
     @e156.setter
-    def e156(self, e156: int):
+    def e156(self, e156: int) -> None:
         self._set_combobox_selection(self.ui.e156, e156, -1)
 
     @property
-    def e157(self) -> int:
+    def e157(self) -> int | None:
         return self._get_combobox_selection(self.ui.e157, 1)
 
     @e157.setter
@@ -719,7 +719,7 @@ class Removal2020Dialog(BaseDialog):
         self.ui.e161.setChecked(e161 == 1)
 
     @property
-    def e162(self) -> int:
+    def e162(self) -> int | None:
         return self._get_int_field(self.ui.e162)
 
     @e162.setter
@@ -807,7 +807,7 @@ class Removal2020Dialog(BaseDialog):
         self._set_radio_button(self.ui.e172, e172)
 
     @property
-    def e173(self) -> int:
+    def e173(self) -> int | None:
         return self._get_int_field(self.ui.e173)
 
     @e173.setter
@@ -895,7 +895,7 @@ class Removal2020Dialog(BaseDialog):
         return self._set_radio_button(self.ui.e183, e183)
 
     @property
-    def e184(self) -> int:
+    def e184(self) -> int | None:
         return self._get_combobox_selection(self.ui.e184, 1)
 
     @e184.setter
@@ -903,15 +903,15 @@ class Removal2020Dialog(BaseDialog):
         self._set_combobox_selection(self.ui.e184, e184, -1)
 
     @property
-    def e185(self) -> None:
-        self._get_combobox_selection(self.ui.e185)
+    def e185(self) -> int | None:
+        return self._get_combobox_selection(self.ui.e185)
 
     @e185.setter
     def e185(self, e185: int) -> None:
         self._set_combobox_selection(self.ui.e185, e185)
 
     @property
-    def e186(self) -> int:
+    def e186(self) -> int | None:
         return self._get_int_field(self.ui.e186)
 
     @e186.setter

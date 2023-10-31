@@ -9,31 +9,34 @@ from PySide6.QtWidgets import QDialog, QWidget, QErrorMessage, QCheckBox, QRadio
     QButtonGroup, QTableWidget, QListWidget
 from PySide6.QtWidgets import QMessageBox
 
+from .main_window import MainWindow
 
-class BasePath:
-    _base_path: str = None
 
-    @staticmethod
-    def path(new_path: str = None) -> str:
-        if new_path is not None:
-            print(f"{new_path=}")
-            BasePath._base_path = Path(new_path).resolve().parent
-        return BasePath._base_path
+# class BasePath:
+#     _base_path: str | None = None
+#
+#     @staticmethod
+#     def path(new_path: str = None) -> str:
+#         if new_path is not None:
+#             print(f"{new_path=}")
+#             BasePath._base_path = Path(new_path).resolve().parent
+#         return str(BasePath._base_path)
 
 
 class BaseDialog(QDialog):
 
     def __init__(self,
                  parent: Optional[QWidget] = None,
-                 flags: Qt.WindowType = None,
+                 flags: Qt.WindowType | None = None,
                  relaxed_rules: bool = False):
         if flags is None:
             flags = Qt.WindowType()
         super().__init__(parent, flags)
-        self.id: int = None
+        self.id: int | None = None
         self.is_dirty: bool = False
         self.errors: list[str] = []
         self.relaxed_rules = relaxed_rules
+        self._on_accept = None
 
     def _on_accept(self, v: Callable):
         self._on_accept = v
@@ -48,7 +51,7 @@ class BaseDialog(QDialog):
             # we are running in a normal Python environment
             bundle_dir = Path(__file__).resolve().parent.parent
         ui_file_path = Path(bundle_dir) / 'ui' / file_name
-        print(f"{ui_file_path=}")
+        # print(f"{ui_file_path=}")
         loader = QUiLoader()
         ui_file = QFile(ui_file_path)
         ui_file.open(QFile.ReadOnly)
@@ -57,7 +60,7 @@ class BaseDialog(QDialog):
         return ui
 
     def accept(self):
-        if self._on_accept and self._on_accept():
+        if self._on_accept is None or (self._on_accept and self._on_accept()):
             super().accept()
 
     def reject(self):

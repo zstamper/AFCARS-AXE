@@ -1,3 +1,5 @@
+from typing import Optional
+
 from PySide6.QtWidgets import QDialog
 
 from PySide6.QtWidgets import QDialog
@@ -17,18 +19,22 @@ class OOHController:
      :param data_class a class reference used for manipulating model data
      """
 
-    def __init__(self, dialog: BaseDialog, context_id: int):
+    def __init__(self, dialog: BaseDialog, context_id: int, epa_tribes: dict):
         self.dialog = dialog
         self.dialog.on_accept = self.do_accept
         self.new_data: Child | None = None
+        self.epa_tribes = epa_tribes
         self.context_id = context_id
 
-    def add(self) -> Child | None:
+    def add(self, child: Optional[Child] = None) -> Child | None:
         """Shows an empty dialog, lets the user do what they will, then returns either a new model instance or None,
         depending on whether the form contents are "valid" or not. The "valid" determination is handled by the model
         as a feature of pydantic."""
         self.dialog.clear()
         self.dialog.context_id = self.context_id
+        self.dialog.epa_tribes = self.epa_tribes
+        if child:
+            child.scatter(self.dialog)
         self.dialog.exec()
         if self.dialog.result() == QDialog.Accepted:
             return self.new_data
@@ -39,9 +45,10 @@ class OOHController:
         contents are valid, the model instance is modified with the new form contents. Otherwise, the model contents are
         left unchanged. Like the add() method, "valid" is determined by rules in the model using pydantic."""
         self.dialog.clear()
-        data.scatter(self.dialog)
+        self.dialog.epa_tribes = self.epa_tribes
         if data.ooh:
             data.ooh.scatter(self.dialog)
+        data.scatter(self.dialog)
         self.dialog.exec()
         if self.dialog.result() == QDialog.Accepted:
             data.gather(self.dialog)

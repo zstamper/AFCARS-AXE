@@ -1,4 +1,5 @@
 from .id_generator import generate_id
+from .export import XMLExporter
 
 
 def coalesce(v: str|int|float|None, d: int|float) -> int|float:

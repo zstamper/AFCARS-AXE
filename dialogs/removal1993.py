@@ -31,11 +31,11 @@ class Removal1993Dialog(BaseDialog):
         self.ooh = None
 
     @property
-    def id(self) -> int:
+    def id(self) -> int | None:
         return self.__id
 
     @id.setter
-    def id(self, id: int) -> None:
+    def id(self, id: int | None) -> None:
         self.__id = id
 
     @property
@@ -59,7 +59,7 @@ class Removal1993Dialog(BaseDialog):
             self.setWindowTitle("")
 
     @property
-    def e69(self) -> int:
+    def e69(self) -> int | None:
         return self._get_int_field(self.ui.e69)
 
     @e69.setter
@@ -67,7 +67,7 @@ class Removal1993Dialog(BaseDialog):
         self._set_int_field(self.ui.e69, v)
 
     @property
-    def e153(self) -> int:
+    def e153(self) -> int | None:
         return self._get_int_field(self.ui.e153)
 
     @e153.setter
@@ -75,7 +75,7 @@ class Removal1993Dialog(BaseDialog):
         self._set_int_field(self.ui.e153, v)
 
     @property
-    def e155(self) -> int:
+    def e155(self) -> int | None:
         return self._get_combobox_selection(self.ui.e155, mapping={0: 1, 1: 2, 2: 3, 3: 4, 4: 5, 5: 6, 6: 8})
 
     @e155.setter

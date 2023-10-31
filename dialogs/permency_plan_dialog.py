@@ -17,13 +17,13 @@ class PermanencyPlanDialog(BaseDialog):
         self.removal_id: int | None = None
         self._child_name: str = ""
 
-    def _wire_ui(self):
+    def _wire_ui(self) -> None:
         self.setModal(True)
 
         self.ui.form_action.accepted.connect(self.accept)
         self.ui.form_action.rejected.connect(self.reject)
 
-    def clear(self):
+    def clear(self) -> None:
         super().clear()
         self.child_name = ""
 
@@ -32,7 +32,7 @@ class PermanencyPlanDialog(BaseDialog):
         return self._child_name
 
     @child_name.setter
-    def child_name(self, v: str):
+    def child_name(self, v: str) -> None:
         self._child_name = v
         if v:
             self.setWindowTitle(f"Permanency Plan : {v}")
@@ -40,7 +40,7 @@ class PermanencyPlanDialog(BaseDialog):
             self.setWindowTitle("")
 
     @property
-    def e147(self) -> int:
+    def e147(self) -> int | None:
         return self._get_int_field(self.ui.e147)
 
     @e147.setter
@@ -48,7 +48,7 @@ class PermanencyPlanDialog(BaseDialog):
         self._set_int_field(self.ui.e147)
 
     @property
-    def e148(self) -> int:
+    def e148(self) -> int | None:
         return self._get_combobox_selection(self.ui.e148, self.e148_to_obj_mapping)
 
     @e148.setter

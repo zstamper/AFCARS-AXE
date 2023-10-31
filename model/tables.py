@@ -13,12 +13,12 @@ class BaseModel(Model):
 
 
 class ConfigTable(BaseModel):
-    # id = AutoField()
+    id = AutoField()
     agency = IntegerField()
 
 
 class ContextTable(BaseModel):
-    # id = AutoField()
+    id = AutoField()
     e1 = IntegerField(index=True)  # Title IV-E Agency ID (2-digit FIPS or 3-digit EPA tribal code)
 
     def to_model(self) -> Context:
@@ -33,10 +33,10 @@ class ContextTable(BaseModel):
 
 
 class ChildTable(BaseModel):
-    id = AutoField()
+    child_id = AutoField()
     context = ForeignKeyField(ContextTable, backref='children')
-    first_name = TextField()
-    last_name = TextField()
+    first_name = TextField(null=True)
+    last_name = TextField(null=True)
     e4 = TextField(null=True)
     e5 = IntegerField(null=True)
     e6 = IntegerField(null=True)
@@ -52,12 +52,18 @@ class ChildTable(BaseModel):
 
     def to_model(self) -> Child:
         child_model = Child.crib(self)
-        child_model.ooh = ooh.to_model() if (ooh := self.ooh.get_or_none()) is not None else None
-        child_model.a = a.to_model() if (a := self.a.get_or_none()) is not None else None
+        if self.ooh:
+            ooh = OOHRecordTable.get_or_none(self.ooh)
+            if ooh:
+                child_model.ooh = ooh.to_model()
+        if self.a:
+            a = ARecordTable.get_or_none(self.a)
+            if a:
+                child_model.a = a.to_model()
         return child_model
 
     @staticmethod
-    def persist_model(model: Child, context_id:int = None):
+    def persist_model(model: Child):
         # child = ChildTable(id=model.id, first_name=model.first_name,
         #                    last_name=model.last_name, e4=model.e4, e5=model.e5, e6=model.e6,
         #                    e13=model.e13, e14=model.e14, e15=model.e15, e16=model.e16, e17=model.e17, e18=model.e18,
@@ -65,33 +71,18 @@ class ChildTable(BaseModel):
         child = ChildTable(**model.kwds())
         child.save()
 
-        model.id = child.id
+        model.child_id = child.child_id
         if model.ooh:
-            model.ooh.child_id = model.id
+            model.ooh.child_id = model.child_id
             OOHRecordTable.persist_model(model.ooh)
         if model.a:
-            model.a.child_id = model.id
+            model.a.child_id = model.child_id
             ARecordTable.persist_model(model.a)
 
 
 class ARecordTable(BaseModel):
-    id = AutoField()
-    child = ForeignKeyField(ChildTable, backref='a')
-    # a1 == e1
-    # a2 == e2
-    # a3 == e4
-    # a4 == e5
-    # a5 == e6
-    a5 = IntegerField(null=True)
-    a6 = IntegerField(null=True)
-    a7 = IntegerField(null=True)
-    a8 = IntegerField(null=True)
-    a9 = IntegerField(null=True)
-    a10 = IntegerField(null=True)
-    a11 = IntegerField(null=True)
-    a12 = IntegerField(null=True)
-    a13 = IntegerField(null=True)
-    a14 = IntegerField(null=True)
+    a_id = AutoField()
+    child = ForeignKeyField(ChildTable, backref="a")
     a15 = IntegerField(null=True)
     a16 = IntegerField(null=True)
     a17 = IntegerField(null=True)
@@ -100,7 +91,6 @@ class ARecordTable(BaseModel):
 
     def to_model(self) -> ARecord:
         record = ARecord.crib(self)
-        record.context = self.context.to_model()
         return record
         # record = ARecord(id=self.id, child=self.child, context=self.context.to_model(),
         #                  a6=self.a6, a7=self.a7, a8=self.a8, a9=self.a9,
@@ -109,22 +99,19 @@ class ARecordTable(BaseModel):
         # return record
 
     @staticmethod
-    def persist_model(model: ARecord, child: int = None):
-        arecord = ARecordTable(id=model.id, child=child, context=model.context.id,
-                               a5=model.a5, a6=model.a6, a7=model.a7, a8=model.a8, a9=model.a9,
-                               a10=model.a10, a11=model.a11, a12=model.a12, a13=model.a13, a14=model.a14,
-                               a15=model.a15, a16=model.a16, a17=model.a17, a18=model.a18, a19=model.a19)
+    def persist_model(model: ARecord):
+        arecord = ARecordTable(**model.kwds())
         arecord.save()
-        model.id = arecord.id
+        model.a_id = arecord.a_id
 
 
 class OOHRecordTable(BaseModel):
-    id = AutoField()
-    funding = IntegerField(null=True)
+    ooh_id = AutoField()
     child = ForeignKeyField(ChildTable, backref="ooh")
+    funding = IntegerField(null=True)
     e7 = IntegerField(null=True)
     e8 = IntegerField(null=True)
-    e9 = IntegerField(null=True)
+    # e9 = IntegerField(null=True)
     e10 = IntegerField(null=True)
     e11 = IntegerField(null=True)
     e12 = IntegerField(null=True)
@@ -198,23 +185,28 @@ class OOHRecordTable(BaseModel):
 
     @staticmethod
     def persist_model(model: OOHRecord):
-        ChildTable.persist_model(model.child)
-        ContextTable.persist_model(model.context)
         record = OOHRecordTable(**model.kwds())
         record.save()
-        model.id = record.id
+        model.ooh_id = record.ooh_id
+
+        # tribes are handled a little differently because of how the UI handles them. The tribes array is potentially
+        # a mix of existing and new records. The challenge is with the deleted records. They'll still exist on disk,
+        # but not in the list.
+        existing_tribes = [rec.to_model() for rec in RecognizedTribesTable.select().where(RecognizedTribesTable.ooh_id == record.ooh_id)]
+        for tribe in [tribe for tribe in existing_tribes if tribe not in model.tribes]:
+            RecognizedTribesTable.get_by_id(tribe.id).delete_instance()
         for tribe in model.tribes:
-            tribe.ooh_id = record.id
-            TribeTable.persist_model(tribe)
+            tribe.ooh_id = record.ooh_id
+            RecognizedTribesTable.persist_model(tribe)
         for second_parent in model.second_parents:
-            second_parent.ooh_id = record.id
-            SecondParentTable.persist_model(second_parent, ooh=int(model.id))
-        for removal in model.removals1993:
-            removal.ooh_id = record.id
-            Removal1993Table.persist_model(removal, ooh=int(model.id))
-        for removal in model.removals2020:
-            removal.ooh_id = record.id
-            Removal2020Table.persist_model(removal, ooh=int(model.id))
+            second_parent.ooh_id = record.ooh_id
+            SecondParentTable.persist_model(second_parent)
+        for removal1993 in model.removals1993:
+            removal1993.ooh_id = record.ooh_id
+            Removal1993Table.persist_model(removal1993)
+        for removal2020 in model.removals2020:
+            removal2020.ooh_id = record.ooh_id
+            Removal2020Table.persist_model(removal2020)
 
 
 class RecognizedTribesTable(BaseModel):
@@ -243,7 +235,7 @@ class SecondParentTable(BaseModel):
         return SecondParent.crib(self)
 
     @staticmethod
-    def persist_model(model: SecondParent, ooh: int = None):
+    def persist_model(model: SecondParent):
         parent = SecondParentTable(**model.kwds())
         parent.save()
         model.id = parent.id
@@ -261,7 +253,7 @@ class Removal1993Table(BaseModel):
         return record
 
     @staticmethod
-    def persist_model(model: Removal1993, ooh: int = None):
+    def persist_model(model: Removal1993):
         removal = Removal1993Table(**model.kwds())
         removal.save()
         model.id = removal.id
@@ -384,12 +376,12 @@ class Removal2020Table(BaseModel):
         # return record
 
     @staticmethod
-    def persist_model(model: Removal2020, ooh: int = None):
+    def persist_model(model: Removal2020):
         record = Removal2020Table(**model.kwds())
         record.save()
         model.id = record.id
         for living_arrangement in model.living_arrangements:
-            living_arrangement.removal = model.id
+            living_arrangement.removal_id = model.id
             LivingArrangementTable.persist_model(living_arrangement)
         for permanency_plan in model.permanency_plans:
             permanency_plan.removal_id = model.id
@@ -461,7 +453,7 @@ class LivingArrangementTable(BaseModel):
 
     @staticmethod
     def persist_model(model: LivingArrangement):
-        living_arrangement = LivingArrangementTable(id=model.id, removal=model.removal,
+        living_arrangement = LivingArrangementTable(id=model.id, removal_id=model.removal_id,
                                                     e112=model.e112, e113=model.e113, e114=model.e114,
                                                     e115=model.e115, e116=model.e116, e117=model.e117, e118=model.e118,
                                                     e119=model.e119, e120=model.e120, e121=model.e121, e122=model.e122,
@@ -494,7 +486,7 @@ class PermanencyPlanTable(BaseModel):
 
     @staticmethod
     def persist_model(model: PermanencyPlan):
-        permanency_plan = PermanencyPlanTable(id=model.id, e147=model.e147, e148=model.e148)
+        permanency_plan = PermanencyPlanTable(**model.kwds())
         permanency_plan.save()
         model.id = permanency_plan.id
 
@@ -511,7 +503,7 @@ class PeriodicReviewTable(BaseModel):
 
     @staticmethod
     def persist_model(model: PeriodicReview):
-        periodic_review = PeriodicReviewTable(id=model.id, e149=model.e149)
+        periodic_review = PeriodicReviewTable(**model.kwds())
         periodic_review.save()
         model.id = periodic_review.id
 

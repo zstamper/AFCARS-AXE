@@ -1,7 +1,10 @@
+from typing import Optional
+
 from PySide6.QtWidgets import QDialog
 from pydantic import ValidationError
 
-from controllers.utilities import show_error_dialog
+from dialogs import BaseDialog
+from .utilities import show_error_dialog
 from model.models import Child, ARecord
 
 
@@ -14,18 +17,20 @@ class AController:
      :param data_class a class reference used for manipulating model data
      """
 
-    def __init__(self, dialog: QDialog, context_id: int):
+    def __init__(self, dialog: BaseDialog, context_id: int):
         self.dialog = dialog
         self.dialog.on_accept = self.do_accept
         self.new_data: Child | None = None
         self.context_id = context_id
 
-    def add(self) -> Child | None:
+    def add(self, child: Optional[Child] = None) -> Child | None:
         """Shows an empty dialog, lets the user do what they will, then returns either a new model instance or None,
         depending on whether the form contents are "valid" or not. The "valid" determination is handled by the model
         as a feature of pydantic."""
         self.dialog.clear()
         self.dialog.context_id = self.context_id
+        if child:
+            child.scatter(self.dialog)
         self.dialog.exec()
         if self.dialog.result() == QDialog.Accepted:
             return self.new_data
@@ -37,9 +42,9 @@ class AController:
         left unchanged. Like the add() method, "valid" is determined by rules in the model using pydantic."""
         self.dialog.clear()
         self.dialog.context_id = self.context_id
-        data.scatter(self.dialog)
         if data.a:
             data.a.scatter(self.dialog)
+        data.scatter(self.dialog)
         self.dialog.exec()
         if self.dialog.result() == QDialog.Accepted:
             data.gather(self.dialog)
