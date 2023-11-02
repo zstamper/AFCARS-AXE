@@ -74,7 +74,7 @@ class Removal1993(MyBaseModel):
                 int(y) <= 1980 or \
                 int(y) > datetime.today().year or \
                 not ("01" <= m <= "12") or \
-                not ("01" <= m <=
+                not ("01" <= d <=
                      {"01": "31", "02": "29", "03": "31", "04": "30", "05": "31", "06": "30", "07": "31", "08": "31",
                       "09": "30", "10": "31", "11": "30", "12": "31"}[m]):
             raise ValueError(err_msg)
@@ -356,6 +356,110 @@ class OOHRecord(MyBaseModel):
     removals1993: list[Removal1993] = Field(default_factory=list)
     removals2020: list[Removal2020] = Field(default_factory=list)
 
+    @model_validator(mode='after')
+    def validate_funding_e7_e8_e10(self):
+        if self.funding == 0 and self.e7 not in [0, 1]:
+            raise ValueError(
+                f"'Agency made inquries' (E7) must be Yes or No if the child is being reported for a tribe that received funding."
+            )
+        if self.funding == 0 and self.e8 not in [0, 1, 9]:
+            raise ValueError(
+                f"Child's Tribal membership (E8) must be Yes, No, or Unknown if the child is being reported for a tribe that received funding."
+            )
+        if self.funding == 0 and self.e10 not in [0, 1, 9]:
+            raise ValueError(
+                "ICWA applicability (E10) must be specified if the child is being reported for a tribe that received funding."
+            )
+        return self
+
+    @model_validator(mode='after')
+    def validate_e8_e9(self):
+        if self.e8 == 1 and (self.tribes is None or len(self.tribes) == 0):
+            raise ValueError("One or more Tribes should be selected (E9) if the child is a Tribe member (E8).")
+        return self
+
+    @model_validator(mode='after')
+    def validate_e42_e43(self):
+        if self.e42 is not None and self.e43 not in [0, 1]:
+            raise ValueError(
+                f"Inter-country prior adoption (E43) is required if prior adoption date is specified (E42).")
+        return self
+
+    @model_validator(mode='after')
+    def validate_e44_e45(self):
+        if self.e45 is not None and self.e44 not in [0, 1]:
+            raise ValueError(
+                f"Prior guardianship indication (E44) is required if prior guardianship date is specified (E45).")
+        return self
+
+    @model_validator(mode='after')
+    def validate_e56_e57(self):
+        if self.e56 is not None and self.e57 is not None:
+            if self.e57 > self.e56:
+                raise ValueError(
+                    f"Total number of siblings in foster car (E57) may not be more than total number of siblings (E56).")
+        return self
+
+    @model_validator(mode='after')
+    def validate_e10_e11(self):
+        if self.e10 == 1 and self.e11 is None:
+            raise ValueError("Date of determination (E11) is required if ICWA applies (E10).")
+        return self
+
+    @model_validator(mode='after')
+    def validate_e10_e12(self):
+        if self.e10 == 1 and self.e12 not in [0, 1]:
+            raise ValueError("Tribal ICWA notification indication (E12) is required if ICWA applies (E10).")
+        return self
+
+    @model_validator(mode='after')
+    def validate_e22(self):
+        if self.e22 not in [0, 1]:
+            raise ValueError("Health Assessment (E22) must be Yes or No.")
+        return self
+
+    @model_validator(mode='after')
+    def validate_e23(self):
+        if self.e23 not in [0, 1, 2, 3]:
+            raise ValueError("Health conditions (E23) is required.")
+        return self
+
+    @model_validator(mode='after')
+    def validate_e24_e34(self):
+        if self.e23 == 1:
+            if any([e not in [0, 1, 2] for e in
+                    [self.e24, self.e25, self.e26, self.e27, self.e28, self.e29, self.e30, self.e31, self.e32, self.e33,
+                     self.e34]]):
+                raise ValueError(
+                    "All health conditions (E24-E34) are required if the child has a diagnosed condition (E23).")
+            if all([e == 0 for e in
+                    [self.e24, self.e25, self.e26, self.e27, self.e28, self.e29, self.e30, self.e31, self.e32, self.e33,
+                     self.e34]]):
+                raise ValueError(
+                    "All health condition must be indicated (E24-E34) if the child has a diagnosed condition (E23).")
+        return self
+
+    @model_validator(mode='after')
+    def validate_e39(self):
+        if self.e39 not in [0, 1]:
+            raise ValueError("Element E39 is required.")
+        return self
+
+    @model_validator(mode='after')
+    def validate_e41(self):
+        if self.e41 is None:
+            raise ValueError("Prior Adoption (E41) is required.")
+        return self
+
+    @model_validator(mode='after')
+    def validate_e41_e42(self):
+        if self.e42 is not None and self.e41 in [None, 0, 7]:
+            raise ValueError("Prior Adoption (E41) must be Yes if Prior Adoption Date (E42) is specified.")
+        if self.e42 is None and self.e41 == 1:
+            raise ValueError(
+                "Prior Adoption (E41) must be No or Unknown if Prior Adoption Date (E42) is not specified.")
+        return self
+
 
 class ARecord(MyBaseModel):
     a_id: int | None = Field(default=None)
@@ -401,6 +505,60 @@ class Child(MyBaseModel):
     e21: int | None
     ooh: OOHRecord | None = Field(default=None)
     a: ARecord | None = Field(default=None)
+
+    @model_validator(mode='after')
+    def validate_e4(self):
+        if self.e4 is None or len(self.e4) < 12:
+            raise ValueError("Child ID (E4) is required and must be exactly 12 characters long.")
+        return self
+
+    @field_validator('e5')
+    @classmethod
+    def check_date(cls, v: int, info: FieldValidationInfo) -> int:
+        s = str(v)
+        y = s[0:4]
+        m = s[4:6]
+        d = s[6:]
+        err_msg = f"{d} is not a valid date in YYYYMMDD format for {info.field_name}"
+        if len(s) != 8 or \
+                int(y) <= 1980 or \
+                int(y) > datetime.today().year or \
+                not ("01" <= m <= "12") or \
+                not ("01" <= d <=
+                     {"01": "31", "02": "29", "03": "31", "04": "30", "05": "31", "06": "30", "07": "31", "08": "31",
+                      "09": "30", "10": "31", "11": "30", "12": "31"}[m]):
+            raise ValueError(err_msg)
+        return v
+
+    @model_validator(mode='after')
+    def validate_e6(self):
+        if self.e6 not in [1, 2]:
+            raise ValueError("Child's gender is required (E6).")
+        return self
+
+    @model_validator(mode='after')
+    def validate_e6_e38(self):
+        if self.e6 == 2 and self.ooh is not None and self.ooh.e38 not in [0, 1]:
+            raise ValueError("Pregnancy indication (E38) is required when child is female (E6).")
+        return self
+
+    @model_validator(mode='after')
+    def validate_e13_e14_e15_e16_e17_e18_e19_e20(self):
+        if all([e != 1 for e in [self.e13, self.e14, self.e15, self.e16, self.e17, self.e18, self.e19, self.e20]]):
+            raise ValueError("At least one race must be selected (E13-E20).")
+        if any([e == 1 for e in [self.e19, self.e20]]) and any(
+                e == 1 for e in [self.e13, self.e14, self.e15, self.e16, self.e17, self.e18]):
+            raise ValueError(
+                "No additional races may be selected (E13-E18) if child is abandoned (E19) or race is declined (E20).")
+        if self.e19 == 1 and self.e20 == 1:
+            raise ValueError("Race may be either Abandoned (E19) or Declined (E20), but not both.")
+        return self
+
+    @model_validator(mode='after')
+    def validate_e21(self):
+        if self.e21 is None:
+            raise ValueError("Child's hispanic origin (E21) is required.")
+        return self
 
 
 class Agency(MyBaseModel):

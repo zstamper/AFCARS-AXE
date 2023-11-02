@@ -1,9 +1,14 @@
 import os
 import sys
+import unittest
+
 import pytest
 from PySide6.QtTest import QTest
 from PySide6.QtCore import Qt
+from pydantic import ValidationError
+
 from dialogs.ooh_dialog import OOHDialog
+from model import OOHRecord, RecognizedTribe
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
@@ -192,8 +197,8 @@ def test_icwa_funding_button(child_form, qtbot):
     assert not child_form.ui.e8_y.isEnabled()
     assert not child_form.ui.e8_n.isEnabled()
     assert not child_form.ui.e8_u.isEnabled()
-    assert not child_form.ui.e9.isEnabled()
-    assert child_form.ui_e9.isHidden()
+    assert not child_form.ui.tribes.isEnabled()
+    assert not child_form.ui.epa_tribes.isEnabled()
     assert not child_form.ui.e10_y.isEnabled()
     assert not child_form.ui.e10_n.isEnabled()
     assert not child_form.ui.e10_u.isEnabled()
@@ -203,13 +208,14 @@ def test_icwa_funding_button(child_form, qtbot):
 
     # TODO: If Yes is indicated, Element 104 is populated with “applies”
 
-    child_form.ui.funding_no.click()
+    child_form.ui.funding_n.click()
     assert child_form.ui.e7_y.isEnabled()
     assert child_form.ui.e7_n.isEnabled()
     assert child_form.ui.e8_y.isEnabled()
     assert child_form.ui.e8_n.isEnabled()
     assert child_form.ui.e8_u.isEnabled()
-    assert child_form.ui.e9.isEnabled()
+    assert child_form.ui.tribes.isEnabled()
+    assert child_form.ui.epa_tribes.isEnabled()
     assert child_form.ui.e10_y.isEnabled()
     assert child_form.ui.e10_n.isEnabled()
     assert child_form.ui.e10_u.isEnabled()
@@ -270,13 +276,5 @@ def test_e12_is_required_when_e10_is_yes(child_form, qtbot):
     child_form.ui.e10_n.click()
 
     child_form.ui.e10_u.click()
-
-
-def test_e43_is_required_if_e42_is_not_empty(child_form, qtbot):
-    assert False
-
-
-def test_e57_cannot_be_bigger_than_e56(child_form, qtbot):
-    assert False
 
 
