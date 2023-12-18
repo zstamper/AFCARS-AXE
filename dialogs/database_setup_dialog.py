@@ -1,5 +1,6 @@
-from dialogs import BaseDialog
 from PySide6.QtCore import Qt
+
+from dialogs import BaseDialog
 
 
 class DatabaseSetupDialog(BaseDialog):
@@ -602,6 +603,7 @@ class DatabaseSetupDialog(BaseDialog):
         self._wire_ui()
         self.setLayout(self.ui.layout())
         self.setFixedSize(self.ui.size())
+        self.validate_on_save: bool = True          # magic instance variable used by GenericController
 
     def _wire_ui(self):
         self.setModal(True)

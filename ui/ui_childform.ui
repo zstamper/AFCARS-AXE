@@ -3324,14 +3324,41 @@ Leave blank if law enforcement was not notified.&lt;/i&gt;</string>
     </layout>
    </item>
    <item>
-    <widget class="QDialogButtonBox" name="form_action">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Save</set>
-     </property>
-    </widget>
+    <layout class="QVBoxLayout" name="verticalLayout_23">
+     <item>
+      <widget class="QDialogButtonBox" name="form_action">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="standardButtons">
+        <set>QDialogButtonBox::Cancel|QDialogButtonBox::Save</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="validate_button">
+       <property name="text">
+        <string>Validate</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="verticalSpacer_12">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeType">
+        <enum>QSizePolicy::Maximum</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>600</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
    </item>
   </layout>
  </widget>
@@ -3417,20 +3444,20 @@ Leave blank if law enforcement was not notified.&lt;/i&gt;</string>
   </connection>
  </connections>
  <buttongroups>
-  <buttongroup name="e22"/>
-  <buttongroup name="e61"/>
-  <buttongroup name="e7"/>
   <buttongroup name="e10"/>
-  <buttongroup name="e109"/>
-  <buttongroup name="funding"/>
+  <buttongroup name="e7"/>
+  <buttongroup name="e12"/>
+  <buttongroup name="e62"/>
+  <buttongroup name="e107"/>
+  <buttongroup name="e8"/>
   <buttongroup name="e63"/>
+  <buttongroup name="e109"/>
+  <buttongroup name="e110"/>
+  <buttongroup name="e61"/>
   <buttongroup name="e6"/>
+  <buttongroup name="e22"/>
+  <buttongroup name="funding"/>
   <buttongroup name="e106"/>
   <buttongroup name="e55"/>
-  <buttongroup name="e8"/>
-  <buttongroup name="e110"/>
-  <buttongroup name="e62"/>
-  <buttongroup name="e12"/>
-  <buttongroup name="e107"/>
  </buttongroups>
 </ui>

@@ -16,6 +16,8 @@ class Removal1993Dialog(BaseDialog):
         self.id: int | None = None
         self.ooh_id: int | None = None
         self._child_name: str = ""
+        self.on_validate_clicked: Optional[Callable] = None
+
         # self.on_accept: Optional[Callable] = None
 
     # def accept(self):
@@ -91,3 +93,8 @@ class Removal1993Dialog(BaseDialog):
         """add event handlers to the form"""
         ui.form_action.accepted.connect(self.accept)
         ui.form_action.rejected.connect(self.reject)
+        self.ui.validate_button.clicked.connect(self.validate_button_clicked)
+
+    def validate_button_clicked(self):
+        if self.on_validate_clicked:
+            self.on_validate_clicked()

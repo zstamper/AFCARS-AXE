@@ -10,16 +10,16 @@ from utils import generate_id
 class ADialog(BaseDialog):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
         self.ui: QWidget = self.load_ui('ui_adoption_subsidy.ui')
+
+        self.ooh: OOHRecord | None = None
+
+        self._child_name: str = ""
+
         self._wire_ui()
         self.setLayout(self.ui.layout())
         self.setFixedSize(self.ui.size())
-        self.a_id: int | None = None
-        self.child_id: int | None = None
-        self.context_id: int | None = None
-        self._child_name: str = ""
-        self.ooh: OOHRecord | None = None
-
 
     def _wire_ui(self) -> None:
         ui = self.ui
@@ -47,7 +47,6 @@ class ADialog(BaseDialog):
         super().clear()
         self.child_name = ""
         self.id = None
-        self.context_id = None
 
     # =========================================================================
 
@@ -221,7 +220,7 @@ class ADialog(BaseDialog):
 
     @property
     def a19(self) -> int:
-        self._get_radio_button(self.ui.a19)
+        return self._get_radio_button(self.ui.a19)
 
     @a19.setter
     def a19(self, v: int) -> None:

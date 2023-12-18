@@ -1,38 +1,85 @@
-from datetime import datetime
-from typing import Optional
+import re
+from datetime import datetime, date
+from enum import Enum
+from typing import Optional, Any
 
 from pydantic import BaseModel, field_validator, model_validator, Field
 from pydantic_core.core_schema import FieldValidationInfo
 
 
+class _Patterns:
+    E59 = re.compile(r'7777|(19|20)[0-9]{2}')
+    E60 = re.compile(r'7777|9999|(19|20)[0-9]{2}')
+    E66 = re.compile(
+        r'66666666|(19|20)[0-9]{2}(((01|03|05|07|08|10|12])(0[1-9]|[12][0-9]|30|31))|(02(0[1-9]|[12][0-9]))|((04|06|09|11)(0[1-9]|[12][0-9]|30)))')
+
+
+class ReportType(Enum):
+    OOH = 'Out of Home'
+    A = 'Adoption/Guardianship Subsidy'
+
+
+class FileType(Enum):
+    PRODUCTION = 0
+    TEST = 1
+
+
+ReportingPeriod = str
+
+
+class ReportingPeriodFileType:
+    def __init__(self, reporting_period: ReportingPeriod, file_type: FileType):
+        self.reporting_period: ReportingPeriod = reporting_period
+        self.file_type: FileType = file_type
+
+    def __str__(self) -> str:
+        return str(self.reporting_period) + str(self.file_type.value)
+
+    def __repr__(self) -> str:
+        return str(self)
+
+
+def is_valid_date(d: int) -> bool:
+    try:
+        s = str(d)
+        year = int(s[0:4])
+        month = int(s[4:6])
+        day = int(s[6:8])
+        date(year=year, month=month, day=day)
+        return True
+    except ValueError:
+        return False
+
+
 class MyBaseModel(BaseModel):
     def scatter(self, obj, ignore: Optional[list[str]] = None):
-        "Copy model fields into another object"
+        """Copy model fields into another object"""
         for fld in self.model_fields_set:
             if not ignore or fld not in ignore:
                 setattr(obj, fld, getattr(self, fld))
 
     def gather(self, obj, ignore: Optional[list[str]] = None):
-        "Copy model fields from another object"
+        """Copy model fields from another object"""
         for fld in self.model_fields_set:
             if not ignore or fld not in ignore:
                 setattr(self, fld, getattr(obj, fld))
 
     @classmethod
     def crib(cls, obj):
-        "Create a new model based on values found in another object"
+        """Create a new model based on values found in another object"""
         d = {}
         for fld in cls.model_fields:
             try:
                 if hasattr(obj, fld) and isinstance(getattr(obj, fld), cls.model_fields[fld].annotation):
                     d[fld] = getattr(obj, fld)
-            except TypeError:
-                pass
+            except TypeError as te:
+                print(f"{te}, {te.args}, {fld}, {cls.model_fields[fld].annotation}")
+                # pass
         # print(f"cribbing {cls.__name__} with {d}")
         return cls(**d)
 
     def kwds(self) -> dict:
-        "Represent the model's fields as a set unpackable keyword/value pairs"
+        """Represent the model's fields as a set unpackable keyword/value pairs"""
         d = {}
         for fld in self.model_fields:
             d[fld] = getattr(self, fld)
@@ -43,8 +90,12 @@ class MyBaseModel(BaseModel):
 class Tribe(MyBaseModel):
     id: int = Field(default=None)
     tribe: str
-    epa_code: int
+    epa_code: str
     states: list[str] = Field(default_factory=list)
+
+    def __str__(self):
+        states = ", ".join([state for state in self.states])
+        return f"{self.tribe} ({states})"
 
 
 class State(MyBaseModel):
@@ -56,8 +107,8 @@ class State(MyBaseModel):
 
 
 class Removal1993(MyBaseModel):
-    id: int | None = Field(default=None)
-    ooh_id: int | None
+    # id: int | None = Field(default=None)
+    # ooh_id: int | None
     e69: int | None
     e153: int | None
     e155: int | None
@@ -84,45 +135,45 @@ class Removal1993(MyBaseModel):
     @classmethod
     def e155_valid(cls, v: int, info: FieldValidationInfo) -> int:
         if v not in (1, 2, 3, 4, 5, 6, 8):
-            raise ValueError(f"Invalid selection for {info.field_name}")
+            raise ValueError(f"Invalid selection for {info.field_name.upper()}")
         return v
 
     @model_validator(mode='after')
     def e69_e153(self):
         if self.e69 >= self.e153:
-            raise ValueError(f"Date of Removal (e69) must be prior to the Date of Exit (e153) for the same removal")
+            raise ValueError(f"Date of Removal (E69) must be prior to the Date of Exit (E153) for the same removal")
         return self
 
 
 class PermanencyPlan(MyBaseModel):
-    id: int | None = Field(default=None)
-    removal_id: int | None
+    # id: int | None = Field(default=None)
+    # removal_id: int | None
     e147: int | None
     e148: int | None
 
 
 class PermanencyHearing(MyBaseModel):
-    id: int | None = Field(default=None)
-    removal_id: int | None
+    # id: int | None = Field(default=None)
+    # removal_id: int | None
     e150: int | None
 
 
 class PeriodicReview(MyBaseModel):
-    id: int | None = Field(default=None)
-    removal_id: int | None
+    # id: int | None = Field(default=None)
+    # removal_id: int | None
     e149: int | None
 
 
 class CaseVisit(MyBaseModel):
-    id: int | None
-    removal_id: int | None
+    # id: int | None
+    # removal_id: int | None
     e151: int | None
     e152: int | None
 
 
 class LivingArrangement(MyBaseModel):
-    id: int | None = Field(default=None)
-    removal_id: int | None
+    # id: int | None = Field(default=None)
+    # removal_id: int | None
     e40: int | None
     e58: int | None
     e112: int | None
@@ -163,9 +214,9 @@ class LivingArrangement(MyBaseModel):
 
 
 class Removal2020(MyBaseModel):
-    id: int | None = Field(default=None)
-    ooh_id: int | None
-    e3: int | None
+    # id: int | None = Field(default=None)
+    # ooh_id: int | None
+    e3: str | None
     e69: int | None
     e70: int | None
     e71: int | None
@@ -243,322 +294,139 @@ class Removal2020(MyBaseModel):
     e185: int | None
     e186: int | None
 
-    @field_validator('e69', 'e153')
-    @classmethod
-    def check_date(cls, v: int | None, info: FieldValidationInfo) -> int | None:
-        if v is not None:
-            s = str(v)
-            y = s[0:4]
-            m = s[4:6]
-            d = s[6:]
-            err_msg = f"{d} is not a valid date in YYYYMMDD format for {info.field_name}"
-            if len(s) != 8 or \
-                    int(y) <= 1980 or \
-                    int(y) > datetime.today().year or \
-                    not ("01" <= m <= "12") or \
-                    not ("01" <= m <=
-                         {"01": "31", "02": "29", "03": "31", "04": "30", "05": "31", "06": "30", "07": "31",
-                          "08": "31",
-                          "09": "30", "10": "31", "11": "30", "12": "31"}[m]):
-                raise ValueError(err_msg)
-        return v
-
-    @field_validator('e155')
-    @classmethod
-    def e155_valid(cls, v: int, info: FieldValidationInfo) -> int:
-        if v not in (1, 2, 3, 4, 5, 6, 7, 8, 9):
-            raise ValueError(f"Invalid selection for {info.field_name}")
-        return v
-
-    @model_validator(mode='after')
-    def e69_e153(self):
-        if self.e69 is not None and self.e153 is not None:
-            if self.e69 >= self.e153:
-                raise ValueError(f"Date of Removal (e69) must be prior to the Date of Exit (e153) for the same removal")
-        return self
-
 
 class SecondParent(MyBaseModel):
-    id: int | None = Field(default=None)
-    ooh_id: int | None
+    # id: int | None = Field(default=None)
+    # ooh_id: int | None
     e64: int | None
     e66: int | None
     e68: int | None
 
+    def __init__(self, **data: Any):
+        super().__init__(**data)
+
+    def e64_as_str(self) -> str:
+        return {0: 'Not Applicable', 1: 'Voluntary', 2: 'Involuntary'}[self.e64]
+
 
 class RecognizedTribe(MyBaseModel):
-    id: int | None = Field(default=None)
-    ooh_id: int | None
+    # id: int | None = Field(default=None)
+    # ooh_id: int | None
     e9: int | None
 
 
 class OOHRecord(MyBaseModel):
-    ooh_id: int | None = Field(default=None)
-    child_id: int | None
-    funding: int | None
-    e7: int | None
-    e8: int | None
-    e10: int | None
-    e11: int | None
-    e12: int | None
-    e22: int | None
-    e23: int | None
-    e24: int | None
-    e25: int | None
-    e26: int | None
-    e27: int | None
-    e28: int | None
-    e29: int | None
-    e30: int | None
-    e31: int | None
-    e32: int | None
-    e33: int | None
-    e34: int | None
-    e35: int | None
-    e36: int | None
-    e37: int | None
-    e38: int | None
-    e39: int | None
+    # ooh_id: int | None = Field(default=None)
+    # context_id: int  # = Field(default=None)
+    funding: int | None = Field(default=None)
+    e7: int | None = Field(default=None)
+    e8: int | None = Field(default=None)
+    e10: int | None = Field(default=None)
+    e11: int | None = Field(default=None)
+    e12: int | None = Field(default=None)
+    e22: int | None = Field(default=None)
+    e23: int | None = Field(default=None)
+    e24: int | None = Field(default=None)
+    e25: int | None = Field(default=None)
+    e26: int | None = Field(default=None)
+    e27: int | None = Field(default=None)
+    e28: int | None = Field(default=None)
+    e29: int | None = Field(default=None)
+    e30: int | None = Field(default=None)
+    e31: int | None = Field(default=None)
+    e32: int | None = Field(default=None)
+    e33: int | None = Field(default=None)
+    e34: int | None = Field(default=None)
+    e35: int | None = Field(default=None)
+    e36: int | None = Field(default=None)
+    e37: int | None = Field(default=None)
+    e38: int | None = Field(default=None)
+    e39: int | None = Field(default=None)
     # e40: int | None
-    e41: int | None
-    e42: int | None
-    e43: int | None
-    e44: int | None
-    e45: int | None
-    e46: int | None
-    e47: int | None
-    e48: int | None
-    e49: int | None
-    e50: int | None
-    e51: int | None
-    e52: int | None
-    e53: int | None
-    e54: int | None
-    e55: int | None
-    e56: int | None
-    e57: int | None
+    e41: int | None = Field(default=None)
+    e42: int | None = Field(default=None)
+    e43: int | None = Field(default=None)
+    e44: int | None = Field(default=None)
+    e45: int | None = Field(default=None)
+    e46: int | None = Field(default=None)
+    e47: int | None = Field(default=None)
+    e48: int | None = Field(default=None)
+    e49: int | None = Field(default=None)
+    e50: int | None = Field(default=None)
+    e51: int | None = Field(default=None)
+    e52: int | None = Field(default=None)
+    e53: int | None = Field(default=None)
+    e54: int | None = Field(default=None)
+    e55: int | None = Field(default=None)
+    e56: int | None = Field(default=None)
+    e57: int | None = Field(default=None)
     # e58: int | None
-    e59: int | None
-    e60: int | None
-    e61: int | None
-    e62: int | None
-    e63: int | None
-    e65: int | None
-    e67: int | None
-    e106: int | None
-    e107: int | None
-    e108: int | None
-    e109: int | None
-    e110: int | None
-    e111: int | None
+    e59: int | None = Field(default=None)
+    e60: int | None = Field(default=None)
+    e61: int | None = Field(default=None)
+    e62: int | None = Field(default=None)
+    e63: int | None = Field(default=None)
+    e65: int | None = Field(default=None)
+    e67: int | None = Field(default=None)
+    e106: int | None = Field(default=None)
+    e107: int | None = Field(default=None)
+    e108: int | None = Field(default=None)
+    e109: int | None = Field(default=None)
+    e110: int | None = Field(default=None)
+    e111: int | None = Field(default=None)
     tribes: list[RecognizedTribe] = Field(default_factory=list)
     second_parents: list[SecondParent] = Field(default_factory=list)
     removals1993: list[Removal1993] = Field(default_factory=list)
     removals2020: list[Removal2020] = Field(default_factory=list)
 
-    @model_validator(mode='after')
-    def validate_funding_e7_e8_e10(self):
-        if self.funding == 0 and self.e7 not in [0, 1]:
-            raise ValueError(
-                f"'Agency made inquries' (E7) must be Yes or No if the child is being reported for a tribe that received funding."
-            )
-        if self.funding == 0 and self.e8 not in [0, 1, 9]:
-            raise ValueError(
-                f"Child's Tribal membership (E8) must be Yes, No, or Unknown if the child is being reported for a tribe that received funding."
-            )
-        if self.funding == 0 and self.e10 not in [0, 1, 9]:
-            raise ValueError(
-                "ICWA applicability (E10) must be specified if the child is being reported for a tribe that received funding."
-            )
-        return self
-
-    @model_validator(mode='after')
-    def validate_e8_e9(self):
-        if self.e8 == 1 and (self.tribes is None or len(self.tribes) == 0):
-            raise ValueError("One or more Tribes should be selected (E9) if the child is a Tribe member (E8).")
-        return self
-
-    @model_validator(mode='after')
-    def validate_e42_e43(self):
-        if self.e42 is not None and self.e43 not in [0, 1]:
-            raise ValueError(
-                f"Inter-country prior adoption (E43) is required if prior adoption date is specified (E42).")
-        return self
-
-    @model_validator(mode='after')
-    def validate_e44_e45(self):
-        if self.e45 is not None and self.e44 not in [0, 1]:
-            raise ValueError(
-                f"Prior guardianship indication (E44) is required if prior guardianship date is specified (E45).")
-        return self
-
-    @model_validator(mode='after')
-    def validate_e56_e57(self):
-        if self.e56 is not None and self.e57 is not None:
-            if self.e57 > self.e56:
-                raise ValueError(
-                    f"Total number of siblings in foster car (E57) may not be more than total number of siblings (E56).")
-        return self
-
-    @model_validator(mode='after')
-    def validate_e10_e11(self):
-        if self.e10 == 1 and self.e11 is None:
-            raise ValueError("Date of determination (E11) is required if ICWA applies (E10).")
-        return self
-
-    @model_validator(mode='after')
-    def validate_e10_e12(self):
-        if self.e10 == 1 and self.e12 not in [0, 1]:
-            raise ValueError("Tribal ICWA notification indication (E12) is required if ICWA applies (E10).")
-        return self
-
-    @model_validator(mode='after')
-    def validate_e22(self):
-        if self.e22 not in [0, 1]:
-            raise ValueError("Health Assessment (E22) must be Yes or No.")
-        return self
-
-    @model_validator(mode='after')
-    def validate_e23(self):
-        if self.e23 not in [0, 1, 2, 3]:
-            raise ValueError("Health conditions (E23) is required.")
-        return self
-
-    @model_validator(mode='after')
-    def validate_e24_e34(self):
-        if self.e23 == 1:
-            if any([e not in [0, 1, 2] for e in
-                    [self.e24, self.e25, self.e26, self.e27, self.e28, self.e29, self.e30, self.e31, self.e32, self.e33,
-                     self.e34]]):
-                raise ValueError(
-                    "All health conditions (E24-E34) are required if the child has a diagnosed condition (E23).")
-            if all([e == 0 for e in
-                    [self.e24, self.e25, self.e26, self.e27, self.e28, self.e29, self.e30, self.e31, self.e32, self.e33,
-                     self.e34]]):
-                raise ValueError(
-                    "All health condition must be indicated (E24-E34) if the child has a diagnosed condition (E23).")
-        return self
-
-    @model_validator(mode='after')
-    def validate_e39(self):
-        if self.e39 not in [0, 1]:
-            raise ValueError("Element E39 is required.")
-        return self
-
-    @model_validator(mode='after')
-    def validate_e41(self):
-        if self.e41 is None:
-            raise ValueError("Prior Adoption (E41) is required.")
-        return self
-
-    @model_validator(mode='after')
-    def validate_e41_e42(self):
-        if self.e42 is not None and self.e41 in [None, 0, 7]:
-            raise ValueError("Prior Adoption (E41) must be Yes if Prior Adoption Date (E42) is specified.")
-        if self.e42 is None and self.e41 == 1:
-            raise ValueError(
-                "Prior Adoption (E41) must be No or Unknown if Prior Adoption Date (E42) is not specified.")
-        return self
-
 
 class ARecord(MyBaseModel):
-    a_id: int | None = Field(default=None)
-    child_id: int | None
-    # a5: int | None
-    # a6: int | None
-    # a7: int | None
-    # a8: int | None
-    # a9: int | None
-    # a10: int | None
-    # a11: int | None
-    # a12: int | None
-    # a13: int | None
-    # a14: int | None
-    a15: int | None
-    a16: int | None
-    a17: int | None
-    a18: int | None
-    a19: int | None
-
-
-class Context(MyBaseModel):
-    id: int | None
-    e1: int | None
+    # a_id: int | None = Field(default=None)
+    # context_id: int  # = Field(default=None)
+    a15: int | None = Field(default=None)
+    a16: int | None = Field(default=None)
+    a17: int | None = Field(default=None)
+    a18: int | None = Field(default=None)
+    a19: int | None = Field(default=None)
 
 
 class Child(MyBaseModel):
-    child_id: int | None = Field(default=None)
-    context_id: int  # = Field(default=None)
-    first_name: str | None
-    last_name: str | None
-    e4: str | None
-    e5: int | None
-    e6: int | None
-    e13: int | None
-    e14: int | None
-    e15: int | None
-    e16: int | None
-    e17: int | None
-    e18: int | None
-    e19: int | None
-    e20: int | None
-    e21: int | None
+    e5: int | None = Field(default=None)
+    e6: int | None = Field(default=None)
+    e13: int | None = Field(default=None)
+    e14: int | None = Field(default=None)
+    e15: int | None = Field(default=None)
+    e16: int | None = Field(default=None)
+    e17: int | None = Field(default=None)
+    e18: int | None = Field(default=None)
+    e19: int | None = Field(default=None)
+    e20: int | None = Field(default=None)
+    e21: int | None = Field(default=None)
     ooh: OOHRecord | None = Field(default=None)
     a: ARecord | None = Field(default=None)
 
-    @model_validator(mode='after')
-    def validate_e4(self):
-        if self.e4 is None or len(self.e4) < 12:
-            raise ValueError("Child ID (E4) is required and must be exactly 12 characters long.")
-        return self
 
-    @field_validator('e5')
-    @classmethod
-    def check_date(cls, v: int, info: FieldValidationInfo) -> int:
-        s = str(v)
-        y = s[0:4]
-        m = s[4:6]
-        d = s[6:]
-        err_msg = f"{d} is not a valid date in YYYYMMDD format for {info.field_name}"
-        if len(s) != 8 or \
-                int(y) <= 1980 or \
-                int(y) > datetime.today().year or \
-                not ("01" <= m <= "12") or \
-                not ("01" <= d <=
-                     {"01": "31", "02": "29", "03": "31", "04": "30", "05": "31", "06": "30", "07": "31", "08": "31",
-                      "09": "30", "10": "31", "11": "30", "12": "31"}[m]):
-            raise ValueError(err_msg)
-        return v
+class Context(MyBaseModel):
+    # context_id: int | None
+    # first_name: str | None = Field(default="")
+    # last_name: str | None = Field(default="")
+    id: int | None = Field(default=None)
+    e2: str | None
+    file_type: FileType
+    data: Child = Field(default_factory=Child)
 
-    @model_validator(mode='after')
-    def validate_e6(self):
-        if self.e6 not in [1, 2]:
-            raise ValueError("Child's gender is required (E6).")
-        return self
 
-    @model_validator(mode='after')
-    def validate_e6_e38(self):
-        if self.e6 == 2 and self.ooh is not None and self.ooh.e38 not in [0, 1]:
-            raise ValueError("Pregnancy indication (E38) is required when child is female (E6).")
-        return self
-
-    @model_validator(mode='after')
-    def validate_e13_e14_e15_e16_e17_e18_e19_e20(self):
-        if all([e != 1 for e in [self.e13, self.e14, self.e15, self.e16, self.e17, self.e18, self.e19, self.e20]]):
-            raise ValueError("At least one race must be selected (E13-E20).")
-        if any([e == 1 for e in [self.e19, self.e20]]) and any(
-                e == 1 for e in [self.e13, self.e14, self.e15, self.e16, self.e17, self.e18]):
-            raise ValueError(
-                "No additional races may be selected (E13-E18) if child is abandoned (E19) or race is declined (E20).")
-        if self.e19 == 1 and self.e20 == 1:
-            raise ValueError("Race may be either Abandoned (E19) or Declined (E20), but not both.")
-        return self
-
-    @model_validator(mode='after')
-    def validate_e21(self):
-        if self.e21 is None:
-            raise ValueError("Child's hispanic origin (E21) is required.")
-        return self
+class BaseChild(MyBaseModel):
+    id: int | None = Field(default=None)
+    first_name: str | None = Field(default="")
+    last_name: str | None = Field(default="")
+    date_created: date = Field(default=date.today())
+    last_removal: date | None = Field(default=None)
+    last_adoption: date | None = Field(default=None)
+    last_exit: date | None = Field(default=None)
+    last_termination: date | None = Field(default=None)
+    e1: str | None = Field(default=None)
+    e4: str | None = Field(default=None)
 
 
 class Agency(MyBaseModel):

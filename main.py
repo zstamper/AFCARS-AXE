@@ -6,8 +6,8 @@ import traceback
 
 import peewee
 
-from dialogs.database_setup_dialog import DatabaseSetupDialog
-from model.models import Agency
+from controllers.main_window2_controller import MainWindow2Controller
+from model.models import Tribe
 
 try:
     import os
@@ -21,33 +21,24 @@ try:
         QTableWidget, QSplashScreen
 
     import model
-    from controllers import GenericController, OOHController, AController
-    from dialogs import MainWindow
-    from dialogs.a_dialog import ADialog
-
-    from dialogs.ooh_dialog import OOHDialog
-    from model import TribeTable, OOHRecord, Child, Context, StateTable, TribeStateTable, ChildTable, ARecordTable, \
-        OOHRecordTable, ContextTable
+    from controllers.ooh_controller import OOHController
+    from controllers.a_controller import AController
+    from model import TribeTable, OOHRecord, Child, Context, ContextTable, StateTable, TribeStateTable, BaseChildTable
 
 
     def initialize_database() -> None:
-        dialog = DatabaseSetupDialog()
-        controller = GenericController(dialog, Agency)
-        data = controller.add()
-        if data:
-            model.create_tables()
-            ContextTable.get_or_create(e1=data.e1)
-        else:
-            sys.exit(1)
+        model.create_tables()
 
 
-    def epa_tribes() -> dict:
+    def epa_tribes() -> list[Tribe]:
         results = {}
         query = TribeTable.select().order_by(TribeTable.tribe).prefetch(TribeStateTable, StateTable)
-        for tribe in query:
-            states = ", ".join([state.state.code for state in tribe.states])
-            results[tribe.id] = f"{tribe.tribe} ({states})"
-        return results
+        return [Tribe(id=tribe.id, tribe=tribe.tribe, epa_code=tribe.epa_code, states=[tribestate.state.code for tribestate in tribe.states])
+                for tribe in TribeTable.select().order_by(TribeTable.tribe).prefetch(TribeStateTable, StateTable)]
+        # for tribe in query:
+        #     states = ", ".join([state.state.code for state in tribe.states])
+        #     results[tribe.id] = f"{tribe.tribe} ({states})"
+        # return results
 
     def main():
         """
@@ -64,9 +55,9 @@ try:
         """
         try:
             app = QApplication()
-            app.setApplicationName('ADT')
-            app.setApplicationDisplayName('ADT')
-            app.setDesktopFileName('ADT')
+            app.setApplicationName('AXE')
+            app.setApplicationDisplayName('AXE')
+            app.setDesktopFileName('AXE')
 
             if getattr(sys, 'frozen', False):
                 bundle_dir = sys._MEIPASS
@@ -84,24 +75,24 @@ try:
             app.setStyleSheet(style_sheet)
 
             if getattr(sys, 'frozen', False):
-                database_path = Path.home() / 'default.db'
+                database_path = Path.home() / 'axe.db'
             else:
-                database_path = 'default.db'
+                database_path = 'axe.db'
             model.open_database(str(database_path))
 
             try:
                 if ContextTable.select().count() == 0:
+                    splash.showMessage("Initializing new database...", color=QColor.fromRgb(255, 255, 255, 255))
+                    QCoreApplication.processEvents()
                     initialize_database()
             except (peewee.OperationalError, peewee.DoesNotExist) as e:
+                splash.showMessage("Initializing new database...", color=QColor.fromRgb(255, 255, 255, 255))
+                QCoreApplication.processEvents()
                 initialize_database()
 
-            main_window = MainWindow()
-            main_window.context_id = ContextTable.select().first().id
-            main_window.epa_tribes = epa_tribes()
-            query = ChildTable.select()
-            main_window.refresh_children(query)
+            main_window = MainWindow2Controller()
             main_window.show()
-            splash.finish(main_window)
+            splash.finish(main_window.window)
             sys.exit(app.exec())
 
         except Exception as e:
@@ -112,5 +103,6 @@ try:
         main()
 
 except Exception as e:
+    traceback.print_exc()
     with open('./stderr.txt', 'w') as stderr:
         traceback.print_exc(file=stderr)

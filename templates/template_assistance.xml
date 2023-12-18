@@ -2,28 +2,28 @@
 <acf:data xmlns:acf="http://www.acf.hhs.gov"
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:schemaLocation="http://www.acf.hhs.gov schema_assistance.xsd">
-    <A1_title_iv_agency>{{ context.e1|no_null }}</A1_title_iv_agency>
+    <A1_title_iv_agency>{{ e1|no_null }}</A1_title_iv_agency>
     <A2_report_date>{{ e2|no_null }}</A2_report_date>
     <records>
         {%- for record in data %}
         <record>
-            <A3_child_record_number>{{ record.child.e4|no_null|no_null }}</A3_child_record_number>
-            <A4_child_date_of_birth>{{ record.child.e5|no_null }}</A4_child_date_of_birth>
-            <A5_child_sex>{{ record.child.e6|no_null }}</A5_child_sex>
-            <A6_child_race_american_indian_alaska_native>{{ record.child.e13|no_null }}</A6_child_race_american_indian_alaska_native>
-            <A7_child_race_asian>{{ record.child.e14|no_null }}</A7_child_race_asian>
-            <A8_child_race_black_african_american>{{ record.child.e15|no_null }}</A8_child_race_black_african_american>
-            <A9_child_race_hawaiian_pacific_islander>{{ record.child.e16|no_null }}</A9_child_race_hawaiian_pacific_islander>
-            <A10_child_race_white>{{ record.child.e17|no_null}}</A10_child_race_white>
-            <A11_child_race_unknown>{{ record.child.e18|no_null }}</A11_child_race_unknown>
-            <A12_child_race_abandoned>{{ record.child.e19|no_null }}</A12_child_race_abandoned>
-            <A13_child_race_declined>{{ record.child.e20|no_null }}</A13_child_race_declined>
-            <A14_child_hispanic_latino>{{ record.child.e21|no_null }}</A14_child_hispanic_latino>
-            <A15_assistance_agreement_type>{{ record.a15|no_null }}</A15_assistance_agreement_type>
-            <A16_adoption_subsidy_amount>{{ record.a16|no_null }}</A16_adoption_subsidy_amount>
-            <A17_adoption_finalization_date>{{ record.a17|no_null }}</A17_adoption_finalization_date>
-            <A18_agreement_termination_date>{{ record.a18|no_null }}</A18_agreement_termination_date>
-            <A19_adoption_placing_agency>{{ record.a19|no_null }}</A19_adoption_placing_agency>
+            <A3_child_record_number>{{ record.e4|no_null|no_null }}</A3_child_record_number>
+            <A4_child_date_of_birth>{{ record['data'].e5|no_null }}</A4_child_date_of_birth>
+            <A5_child_sex>{{ record['data'].e6|no_null }}</A5_child_sex>
+            <A6_child_race_american_indian_alaska_native>{{ record['data'].e13|no_null }}</A6_child_race_american_indian_alaska_native>
+            <A7_child_race_asian>{{ record['data'].e14|no_null }}</A7_child_race_asian>
+            <A8_child_race_black_african_american>{{ record['data'].e15|no_null }}</A8_child_race_black_african_american>
+            <A9_child_race_hawaiian_pacific_islander>{{ record['data'].e16|no_null }}</A9_child_race_hawaiian_pacific_islander>
+            <A10_child_race_white>{{ record['data'].e17|no_null}}</A10_child_race_white>
+            <A11_child_race_unknown>{{ record['data'].e18|no_null }}</A11_child_race_unknown>
+            <A12_child_race_abandoned>{{ record['data'].e19|no_null }}</A12_child_race_abandoned>
+            <A13_child_race_declined>{{ record['data'].e20|no_null }}</A13_child_race_declined>
+            <A14_child_hispanic_latino>{{ record['data'].e21|no_null }}</A14_child_hispanic_latino>
+            <A15_assistance_agreement_type>{{ record['data'].a.a15|no_null }}</A15_assistance_agreement_type>
+            <A16_adoption_subsidy_amount>{{ record['data'].a.a16|no_null }}</A16_adoption_subsidy_amount>
+            <A17_adoption_finalization_date>{{ record['data'].a.a17|no_null }}</A17_adoption_finalization_date>
+            <A18_agreement_termination_date>{{ record['data'].a.a18|no_null }}</A18_agreement_termination_date>
+            <A19_adoption_placing_agency>{{ record['data'].a.a19|no_null }}</A19_adoption_placing_agency>
         </record>
         {%- endfor %}
     </records>

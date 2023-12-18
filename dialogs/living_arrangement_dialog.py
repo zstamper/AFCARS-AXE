@@ -31,8 +31,41 @@ class LivingArrangementDialog(BaseDialog):
         self._init_radio_ynud(ui, 'e145')
         self._init_radio_mf(ui, 'e146')
 
-        # field interactions
-        ...
+        self.ui.e121.currentIndexChanged.connect(self._e121_changed)
+        self.ui.e123.currentIndexChanged.connect(self._e123_changed)
+
+    def _e121_changed(self):
+        self.ui.e122.setEnabled(self.e121 not in (1, 4))
+
+    def _e123_changed(self):
+        enabled = self.e123 in (1, 2)
+        self.ui.e136.setEnabled(enabled)
+        self.ui.e146.setEnabled(enabled)
+        self.ui.e138.setEnabled(enabled)
+        self.ui.e139.setEnabled(enabled)
+        self.ui.e140.setEnabled(enabled)
+        self.ui.e141.setEnabled(enabled)
+        self.ui.e142.setEnabled(enabled)
+        self.ui.e143.setEnabled(enabled)
+        self.ui.e144.setEnabled(enabled)
+        self.ui.e145.setEnabled(enabled)
+        self.ui.e137.setEnabled(enabled)
+
+    def _e133_changed(self):
+        enabled = self.e133 != 1
+        self.ui.e127.setEnabled(enabled)
+        self.ui.e128.setEnabled(enabled)
+        self.ui.e129.setEnabled(enabled)
+        self.ui.e130.setEnabled(enabled)
+        self.ui.e131.setEnabled(enabled)
+        self.ui.e132.setEnabled(enabled)
+        if self.e133 == 1:
+            self.e127 = 0
+            self.e128 = 0
+            self.e129 = 0
+            self.e130 = 0
+            self.e131 = 0
+            self.e132 = 0
 
     @property
     def child_name(self) -> str:
@@ -146,6 +179,7 @@ class LivingArrangementDialog(BaseDialog):
     @e121.setter
     def e121(self, v: int) -> None:
         self._set_combobox_selection(self.ui.e121, v, -1)
+        self._e121_changed()
 
     @property
     def e122(self) -> int:
@@ -162,6 +196,7 @@ class LivingArrangementDialog(BaseDialog):
     @e123.setter
     def e123(self, v: int) -> None:
         self._set_combobox_selection(self.ui.e123, v, -1)
+        self._e123_changed()
 
     @property
     def e124(self) -> int:

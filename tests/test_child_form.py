@@ -1,14 +1,9 @@
 import os
 import sys
-import unittest
 
 import pytest
-from PySide6.QtTest import QTest
-from PySide6.QtCore import Qt
-from pydantic import ValidationError
 
 from dialogs.ooh_dialog import OOHDialog
-from model import OOHRecord, RecognizedTribe
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
@@ -225,20 +220,6 @@ def test_icwa_funding_button(child_form, qtbot):
     # TODO: If No is indicated, Element 104 is populated with “applies”
 
     assert False
-
-
-def test_e9_is_required_when_e8_is_yes(child_form, qtbot):
-    child_form.ui.e8_y.click()
-
-    child_form.ui.e8_n.click()
-
-    child_form.ui.e8_u.click()
-
-    child_form.ui.e8_y.click()
-    child_form.ui.e9.setSelectedIndexes([0])
-
-    child_form.ui.e8_y.click()
-    child_form.ui.e9.setSelectedIndexes([])
 
 
 def test_e11_is_required_when_e10_is_yes(child_form, qtbot, today):

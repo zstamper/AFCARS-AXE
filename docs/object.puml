@@ -1,12 +1,38 @@
 @startuml
 'https://plantuml.com/object-diagram
-object Child {
+
+object Config {
+}
+
+
+object BaseChild {
+    e1: int		-- agency ID
+    e4: str		-- child ID
     first_name: str
     last_name: str
-    e4: str
-    e5: int
-    e6: int
-    e13: int
+    date_created: date
+    last_updated: date
+    last_removal: date
+}
+
+object Context {
+    base_child_id: int
+    reporting_period: ReportingPeriod
+    file_type: FileType
+    data: Child
+}
+object FIPSCode {
+}
+
+object Child {
+'    child_id: int
+'    file_type: FileType
+    first_name: str
+    last_name: str
+    e2: int 		-- reporting period
+    e5: int		-- date of birth
+    e6: int		-- sex
+    e13: int		-- race
     e14: int
     e15: int
     e16: int
@@ -14,20 +40,32 @@ object Child {
     e18: int
     e19: int
     e20: int
-    e21: int
+    e21: int		-- hispanic
+    a: ARecord
+    ooh: OOHRecord
 }
 
-object Config {
+object ARecord {
+'    context_id: int
+    a5: int
+    a6: int
+    a7: int
+    a8: int
+    a9: int
+    a10: int
+    a11: int
+    a12: int
+    a13: int
+    a14: int
+    a15: int
+    a16: int
+    a17: int
+    a18: int
+    a19: int
 }
-object Context {
-    e1: int
-'    e2: int
-}
-object FIPSCode {
-}
+
 object OOHRecord {
-    child: Child
-    context: Context
+'    context_id: int
     e7: int
     e8: int
     tribes: list[RecognizedTribes]
@@ -88,6 +126,11 @@ object OOHRecord {
     e110: int
     e111: int
 }
+
+
+Child "1" --* "0..1" OOHRecord
+Child "1" --* "0..1" ARecord
+
 object RecognizedTribes {
     e9: int
 }
@@ -241,25 +284,7 @@ object AdoptiveParents {
 }
 
 
-object ARecord {
-    child: Child
-    context: Context
-    a5: int
-    a6: int
-    a7: int
-    a8: int
-    a9: int
-    a10: int
-    a11: int
-    a12: int
-    a13: int
-    a14: int
-    a15: int
-    a16: int
-    a17: int
-    a18: int
-    a19: int
-}
+
 object Tribe {
     tribe: str
     epa_code: str
@@ -269,25 +294,32 @@ object State {
     code: str
     name: str
 }
-State "1" o-- "0..*" Tribe
-FIPSCode "1" o-- "0..*" Context
-Tribe "1" o-- "0..*" Context
+
+BaseChild "1" --* "0..*" Context
+
+Context "1" --* "0..*" Child
+
+
+State "*" -- "*" Tribe
+'FIPSCode "1" o-- "0..*" Child
+'Tribe "1" o-- "0..*" Child
 Tribe "1" o-- "0..*" RecognizedTribes
-Child "1" *--- "0..*" OOHRecord
-Context "1" *--- "0..*" OOHRecord
+'Child "1" *--- "0..*" OOHRecord
+'Context "1" --* "0..1" OOHRecord
+'Context "1" *--- "0..*" OOHRecord
 FIPSCode "1" o-- "0..*" Removal2020
 RecognizedTribes "0..*" *-- "1" OOHRecord
-OOHRecord "1" *-- "0..*" SecondTPRParent
-OOHRecord "1" *-- "0..*" Removal2020
-OOHRecord "1" *-- "0..*" Removal1993
-Removal2020 "1" *-- "1..*" LivingArrangement
-Removal2020 "1" *-- "0..*" PermanencyPlan
-Removal2020 "1" *-- "0..*" PeriodicReview
-Removal2020 "1" *-- "0..*" PermanencyHearing
-Removal2020 "1" *-- "0..*" CaseWorkerVisit
-Removal2020 "1" *-- "0..1" AdoptiveParents
+OOHRecord "1" --* "0..*" SecondTPRParent
+OOHRecord "1" --* "0..*" Removal2020
+OOHRecord "1" --* "0..*" Removal1993
+Removal2020 "1" --* "1..*" LivingArrangement
+Removal2020 "1" --* "0..*" PermanencyPlan
+Removal2020 "1" --* "0..*" PeriodicReview
+Removal2020 "1" --* "0..*" PermanencyHearing
+Removal2020 "1" --* "0..*" CaseWorkerVisit
+Removal2020 "1" --* "0..1" AdoptiveParents
 
-Child "1" *--- "0..*" ARecord
-Context "1" *--- "0..*" ARecord
+'Child "1" *--- "0..*" ARecord
+'Context "1" --* "0..1" ARecord
 
 @enduml

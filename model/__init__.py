@@ -1,10 +1,7 @@
-from .models import (Child, Context, OOHRecord, RecognizedTribe, SecondParent, Removal1993, Removal2020,
+from .models import (BaseChild, Context, Child, OOHRecord, RecognizedTribe, SecondParent, Removal1993, Removal2020,
                      LivingArrangement, PermanencyPlan, PeriodicReview, PermanencyHearing, CaseVisit,
                      ARecord, Export)
-from .tables import (database, ChildTable, ConfigTable, ContextTable, OOHRecordTable, RecognizedTribesTable,
-                     SecondParentTable, Removal1993Table, Removal2020Table, LivingArrangementTable, PermanencyPlanTable,
-                     PeriodicReviewTable, PermanencyHearingTable, CaseWorkerVisitTable,
-                     ARecordTable, StateTable, TribeTable, TribeStateTable)
+from .tables import (database, BaseChildTable, ConfigTable, ContextTable, StateTable, TribeTable, TribeStateTable)
 
 
 def open_database(database_name: str):
@@ -20,10 +17,11 @@ def close_database():
 
 def create_tables():
     database.create_tables(
-        [ChildTable, ConfigTable, ContextTable, OOHRecordTable, RecognizedTribesTable, SecondParentTable,
-         Removal1993Table, Removal2020Table,
-         LivingArrangementTable, PermanencyPlanTable, PeriodicReviewTable, PermanencyHearingTable, CaseWorkerVisitTable,
-         ARecordTable, StateTable, TribeTable, TribeStateTable,
+        [BaseChildTable, ConfigTable, ContextTable, #OOHRecordTable, RecognizedTribesTable, SecondParentTable,
+         #Removal1993Table, Removal2020Table,
+         #LivingArrangementTable, PermanencyPlanTable, PeriodicReviewTable, PermanencyHearingTable, CaseWorkerVisitTable,
+         #ARecordTable,
+         StateTable, TribeTable, TribeStateTable,
          ])
     bootstrap_states()
     bootstrap_tribes()
@@ -714,7 +712,11 @@ def bootstrap_fips_codes():
         ("West Virginia", "54"),
         ("Wisconsin", "55"),
         ("Wyoming", "56"),
-        ("Virgin Islands of the U.S.", "78")
+        ("U.S. Virgin Islands", "78"),
+        ("Guam", "66"),
+        ("Northern Mariana Islands","69"),
+        ("American Samoa", "60"),
+        ("Puerto Rico", "72")
     ]
     for state, fips_code in data:
         StateTable.update(fips_code=fips_code).where(StateTable.name == state).execute()

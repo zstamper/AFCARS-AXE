@@ -297,7 +297,7 @@
           <item>
            <widget class="QLabel" name="label_10">
             <property name="text">
-             <string>State, Tribe, or Territory Code (E122)</string>
+             <string>State, Tribe, or Country Code (E122)</string>
             </property>
            </widget>
           </item>
@@ -1089,10 +1089,10 @@
  <buttongroups>
   <buttongroup name="e135"/>
   <buttongroup name="e134"/>
+  <buttongroup name="e137"/>
   <buttongroup name="e40"/>
   <buttongroup name="e146"/>
   <buttongroup name="e126"/>
-  <buttongroup name="e137"/>
   <buttongroup name="e145"/>
  </buttongroups>
 </ui>

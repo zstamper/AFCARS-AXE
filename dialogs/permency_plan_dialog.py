@@ -45,7 +45,7 @@ class PermanencyPlanDialog(BaseDialog):
 
     @e147.setter
     def e147(self, v: int) -> None:
-        self._set_int_field(self.ui.e147)
+        self._set_int_field(self.ui.e147, v)
 
     @property
     def e148(self) -> int | None:

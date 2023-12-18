@@ -102,7 +102,10 @@
             </sizepolicy>
            </property>
            <property name="inputMask">
-            <string>00000</string>
+            <string/>
+           </property>
+           <property name="maxLength">
+            <number>5</number>
            </property>
           </widget>
          </item>
@@ -1786,17 +1789,149 @@ is Jurisdiction Transfer&lt;/i&gt;</string>
     </widget>
    </item>
    <item>
-    <widget class="QDialogButtonBox" name="form_action">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Save</set>
-     </property>
-    </widget>
+    <layout class="QVBoxLayout" name="verticalLayout_28">
+     <item>
+      <widget class="QDialogButtonBox" name="form_action">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="standardButtons">
+        <set>QDialogButtonBox::Cancel|QDialogButtonBox::Save</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="validate_button">
+       <property name="text">
+        <string>Validate</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="verticalSpacer_12">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeType">
+        <enum>QSizePolicy::Maximum</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>600</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>tabWidget</tabstop>
+  <tabstop>e69</tabstop>
+  <tabstop>e3</tabstop>
+  <tabstop>e71</tabstop>
+  <tabstop>e72</tabstop>
+  <tabstop>living_arrangements_table</tabstop>
+  <tabstop>e73</tabstop>
+  <tabstop>e74</tabstop>
+  <tabstop>e75</tabstop>
+  <tabstop>e76</tabstop>
+  <tabstop>e77</tabstop>
+  <tabstop>e78</tabstop>
+  <tabstop>e79</tabstop>
+  <tabstop>e80</tabstop>
+  <tabstop>e81</tabstop>
+  <tabstop>e82</tabstop>
+  <tabstop>e83</tabstop>
+  <tabstop>e84</tabstop>
+  <tabstop>e85</tabstop>
+  <tabstop>living_arrangement_add_button</tabstop>
+  <tabstop>e86</tabstop>
+  <tabstop>e87</tabstop>
+  <tabstop>e88</tabstop>
+  <tabstop>e89</tabstop>
+  <tabstop>e90</tabstop>
+  <tabstop>e91</tabstop>
+  <tabstop>e92</tabstop>
+  <tabstop>e93</tabstop>
+  <tabstop>e94</tabstop>
+  <tabstop>e95</tabstop>
+  <tabstop>e96</tabstop>
+  <tabstop>e97</tabstop>
+  <tabstop>e98</tabstop>
+  <tabstop>e99</tabstop>
+  <tabstop>e100</tabstop>
+  <tabstop>e101</tabstop>
+  <tabstop>e102</tabstop>
+  <tabstop>e103</tabstop>
+  <tabstop>e104</tabstop>
+  <tabstop>e105</tabstop>
+  <tabstop>living_arrangement_delete_button</tabstop>
+  <tabstop>permanency_plans_table</tabstop>
+  <tabstop>permanency_plan_add_button</tabstop>
+  <tabstop>permanency_plan_edit</tabstop>
+  <tabstop>permanency_plan_delete_button</tabstop>
+  <tabstop>case_visits_table</tabstop>
+  <tabstop>case_visit_add_button</tabstop>
+  <tabstop>case_visit_edit_button</tabstop>
+  <tabstop>case_visit_delete_button</tabstop>
+  <tabstop>permanency_hearings_table</tabstop>
+  <tabstop>permanency_hearing_add_button</tabstop>
+  <tabstop>permanency_hearing_edit_button</tabstop>
+  <tabstop>permanency_hearing_delete_button</tabstop>
+  <tabstop>periodic_reviews_table</tabstop>
+  <tabstop>periodic_review_add_button</tabstop>
+  <tabstop>periodic_review_edit_button</tabstop>
+  <tabstop>periodic_review_delete_button</tabstop>
+  <tabstop>e153</tabstop>
+  <tabstop>e154</tabstop>
+  <tabstop>e155</tabstop>
+  <tabstop>e156</tabstop>
+  <tabstop>e162</tabstop>
+  <tabstop>e172_m</tabstop>
+  <tabstop>e172_f</tabstop>
+  <tabstop>e163_y</tabstop>
+  <tabstop>e163_n</tabstop>
+  <tabstop>e163_u</tabstop>
+  <tabstop>e164</tabstop>
+  <tabstop>e165</tabstop>
+  <tabstop>e166</tabstop>
+  <tabstop>e167</tabstop>
+  <tabstop>e168</tabstop>
+  <tabstop>e169</tabstop>
+  <tabstop>e170</tabstop>
+  <tabstop>e171_y</tabstop>
+  <tabstop>e171_n</tabstop>
+  <tabstop>e171_u</tabstop>
+  <tabstop>e171_d</tabstop>
+  <tabstop>e173</tabstop>
+  <tabstop>e183_m</tabstop>
+  <tabstop>e183_f</tabstop>
+  <tabstop>e174_y</tabstop>
+  <tabstop>e174_n</tabstop>
+  <tabstop>e174_u</tabstop>
+  <tabstop>e175</tabstop>
+  <tabstop>e176</tabstop>
+  <tabstop>e177</tabstop>
+  <tabstop>e178</tabstop>
+  <tabstop>e179</tabstop>
+  <tabstop>e180</tabstop>
+  <tabstop>e181</tabstop>
+  <tabstop>e182_y</tabstop>
+  <tabstop>e182_n</tabstop>
+  <tabstop>e182_u</tabstop>
+  <tabstop>e182_d</tabstop>
+  <tabstop>e157</tabstop>
+  <tabstop>e186</tabstop>
+  <tabstop>e184</tabstop>
+  <tabstop>e160</tabstop>
+  <tabstop>e158</tabstop>
+  <tabstop>e161</tabstop>
+  <tabstop>e159</tabstop>
+  <tabstop>e185</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>
@@ -1833,11 +1968,11 @@ is Jurisdiction Transfer&lt;/i&gt;</string>
   </connection>
  </connections>
  <buttongroups>
-  <buttongroup name="e171"/>
-  <buttongroup name="e182"/>
-  <buttongroup name="e172"/>
-  <buttongroup name="e163"/>
-  <buttongroup name="e174"/>
   <buttongroup name="e183"/>
+  <buttongroup name="e174"/>
+  <buttongroup name="e182"/>
+  <buttongroup name="e163"/>
+  <buttongroup name="e171"/>
+  <buttongroup name="e172"/>
  </buttongroups>
 </ui>

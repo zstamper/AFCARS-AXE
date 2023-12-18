@@ -1,9 +1,8 @@
 from .id_generator import generate_id
-from .export import XMLExporter
 
 
-def coalesce(v: str|int|float|None, d: int|float) -> int|float:
-    if isinstance(v,(int,float)):
+def coalesce(v: str | int | float | None, d: int | float) -> int | float:
+    if isinstance(v, (int, float)):
         return v
     if isinstance(v, str):
         try:

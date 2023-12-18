@@ -6,44 +6,12 @@ from typing import Optional, Callable
 from PySide6.QtCore import QFile, Qt, QDate
 from PySide6.QtUiTools import QUiLoader
 from PySide6.QtWidgets import QDialog, QWidget, QErrorMessage, QCheckBox, QRadioButton, QLineEdit, QComboBox, \
-    QButtonGroup, QTableWidget, QListWidget
+    QButtonGroup, QTableWidget, QListWidget, QMainWindow
 from PySide6.QtWidgets import QMessageBox
 
-from .main_window import MainWindow
 
-
-# class BasePath:
-#     _base_path: str | None = None
-#
-#     @staticmethod
-#     def path(new_path: str = None) -> str:
-#         if new_path is not None:
-#             print(f"{new_path=}")
-#             BasePath._base_path = Path(new_path).resolve().parent
-#         return str(BasePath._base_path)
-
-
-class BaseDialog(QDialog):
-
-    def __init__(self,
-                 parent: Optional[QWidget] = None,
-                 flags: Qt.WindowType | None = None,
-                 relaxed_rules: bool = False):
-        if flags is None:
-            flags = Qt.WindowType()
-        super().__init__(parent, flags)
-        self.id: int | None = None
-        self.is_dirty: bool = False
-        self.errors: list[str] = []
-        self.relaxed_rules = relaxed_rules
-        self._on_accept = None
-
-    def _on_accept(self, v: Callable):
-        self._on_accept = v
-
-    on_accept = property(None, _on_accept, None)
-
-    def load_ui(self, file_name: str) -> QWidget:
+class BaseMixin:
+    def load_ui(self, file_name: str) -> QMainWindow | QDialog | QWidget:
         if getattr(sys, 'frozen', False):
             # we are running in a bundle
             bundle_dir = sys._MEIPASS
@@ -58,20 +26,6 @@ class BaseDialog(QDialog):
         ui = loader.load(ui_file)
         ui_file.close()
         return ui
-
-    def accept(self):
-        if self._on_accept is None or (self._on_accept and self._on_accept()):
-            super().accept()
-
-    def reject(self):
-        if self.is_dirty:
-            ret = reject_confirmation_dialog(self)
-            if ret == QMessageBox.Save:
-                self.accept()
-                return
-            elif ret == QMessageBox.Cancel:
-                return
-        super().reject()
 
     def clear(self) -> None:
         self.id = None
@@ -198,6 +152,59 @@ class BaseDialog(QDialog):
         return mapping[current_index]
 
 
+class BaseDialog(QDialog, BaseMixin):
+
+    def __init__(self,
+                 parent: Optional[QWidget] = None,
+                 flags: Qt.WindowFlags | None = None,
+                 relaxed_rules: bool = False):
+        if flags is None:
+            flags = Qt.Window
+        super().__init__(parent, flags)
+        self.id: int | None = None
+        self.is_dirty: bool = False
+        self.errors: list[str] = []
+        self.relaxed_rules = relaxed_rules
+        self._on_accept = None
+
+    @property
+    def on_accept(self) -> Callable:
+        return getattr(self, "_on_accept", None)
+
+    @on_accept.setter
+    def on_accept(self, v: Callable) -> None:
+        setattr(self, "_on_accept", v)
+
+    def accept(self):
+        if self._on_accept is None or (self._on_accept and self._on_accept()):
+            super().accept()
+
+    def reject(self):
+        if self.is_dirty:
+            ret = reject_confirmation_dialog(self)
+            if ret == QMessageBox.Save:
+                self.accept()
+                return
+            elif ret == QMessageBox.Cancel:
+                return
+        super().reject()
+
+
+class BaseMainWindow(QMainWindow, BaseMixin):
+
+    def __init__(self,
+                 parent: Optional[QWidget] = None,
+                 flags: Qt.WindowType | None = None,
+                 relaxed_rules: bool = False):
+        if flags is None:
+            flags = Qt.WindowType.Window
+        super().__init__(parent, flags)
+        self.id: int | None = None
+        self.is_dirty: bool = False
+        self.errors: list[str] = []
+        self.relaxed_rules = relaxed_rules
+
+
 def reject_confirmation_dialog(parent: QWidget) -> int:
     msg_box = QMessageBox(parent)
     msg_box.setWindowTitle("Confirm")
@@ -218,6 +225,9 @@ def delete_confirmation_dialog(parent: QWidget) -> int:
 
 def error_message_dialog(parent: QWidget, errors: list[str]):
     err_box = QErrorMessage(parent)
-    err_box.showMessage("\n\n- ".join(errors))
+    error_str = "\n\n• ".join(errors[0:5])
+    if len(errors) > 5:
+        error_str += "\n\n" + f"{len(errors) - 5} additional validation errors."
+    err_box.showMessage(error_str)
     err_box.setWindowTitle("Error")
     err_box.exec()

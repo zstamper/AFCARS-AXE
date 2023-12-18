@@ -1,7 +1,8 @@
+from typing import Optional, Callable
+
 from PySide6.QtWidgets import QDialog
 
 from dialogs import BaseDialog
-from model import SecondParent
 
 
 class Parent2Dialog(BaseDialog):
@@ -18,32 +19,21 @@ class Parent2Dialog(BaseDialog):
         self.id: int | None = None
         self.ooh_id: int | None = None
         self._child_name: str = ""
+        self.on_validate_clicked: Optional[Callable] = None
 
     def _wire_ui(self):
         self._init_radio(self.ui, 'e64', {'na': 0, 'v': 1, 'i': 2})
         self.ui.buttonBox.accepted.connect(self.accept)
         self.ui.buttonBox.rejected.connect(self.reject)
+        self.ui.validate_button.clicked.connect(self.do_validate_clicked)
 
     def clear(self):
         super().clear()
         self.child_name = ""
 
-    def populate(self, obj: SecondParent):
-        self.obj = obj
-        self._from_obj()
-
-    def validate(self) -> bool:
-        return True
-
-    def _to_obj(self):
-        self.obj.e64 = self._get_radio_button(self.ui.e64)
-        self.obj.e66 = self._get_int_field(self.ui.e66)
-        self.obj.e68 = self._get_int_field(self.ui.e68)
-
-    def _from_obj(self):
-        self._set_radio_button(self.ui.e64, self.obj.e64)
-        self._set_int_field(self.ui.e66, self.obj.e66)
-        self._set_int_field(self.ui.e68, self.obj.e68)
+    def do_validate_clicked(self):
+        if self.on_validate_clicked:
+            self.on_validate_clicked()
 
     @property
     def child_name(self) -> str:
@@ -56,3 +46,33 @@ class Parent2Dialog(BaseDialog):
             self.setWindowTitle(f"Putative Parent/Guardian for {self.child_name}")
         else:
             self.setWindowTitle("")
+
+    @property
+    def e64(self) -> int:
+        return self._get_radio_button(self.ui.e64)
+
+    @e64.setter
+    def e64(self, v: int) -> None:
+        self._set_radio_button(self.ui.e64, v)
+
+    @property
+    def e64_text(self) -> str:
+        if self.e64 is not None:
+            return self.ui.e64.checkedButton().text()
+        return ""
+
+    @property
+    def e66(self) -> int:
+        return self._get_int_field(self.ui.e66)
+
+    @e66.setter
+    def e66(self, v: int) -> None:
+        self._set_int_field(self.ui.e66, v)
+
+    @property
+    def e68(self) -> int:
+        return self._get_int_field(self.ui.e68)
+
+    @e68.setter
+    def e68(self, v: int) -> None:
+        self._set_int_field(self.ui.e68, v)

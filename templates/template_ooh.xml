@@ -2,95 +2,95 @@
 <acf:data xmlns:acf="http://www.acf.hhs.gov"
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:schemaLocation="http://www.acf.hhs.gov schema_ooh.xsd">
-    <E1_title_iv_agency>{{ context.e1|no_null }}</E1_title_iv_agency>
+    <E1_title_iv_agency>{{ e1|no_null }}</E1_title_iv_agency>
     <E2_report_date>{{ e2|no_null }}</E2_report_date>
     <records>
         {%- for record in data %}
         <record>
-            <E4_child_record_number>{{ record.child.e4|no_null }}</E4_child_record_number>
-            <E5_date_of_birth>{{ record.child.e5|no_null }}</E5_date_of_birth>
-            <E6_sex>{{ record.child.e6|no_null }}</E6_sex>
+            <E4_child_record_number>{{ record.e4|no_null }}</E4_child_record_number>
+            <E5_date_of_birth>{{ record['data'].e5|no_null }}</E5_date_of_birth>
+            <E6_sex>{{ record['data'].e6|no_null }}</E6_sex>
             <E7_E12_tribal_information>
-                <E7_agency_made_inquiries>{{ record.e7|no_null }}</E7_agency_made_inquiries>
-                <E8_tribal_membership>{{ record.e8|no_null }}</E8_tribal_membership>
-                {%- if record['tribes'] %}
+                <E7_agency_made_inquiries>{{ record['data'].ooh.e7|no_null }}</E7_agency_made_inquiries>
+                <E8_tribal_membership>{{ record['data'].ooh.e8|no_null }}</E8_tribal_membership>
+                {%- if record['data'].ooh.tribes %}
                 <E9_recognized_tribes>
-                    {%- for e9 in record['tribes'] %}
+                    {%- for e9 in record['data'].ooh.tribes %}
                     <E9_recognized_tribe>{{ e9 }}</E9_recognized_tribe>
                     {%- endfor %}
                 </E9_recognized_tribes>
                 {%- else %}
                 <E9_recognized_tribes/>
                 {%- endif %}
-                <E10_icwa>{{ record.e10|no_null }}</E10_icwa>
-                <E11_icwa_date>{{ record.e11|no_null }}</E11_icwa_date>
-                <E12_icwa_notification>{{ record.e12|no_null }}</E12_icwa_notification>
+                <E10_icwa>{{ record['data'].ooh.e10|no_null }}</E10_icwa>
+                <E11_icwa_date>{{ record['data'].ooh.e11|no_null }}</E11_icwa_date>
+                <E12_icwa_notification>{{ record['data'].ooh.e12|no_null }}</E12_icwa_notification>
             </E7_E12_tribal_information>
-            <E13_child_race_american_indian_alaska_native>{{ record.e13|no_null }}</E13_child_race_american_indian_alaska_native>
-            <E14_child_race_asian>{{ record.e14|no_null }}</E14_child_race_asian>
-            <E15_child_race_black>{{ record.e15|no_null }}</E15_child_race_black>
-            <E16_child_race_native_hawaiian_pacific_islander>{{ record.e16|no_null }}</E16_child_race_native_hawaiian_pacific_islander>
-            <E17_child_race_white>{{ record.e17|no_null }}</E17_child_race_white>
-            <E18_child_race_unknown>{{ record.e18|no_null }}</E18_child_race_unknown>
-            <E19_child_race_abandoned>{{ record.e19|no_null }}</E19_child_race_abandoned>
-            <E20_child_race_declined>{{ record.e20|no_null }}</E20_child_race_declined>
-            <E21_child_hispanic_latino>{{ record.e21|no_null }}</E21_child_hispanic_latino>
-            <E22_health_assessment>{{ record.e22|no_null }}</E22_health_assessment>
-            <E23_health_conditions>{{ record.e23|no_null }}</E23_health_conditions>
+            <E13_child_race_american_indian_alaska_native>{{ record['data'].e13|no_null }}</E13_child_race_american_indian_alaska_native>
+            <E14_child_race_asian>{{ record['data'].e14|no_null }}</E14_child_race_asian>
+            <E15_child_race_black>{{ record['data'].e15|no_null }}</E15_child_race_black>
+            <E16_child_race_native_hawaiian_pacific_islander>{{ record['data'].e16|no_null }}</E16_child_race_native_hawaiian_pacific_islander>
+            <E17_child_race_white>{{ record['data'].e17|no_null }}</E17_child_race_white>
+            <E18_child_race_unknown>{{ record['data'].e18|no_null }}</E18_child_race_unknown>
+            <E19_child_race_abandoned>{{ record['data'].e19|no_null }}</E19_child_race_abandoned>
+            <E20_child_race_declined>{{ record['data'].e20|no_null }}</E20_child_race_declined>
+            <E21_child_hispanic_latino>{{ record['data'].e21|no_null }}</E21_child_hispanic_latino>
+            <E22_health_assessment>{{ record['data'].ooh.e22|no_null }}</E22_health_assessment>
+            <E23_health_conditions>{{ record['data'].ooh.e23|no_null }}</E23_health_conditions>
             <E24_34_specific_health_conditions>
-                <E24_health_intellectual_disability>{{ record.e24|no_null }}</E24_health_intellectual_disability>
-                <E25_health_autism_spectrum_disorder>{{ record.e25|no_null }}</E25_health_autism_spectrum_disorder>
-                <E26_health_visual_impairment>{{ record.e26|no_null }}</E26_health_visual_impairment>
-                <E27_health_hearing_impairment>{{ record.e27|no_null }}</E27_health_hearing_impairment>
-                <E28_health_orthopedic_impairment>{{ record.e28|no_null }}</E28_health_orthopedic_impairment>
-                <E29_health_mental_disorder>{{ record.e29|no_null }}</E29_health_mental_disorder>
-                <E30_health_adhd_add>{{ record.e30|no_null }}</E30_health_adhd_add>
-                <E31_health_serious_mental_disorder>{{ record.e31|no_null }}</E31_health_serious_mental_disorder>
-                <E32_health_developmental_delay>{{ record.e32|no_null }}</E32_health_developmental_delay>
-                <E33_health_developmental_disability>{{ record.e33|no_null }}</E33_health_developmental_disability>
-                <E34_health_other_condition>{{ record.e34|no_null }}</E34_health_other_condition>
+                <E24_health_intellectual_disability>{{ record['data'].ooh.e24|no_null }}</E24_health_intellectual_disability>
+                <E25_health_autism_spectrum_disorder>{{ record['data'].ooh.e25|no_null }}</E25_health_autism_spectrum_disorder>
+                <E26_health_visual_impairment>{{ record['data'].ooh.e26|no_null }}</E26_health_visual_impairment>
+                <E27_health_hearing_impairment>{{ record['data'].ooh.e27|no_null }}</E27_health_hearing_impairment>
+                <E28_health_orthopedic_impairment>{{ record['data'].ooh.e28|no_null }}</E28_health_orthopedic_impairment>
+                <E29_health_mental_disorder>{{ record['data'].ooh.e29|no_null }}</E29_health_mental_disorder>
+                <E30_health_adhd_add>{{ record['data'].ooh.e30|no_null }}</E30_health_adhd_add>
+                <E31_health_serious_mental_disorder>{{ record['data'].ooh.e31|no_null }}</E31_health_serious_mental_disorder>
+                <E32_health_developmental_delay>{{ record['data'].ooh.e32|no_null }}</E32_health_developmental_delay>
+                <E33_health_developmental_disability>{{ record['data'].ooh.e33|no_null }}</E33_health_developmental_disability>
+                <E34_health_other_condition>{{ record['data'].ooh.e34|no_null }}</E34_health_other_condition>
             </E24_34_specific_health_conditions>
-            <E35_school_enrollment>{{ record.e35|no_null }}</E35_school_enrollment>
-            <E36_school_highest_completed>{{ record.e36|no_null }}</E36_school_highest_completed>
-            <E37_school_special_education>{{ record.e37|no_null }}</E37_school_special_education>
-            <E38_pregnant>{{ record.e38|no_null }}</E38_pregnant>
-            <E39_fathered_or_bore_child>{{ record.e39|no_null }}</E39_fathered_or_bore_child>
-            <E40_child_and_children_together>{{ record.e40|no_null }}</E40_child_and_children_together>
-            <E41_prior_adoption>{{ record.e41|no_null }}</E41_prior_adoption>
+            <E35_school_enrollment>{{ record['data'].ooh.e35|no_null }}</E35_school_enrollment>
+            <E36_school_highest_completed>{{ record['data'].ooh.e36|no_null }}</E36_school_highest_completed>
+            <E37_school_special_education>{{ record['data'].ooh.e37|no_null }}</E37_school_special_education>
+            <E38_pregnant>{{ record['data'].ooh.e38|no_null }}</E38_pregnant>
+            <E39_fathered_or_bore_child>{{ record['data'].ooh.e39|no_null }}</E39_fathered_or_bore_child>
+            <E40_child_and_children_together>{{ record['data'].ooh.e40|no_null }}</E40_child_and_children_together>
+            <E41_prior_adoption>{{ record['data'].ooh.e41|no_null }}</E41_prior_adoption>
             <E42_E43_prior_adoption_information>
-                <E42_prior_adoption_date>{{ record.e42|no_null }}</E42_prior_adoption_date>
-                <E43_prior_adoption_intercountry>{{ record.e43|no_null }}</E43_prior_adoption_intercountry>
+                <E42_prior_adoption_date>{{ record['data'].ooh.e42|no_null }}</E42_prior_adoption_date>
+                <E43_prior_adoption_intercountry>{{ record['data'].ooh.e43|no_null }}</E43_prior_adoption_intercountry>
             </E42_E43_prior_adoption_information>
-            <E44_prior_guardianship>{{ record.e44|no_null }}</E44_prior_guardianship>
-            <E45_prior_guardianship_date>{{ record.e45|no_null }}</E45_prior_guardianship_date>
-            <E46_support_assistance>{{ record.e46|no_null }}</E46_support_assistance>
+            <E44_prior_guardianship>{{ record['data'].ooh.e44|no_null }}</E44_prior_guardianship>
+            <E45_prior_guardianship_date>{{ record['data'].ooh.e45|no_null }}</E45_prior_guardianship_date>
+            <E46_support_assistance>{{ record['data'].ooh.e46|no_null }}</E46_support_assistance>
             <E47_E54_type_financial_assistance>
-                <E47_state_tribal_adoption_assistance>{{ record.e47|no_null }}</E47_state_tribal_adoption_assistance>
-                <E48_state_tribal_foster_care>{{ record.e48|no_null }}</E48_state_tribal_foster_care>
-                <E49_adoption_subsidy>{{ record.e49|no_null }}</E49_adoption_subsidy>
-                <E50_guardianship_assistance>{{ record.e50|no_null }}</E50_guardianship_assistance>
-                <E51_tanf_assistance>{{ record.e51|no_null }}</E51_tanf_assistance>
-                <E52_title_iv_b>{{ record.e52|no_null }}</E52_title_iv_b>
-                <E53_chafee_foster_program>{{ record.e53|no_null }}</E53_chafee_foster_program>
-                <E54_other_financial_support>{{ record.e54|no_null }}</E54_other_financial_support>
+                <E47_state_tribal_adoption_assistance>{{ record['data'].ooh.e47|no_null }}</E47_state_tribal_adoption_assistance>
+                <E48_state_tribal_foster_care>{{ record['data'].ooh.e48|no_null }}</E48_state_tribal_foster_care>
+                <E49_adoption_subsidy>{{ record['data'].ooh.e49|no_null }}</E49_adoption_subsidy>
+                <E50_guardianship_assistance>{{ record['data'].ooh.e50|no_null }}</E50_guardianship_assistance>
+                <E51_tanf_assistance>{{ record['data'].ooh.e51|no_null }}</E51_tanf_assistance>
+                <E52_title_iv_b>{{ record['data'].ooh.e52|no_null }}</E52_title_iv_b>
+                <E53_chafee_foster_program>{{ record['data'].ooh.e53|no_null }}</E53_chafee_foster_program>
+                <E54_other_financial_support>{{ record['data'].ooh.e54|no_null }}</E54_other_financial_support>
             </E47_E54_type_financial_assistance>
-            <E55_foster_care_payment>{{ record.e55|no_null }}</E55_foster_care_payment>
-            <E56_total_siblings>{{ record.e56|no_null }}</E56_total_siblings>
+            <E55_foster_care_payment>{{ record['data'].ooh.e55|no_null }}</E55_foster_care_payment>
+            <E56_total_siblings>{{ record['data'].ooh.e56|no_null }}</E56_total_siblings>
             <E57_E58_siblings_in_foster_care>
-                <E57_siblings_in_foster_care>{{ record.e57|no_null }}</E57_siblings_in_foster_care>
-                <E58_siblings_in_living_arrangement>{{ record.e58|no_null }}</E58_siblings_in_living_arrangement>
+                <E57_siblings_in_foster_care>{{ record['data'].ooh.e57|no_null }}</E57_siblings_in_foster_care>
+                <E58_siblings_in_living_arrangement>{{ record['data'].ooh.e58|no_null }}</E58_siblings_in_living_arrangement>
             </E57_E58_siblings_in_foster_care>
-            <E59_first_parent_birth_year>{{ record.e59|no_null }}</E59_first_parent_birth_year>
-            <E60_second_parent_birth_year>{{ record.e60|no_null }}</E60_second_parent_birth_year>
-            <E61_tribal_membership_mother>{{ record.e61|no_null }}</E61_tribal_membership_mother>
-            <E62_tribal_membership_father>{{ record.e62|no_null }}</E62_tribal_membership_father>
+            <E59_first_parent_birth_year>{{ record['data'].ooh.e59|no_null }}</E59_first_parent_birth_year>
+            <E60_second_parent_birth_year>{{ record['data'].ooh.e60|no_null }}</E60_second_parent_birth_year>
+            <E61_tribal_membership_mother>{{ record['data'].ooh.e61|no_null }}</E61_tribal_membership_mother>
+            <E62_tribal_membership_father>{{ record['data'].ooh.e62|no_null }}</E62_tribal_membership_father>
             <E63_E68_termination_of_parental_rights>
                 <tpr_first_parent>
-                    <E63_tpr_parent1>{{ record.e63|no_null }}</E63_tpr_parent1>
-                    <E65_tpr_petition_date_parent1>{{ record.e65|no_null }}</E65_tpr_petition_date_parent1>
-                    <E67_tpr_date_parent1>{{ record.e67|no_null }}</E67_tpr_date_parent1>
+                    <E63_tpr_parent1>{{ record['data'].ooh.e63|no_null }}</E63_tpr_parent1>
+                    <E65_tpr_petition_date_parent1>{{ record['data'].ooh.e65|no_null }}</E65_tpr_petition_date_parent1>
+                    <E67_tpr_date_parent1>{{ record['data'].ooh.e67|no_null }}</E67_tpr_date_parent1>
                 </tpr_first_parent>
-                {%- for tpr_second_parent in record.second_parent %}
+                {%- for tpr_second_parent in record['data'].ooh.second_parent %}
                 {%- if tpr_second_parent.e64 %}
                 <tpr_second_parent>
                     <E64_tpr_parent2>{{ tpr_second_parent.e64|no_null }}</E64_tpr_parent2>
@@ -101,7 +101,7 @@
                 {%- endfor %}
             </E63_E68_termination_of_parental_rights>
             <E69_E186_removals>
-                {%- for removal_2020 in record.removals_2020 %}
+                {%- for removal_2020 in record['data'].ooh.removals_2020 %}
                 <removal_2020>
                     <E69_removal_date>{{ removal_2020.e69|no_null }}</E69_removal_date>
                     <E70_removal_transaction_date>{{ removal_2020.e70|no_null }}</E70_removal_transaction_date>
@@ -272,7 +272,7 @@
                     </E157_E186_adoptive_parents_information>
                 </removal_2020>
                 {%- endfor %}
-                {%- for removal_1993 in record.removals_1993 %}
+                {%- for removal_1993 in record['data'].ooh.removals_1993 %}
                 <removal_1993>
                     <E69_removal_date>{{ removal_1993.e69|no_null }}</E69_removal_date>
                     <E153_exit_date>{{ removal_1993.e153|no_null }}</E153_exit_date>
@@ -280,15 +280,15 @@
                 </removal_1993>
                 {%- endfor %}
             </E69_E186_removals>
-            <E106_prior_victim_sex_trafficking>{{ record.e106|no_null }}</E106_prior_victim_sex_trafficking>
+            <E106_prior_victim_sex_trafficking>{{ record['data'].ooh.e106|no_null }}</E106_prior_victim_sex_trafficking>
             <E107_E108_prior_victim_sex_trafficking_reporting>
-                <E107_prior_victim_sex_trafficking_reported>{{ record.e107|no_null }}</E107_prior_victim_sex_trafficking_reported>
-                <E108_prior_victim_sex_trafficking_reported_date>{{ record.e108|no_null }}</E108_prior_victim_sex_trafficking_reported_date>
+                <E107_prior_victim_sex_trafficking_reported>{{ record['data'].ooh.e107|no_null }}</E107_prior_victim_sex_trafficking_reported>
+                <E108_prior_victim_sex_trafficking_reported_date>{{ record['data'].ooh.e108|no_null }}</E108_prior_victim_sex_trafficking_reported_date>
             </E107_E108_prior_victim_sex_trafficking_reporting>
-            <E109_victim_sex_trafficking>{{ record.e109|no_null }}</E109_victim_sex_trafficking>
+            <E109_victim_sex_trafficking>{{ record['data'].ooh.e109|no_null }}</E109_victim_sex_trafficking>
             <E110_E111_victim_sex_trafficking_reporting>
-                <E110_victim_sex_trafficking_reported>{{ record.e110|no_null }}</E110_victim_sex_trafficking_reported>
-                <E111_victim_sex_trafficking_reported_date>{{ record.e111|no_null }}</E111_victim_sex_trafficking_reported_date>
+                <E110_victim_sex_trafficking_reported>{{ record['data'].ooh.e110|no_null }}</E110_victim_sex_trafficking_reported>
+                <E111_victim_sex_trafficking_reported_date>{{ record['data'].ooh.e111|no_null }}</E111_victim_sex_trafficking_reported_date>
             </E110_E111_victim_sex_trafficking_reporting>
         </record>
         {%- endfor %}

@@ -1,27 +1,18 @@
 # -*- coding: utf-8 -*-
-from string import Template
+from typing import Optional, Callable, Any
 
 # from .childform import Ui_ChildForm
-from PySide6.QtCore import (QRegularExpression, Qt)
+from PySide6.QtCore import (QRegularExpression)
 from PySide6.QtGui import (QRegularExpressionValidator)
 from PySide6.QtWidgets import (QAbstractButton, QWidget, QListWidgetItem, QTableWidgetItem)
 
-from controllers import GenericController
 from model import SecondParent, Removal1993, Removal2020, RecognizedTribe, ARecord
+from model.models import Tribe
 from utils import generate_id
 from . import BaseDialog
-from .removal1993 import Removal1993Dialog
-from .removal2020 import Removal2020Dialog
-from .second_parent_dialog import Parent2Dialog
 
 
 class OOHDialog(BaseDialog):
-    ERROR_TEMPLATE: Template = Template(
-        '<html><head/><body><p><span style="font-weight:700; color: #ff2600;">$message</span></p></body></html>')
-    E24_ERROR_MESSAGE: str = "At least one of E24 - E34 is required."
-    E43_ERROR_MESSAGE: str = "Required."
-    E57_ERROR_MESSAGE: str = "Siblings in placement (E57) may not be more<br/>than total siblings (E56)."
-
     E155_MESSAGES: dict = {1: "Reunify with parent or legal guardian",
                            2: "Live with other relative",
                            3: "Adoption",
@@ -34,32 +25,46 @@ class OOHDialog(BaseDialog):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
         self.ui: QWidget = self.load_ui('ui_childform.ui')
-        self._wire_ui()
-        self.setLayout(self.ui.layout())
-        self.setFixedSize(self.ui.size())
-        self.context_id: int | None = None
-        self.ooh_id: int | None = None
-        self.child_id: int | None = None
+
         self.a: ARecord | None = None
+
         # Virtual elements:
         # e41 & e44 default to 'no' (0) because the corresponding line edit fields default to empty
         self.e41: int = 0
         self.e44: int = 0
-        self._tribes: list[str] = []
-        self._epa_tribe_ids: dict = {}
-        self._epa_tribe_names: dict = {}
-        self._reverse_epa_tribes: dict = {}
+
+        # back-end stores for our virtual properties
+        self._epa_tribes: list[Tribe] = []
         self._recognized_tribes: list[RecognizedTribe] = []
         self._second_parents: list[SecondParent] = []
         self._removals1993: list[Removal1993] = []
         self._removals2020: list[Removal2020] = []
         self._child_name: str = ""
 
+        # Callbacks
+        self.on_add_tribe_clicked: Optional[Callable] = None
+        self.on_remove_tribe_clicked: Optional[Callable] = None
+        self.on_add_second_parent: Optional[Callable] = None
+        self.on_edit_second_parent: Optional[Callable] = None
+        self.on_add_removal1993_clicked: Optional[Callable] = None
+        self.on_edit_removal1993_clicked: Optional[Callable] = None
+        self.on_delete_removal1993_clicked: Optional[Callable] = None
+        self.on_add_removal2020_clicked: Optional[Callable] = None
+        self.on_edit_removal2020_clicked: Optional[Callable] = None
+        self.on_delete_removal2020_clicked: Optional[Callable] = None
+        self.on_tab_changed: Optional[Callable] = None
+        self.on_validate_clicked: Optional[Callable] = None
+
+        self._wire_ui()
+        self.setLayout(self.ui.layout())
+        self.setFixedSize(self.ui.size())
+
     def clear(self) -> None:
         super().clear()
         self.setWindowTitle("")
-        self.context_id = None
+        self.current_tab = 0
 
     # ==================================================================================================================
 
@@ -72,6 +77,7 @@ class OOHDialog(BaseDialog):
 
     # ==================================================================================================================
 
+    # noinspection PyPropertyAccess
     def _wire_ui(self) -> None:
         ui = self.ui
 
@@ -106,8 +112,8 @@ class OOHDialog(BaseDialog):
         # ui.e7.buttonClicked.connect(self._e7_button_clicked)
         # ui.e8.buttonClicked.connect(self._e8_button_clicked)
 
-        ui.add_tribe_button.clicked.connect(self._add_tribe)
-        ui.remove_tribe_button.clicked.connect(self._remove_tribe)
+        ui.add_tribe_button.clicked.connect(self._on_add_tribe_clicked)
+        ui.remove_tribe_button.clicked.connect(self._on_remove_tribe_clicked)
 
         ui.e19.toggled.connect(self._e19_toggled)
         ui.e20.toggled.connect(self._e20_toggled)
@@ -117,18 +123,77 @@ class OOHDialog(BaseDialog):
         ui.e42.textChanged.connect(self._e42_text_changed)
         ui.e45.textChanged.connect(self._e45_text_changed)
 
-        ui.parent2_add_button.clicked.connect(self._add_parent2)
-        ui.parent2_edit_button.clicked.connect(self._edit_parent2)
-        ui.parent2tpr.cellDoubleClicked.connect(self._edit_parent2)
+        ui.parent2_add_button.clicked.connect(self._on_add_second_parent)
+        ui.parent2_edit_button.clicked.connect(self._on_edit_second_parent)
+        ui.parent2tpr.cellDoubleClicked.connect(self._on_edit_second_parent)
 
-        ui.removal_1993_add_button.clicked.connect(self._add_removal1993)
-        ui.removal_1993_edit_button.clicked.connect(self._edit_removal1993)
-        ui.removal_1993_delete_button.clicked.connect(self._delete_removal1993)
-        ui.removal_1993_table.cellDoubleClicked.connect(self._edit_removal1993)
-        ui.removal_2020_add_button.clicked.connect(self._add_removal2020)
-        ui.removal_2020_edit_button.clicked.connect(self._edit_removal2020)
-        ui.removal_2020_delete_button.clicked.connect(self._delete_removal2020)
-        ui.removal_2020_table.cellDoubleClicked.connect(self._edit_removal2020)
+        ui.removal_1993_add_button.clicked.connect(self._on_add_removal1993_clicked)
+        ui.removal_1993_edit_button.clicked.connect(self._on_edit_removal1993_clicked)
+        ui.removal_1993_delete_button.clicked.connect(self._on_delete_removal1993_clicked)
+        ui.removal_1993_table.cellDoubleClicked.connect(self._on_edit_removal1993_clicked)
+        ui.removal_2020_add_button.clicked.connect(self._on_add_removal2020_clicked)
+        ui.removal_2020_edit_button.clicked.connect(self._on_edit_removal2020_clicked)
+        ui.removal_2020_delete_button.clicked.connect(self._on_delete_removal2020_clicked)
+        ui.removal_2020_table.cellDoubleClicked.connect(self._on_edit_removal2020_clicked)
+
+        ui.tabWidget.currentChanged.connect(self._on_tab_changed)
+        ui.validate_button.clicked.connect(self._on_validate_clicked)
+
+    # ==================================================================================================================
+    #
+    #                                                   PROPERTIES
+    #
+    # ==================================================================================================================
+
+    def _on_add_second_parent(self, *args, **kwargs) -> Any:
+        return self.on_add_second_parent(*args, **kwargs) if self.on_add_second_parent else None
+
+    def _on_edit_second_parent(self, *args, **kwargs) -> Any:
+        return self.on_edit_second_parent(*args, **kwargs) if self.on_edit_second_parent else None
+
+    def _on_add_tribe_clicked(self, *args, **kwargs) -> Any:
+        return self.on_add_tribe_clicked(*args, **kwargs) if self.on_add_tribe_clicked else None
+
+    def _on_remove_tribe_clicked(self, *args, **kwargs) -> Any:
+        return self.on_remove_tribe_clicked(*args, **kwargs) if self.on_remove_tribe_clicked else None
+
+    def _on_add_removal1993_clicked(self, *args, **kwargs) -> Any:
+        return self.on_add_removal1993_clicked(*args, **kwargs) if self.on_add_removal1993_clicked else None
+
+    def _on_edit_removal1993_clicked(self, *args, **kwargs) -> Any:
+        return self.on_edit_removal1993_clicked(*args, **kwargs) if self.on_edit_removal1993_clicked else None
+
+    def _on_delete_removal1993_clicked(self, *args, **kwargs) -> Any:
+        return self.on_delete_removal1993_clicked(*args, **kwargs) if self.on_delete_removal1993_clicked else None
+
+    def _on_add_removal2020_clicked(self, *args, **kwargs) -> Any:
+        return self.on_add_removal2020_clicked(*args, **kwargs) if self.on_add_removal2020_clicked else None
+
+    def _on_edit_removal2020_clicked(self, *args, **kwargs) -> Any:
+        return self.on_edit_removal2020_clicked(*args, **kwargs) if self.on_edit_removal2020_clicked else None
+
+    def _on_delete_removal2020_clicked(self, *args, **kwargs) -> Any:
+        return self.on_delete_removal2020_clicked(*args, **kwargs) if self.on_delete_removal2020_clicked else None
+
+    def _on_tab_changed(self, *args, **kwargs) -> Any:
+        return self.on_tab_changed(*args, **kwargs) if self.on_tab_changed else None
+
+    def _on_validate_clicked(self, *args, **kwargs) -> Any:
+        return self.on_validate_clicked(*args, **kwargs) if self.on_validate_clicked else None
+
+    def tab_label(self, tab: int) -> str:
+        return self.ui.tabWidget.tabText(tab)
+
+    def set_tab_label(self, tab: int, label: str) -> None:
+        self.ui.tabWidget.setTabText(tab, label)
+
+    @property
+    def current_tab(self) -> int:
+        return self.ui.tabWidget.currentIndex()
+
+    @current_tab.setter
+    def current_tab(self, new_tab: int) -> None:
+        self.ui.tabWidget.setCurrentIndex(new_tab)
 
     def _last_name_text_changed(self, text: str) -> None:
         self.child_name = f"{self.last_name if self.last_name else ''}{', ' if self.last_name and self.first_name else ''}{self.first_name if self.first_name else ''}"
@@ -138,24 +203,6 @@ class OOHDialog(BaseDialog):
 
     def _refresh_title(self) -> None:
         self.setWindowTitle(f"{self.child_name}{' : ' if self.e4 else ''}{self.e4 if self.e4 else ''}")
-
-    def _add_tribe(self):
-        selected_item = self.ui.epa_tribes.currentItem()
-        if selected_item:
-            if not self.ui.tribes.findItems(selected_item.text(), Qt.MatchExactly):
-                self._recognized_tribes.append(
-                    RecognizedTribe(id=None, ooh_id=None, e9=self._epa_tribe_names[selected_item.text()])
-                )
-                self.ui.tribes.addItem(selected_item.text())
-
-    def _remove_tribe(self):
-        selected_item = self.ui.tribes.currentItem()
-        if selected_item:
-            for row in range(len(self._recognized_tribes)):
-                if self._recognized_tribes[row].e9 == self._epa_tribe_names[selected_item.text()]:
-                    del self._recognized_tribes[row]
-                    self.ui.tribes.takeItem(row)
-                    break
 
     def _e4_text_changed(self, text: str) -> None:
         if self.ui.e4.hasAcceptableInput():
@@ -261,126 +308,6 @@ class OOHDialog(BaseDialog):
     def _e45_text_changed(self, text: str) -> None:
         self.e44 = 1 if text != "" else 0
 
-    # ===== Removals ==========================================================
-
-    def _add_removal1993(self) -> None:
-        dialog = Removal1993Dialog(self)
-        dialog.clear()
-        dialog.child_name = self.child_name
-        controller = GenericController(dialog, Removal1993)
-        data: Removal1993 = controller.add()
-        if data is not None:
-            self._removals1993.append(data)
-            self.__add_removal1993_row(data)
-
-    def _edit_removal1993(self) -> None:
-        current_row = self.ui.removal_1993_table.currentRow()
-        if current_row >= 0:
-            dialog = Removal1993Dialog(self)
-            dialog.clear()
-            dialog.child_name = self.child_name
-            controller = GenericController(dialog, Removal1993)
-            data = self._removals1993[current_row]
-            controller.edit(data)
-            self.__update_removal_1993_row(current_row, data)
-
-    def _delete_removal1993(self) -> None:
-        current_row = self.ui.removal_1993_table.currentRow()
-        if 0 <= current_row < len(self._removals1993):
-            del self._removals1993[current_row]
-            self.ui.removal_1993_table.removeRow(current_row)
-
-    def __add_removal1993_row(self, data: Removal1993) -> None:
-        row: int = self.ui.removal_1993_table.rowCount()
-        self.ui.removal_1993_table.insertRow(row)
-        self.__update_removal_1993_row(row, data)
-
-    def __update_removal_1993_row(self, row: int, data: Removal1993) -> None:
-        self.ui.removal_1993_table.setItem(row, 0, QTableWidgetItem(str(data.e69)))
-        self.ui.removal_1993_table.setItem(row, 1, QTableWidgetItem(str(data.e153)))
-        self.ui.removal_1993_table.setItem(row, 2, QTableWidgetItem(
-            self.E155_MESSAGES[data.e155] if data.e155 in self.E155_MESSAGES else ''))
-
-    def _add_removal2020(self) -> None:
-        dialog = Removal2020Dialog(self)
-        dialog.clear()
-        dialog.child_name = self.child_name
-        controller = GenericController(dialog, Removal2020)
-        data: Removal2020 = controller.add()
-        if data is not None:
-            self._removals2020.append(data)
-            self.__add_removal2020_row(data)
-
-    def _edit_removal2020(self) -> None:
-        current_row = self.ui.removal_2020_table.currentRow()
-        if current_row >= 0:
-            dialog = Removal2020Dialog(self)
-            dialog.clear()
-            dialog.child_name = self.child_name
-            controller = GenericController(dialog, Removal2020)
-            data = self._removals2020[current_row]
-            controller.edit(data)
-            self.__update_removal_2020_row(current_row, data)
-
-    def _delete_removal2020(self) -> None:
-        current_row = self.ui.removal_2020_table.currentRow()
-        if 0 <= current_row < len(self._removals2020):
-            del self._removals2020[current_row]
-            self.ui.removal_2020_table.removeRow(current_row)
-
-    def __add_removal2020_row(self, data: Removal2020) -> None:
-        row: int = self.ui.removal_2020_table.rowCount()
-        self.ui.removal_2020_table.insertRow(row)
-        self.__update_removal_2020_row(row, data)
-
-    def __update_removal_2020_row(self, row: int, data: Removal2020) -> None:
-        self.ui.removal_2020_table.setItem(row, 0, QTableWidgetItem(str(data.e69)))
-        self.ui.removal_2020_table.setItem(row, 1, QTableWidgetItem(str(data.e153)))
-        self.ui.removal_2020_table.setItem(row, 2, QTableWidgetItem(
-            self.E155_MESSAGES[data.e155] if data.e155 in self.E155_MESSAGES else ''))
-
-    # ===== SecondParent ======================================================
-
-    def _add_parent2(self) -> None:
-        dialog = Parent2Dialog(self)
-        dialog.clear()
-        dialog.child_name = self.child_name
-        controller = GenericController(dialog, SecondParent)
-        data: SecondParent = controller.add()
-        if data is not None:
-            self._second_parents.append(data)
-            self.__add_parent2_row(data)
-
-    def _edit_parent2(self) -> None:
-        current_row = self.ui.parent2tpr.currentRow()
-        if current_row >= 0:
-            dialog = Parent2Dialog(self)
-            dialog.clear()
-            dialog.child_name = self.child_name
-            controller = GenericController(dialog, SecondParent)
-            data = self._second_parents[current_row]
-            controller.edit(data)
-            self.__update_parent2_row(current_row, data)
-
-    def _delete_parent2(self) -> None:
-        current_row = self.ui.parent2tpr.currentRow()
-        if 0 <= current_row < len(self._second_parents):
-            del self._second_parents[current_row]
-            self.ui.parent2tpr.removeRow(current_row)
-
-    def __add_parent2_row(self, data: SecondParent) -> None:
-        row: int = self.ui.parent2tpr.rowCount()
-        self.ui.parent2tpr.insertRow(row)
-        self.__update_parent2_row(row, data)
-
-    def __update_parent2_row(self, row: int, data: SecondParent) -> None:
-        self.ui.parent2tpr.setItem(row, 0, QTableWidgetItem(
-            self.E64_MESSAGES[data.e64] if data.e64 in self.E64_MESSAGES else ''))
-        self.ui.parent2tpr.setItem(row, 1, QTableWidgetItem(str(data.e66)))
-        self.ui.parent2tpr.setItem(row, 2, QTableWidgetItem(str(data.e68)))
-
-    # ==================================================================================================================
-
     @property
     def child_name(self) -> str:
         return self._child_name
@@ -447,7 +374,7 @@ class OOHDialog(BaseDialog):
         self._set_radio_button(self.ui.e8, v)
 
     @property
-    def tribes(self) -> list:
+    def tribes(self) -> list[RecognizedTribe]:
         return self._recognized_tribes
 
     @tribes.setter
@@ -456,18 +383,31 @@ class OOHDialog(BaseDialog):
         for tribe in v:
             self.ui.tribes.addItem(self._epa_tribe_ids[tribe.e9])
 
+    def current_tribe_row(self) -> int:
+        return self.ui.tribes.currentRow()
+
+    def current_epa_tribe_row(self) -> int:
+        return self.ui.epa_tribes.currentRow()
+
+    def refresh_tribes(self) -> None:
+        self.ui.tribes.clear()
+        lookup = {tribe.id: str(tribe) for tribe in self.epa_tribes}
+        for tribe in self.tribes:
+            self.ui.tribes.addItem(lookup[tribe.e9])
+
     @property
-    def epa_tribes(self) -> dict:
-        return self._epa_tribe_ids
+    def epa_tribes(self) -> list[Tribe]:
+        return self._epa_tribes
 
     @epa_tribes.setter
-    def epa_tribes(self, v: dict):
-        self._epa_tribe_ids = v
-        self._epa_tribe_names = {v: k for k, v in self._epa_tribe_ids.items()}
+    def epa_tribes(self, v: list[Tribe]):
+        self._epa_tribes = v
+        self.refresh_epa_tribes()
 
+    def refresh_epa_tribes(self):
         self.ui.epa_tribes.clear()
-        for tribe in self._epa_tribe_names:
-            self.ui.epa_tribes.addItem(tribe)
+        for tribe in self._epa_tribes:
+            self.ui.epa_tribes.addItem(str(tribe))
 
     @property
     def funding(self) -> int:
@@ -956,9 +896,22 @@ class OOHDialog(BaseDialog):
         return self._removals1993
 
     @removals1993.setter
-    def removals1993(self, data: list[Removal1993]):
-        for row in data:
-            self.__add_removal1993_row(row)
+    def removals1993(self, data: list[Removal1993]) -> None:
+        self._removals1993 = data
+        self.refresh_removals1993()
+
+    def refresh_removals1993(self) -> None:
+        self.ui.removal_1993_table.clearContents()
+        for data in self._removals1993:
+            row: int = self.ui.removal_1993_table.rowCount()
+            self.ui.removal_1993_table.insertRow(row)
+            self.ui.removal_1993_table.setItem(row, 0, QTableWidgetItem(str(data.e69)))
+            self.ui.removal_1993_table.setItem(row, 1, QTableWidgetItem(str(data.e153)))
+            self.ui.removal_1993_table.setItem(row, 2, QTableWidgetItem(
+                self.E155_MESSAGES[data.e155] if data.e155 in self.E155_MESSAGES else ''))
+
+    def current_removal1993_row(self) -> int:
+        return self.ui.removal_1993_table.currentRow()
 
     @property
     def removals2020(self) -> list[Removal2020]:
@@ -969,6 +922,19 @@ class OOHDialog(BaseDialog):
         for row in data:
             self.__add_removal2020_row(row)
 
+    def refresh_removals2020(self):
+        self.ui.removal_2020_table.clearContents()
+        for data in self.removals2020:
+            row: int = self.ui.removal_2020_table.rowCount()
+            self.ui.removal_2020_table.insertRow(row)
+            self.ui.removal_2020_table.setItem(row, 0, QTableWidgetItem(str(data.e69)))
+            self.ui.removal_2020_table.setItem(row, 1, QTableWidgetItem(str(data.e153)))
+            self.ui.removal_2020_table.setItem(row, 2, QTableWidgetItem(
+                self.E155_MESSAGES[data.e155] if data.e155 in self.E155_MESSAGES else ''))
+
+    def current_removal2020_row(self) -> int:
+        return self.ui.removals_2020_table.currentRow()
+
     @property
     def second_parents(self) -> list[SecondParent]:
         return self._second_parents
@@ -977,3 +943,19 @@ class OOHDialog(BaseDialog):
     def second_parents(self, data: list[SecondParent]) -> None:
         for row in data:
             self.__add_parent2_row(row)
+
+    def current_second_parents_row(self) -> int:
+        return self.ui.parent2tpr.currentRow()
+
+    def refresh_second_parents(self) -> None:
+        self.ui.parent2tpr.clearContents()
+        row = 0
+        for data in self.second_parents:
+            if row >= self.ui.parent2tpr.rowCount():
+                self.ui.parent2tpr.insertRow(row)
+            self.ui.parent2tpr.setItem(row, 0, QTableWidgetItem(str(data.e64_as_str())))
+            self.ui.parent2tpr.setItem(row, 1, QTableWidgetItem(str(data.e66)))
+            self.ui.parent2tpr.setItem(row, 2, QTableWidgetItem(str(data.e68)))
+            row += 1
+        while self.ui.parent2tpr.rowCount() > len(self.second_parents):
+            self.ui.parent2tpr.removeRow(self.ui.parent2tpr.rowCount() - 1)

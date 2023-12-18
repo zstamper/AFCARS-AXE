@@ -1,63 +1,92 @@
-from typing import Optional
+from typing import Optional, Callable
 
-from PySide6.QtWidgets import QDialog
 from pydantic import ValidationError
 
 from dialogs import BaseDialog
+from dialogs.a_dialog import ADialog
+from model.models import Child, BaseChild
 from .utilities import show_error_dialog
-from model.models import Child, ARecord
+from .validators.a_validator import AValidator
 
 
 class AController:
     """Provides a basic controller for the dialogs. The basic controller serves as the interface point between the model
      and the view. The GenericController provides to main entry points: add() and edit(). These methods handle adding
      and editing model data using the view provided at time of controller instantiation.
-
-     :param dialog a QDialog instance of the dialog to operate upon
-     :param data_class a class reference used for manipulating model data
      """
 
-    def __init__(self, dialog: BaseDialog, context_id: int):
-        self.dialog = dialog
-        self.dialog.on_accept = self.do_accept
+    def __init__(self, parent: BaseDialog):
+        self.dialog = ADialog(parent=parent)
+        self.validator = AValidator(self.dialog)
         self.new_data: Child | None = None
-        self.context_id = context_id
+        self._base_child: BaseChild | None = None
+        self._child: Child | None = None
+        self.on_accept: Optional[Callable] = None
 
-    def add(self, child: Optional[Child] = None) -> Child | None:
-        """Shows an empty dialog, lets the user do what they will, then returns either a new model instance or None,
-        depending on whether the form contents are "valid" or not. The "valid" determination is handled by the model
-        as a feature of pydantic."""
-        self.dialog.clear()
-        self.dialog.context_id = self.context_id
-        if child:
-            child.scatter(self.dialog)
-        self.dialog.exec()
-        if self.dialog.result() == QDialog.Accepted:
-            return self.new_data
-        return None
-
-    def edit(self, data: Child) -> None:
-        """Pushes the model data into the form, shows the form, and lets the user do what they will. If the form
-        contents are valid, the model instance is modified with the new form contents. Otherwise, the model contents are
-        left unchanged. Like the add() method, "valid" is determined by rules in the model using pydantic."""
-        self.dialog.clear()
-        self.dialog.context_id = self.context_id
-        if data.a:
-            data.a.scatter(self.dialog)
-        data.scatter(self.dialog)
-        self.dialog.exec()
-        if self.dialog.result() == QDialog.Accepted:
-            data.gather(self.dialog)
-            if data.a:
-                data.a.gather(self.dialog)
-            else:
-                data.a = ARecord.crib(self.dialog)
+        # Wire our callbacks into the dialog
+        self.dialog.on_accept = self.do_accept
+        self.dialog.on_validate_clicked = self.do_validate_clicked
 
     def do_accept(self) -> bool:
         try:
-            self.new_data = Child.crib(self.dialog)
-            self.new_data.a = ARecord.crib(self.dialog)
+            for key in vars(self.base_child).keys():
+                if key != 'id':
+                    if hasattr(self.dialog, key):
+                        setattr(self.base_child, key, getattr(self.dialog, key))
+            for key in vars(self.child).keys():
+                if hasattr(self.dialog, key):
+                    setattr(self.child, key, getattr(self.dialog, key))
+            for key in vars(self.child.a).keys():
+                if hasattr(self.dialog, key):
+                    setattr(self.child.a, key, getattr(self.dialog, key))
+            if self.on_accept:
+                self.on_accept()
             return True
         except ValidationError as ve:
-            show_error_dialog(self.dialog, ve)
+            show_error_dialog(self.dialog, ve=ve)
         return False
+
+    def do_validate_clicked(self):
+        ok = self.validator.validate()
+        if not ok:
+            show_error_dialog(self.dialog, messages=self.validator.messages)
+
+    def show(self):
+        self.dialog.exec()
+
+    def clear(self):
+        self.dialog.clear()
+
+    @property
+    def child_name(self) -> str:
+        return self.dialog.child_name
+
+    @child_name.setter
+    def child_name(self, v: str) -> None:
+        self.dialog.child_name = v
+
+    @property
+    def base_child(self) -> BaseChild:
+        return self._base_child
+
+    @base_child.setter
+    def base_child(self, v: BaseChild) -> None:
+        self._base_child = v
+        self.dialog.e4 = v.e4
+        self.dialog.first_name = v.first_name
+        self.dialog.last_name = v.last_name
+
+    @property
+    def child(self) -> Child:
+        return self._child
+
+    @child.setter
+    def child(self, v: Child) -> None:
+        self._child = v
+        for key in vars(v).keys():
+            if hasattr(self.dialog, key):
+                setattr(self.dialog, key, getattr(v, key))
+        if v.a:
+            for key in vars(v.a).keys():
+                if hasattr(self.dialog, key):
+                    setattr(self.dialog, key, getattr(v.a, key))

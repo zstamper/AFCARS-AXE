@@ -1,19 +1,22 @@
-from pathlib import Path
+from typing import Optional
 
-from PySide6.QtCore import QRegularExpression
-from PySide6.QtGui import QRegularExpressionValidator
-from PySide6.QtWidgets import QFileDialog
+from PySide6.QtCore import Qt
+from PySide6.QtWidgets import QDialog, QTableWidgetItem
 
 from dialogs import BaseDialog
+from model import Child, BaseChild
+from model.models import ReportType
 
 
 class ExportDialog(BaseDialog):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__(self, parent: QDialog = None, *args, **kwargs):
+        super().__init__(parent, *args, **kwargs)
         self.ui = self.load_ui('ui_export_dialog.ui')
         self._wire_ui()
+        self._report_type: Optional[ReportType] = None
         self.setLayout(self.ui.layout())
         self.setFixedSize(self.ui.size())
+        self._child_data: list[tuple[BaseChild, Child]] = []
 
     def _wire_ui(self):
         self.setModal(True)
@@ -22,26 +25,63 @@ class ExportDialog(BaseDialog):
 
         ui.form_action.accepted.connect(self.accept)
         ui.form_action.rejected.connect(self.reject)
-        ui.select_button.clicked.connect(self.select_file)
-        ui.e2.setValidator(QRegularExpressionValidator(QRegularExpression(r'20[0-9]{2}(03|09)')))
-
-    def select_file(self):
-        home_dir = str(Path.home())
-        self.file_name, _ = QFileDialog.getSaveFileName(self, caption="Export to...", dir=home_dir, filter="XML Files (*.xml);;All Files (*.*)")
-
 
     @property
-    def e2(self) -> int:
-        return self._get_int_field(self.ui.e2)
+    def report_type(self) -> ReportType:
+        return self._report_type
 
-    @e2.setter
-    def e2(self, v: int) -> None:
-        self._set_int_field(self.ui.e2, v)
+    @report_type.setter
+    def report_type(self, v: ReportType) -> None:
+        self._report_type = v
+        self._set_headers()
+
+    def _set_headers(self):
+        if self.report_type == ReportType.OOH:
+            self.ui.child_table.horizontalHeaderItem(4).setText("Last Removal")
+            self.ui.child_table.horizontalHeaderItem(5).setText("Last Exit")
+        elif self.report_type == ReportType.A:
+            self.ui.child_table.horizontalHeaderItem(4).setText("Last Adoption")
+            self.ui.child_table.horizontalHeaderItem(5).setText("Last Termination")
 
     @property
-    def file_name(self) -> str:
-        return self._get_text_field(self.ui.file_name)
+    def child_data(self) -> list[tuple[BaseChild, Child]]:
+        return self._child_data
 
-    @file_name.setter
-    def file_name(self, v: str) -> None:
-        self._set_text_field(self.ui.file_name, v)
+    @child_data.setter
+    def child_data(self, v: list[tuple[str, Child]]) -> None:
+        self._child_data = v
+        self.refresh_child_data()
+
+    def refresh_child_data(self):
+        self.ui.child_table.clearContents()
+
+        while self.ui.child_table.rowCount() > 0:
+            self.ui.child_table.removeRow(0)
+        for row, child in enumerate(self.child_data):
+            self.ui.child_table.insertRow(row)
+            item = QTableWidgetItem(child[0].e4)
+            item.setFlags(item.flags() | Qt.ItemIsUserCheckable)
+            item.setCheckState(Qt.Unchecked)
+            self.ui.child_table.setItem(row, 0, item)
+            self.ui.child_table.setItem(row, 1, QTableWidgetItem(child[0].last_name))
+            self.ui.child_table.setItem(row, 2, QTableWidgetItem(child[0].first_name))
+            self.ui.child_table.setItem(row, 3, QTableWidgetItem(
+                child[0].date_created.strftime("%m/%d/%Y") if child[0].date_created else ""))
+            if self.report_type == ReportType.OOH:
+                self.ui.child_table.setItem(row, 4, QTableWidgetItem(
+                    child[0].last_removal.strftime("%m/%d/%Y") if child[0].last_removal else ""))
+                self.ui.child_table.setItem(row, 5, QTableWidgetItem(
+                    child[0].last_exit.strftime("%m/%d/%Y") if child[0].last_exit else ""))
+            elif self.report_type == ReportType.A:
+                self.ui.child_table.setItem(row, 4, QTableWidgetItem(
+                    child[0].last_adoption.strftime("%m/%d/%Y") if child[0].last_adoption else ""))
+                self.ui.child_table.setItem(row, 5, QTableWidgetItem(
+                    child[0].last_termination.strftime("%m/%d/%Y") if child[0].last_termination else ""))
+
+    @property
+    def selected_children(self) -> list[tuple[BaseChild, Child]]:
+        selections: list[(BaseChild, Child)] = []
+        for row in range(self.ui.child_table.rowCount()):
+            if self.ui.child_table.item(row, 0).checkState() == Qt.Checked:
+                selections.append(self._child_data[row])
+        return selections

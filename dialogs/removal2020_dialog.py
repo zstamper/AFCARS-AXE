@@ -2,14 +2,7 @@ from typing import Optional, Callable
 
 from PySide6.QtWidgets import QWidget, QTableWidgetItem
 
-from controllers import GenericController
-from model import Removal2020, LivingArrangement, PermanencyPlan, CaseVisit, PermanencyHearing, PeriodicReview
 from . import BaseDialog
-from .case_worker_visit import CaseVisitDialog
-from .living_arrangement_dialog import LivingArrangementDialog
-from .periodic_review_dialog import PeriodicReviewDialog
-from .permanency_hearing_dialog import PermanencyHearingDialog
-from .permency_plan_dialog import PermanencyPlanDialog
 
 
 def e120_to_str(v: int | None) -> str:
@@ -64,7 +57,6 @@ class Removal2020Dialog(BaseDialog):
         self._wire_ui()
         self.setLayout(self.ui.layout())
         self.setFixedSize(self.ui.size())
-        self.obj: Removal2020 | None = None
         # self.on_accept: Optional[Callable] = None
         self.living_arrangements = []
         self.permanency_plans = []
@@ -74,13 +66,29 @@ class Removal2020Dialog(BaseDialog):
         self.id: int | None = None
         self.ooh_id: int | None = None
         self._child_name: str = ""
+        self.on_tab_changed: Optional[Callable] = None
+        self.on_validate_clicked: Optional[Callable] = None
+        self.on_add_living_arrangement: Optional[Callable] = None
+        self.on_edit_living_arrangement: Optional[Callable] = None
+        self.on_delete_living_arrangement: Optional[Callable] = None
+        self.on_add_permanency_plan: Optional[Callable] = None
+        self.on_edit_permanency_plan: Optional[Callable] = None
+        self.on_delete_permanency_plan: Optional[Callable] = None
+        self.on_add_permanency_hearing: Optional[Callable] = None
+        self.on_edit_permanency_hearing: Optional[Callable] = None
+        self.on_delete_permanency_hearing: Optional[Callable] = None
+        self.on_add_case_worker_visit: Optional[Callable] = None
+        self.on_edit_case_worker_visit: Optional[Callable] = None
+        self.on_delete_case_worker_visit: Optional[Callable] = None
+        self.on_add_periodic_review: Optional[Callable] = None
+        self.on_edit_periodic_review: Optional[Callable] = None
+        self.on_delete_periodic_review: Optional[Callable] = None
 
     # ------------------------------------------------------------------------
 
     def clear(self) -> None:
         super().clear()
         self.child_name = ""
-        self.ui = None
         self.ooh_id = None
 
     def _wire_ui(self) -> None:
@@ -91,26 +99,26 @@ class Removal2020Dialog(BaseDialog):
         ui.form_action.accepted.connect(self.accept)
         ui.form_action.rejected.connect(self.reject)
 
-        ui.living_arrangement_add_button.clicked.connect(self.add_living_arrangement)
-        ui.living_arrangement_delete_button.clicked.connect(self.delete_living_arrangement)
-        ui.living_arrangements_table.cellDoubleClicked.connect(self.edit_living_arrangement)
+        ui.living_arrangement_add_button.clicked.connect(self._on_add_living_arrangement)
+        ui.living_arrangement_delete_button.clicked.connect(self._on_delete_living_arrangement)
+        ui.living_arrangements_table.cellDoubleClicked.connect(self._on_edit_living_arrangement)
 
-        ui.permanency_plan_add_button.clicked.connect(self.add_permanency_plan)
-        ui.permanency_plan_delete_button.clicked.connect(self.delete_permanency_plan)
-        ui.permanency_plans_table.cellDoubleClicked.connect(self.edit_permanency_plan)
+        ui.permanency_plan_add_button.clicked.connect(self._on_add_permanency_plan)
+        ui.permanency_plan_delete_button.clicked.connect(self._on_delete_permanency_plan)
+        ui.permanency_plans_table.cellDoubleClicked.connect(self._on_edit_permanency_plan)
 
-        ui.case_visit_add_button.clicked.connect(self.add_case_worker_visit)
-        ui.case_visit_edit_button.clicked.connect(self.edit_case_worker_visit)
-        ui.case_visit_delete_button.clicked.connect(self.delete_case_worker_visit)
-        ui.case_visits_table.cellDoubleClicked.connect(self.edit_case_worker_visit)
+        ui.case_visit_add_button.clicked.connect(self._on_add_case_worker_visit)
+        ui.case_visit_edit_button.clicked.connect(self._on_edit_case_worker_visit)
+        ui.case_visit_delete_button.clicked.connect(self._on_delete_case_worker_visit)
+        ui.case_visits_table.cellDoubleClicked.connect(self._on_edit_case_worker_visit)
 
-        ui.permanency_hearing_add_button.clicked.connect(self.add_permanency_hearing)
-        ui.permanency_hearing_delete_button.clicked.connect(self.delete_permanency_hearing)
-        ui.permanency_hearings_table.cellDoubleClicked.connect(self.edit_permanency_hearing)
+        ui.permanency_hearing_add_button.clicked.connect(self._on_add_permanency_hearing)
+        ui.permanency_hearing_delete_button.clicked.connect(self._on_delete_permanency_hearing)
+        ui.permanency_hearings_table.cellDoubleClicked.connect(self._on_edit_permanency_hearing)
 
-        ui.periodic_review_add_button.clicked.connect(self.add_periodic_review)
-        ui.periodic_review_delete_button.clicked.connect(self.delete_periodic_review)
-        ui.periodic_reviews_table.cellDoubleClicked.connect(self.edit_periodic_review)
+        ui.periodic_review_add_button.clicked.connect(self._on_add_periodic_review)
+        ui.periodic_review_delete_button.clicked.connect(self._on_delete_periodic_review)
+        ui.periodic_reviews_table.cellDoubleClicked.connect(self._on_edit_periodic_review)
 
         # e71 item data values are 1..7 (they can't be set via the ui creator)
         for i, d in ((0, 1), (1, 2), (2, 3), (3, 4), (4, 5), (5, 6), (6, 7)):
@@ -124,210 +132,199 @@ class Removal2020Dialog(BaseDialog):
         self._init_radio_ynud(ui, 'e182')
         self._init_radio_mf(ui, 'e183')
 
+        self.ui.validate_button.clicked.connect(self.validate_button_clicked)
+        self.ui.tab_widget.currentChanged.connect(self.tab_changed)
+
     # ----- Living Arrangements Automation ------------------------------------
 
-    def add_living_arrangement(self) -> None:
-        dialog = LivingArrangementDialog(self)
-        dialog.clear()
-        dialog.child_name = self.child_name
-        controller = GenericController(dialog, LivingArrangement)
-        data: LivingArrangement = controller.add()
-        if data is not None:
-            self.living_arrangements.append(data)
-            self._add_living_arrangement_table_row(data)
+    def do_validate_button_clicked(self):
+        if self.on_validate_clicked:
+            self.on_validate_clicked()
 
-    def edit_living_arrangement(self) -> None:
-        # if the living_arrangement_table has a current row, pass the corresponding obj item to the dialog
-        current_row = self.ui.living_arrangements_table.currentRow()
-        if current_row >= 0:
-            dialog = LivingArrangementDialog(self)
-            dialog.clear()
-            dialog.child_name = self.child_name
-            controller = GenericController(dialog, LivingArrangement)
-            data = self.living_arrangements[current_row]
-            controller.edit(data)
-            self._update_living_arrangement_table_row(current_row, data)
+    def do_tab_changed(self, new_index: int):
+        if self.on_tab_changed:
+            self.on_tab_changed(new_index)
 
-    def delete_living_arrangement(self) -> None:
+    def _on_add_living_arrangement(self, *args, **kwargs) -> None:
+        if self.on_add_living_arrangement:
+            self.on_add_living_arrangement(self, *args, **kwargs)
+
+    def _on_edit_living_arrangement(self, *args, **kwargs) -> None:
+        if self.on_edit_living_arrangement:
+            self.on_edit_living_arrangement(self, *args, **kwargs)
+
+    def _on_delete_living_arrangement(self, *args, **kwargs) -> None:
         # if the living_arrangement_table has a current row, delete it from the obj and refresh the table
-        current_row = self.ui.living_arrangements_table.currentRow()
-        if 0 <= current_row < len(self.obj.living_arrangements):
-            del self.obj.living_arrangements[current_row]
-            self.ui.living_arrangements_table.removeRow(current_row)
+        if self.on_delete_living_arrangement:
+            self.on_delete_living_arrangement(*args, **kwargs)
 
-    def _add_living_arrangement_table_row(self, living_arrangement: LivingArrangement) -> None:
-        row: int = self.ui.living_arrangements_table.rowCount()
-        self.ui.living_arrangements_table.insertRow(row)
-        self._update_living_arrangement_table_row(row, living_arrangement)
+    @property
+    def living_arrangements_current_row(self) -> int:
+        return self.ui.living_arrangements_table.currentRow()
 
-    def _update_living_arrangement_table_row(self, row: int, living_arrangement: LivingArrangement) -> None:
-        self.ui.living_arrangements_table.setItem(row, 0, QTableWidgetItem(str(living_arrangement.e112)))
-        self.ui.living_arrangements_table.setItem(row, 1, QTableWidgetItem(e120_to_str(living_arrangement.e120)))
-        self.ui.living_arrangements_table.setItem(row, 2, QTableWidgetItem(""))
+    @living_arrangements_current_row.setter
+    def living_arrangements_current_row(self, v: int) -> None:
+        self.ui.living_arrangements_table.setCurrentRow(v)
+
+    def refresh_living_arrangements(self):
+        self.ui.living_arrangements_table.clearContents()
+        row = 0
+        for data in self.living_arrangements:
+            if row >= self.ui.living_arrangements_table.rowCount():
+                self.ui.living_arrangements_table.insertRow(row)
+            self.ui.living_arrangements_table.setItem(row, 0, QTableWidgetItem(str(data.e112)))
+            self.ui.living_arrangements_table.setItem(row, 1, QTableWidgetItem(e120_to_str(data.e120)))
+            self.ui.living_arrangements_table.setItem(row, 2, QTableWidgetItem(""))
+            row += 1
+        max_len: int = len(self.living_arrangements)
+        while self.ui.living_arrangements_table.rowCount() > max_len:
+            self.ui.living_arrangements_table.removeRow(max_len - 1)
 
     # ----- Permanency Plan Automation ----------------------------------------
 
-    def add_permanency_plan(self) -> None:
-        dialog = PermanencyPlanDialog(self)
-        dialog.clear()
-        dialog.child_name = self.child_name
-        controller = GenericController(dialog, PermanencyPlan)
-        data: PermanencyPlan = controller.add()
-        if data is not None:
-            self.permanency_plans.append(data)
-            self._add_permanency_plan_table_row(data)
+    def _on_add_permanency_plan(self, *args, **kwargs) -> None:
+        if self.on_add_permanency_plan:
+            self.on_add_permanency_plan(*args, **kwargs)
 
-    def edit_permanency_plan(self) -> None:
-        # if the permanency_plan_table has a current row, pass the corresponding obj item to the dialog
-        current_row = self.ui.permanency_plans_table.currentRow()
-        if current_row >= 0:
-            dialog = PermanencyPlanDialog(self)
-            dialog.clear()
-            dialog.child_name = self.child_name
-            controller = GenericController(dialog, PermanencyPlan)
-            data = self.permanency_plans[current_row]
-            controller.edit(data)
-            self._update_permanency_plan_table_row(current_row, data)
+    def _on_edit_permanency_plan(self, *args, **kwargs) -> None:
+        if self.on_edit_permanency_plan:
+            self.on_edit_permanency_plan(*args, **kwargs)
 
-    def delete_permanency_plan(self) -> None:
-        # if the permanency_plan_table has a current row, delete it from the obj and refresh the table
-        current_row = self.ui.permanency_plans_table.currentRow()
-        if 0 <= current_row < len(self.obj.permanency_plans):
-            del self.obj.permanency_plans[current_row]
-            self.ui.permanency_plans_table.removeRow(current_row)
+    def _on_delete_permanency_plan(self, *args, **kwargs) -> None:
+        if self.on_delete_permanency_plan:
+            self.on_delete_permanency_plan(*args, **kwargs)
 
-    def _add_permanency_plan_table_row(self, permanency_plan: PermanencyPlan) -> None:
-        row: int = self.ui.permanency_plans_table.rowCount()
-        self.ui.permanency_plans_table.insertRow(row)
-        self._update_permanency_plan_row(row, permanency_plan)
+    def refresh_permanency_plans(self):
+        row: int = 0
+        for data in self.permanency_plans:
+            if row >= self.ui.permanency_plans_table.rowCount():
+                self.ui.permanency_plans_table.insertRow(row)
+            self.ui.permanency_plans_table.setItem(row, 0, QTableWidgetItem(str(data.e147)))
+            self.ui.permanency_plans_table.setItem(row, 1, QTableWidgetItem(e148_to_str(data.e148)))
+            row += 1
+        max_len: int = len(self.permanency_plans)
+        while self.ui.permanency_plans_table.rowCount() > max_len:
+            self.ui.permanency_plans_table.removeRow(max_len - 1)
 
-    def _update_permanency_plan_row(self, row: int, data: PermanencyPlan) -> None:
-        self.ui.permanency_plans_table.setItem(row, 0, QTableWidgetItem(str(data.e147)))
-        self.ui.permanency_plans_table.setItem(row, 1, QTableWidgetItem(e148_to_str(data.e148)))
+    @property
+    def permanency_plan_current_row(self) -> int:
+        return self.ui.permanency_plans_table.currentRow()
+
+    @permanency_plan_current_row.setter
+    def permanency_plan_current_row(self, v: int) -> None:
+        self.ui.permanency_plans_table.setCurrentRow(v)
 
     # ----- Case Visit Automation ---------------------------------------------
 
-    def add_case_worker_visit(self) -> None:
-        dialog = CaseVisitDialog(self)
-        dialog.clear()
-        dialog.child_name = self.child_name
-        controller = GenericController(dialog, CaseVisit)
-        data: CaseVisit = controller.add()
-        if data is not None:
-            self.case_worker_visits.append(data)
-            self._add_case_worker_visit_table_row(data)
+    def _on_add_case_worker_visit(self, *args, **kwargs) -> None:
+        if self.on_add_case_worker_visit:
+            self.on_add_case_worker_visit(*args, **kwargs)
 
-    def edit_case_worker_visit(self) -> None:
-        # if the case_worker_visit_table has a current row, pass the corresponding obj item to the dialog
-        current_row = self.ui.case_visits_table.currentRow()
-        if current_row >= 0:
-            dialog = CaseVisitDialog(self)
-            dialog.clear()
-            dialog.child_name = self.child_name
-            controller = GenericController(dialog, CaseVisit)
-            data = self.case_worker_visits[current_row]
-            controller.edit(data)
-            self._update_case_worker_visit_table_row(current_row, data)
+    def _on_edit_case_worker_visit(self, *args, **kwargs) -> None:
+        if self.on_edit_case_worker_visit:
+            self.on_edit_case_worker_visit(*args, **kwargs)
 
-    def delete_case_worker_visit(self) -> None:
-        # if the case_worker_visit_table has a current row, delete it from the obj and refresh the table
-        current_row = self.ui.case_visits_table.currentRow()
-        if 0 <= current_row < len(self.obj.case_worker_visits):
-            del self.case_worker_visits[current_row]
-            self.ui.case_visits_table.removeRow(current_row)
+    def _on_delete_case_worker_visit(self, *args, **kwargs) -> None:
+        if self.on_delete_case_worker_visit:
+            self.on_delete_case_worker_visit(*args, **kwargs)
 
-    def _add_case_worker_visit_table_row(self, case_worker_visit: CaseVisit) -> None:
-        row: int = self.ui.case_visits_table.rowCount()
-        self.ui.case_visits_table.insertRow(row)
-        self._update_case_worker_visit_table_row(row, case_worker_visit)
+    def refresh_case_worker_visits(self):
+        row: int = 0
+        for data in self.case_worker_visits:
+            if row >= self.ui.case_visits_table.rowCount():
+                self.ui.case_visits_table.insertRow(row)
+            self.ui.case_visits_table.setItem(row, 0, QTableWidgetItem(str(data.e151)))
+            self.ui.case_visits_table.setItem(row, 1, QTableWidgetItem(e148_to_str(data.e152)))
+            row += 1
+        max_len: int = len(self.permanency_plans)
+        while self.ui.case_visits_table.rowCount() > max_len:
+            self.ui.case_visits_table.removeRow(max_len - 1)
 
-    def _update_case_worker_visit_table_row(self, row: int, data: CaseVisit) -> None:
-        self.ui.case_visits_table.setItem(row, 0,
-                                          QTableWidgetItem(str(data.e151)))
-        self.ui.case_visits_table.setItem(row, 1,
-                                          QTableWidgetItem(e152_to_str(data.e152)))
+    @property
+    def case_worker_visit_current_row(self) -> int:
+        return self.ui.case_visits_table.currentRow()
+
+    @case_worker_visit_current_row.setter
+    def case_worker_visit_current_row(self, v: int) -> None:
+        self.ui.case_visits_table.setCurrentRow(v)
 
     # ----- Permanency Hearing Automation -------------------------------------
 
-    def add_permanency_hearing(self) -> None:
-        dialog = PermanencyHearingDialog(self)
-        dialog.clear()
-        dialog.child_name = self.child_name
-        controller = GenericController(dialog, PermanencyHearing)
-        data: PermanencyHearing = controller.add()
-        if data is not None:
-            self.permanency_hearings.append(data)
-            self._add_permanency_hearing_table_row(data)
+    def _on_add_permanency_hearing(self, *args, **kwargs):
+        if self.on_add_permanency_hearing:
+            self.on_add_permanency_hearing(*args, **kwargs)
 
-    def edit_permanency_hearing(self) -> None:
-        # if the permanency_hearing_table has a current row, pass the corresponding obj item to the dialog
-        current_row = self.ui.permanency_hearings_table.currentRow()
-        if current_row >= 0:
-            dialog = PermanencyHearingDialog(self)
-            dialog.clear()
-            dialog.child_name = self.child_name
-            controller = GenericController(dialog, PermanencyHearing)
-            data = self.permanency_hearings[current_row]
-            controller.edit(data)
-            self._update_permanency_hearing_table_row(current_row, data)
+    def _on_edit_permanency_hearing(self, *args, **kwargs):
+        if self.on_edit_permanency_hearing:
+            self.on_edit_permanency_hearing(*args, **kwargs)
 
-    def delete_permanency_hearing(self) -> None:
-        # if the permanency_hearing_table has a current row, delete it from the obj and refresh the table
-        current_row = self.ui.permanency_hearings_table.currentRow()
-        if 0 <= current_row < len(self.obj.permanency_hearings):
-            del self.permanency_hearings[current_row]
-            self.ui.permanency_hearings_table.removeRow(current_row)
+    def _on_delete_permanency_hearing(self, *args, **kwargs):
+        if self.on_delete_permanency_hearing:
+            self.on_delete_permanency_hearing(*args, **kwargs)
 
-    def _add_permanency_hearing_table_row(self, permanency_hearing: PermanencyHearing) -> None:
-        row: int = self.ui.permanency_hearings_table.rowCount()
-        self.ui.permanency_hearings_table.insertRow(row)
-        self._update_permanency_hearing_table_row(row, permanency_hearing)
+    def refresh_permanency_hearings(self):
+        row: int = 0
+        for data in self.permanency_hearings:
+            if row >= self.ui.permanency_hearings_table.rowCount():
+                self.ui.permanency_hearings_table.inserRow(row)
+            self.ui.permanency_hearings_table.setItem(row, 0, QTableWidgetItem(str(data.e150)))
+            row += 1
+        max_len: int = len(self.permanency_hearings)
+        while self.ui.permanency_hearings_table.rowCount() > max_len:
+            self.ui.permanency_hearings_table.removeRow(max_len - 1)
 
-    def _update_permanency_hearing_table_row(self, row: int, data: PermanencyHearing) -> None:
-        self.ui.permanency_hearings_table.setItem(row, 0, QTableWidgetItem(str(data.e150)))
+    @property
+    def permanency_hearings_current_row(self) -> int:
+        return self.ui.permanency_hearings_table.currentRow()
+
+    @permanency_hearings_current_row.setter
+    def permanency_hearings_current_row(self, v: int) -> None:
+        self.ui.permanency_hearings_table.setCurrentRow(v)
 
     # ----- Period Review Automation ------------------------------------------
 
-    def add_periodic_review(self) -> None:
-        dialog = PeriodicReviewDialog(self)
-        dialog.clear()
-        dialog.child_name = self.child_name
-        controller = GenericController(dialog, PeriodicReview)
-        data: PeriodicReview = controller.add()
-        if data is not None:
-            self.periodic_reviews.append(data)
-            self._add_periodic_review_table_row(data)
+    def _on_add_periodic_review(self, *args, **kwargs):
+        if self.on_add_periodic_review:
+            self.on_add_periodic_review(*args, **kwargs)
 
-    def edit_periodic_review(self) -> None:
-        # if the periodic_review_table has a current row, pass the corresponding obj item to the dialog
-        current_row = self.ui.periodic_reviews_table.currentRow()
-        if current_row >= 0:
-            dialog = PeriodicReviewDialog(self)
-            dialog.clear()
-            dialog.child_name = self.child_name
-            controller = GenericController(dialog, PeriodicReview)
-            data = self.periodic_reviews[current_row]
-            controller.edit(data)
-            self._update_periodic_review_table_row(current_row, data)
+    def _on_edit_periodic_review(self, *args, **kwargs):
+        if self.on_edit_periodic_review:
+            self.on_edit_periodic_review(*args, **kwargs)
 
-    def delete_periodic_review(self) -> None:
-        # if the periodic_review_table has a current row, delete it from the obj and refresh the table
-        current_row = self.ui.periodic_reviews_table.currentRow()
-        if 0 <= current_row < len(self.obj.periodic_reviews):
-            del self.periodic_reviews[current_row]
-            self.ui.periodic_reviews_table.removeRow(current_row)
+    def _on_delete_periodic_review(self, *args, **kwargs):
+        if self.on_delete_periodic_review:
+            self.on_delete_periodic_review(*args, **kwargs)
 
-    def _add_periodic_review_table_row(self, periodic_review: PeriodicReview) -> None:
-        row: int = self.ui.periodic_reviews_table.rowCount()
-        self.ui.periodic_reviews_table.insertRow(row)
-        self._update_periodic_review_table_row(row, periodic_review)
+    def refresh_periodic_reviews(self):
+        row: int = 0
+        for data in self.periodic_reviews:
+            if row >= self.ui.periodic_reviews_table.rowCount():
+                self.ui.periodic_reviews_table.insertRow(row)
+            self.ui.periodic_reviews_table.setItem(row, 0, QTableWidgetItem(str(data.e149)))
+            row += 1
+        max_len: int = len(self.periodic_reviews)
+        while self.ui.periodic_reviews_table.rowCount() > max_len:
+            self.ui.periodic_reviews_table.removeRow(max_len - 1)
 
-    def _update_periodic_review_table_row(self, row: int, data: PeriodicReview) -> None:
-        self.ui.periodic_reviews_table.setItem(row, 0, QTableWidgetItem(str(data.e149)))
+    @property
+    def periodic_reviews_current_row(self) -> int:
+        return self.ui.periodic_reviews_table.currentRow()
+
+    @periodic_reviews_current_row.setter
+    def periodic_reviews_current_row(self, v: int) -> None:
+        self.ui.periodic_reviews_table.setCurrentRow(v)
 
     # -------------------------------------------------------------------------
     #                       Form Fields As Properties
     # -------------------------------------------------------------------------
+
+    @property
+    def current_tab(self) -> int:
+        return self.tabWidget.currentIndex()
+
+    @current_tab.setter
+    def current_tab(self, v: int) -> None:
+        self.tabWidget.setCurrentIndex(v)
 
     @property
     def child_name(self) -> str:
@@ -343,12 +340,12 @@ class Removal2020Dialog(BaseDialog):
             self.setWindowTitle("")
 
     @property
-    def e3(self) -> int | None:
-        return self._get_int_field(self.ui.e3)
+    def e3(self) -> str | None:
+        return self._get_text_field(self.ui.e3)
 
     @e3.setter
     def e3(self, e3: int) -> None:
-        self._set_int_field(self.ui.e3, e3)
+        self._set_text_field(self.ui.e3, e3)
 
     @property
     def e69(self) -> int | None:
@@ -892,7 +889,7 @@ class Removal2020Dialog(BaseDialog):
 
     @e183.setter
     def e183(self, e183: int) -> None:
-        return self._set_radio_button(self.ui.e183, e183)
+        self._set_radio_button(self.ui.e183, e183)
 
     @property
     def e184(self) -> int | None:

@@ -1,0 +1,263 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+class MainWindow2Controller {
+    +do_go()
+}
+
+class ChildController {
+    -child_data: list[BaseChild]
+    -context: list[Child]
+    +e1: str
+    +reporting_period: str
+    +report_type: ReportType
+    +file_type: FileType
+    +agency_name: str
+    -add()
+    -edit()
+    '-delete()
+    +show()
+}
+
+class AController {
+    +base_child: BaseChild
+    +child: Child
+    +show()
+}
+
+class OOHController {
+    +base_child: BaseChild
+    +child: Child
+    #add_second_parent()
+    #edit_second_parent()
+    #delete_second_parent()
+    #add_removal1993()
+    #edit_removal1993()
+    #delete_removal1993()
+    #add_removal2020()
+    #edit_removal2020()
+    #delete_removal2020()
+    +show()
+}
+
+class LivingArrangementController {
+    +living_arrangement: LivingArrangement
+    +show()
+}
+
+class PeriodicReviewController {
+    +periodic_review: PeriodicReview
+    +show()
+}
+
+class PermanencyHearingController {
+    +permanency_hearing: PermanencyHearing
+    +show()
+}
+
+class PermanencyPlanController {
+    +permanency_plan: PermanencyPlan
+    +show()
+}
+
+class Removal1993Controller {
+    +removal1993: Removal1993
+    +show()
+}
+
+class Removal2020Controller {
+    +removal2020: Removal2020
+    #add_living_arrangement()
+    #edit_living_arrangement()
+    #delete_living_arrangement()
+    #add_case_worker_visit()
+    #edit_case_worker_visit()
+    #delete_case_worker_visit()
+    #add_periodic_review()
+    #edit_periodic_review()
+    #delete_periodic_review()
+    #add_permanency_hearing()
+    #edit_permanency_hearing()
+    #delete_permanency_hearing()
+    #add_permanency_plan()
+    #edit_permanency_plan()
+    #delete_permanency_plan()
+    +show()
+}
+
+class SecondParentController {
+    +second_parent: SecondParent
+    +show()
+}
+
+class CaseWorkerVisitController {
+    +case_visit: CaseWorkerVisit
+    +show()
+}
+
+abstract BaseDialog
+
+class MainWindow2Dialog {
+    agency_code: str
+    agency_name: str
+    reporting_period: str
+    report_type: ReportType
+    file_type: FileType
+}
+
+class ADialog {
+'    a_id: int
+'    child_id: int
+'    child_name: str
+'    context: Context
+'    e1: str
+    first_name: str
+    last_name: str
+    e4: str
+    e5: int
+    e6: int
+    e7: int
+    e8: int
+    e9: int
+    e10: int
+    e11: int
+    e12: int
+    e13: int
+    e14: int
+    e15: int
+    a15: int
+    a16: int
+    a17: int
+    a18: int
+    a19: int
+}
+
+class OOHDialog {
+    child_name: str
+    first_name: str <BaseChild>
+    last_name: str <BaseChild>
+    e4: str <BaseChild>
+    e5: int
+    e6: int
+    e13: int
+    e14: int
+    e15: int
+    e16: int
+    e17: int
+    e18: int
+    e19: int
+    e20: int
+    e21: int
+    e7: int
+    e8: int
+    tribes: list[RecognizedTribes]
+    e10: int
+    e11: int
+    e12: int
+    e22: int
+    e23: int
+    e24: int
+    e25: int
+    e26: int
+    e27: int
+    e28: int
+    e29: int
+    e30: int
+    e31: int
+    e32: int
+    e33: int
+    e34: int
+    e35: int
+    e36: int
+    e37: int
+    e38: int
+    e39: int
+    e41: int
+    e42: int
+    e43: int
+    e44: int
+    e45: int
+    e46: int
+    e47: int
+    e48: int
+    e49: int
+    e50: int
+    e51: int
+    e52: int
+    e53: int
+    e54: int
+    e55: int
+    e56: int
+    e57: int
+    e59: int
+    e60: int
+    e61: int
+    e62: int
+    e63: int
+    second_parents: list[SecondTPRParent]
+    e65: int
+    e67: int
+    removals1993: list[Removal1993]
+    removals2020: list[Removal2020]
+    e106: int
+    e107: int
+    e108: int
+    e109: int
+    e110: int
+    e111: int
+}
+class ChildDialog
+class LivingArrangementDialog
+class PeriodicReviewDialog
+class PermanencyHearingDialog
+class PermanencyPlanDialog
+class Removal1993Dialog
+class Removal2020Dialog
+class SecondParentDialog
+class CaseWorkerVisitDialog
+
+'BaseDialog <|-- MainWindow2Dialog
+'BaseDialog <|-- ADialog
+'BaseDialog <|-- OOHDialog
+'BaseDialog <|-- ChildDialog
+'BaseDialog <|-- LivingArrangementDialog
+'BaseDialog <|-- PeriodicReviewDialog
+'BaseDialog <|-- PermanencyHearingDialog
+'BaseDialog <|-- PermanencyPlanDialog
+'BaseDialog <|-- Removal1993Dialog
+'BaseDialog <|-- Removal2020Dialog
+'BaseDialog <|-- SecondParentDialog
+'BaseDialog <|-- CaseWorkerVisitDialog
+
+MainWindow2Controller --* ChildController : e1, ReportType, FileType, ReportingPeriod
+ChildController --* AController : BaseChild,\nChild
+ChildController --* OOHController : BaseChild,\nChild
+OOHController --* SecondParentController : SecondParent
+OOHController --* Removal1993Controller : Removal1993
+OOHController --* Removal2020Controller : Removal2020
+Removal2020Controller --* LivingArrangementController : LivingArrangement
+Removal2020Controller --* PeriodicReviewController : PeriodicReview
+Removal2020Controller --* PermanencyHearingController : PermanencyHearing
+Removal2020Controller --* PermanencyPlanController : PermanencyPlan
+Removal2020Controller --* CaseWorkerVisitController : CaseWorkerVisit
+
+MainWindow2Controller -* MainWindow2Dialog
+AController -* ADialog
+OOHController -* OOHDialog
+
+ChildController -* ChildDialog
+LivingArrangementController -* LivingArrangementDialog
+PeriodicReviewController -* PeriodicReviewDialog
+PermanencyHearingController -* PermanencyHearingDialog
+PermanencyPlanController -* PermanencyPlanDialog
+Removal1993Controller -* Removal1993Dialog
+Removal2020Controller -* Removal2020Dialog
+SecondParentController -* SecondParentDialog
+CaseWorkerVisitController -* CaseWorkerVisitDialog
+
+note right of BaseDialog
+    All dialogs
+    inherit from
+    here.
+endnote
+@enduml
