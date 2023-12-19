@@ -191,7 +191,7 @@ class ChildController:
             if child.ooh and child.a:
                 if child.a.a17:
                     dates.append(datetime.datetime.strptime(str(child.a.a17), "%Y%m%d").date())
-            base_child.last_removal = max(dates) if dates else None
+            base_child.last_adoption = max(dates) if dates else None
 
             dates = []
             if base_child.last_termination:

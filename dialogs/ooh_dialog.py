@@ -361,8 +361,7 @@ class OOHDialog(BaseDialog):
     @tribes.setter
     def tribes(self, v: list[RecognizedTribe]) -> None:
         self._recognized_tribes = v
-        for tribe in v:
-            self.ui.tribes.addItem(self._epa_tribe_ids[tribe.e9])
+        self.refresh_tribes()
 
     def current_tribe_row(self) -> int:
         return self.ui.tribes.currentRow()
@@ -909,6 +908,8 @@ class OOHDialog(BaseDialog):
 
     def refresh_removals1993(self) -> None:
         self.ui.removal_1993_table.clearContents()
+        for _ in range(self.ui.removal_1993_table.rowCount()):
+            self.ui.removal_1993_table.removeRow(0)
         for data in self._removals1993:
             row: int = self.ui.removal_1993_table.rowCount()
             self.ui.removal_1993_table.insertRow(row)
@@ -926,11 +927,13 @@ class OOHDialog(BaseDialog):
 
     @removals2020.setter
     def removals2020(self, data: list[Removal2020]):
-        for row in data:
-            self.__add_removal2020_row(row)
+        self._removals2020 = data
+        self.refresh_removals2020()
 
     def refresh_removals2020(self):
         self.ui.removal_2020_table.clearContents()
+        for row in range(self.ui.removal_2020_table.rowCount()):
+            self.ui.removal_2020_table.removeRow(0)
         for data in self.removals2020:
             row: int = self.ui.removal_2020_table.rowCount()
             self.ui.removal_2020_table.insertRow(row)
@@ -940,7 +943,7 @@ class OOHDialog(BaseDialog):
                 self.E155_MESSAGES[data.e155] if data.e155 in self.E155_MESSAGES else ''))
 
     def current_removal2020_row(self) -> int:
-        return self.ui.removals_2020_table.currentRow()
+        return self.ui.removal_2020_table.currentRow()
 
     @property
     def second_parents(self) -> list[SecondParent]:
@@ -948,16 +951,17 @@ class OOHDialog(BaseDialog):
 
     @second_parents.setter
     def second_parents(self, data: list[SecondParent]) -> None:
-        for row in data:
-            self.__add_parent2_row(row)
+        self._second_parents = data
+        self.refresh_second_parents()
 
     def current_second_parents_row(self) -> int:
         return self.ui.parent2tpr.currentRow()
 
     def refresh_second_parents(self) -> None:
         self.ui.parent2tpr.clearContents()
-        row = 0
-        for data in self.second_parents:
+        for _ in range(self.ui.parent2tpr.rowCount()):
+            self.ui.parent2tpr.removeRow(0)
+        for row, data in enumerate(self.second_parents):
             if row >= self.ui.parent2tpr.rowCount():
                 self.ui.parent2tpr.insertRow(row)
             self.ui.parent2tpr.setItem(row, 0, QTableWidgetItem(str(data.e64_as_str())))

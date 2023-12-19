@@ -9,7 +9,6 @@ def open_database(database_name: str):
     database.init(database_name)
     database.connect()
 
-
 def close_database():
     if not database.is_closed():
         database.close()
@@ -17,12 +16,10 @@ def close_database():
 
 def create_tables():
     database.create_tables(
-        [BaseChildTable, ConfigTable, ContextTable, #OOHRecordTable, RecognizedTribesTable, SecondParentTable,
-         #Removal1993Table, Removal2020Table,
-         #LivingArrangementTable, PermanencyPlanTable, PeriodicReviewTable, PermanencyHearingTable, CaseWorkerVisitTable,
-         #ARecordTable,
-         StateTable, TribeTable, TribeStateTable,
-         ])
+        [BaseChildTable, ConfigTable, ContextTable, StateTable, TribeTable, TribeStateTable]
+    )
+
+    # print(BaseChildTable.create_table())
     bootstrap_states()
     bootstrap_tribes()
     bootstrap_fips_codes()

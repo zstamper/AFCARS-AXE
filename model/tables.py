@@ -1,12 +1,30 @@
 import datetime
 
-from peewee import Model, SqliteDatabase, TextField, ForeignKeyField, AutoField, Field, \
-    DateField
+from peewee import Model, SqliteDatabase, TextField, ForeignKeyField, AutoField, Field, DateField
 from playhouse.sqlite_ext import JSONField
 
 from .models import (Child, Context, Tribe, State, FileType, BaseChild, ReportType)
 
-database = SqliteDatabase(None)
+database = SqliteDatabase(None, pragmas={
+    'journal_mode': 'wal',
+    'cache_size': -1 * 64000,  # 64MB
+    'foreign_keys': 1,
+    'ignore_check_constraints': 0,
+    'synchronous': 0})
+
+
+# class DateField(Field):
+#     field_type = 'text'
+#
+#     def __init__(self, formats=None, *args, **kwargs):
+#         super().__init__(*args, **kwargs)
+#         self.formats = formats
+#
+#     def db_value(self, value):
+#         return None if value is None else datetime.date.strftime(value, "%Y-%m-%d")
+#
+def python_value(self, value):
+    return None if value is None else datetime.datetime.strptime(value, "%Y-%m-%d").date()
 
 
 class ReportTypeField(Field):
@@ -69,9 +87,11 @@ class BaseChildTable(BaseModel):
     e4 = TextField(null=True)
     first_name = TextField(null=True)
     last_name = TextField(null=True)
-    date_created: DateField(default=datetime.date.today())
-    last_exit: DateField(null=True)
-    last_removal: DateField(null=True)
+    date_created = DateField(null=False, default=datetime.date.today(), formats=['%Y%m%d', '%m/%d/%Y', '%Y-%m-%d'])
+    last_exit = DateField(null=True, formats=['%Y%m%d', '%m/%d/%Y', '%Y-%m-%d'])
+    last_removal = DateField(null=True, formats=['%Y%m%d', '%m/%d/%Y', '%Y-%m-%d'])
+    last_adoption = DateField(null=True, formats=['%Y%m%d', '%m/%d/%Y', '%Y-%m-%d'])
+    last_termination = DateField(null=True, formats=['%Y%m%d', '%m/%d/%Y', '%Y-%m-%d'])
 
     # contexts = JSONField(json_loads=context_dict_loads, json_dumps=context_dict_dumps)
 
@@ -86,7 +106,6 @@ class BaseChildTable(BaseModel):
         #                    e13=model.e13, e14=model.e14, e15=model.e15, e16=model.e16, e17=model.e17, e18=model.e18,
         #                    e19=model.e19, e20=model.e20, e21=model.e21)
         child = BaseChildTable(**model.kwds())
-        child.last_exit = datetime.datetime.today()
         child.save()
 
         model.id = child.id
