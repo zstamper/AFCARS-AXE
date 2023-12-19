@@ -31,9 +31,6 @@ class OOHDialog(BaseDialog):
         self.a: ARecord | None = None
 
         # Virtual elements:
-        # e41 & e44 default to 'no' (0) because the corresponding line edit fields default to empty
-        self.e41: int = 0
-        self.e44: int = 0
 
         # back-end stores for our virtual properties
         self._epa_tribes: list[Tribe] = []
@@ -91,7 +88,6 @@ class OOHDialog(BaseDialog):
         self._init_radio_ynu(ui, 'e61')
         self._init_radio_ynu(ui, 'e62')
         self._init_radio(ui, 'e63', {'na': 0, 'v': 1, 'i': 2})
-        self._init_radio_yn(ui, 'e55')
         self._init_radio_yn(ui, 'e106')
         self._init_radio_yn(ui, 'e109')
 
@@ -119,9 +115,6 @@ class OOHDialog(BaseDialog):
         ui.e20.toggled.connect(self._e20_toggled)
 
         ui.e23.currentIndexChanged.connect(self._e23_current_index_changed)
-
-        ui.e42.textChanged.connect(self._e42_text_changed)
-        ui.e45.textChanged.connect(self._e45_text_changed)
 
         ui.parent2_add_button.clicked.connect(self._on_add_second_parent)
         ui.parent2_edit_button.clicked.connect(self._on_edit_second_parent)
@@ -264,12 +257,6 @@ class OOHDialog(BaseDialog):
             self.ui.e17.setChecked(False)
             self.ui.e18.setChecked(False)
             self.ui.e20.setChecked(False)
-            self.e41 = 7
-            self.e44 = 7
-        else:
-            self.e41 = 1 if self.ui.e42.text() != "" else 0
-            self.e44 = 1 if self.ui.e45.text() != "" else 0
-        # self._e43_error_refresh()
 
     def _e20_toggled(self, checked: bool) -> None:
         # If E20 is checked, E13, E14, E15, E16, E17, E18, E19 should be unchecked and disabled.
@@ -301,12 +288,6 @@ class OOHDialog(BaseDialog):
         self.ui.e32.setEnabled(index == 1)
         self.ui.e33.setEnabled(index == 1)
         self.ui.e34.setEnabled(index == 1)
-
-    def _e42_text_changed(self, text: str) -> None:
-        self.e41 = 1 if text != "" else 0
-
-    def _e45_text_changed(self, text: str) -> None:
-        self.e44 = 1 if text != "" else 0
 
     @property
     def child_name(self) -> str:
@@ -658,6 +639,19 @@ class OOHDialog(BaseDialog):
         self._set_combobox_selection(self.ui.e39, v)
 
     @property
+    def e41(self) -> int:
+        return \
+            7 if self.e19 == 1 and not self.e42 \
+                else 0 if not self.e42 \
+                else 1
+
+    @e41.setter
+    def e41(self, v: int) -> None:
+        # deliberately left blank: we need to be able to set the value so that the data flows don't crash, but we really
+        # don't care what the value is, since this is a computed field.
+        pass
+
+    @property
     def e42(self) -> int | None:
         return self._get_int_field(self.ui.e42)
 
@@ -673,6 +667,19 @@ class OOHDialog(BaseDialog):
     @e43.setter
     def e43(self, v: int) -> None:
         self._set_combobox_selection(self.ui.e43, v)
+
+    @property
+    def e44(self) -> int:
+        return \
+            7 if self.e19 == 1 and not self.e45 \
+                else 0 if not self.e45 \
+                else 1
+
+    @e44.setter
+    def e44(self, v: int) -> None:
+        # deliberately left blank: we need to be able to set the value so that the data flows don't crash, but we really
+        # don't care what the value is, since this is a computed field.
+        pass
 
     @property
     def e45(self) -> int | None:
@@ -765,11 +772,11 @@ class OOHDialog(BaseDialog):
 
     @property
     def e55(self) -> int:
-        return self._get_radio_button(self.ui.e55)
+        return 1 if self.ui.e55.isChecked() else 0
 
     @e55.setter
     def e55(self, v: int) -> None:
-        self._set_radio_button(self.ui.e55, v)
+        self.ui.e55.setChecked(v == 1)
 
     @property
     def e56(self) -> int | None:

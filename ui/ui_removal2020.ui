@@ -18,7 +18,7 @@
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
    <item>
-    <widget class="QTabWidget" name="tabWidget">
+    <widget class="QTabWidget" name="tab_widget">
      <property name="currentIndex">
       <number>0</number>
      </property>
@@ -1828,7 +1828,7 @@ is Jurisdiction Transfer&lt;/i&gt;</string>
   </layout>
  </widget>
  <tabstops>
-  <tabstop>tabWidget</tabstop>
+  <tabstop>tab_widget</tabstop>
   <tabstop>e69</tabstop>
   <tabstop>e3</tabstop>
   <tabstop>e71</tabstop>

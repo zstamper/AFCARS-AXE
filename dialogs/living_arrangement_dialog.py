@@ -1,3 +1,5 @@
+from typing import Optional, Callable
+
 from PySide6.QtWidgets import QWidget
 
 from dialogs import BaseDialog
@@ -14,6 +16,7 @@ class LivingArrangementDialog(BaseDialog):
         self.id: int | None = None
         self.removal_id: int | None = None
         self._child_name: str = ""
+        self.on_validate_clicked: Optional[Callable] = None
 
     def _wire_ui(self) -> None:
         self.setModal(True)
@@ -33,6 +36,8 @@ class LivingArrangementDialog(BaseDialog):
 
         self.ui.e121.currentIndexChanged.connect(self._e121_changed)
         self.ui.e123.currentIndexChanged.connect(self._e123_changed)
+
+        self.ui.validate_button.clicked.connect(self.do_validate_button_clicked)
 
     def _e121_changed(self):
         self.ui.e122.setEnabled(self.e121 not in (1, 4))
@@ -66,6 +71,10 @@ class LivingArrangementDialog(BaseDialog):
             self.e130 = 0
             self.e131 = 0
             self.e132 = 0
+
+    def do_validate_button_clicked(self):
+        if self.on_validate_clicked:
+            self.on_validate_clicked()
 
     @property
     def child_name(self) -> str:

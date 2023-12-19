@@ -132,8 +132,8 @@ class Removal2020Dialog(BaseDialog):
         self._init_radio_ynud(ui, 'e182')
         self._init_radio_mf(ui, 'e183')
 
-        self.ui.validate_button.clicked.connect(self.validate_button_clicked)
-        self.ui.tab_widget.currentChanged.connect(self.tab_changed)
+        self.ui.validate_button.clicked.connect(self.do_validate_button_clicked)
+        self.ui.tab_widget.currentChanged.connect(self.do_tab_changed)
 
     # ----- Living Arrangements Automation ------------------------------------
 

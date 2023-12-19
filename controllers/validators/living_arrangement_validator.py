@@ -42,7 +42,7 @@ class LivingArrangementValidators:
                     "At least one of E114, E115, E116, E118 must be checked, or Relationship must be Relative or Kin when Living Arrangement Type (E120) is Foster Family Home.")
 
     def validate_e121(self):
-        if not self.dialog.e120 in (1, 2, 3, 4):
+        if not self.dialog.e121 in (1, 2, 3, 4):
             raise ValueError("Location (E121) is required.")
 
     def validate_e122(self):

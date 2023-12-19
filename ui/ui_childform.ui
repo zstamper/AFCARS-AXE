@@ -158,7 +158,7 @@
         <enum>QTabWidget::North</enum>
        </property>
        <property name="currentIndex">
-        <number>0</number>
+        <number>5</number>
        </property>
        <widget class="QWidget" name="demographics_tab">
         <attribute name="title">
@@ -2823,23 +2823,10 @@ payment was paid or will be claimed for the child.&lt;/i&gt;</string>
                   <number>0</number>
                  </property>
                  <item>
-                  <widget class="QRadioButton" name="e55_y">
+                  <widget class="QCheckBox" name="e55">
                    <property name="text">
-                    <string>Yes</string>
+                    <string>(E55)</string>
                    </property>
-                   <attribute name="buttonGroup">
-                    <string notr="true">e55</string>
-                   </attribute>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QRadioButton" name="e55_n">
-                   <property name="text">
-                    <string>No</string>
-                   </property>
-                   <attribute name="buttonGroup">
-                    <string notr="true">e55</string>
-                   </attribute>
                   </widget>
                  </item>
                  <item>
@@ -3444,20 +3431,19 @@ Leave blank if law enforcement was not notified.&lt;/i&gt;</string>
   </connection>
  </connections>
  <buttongroups>
-  <buttongroup name="e10"/>
-  <buttongroup name="e7"/>
-  <buttongroup name="e12"/>
-  <buttongroup name="e62"/>
-  <buttongroup name="e107"/>
-  <buttongroup name="e8"/>
-  <buttongroup name="e63"/>
-  <buttongroup name="e109"/>
   <buttongroup name="e110"/>
-  <buttongroup name="e61"/>
-  <buttongroup name="e6"/>
-  <buttongroup name="e22"/>
   <buttongroup name="funding"/>
+  <buttongroup name="e8"/>
   <buttongroup name="e106"/>
-  <buttongroup name="e55"/>
+  <buttongroup name="e107"/>
+  <buttongroup name="e63"/>
+  <buttongroup name="e6"/>
+  <buttongroup name="e62"/>
+  <buttongroup name="e10"/>
+  <buttongroup name="e61"/>
+  <buttongroup name="e7"/>
+  <buttongroup name="e22"/>
+  <buttongroup name="e109"/>
+  <buttongroup name="e12"/>
  </buttongroups>
 </ui>
