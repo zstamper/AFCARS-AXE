@@ -45,7 +45,8 @@ class LivingArrangementDialog(BaseDialog):
     def _e123_changed(self):
         enabled = self.e123 in (1, 2)
         self.ui.e136.setEnabled(enabled)
-        self.ui.e146.setEnabled(enabled)
+        self.ui.e146_m.setEnabled(enabled)
+        self.ui.e146_f.setEnabled(enabled)
         self.ui.e138.setEnabled(enabled)
         self.ui.e139.setEnabled(enabled)
         self.ui.e140.setEnabled(enabled)
@@ -53,8 +54,13 @@ class LivingArrangementDialog(BaseDialog):
         self.ui.e142.setEnabled(enabled)
         self.ui.e143.setEnabled(enabled)
         self.ui.e144.setEnabled(enabled)
-        self.ui.e145.setEnabled(enabled)
-        self.ui.e137.setEnabled(enabled)
+        self.ui.e145_d.setEnabled(enabled)
+        self.ui.e145_n.setEnabled(enabled)
+        self.ui.e145_u.setEnabled(enabled)
+        self.ui.e145_y.setEnabled(enabled)
+        self.ui.e137_n.setEnabled(enabled)
+        self.ui.e137_u.setEnabled(enabled)
+        self.ui.e137_y.setEnabled(enabled)
 
     def _e133_changed(self):
         enabled = self.e133 != 1

@@ -161,8 +161,8 @@ class ChildController:
             dates = []
             if base_child.last_removal:
                 dates.append(base_child.last_removal)
-            if child.ooh and child.ooh.removal1993:
-                for removal in child.ooh.removal1993:
+            if child.ooh and child.ooh.removals1993:
+                for removal in child.ooh.removals1993:
                     if removal.e69:
                         dates.append(datetime.datetime.strptime(str(removal.e69), "%Y%m%d").date())
             if child.ooh and child.ooh.removals2020:
@@ -174,8 +174,8 @@ class ChildController:
             dates = []
             if base_child.last_exit:
                 dates.append(base_child.last_exit)
-            if child.ooh and child.ooh.removal1993:
-                for removal in child.ooh.removal1993:
+            if child.ooh and child.ooh.removals1993:
+                for removal in child.ooh.removals1993:
                     if removal.e153:
                         dates.append(datetime.datetime.strptime(str(removal.e153), "%Y%m%d").date())
             if child.ooh and child.ooh.removals2020:
