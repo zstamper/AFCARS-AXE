@@ -169,7 +169,7 @@ class ChildController:
                 for removal in child.ooh.removals2020:
                     if removal.e69:
                         dates.append(datetime.datetime.strptime(str(removal.e69), "%Y%m%d").date())
-            base_child.last_removal = max(dates)
+            base_child.last_removal = max(dates) if dates else None
 
             dates = []
             if base_child.last_exit:
@@ -182,7 +182,7 @@ class ChildController:
                 for removal in child.ooh.removals2020:
                     if removal.e153:
                         dates.append(datetime.datetime.strptime(str(removal.e153), "%Y%m%d").date())
-            base_child.last_exit = max(dates)
+            base_child.last_exit = max(dates) if dates else None
 
         if self.report_type == ReportType.A:
             dates = []
@@ -191,7 +191,7 @@ class ChildController:
             if child.ooh and child.a:
                 if child.a.a17:
                     dates.append(datetime.datetime.strptime(str(child.a.a17), "%Y%m%d").date())
-            base_child.last_removal = max(dates)
+            base_child.last_removal = max(dates) if dates else None
 
             dates = []
             if base_child.last_termination:
@@ -199,4 +199,4 @@ class ChildController:
             if child.ooh and child.a:
                 if child.a.a18:
                     dates.append(datetime.datetime.strptime(str(child.a.a18), "%Y%m%d").date())
-            base_child.last_termination = max(dates)
+            base_child.last_termination = max(dates) if dates else None
