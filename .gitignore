@@ -1,0 +1,10 @@
+/build/
+/dist/
+/sandbox/
+/venv/
+**/__pycache__/
+*.pyc
+*.spec
+*.db
+*.db-shm
+*.db-wal
