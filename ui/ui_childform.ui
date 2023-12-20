@@ -158,7 +158,7 @@
         <enum>QTabWidget::North</enum>
        </property>
        <property name="currentIndex">
-        <number>5</number>
+        <number>0</number>
        </property>
        <widget class="QWidget" name="demographics_tab">
         <attribute name="title">
@@ -3350,6 +3350,13 @@ Leave blank if law enforcement was not notified.&lt;/i&gt;</string>
   </layout>
  </widget>
  <tabstops>
+  <tabstop>last_name</tabstop>
+  <tabstop>first_name</tabstop>
+  <tabstop>e4</tabstop>
+  <tabstop>e4_generate</tabstop>
+  <tabstop>e5</tabstop>
+  <tabstop>e6_m</tabstop>
+  <tabstop>e6_f</tabstop>
   <tabstop>e13</tabstop>
   <tabstop>e14</tabstop>
   <tabstop>e15</tabstop>
@@ -3364,6 +3371,26 @@ Leave blank if law enforcement was not notified.&lt;/i&gt;</string>
   <tabstop>e43</tabstop>
   <tabstop>e56</tabstop>
   <tabstop>e57</tabstop>
+  <tabstop>removal_2020_add_button</tabstop>
+  <tabstop>funding_y</tabstop>
+  <tabstop>funding_n</tabstop>
+  <tabstop>e7_y</tabstop>
+  <tabstop>e7_n</tabstop>
+  <tabstop>e8_y</tabstop>
+  <tabstop>e8_n</tabstop>
+  <tabstop>e8_u</tabstop>
+  <tabstop>tribes</tabstop>
+  <tabstop>epa_tribes</tabstop>
+  <tabstop>add_tribe_button</tabstop>
+  <tabstop>remove_tribe_button</tabstop>
+  <tabstop>e10_y</tabstop>
+  <tabstop>e10_n</tabstop>
+  <tabstop>e10_u</tabstop>
+  <tabstop>e11</tabstop>
+  <tabstop>e12_y</tabstop>
+  <tabstop>e12_n</tabstop>
+  <tabstop>e22_y</tabstop>
+  <tabstop>e22_n</tabstop>
   <tabstop>e23</tabstop>
   <tabstop>e24</tabstop>
   <tabstop>e25</tabstop>
@@ -3382,18 +3409,49 @@ Leave blank if law enforcement was not notified.&lt;/i&gt;</string>
   <tabstop>e36</tabstop>
   <tabstop>e37</tabstop>
   <tabstop>e59</tabstop>
+  <tabstop>e61_y</tabstop>
+  <tabstop>e61_n</tabstop>
+  <tabstop>e61_u</tabstop>
   <tabstop>e63_na</tabstop>
   <tabstop>e63_v</tabstop>
   <tabstop>e63_i</tabstop>
   <tabstop>e65</tabstop>
+  <tabstop>e67</tabstop>
   <tabstop>e60</tabstop>
+  <tabstop>e62_y</tabstop>
+  <tabstop>e62_n</tabstop>
+  <tabstop>e62_u</tabstop>
+  <tabstop>parent2tpr</tabstop>
+  <tabstop>parent2_add_button</tabstop>
+  <tabstop>parent2_edit_button</tabstop>
+  <tabstop>e47</tabstop>
+  <tabstop>e48</tabstop>
+  <tabstop>e49</tabstop>
+  <tabstop>e50</tabstop>
+  <tabstop>e51</tabstop>
+  <tabstop>e52</tabstop>
+  <tabstop>e53</tabstop>
+  <tabstop>e54</tabstop>
+  <tabstop>e55</tabstop>
   <tabstop>e106_y</tabstop>
   <tabstop>e106_n</tabstop>
+  <tabstop>e107_y</tabstop>
+  <tabstop>e107_n</tabstop>
   <tabstop>e108</tabstop>
   <tabstop>e109_y</tabstop>
   <tabstop>e109_n</tabstop>
+  <tabstop>e110_y</tabstop>
+  <tabstop>e110_n</tabstop>
   <tabstop>e111</tabstop>
+  <tabstop>removal_1993_table</tabstop>
+  <tabstop>removal_1993_add_button</tabstop>
+  <tabstop>removal_1993_edit_button</tabstop>
+  <tabstop>removal_1993_delete_button</tabstop>
+  <tabstop>removal_2020_table</tabstop>
   <tabstop>tabWidget</tabstop>
+  <tabstop>removal_2020_edit_button</tabstop>
+  <tabstop>removal_2020_delete_button</tabstop>
+  <tabstop>validate_button</tabstop>
  </tabstops>
  <resources/>
  <connections>
@@ -3431,19 +3489,19 @@ Leave blank if law enforcement was not notified.&lt;/i&gt;</string>
   </connection>
  </connections>
  <buttongroups>
-  <buttongroup name="e110"/>
-  <buttongroup name="funding"/>
-  <buttongroup name="e8"/>
-  <buttongroup name="e106"/>
-  <buttongroup name="e107"/>
-  <buttongroup name="e63"/>
-  <buttongroup name="e6"/>
-  <buttongroup name="e62"/>
-  <buttongroup name="e10"/>
-  <buttongroup name="e61"/>
   <buttongroup name="e7"/>
-  <buttongroup name="e22"/>
-  <buttongroup name="e109"/>
   <buttongroup name="e12"/>
+  <buttongroup name="e10"/>
+  <buttongroup name="e63"/>
+  <buttongroup name="e62"/>
+  <buttongroup name="e107"/>
+  <buttongroup name="e106"/>
+  <buttongroup name="e109"/>
+  <buttongroup name="e22"/>
+  <buttongroup name="e110"/>
+  <buttongroup name="e8"/>
+  <buttongroup name="e61"/>
+  <buttongroup name="funding"/>
+  <buttongroup name="e6"/>
  </buttongroups>
 </ui>

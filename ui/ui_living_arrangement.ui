@@ -1101,6 +1101,57 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>e112</tabstop>
+  <tabstop>e120</tabstop>
+  <tabstop>e58</tabstop>
+  <tabstop>e121</tabstop>
+  <tabstop>e40_y</tabstop>
+  <tabstop>e40_n</tabstop>
+  <tabstop>e40_na</tabstop>
+  <tabstop>e122</tabstop>
+  <tabstop>e114</tabstop>
+  <tabstop>e115</tabstop>
+  <tabstop>e116</tabstop>
+  <tabstop>e118</tabstop>
+  <tabstop>e123</tabstop>
+  <tabstop>e125</tabstop>
+  <tabstop>e135_m</tabstop>
+  <tabstop>e135_f</tabstop>
+  <tabstop>e127</tabstop>
+  <tabstop>e128</tabstop>
+  <tabstop>e129</tabstop>
+  <tabstop>e130</tabstop>
+  <tabstop>e131</tabstop>
+  <tabstop>e132</tabstop>
+  <tabstop>e133</tabstop>
+  <tabstop>e134_y</tabstop>
+  <tabstop>e134_n</tabstop>
+  <tabstop>e134_u</tabstop>
+  <tabstop>e134_d</tabstop>
+  <tabstop>e126_y</tabstop>
+  <tabstop>e126_n</tabstop>
+  <tabstop>e126_u</tabstop>
+  <tabstop>e124</tabstop>
+  <tabstop>e136</tabstop>
+  <tabstop>e146_m</tabstop>
+  <tabstop>e146_f</tabstop>
+  <tabstop>e138</tabstop>
+  <tabstop>e139</tabstop>
+  <tabstop>e140</tabstop>
+  <tabstop>e141</tabstop>
+  <tabstop>e142</tabstop>
+  <tabstop>e143</tabstop>
+  <tabstop>e144</tabstop>
+  <tabstop>e145_y</tabstop>
+  <tabstop>e145_n</tabstop>
+  <tabstop>e145_u</tabstop>
+  <tabstop>e145_d</tabstop>
+  <tabstop>e137_y</tabstop>
+  <tabstop>e137_n</tabstop>
+  <tabstop>e137_u</tabstop>
+  <tabstop>validate_button</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>
@@ -1137,12 +1188,12 @@
   </connection>
  </connections>
  <buttongroups>
-  <buttongroup name="e134"/>
-  <buttongroup name="e137"/>
-  <buttongroup name="e145"/>
   <buttongroup name="e126"/>
   <buttongroup name="e135"/>
   <buttongroup name="e146"/>
   <buttongroup name="e40"/>
+  <buttongroup name="e145"/>
+  <buttongroup name="e137"/>
+  <buttongroup name="e134"/>
  </buttongroups>
 </ui>
