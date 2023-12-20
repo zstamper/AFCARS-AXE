@@ -237,7 +237,7 @@ def error_message_dialog(parent: QWidget, errors: list[str]):
         if len(errors) > 6:
             error_str += "\n\n" + f"{len(errors) - 6} additional validation errors."
         err_box = QMessageBox(icon=QMessageBox.Icon.Warning)
-        err_box.setText(f"# Validation Error{'s' if len(errors)>1 else ''}\n\n{error_str}")
+        err_box.setText(f"### {error_str}")
         err_box.setTextFormat(Qt.TextFormat.MarkdownText)
         err_box.setWindowTitle("Validation Error")
     err_box.exec()
