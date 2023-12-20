@@ -102,13 +102,15 @@ class ChildController:
             context_rec.save()
             self.do_refresh_data()
 
+        base_child = self.dialog.current_child
+        if not base_child:
+            return
         controller = None
         if self.report_type == ReportType.OOH:
             controller = OOHController(parent=self.dialog)
         elif self.report_type == ReportType.A:
             controller = AController(parent=self.dialog)
         if controller:
-            base_child = self.dialog.current_child
             context_rec = self._context_for(base_child, self.reporting_period, self.file_type)
 
             controller.clear()
