@@ -224,15 +224,20 @@ def delete_confirmation_dialog(parent: QWidget) -> int:
 
 
 def error_message_dialog(parent: QWidget, errors: list[str]):
-    errors = [error for error in errors if error]
-    error_str = "\n* ".join(errors[:6])
-    if len(errors) > 6:
-        error_str += "\n\n" + f"{len(errors) - 6} additional validation errors."
-    # err_box = QErrorMessage(parent)
-    err_box = QMessageBox(icon=QMessageBox.Icon.Warning)
-    err_box.setText(f"# Validation Error{'s' if len(errors)>1 else ''}\n\n{error_str}")
-    err_box.setTextFormat(Qt.TextFormat.MarkdownText)
-    # err_box.setText(error_str)
-    # err_box.setText(error_str)
-    err_box.setWindowTitle("Validation Error")
+    if sys.platform == 'darwin':
+        err_box = QErrorMessage(parent)
+        error_str = "\n\n• ".join(errors[0:5])
+        if len(errors) > 5:
+            error_str += "\n\n" + f"{len(errors) - 5} additional validation errors."
+        err_box.showMessage(error_str)
+        err_box.setWindowTitle("Error")
+    else:
+        errors = [error for error in errors if error]
+        error_str = "\n* ".join(errors[:6])
+        if len(errors) > 6:
+            error_str += "\n\n" + f"{len(errors) - 6} additional validation errors."
+        err_box = QMessageBox(icon=QMessageBox.Icon.Warning)
+        err_box.setText(f"# Validation Error{'s' if len(errors)>1 else ''}\n\n{error_str}")
+        err_box.setTextFormat(Qt.TextFormat.MarkdownText)
+        err_box.setWindowTitle("Validation Error")
     err_box.exec()
