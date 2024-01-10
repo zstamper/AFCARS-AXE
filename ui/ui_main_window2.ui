@@ -200,6 +200,7 @@
      <string>FIle</string>
     </property>
     <addaction name="actionExport"/>
+    <addaction name="actionImport"/>
     <addaction name="separator"/>
     <addaction name="actionQuit"/>
    </widget>
@@ -214,6 +215,11 @@
   <action name="actionExport">
    <property name="text">
     <string>Export...</string>
+   </property>
+  </action>
+  <action name="actionImport">
+   <property name="text">
+    <string>Import...</string>
    </property>
   </action>
  </widget>

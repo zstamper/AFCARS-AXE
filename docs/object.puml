@@ -45,6 +45,14 @@ object Child {
     ooh: OOHRecord
 }
 
+note left of Child
+    The Child object and everything
+    that it contains is stored as
+    a JSON object in the data field
+    in the Context record.
+endnote
+
+
 object ARecord {
 '    context_id: int
     a5: int
@@ -297,7 +305,7 @@ object State {
 
 BaseChild "1" --* "0..*" Context
 
-Context "1" --* "0..*" Child
+Context "1" --* "0..1" Child
 
 
 State "*" -- "*" Tribe

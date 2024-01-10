@@ -116,7 +116,7 @@ class ContextTable(BaseModel):
     base_child = ForeignKeyField(BaseChildTable, backref="contexts")
     e2 = TextField(index=True)  # reporting_period
     file_type = FileTypeField(index=True)
-    data = JSONField(json_dumps=child_dict_dumps, json_loads=child_dict_loads)
+    data = JSONField(null=True, json_dumps=child_dict_dumps, json_loads=child_dict_loads)
 
     def to_model(self) -> Context:
         context_model = Context(e2=self.e2, file_type=self.file_type, data=self.data)

@@ -21,6 +21,7 @@ class MainWindow2Dialog(QMainWindow, BaseMixin):
         self._file_types: Optional[Literal["production", "test"]] = None
         self.on_go: Optional[Callable] = None
         self.on_export: Optional[Callable] = None
+        self.on_import: Optional[Callable] = None
         self.on_close: Optional[Callable] = None
         self.report_types = [e.value for e in ReportType]
 
@@ -32,6 +33,7 @@ class MainWindow2Dialog(QMainWindow, BaseMixin):
         self.ui.close_button.clicked.connect(self._on_close_button_clicked)
         self.ui.actionQuit.triggered.connect(self._on_close_button_clicked)
         self.ui.actionExport.triggered.connect(self._on_export_button_clicked)
+        self.ui.actionImport.triggered.connect(self._on_import_button_clicked)
 
     def close(self):
         if self.on_close:
@@ -48,6 +50,10 @@ class MainWindow2Dialog(QMainWindow, BaseMixin):
     def _on_export_button_clicked(self):
         if self.on_export:
             self.on_export()
+
+    def _on_import_button_clicked(self):
+        if self.on_import:
+            self.on_import()
 
     @property
     def fips_codes(self) -> list:
@@ -115,12 +121,14 @@ class MainWindow2Dialog(QMainWindow, BaseMixin):
     def reporting_period(self) -> str | None:
         current_index = self.ui.reporting_period.currentIndex()
         if 0 <= current_index < len(self._reporting_periods):
-            return self._reporting_periods[current_index]
+            period = self._reporting_periods[current_index]
+            return f"{period[:4]}03" if period.endswith('A') else f"{period[:4]}09"
         return None
 
     @reporting_period.setter
     def reporting_period(self, v: str):
-        current_index = self._reporting_periods.index(v)
+        period = f"{v[:4]}A" if v.endswith('03') else f"{v[:4]}B"
+        current_index = self._reporting_periods.index(period)
         if current_index >= 0:
             self.ui.reporting_period.setCurrentIndex(current_index)
 

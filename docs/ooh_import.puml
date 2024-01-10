@@ -1,0 +1,157 @@
+@startuml
+'https://plantuml.com/object-diagram
+
+
+
+object "<data>..</data>" as data #ffffaa {
+    E1_title_iv_agency
+    E2_report_date
+    records
+}
+
+object "<records>..</records>" as records #ffffaa {
+    record
+}
+
+data::records --> records
+
+object "<record>..</record>" as record #ffffaa {
+    E4_child_record_number
+    E5_date_of_birth
+    E6_sex
+    E7_agency_made_inquiries
+    E8_tribal_membership
+    E9_recognized_tribes
+    E10_icwa
+    E11_icwa_date
+    E12_icwa_notification
+    E13_child_race_american_indian_alaska_native
+    E14_child_race_asian
+    E15_child_race_black
+    E16_child_race_native_hawaiian_pacific_islander
+    E17_child_race_white
+    E18_child_race_unknown
+    E19_child_race_abandoned
+    E20_child_race_declined
+    E21_child_hispanic_latino
+    E22_health_assessment
+    E23_health_conditions
+    E24_34_specific_health_conditions
+    E35_school_enrollment
+    E36_school_highest_completed
+    E37_school_special_education
+    E38_pregnant
+    E39_fathered_or_bore_child
+    E40_child_and_children_together
+    E41_prior_adoption
+    E42_E43_prior_adoption_information
+    E44_prior_guardianship
+    E45_prior_guardianship_date
+    E46_support_assistance
+    E47_E54_type_financial_assistance
+    E55_foster_care_payment
+    E56_total_siblings
+    E57_E58_siblings_in_foster_care
+    E59_first_parent_birth_year
+    E60_second_parent_birth_year
+    E61_tribal_membership_mother
+    E62_tribal_membership_father
+    E63_E68_termination_of_parental_rights
+    E69_E186_removals
+}
+records::record +--> record
+
+object "<E9_recognized_tribes>..</E9_recognized_tribes>" as e9 #ffffaa {
+    E9_recognized_tribe
+}
+record::E9_recognized_tribes +--> e9
+
+object "<E24_34_specific_health_conditions>..</E24_34_specific_health_conditions>" as E24_34_specific_health_conditions  #ffffaa{
+    E24_health_intellectual_disability
+    E25_health_autism_spectrum_disorder
+    E26_health_visual_impairment
+    E27_health_hearing_impairment
+    E28_health_orthopedic_impairment
+    E29_health_mental_disorder
+    E30_health_adhd_add
+    E31_health_serious_mental_disorder
+    E32_health_developmental_delay
+    E33_health_developmental_disability
+    E34_health_other_condition
+}
+record::E24_34_specific_health_conditions --> E24_34_specific_health_conditions
+
+object "<E42_E43_prior_adoption_information>..</E42_E43_prior_adoption_information>" as E42_E43_prior_adoption_information #ffffaa {
+    E42_prior_adoption_date
+    E43_prior_adoption_intercountry
+
+}
+record::E42_E43_prior_adoption_information --> E42_E43_prior_adoption_information
+
+
+object "<E47_E54_type_financial_assistance>..</E47_E54_type_financial_assistance>" as E47_E54_type_financial_assistance #ffffaa {
+    E47_state_tribal_adoption_assistance
+    E48_state_tribal_foster_care
+    E49_adoption_subsidy
+    E50_guardianship_assistance
+    E51_tanf_assistance
+    E52_title_iv_b
+    E53_chafee_foster_program
+    E54_other_financial_support
+}
+record::E47_E54_type_financial_assistance --> E47_E54_type_financial_assistance
+
+object "<E57_E58_siblings_in_foster_care>..</E57_E58_siblings_in_foster_care>" as E57_E58_siblings_in_foster_care #ffffaa {
+    E57_siblings_in_foster_care
+    E58_siblings_in_living_arrangement
+}
+record::E57_E58_siblings_in_foster_care --> E57_E58_siblings_in_foster_care
+
+object "<tpr_first_parent>..</tpr_first_parent>" as tpr_first_parent #ffffaa {
+    E63_tpr_parent1
+    E65_tpr_petition_date_parent1
+    E67_tpr_date_parent1
+}
+record::E63_E68_termination_of_parental_rights --> tpr_first_parent
+
+object "<tpr_second_parent>..</tpr_second_parent>" as tpr_second_parent #ffffaa {
+    E64_tpr_parent2
+    E66_tpr_petition_date_parent2
+    E68_tpr_date_parent2
+}
+record::E63_E68_termination_of_parental_rights --+ tpr_second_parent
+
+
+object BaseChild #aaffff {
+    last_name
+    first_name
+    date_created
+    last_removal
+    last_adoption
+    last_exit
+    last_termination
+    e1
+    e4
+}
+
+object Child #ddddff {
+    e5
+    e6
+    e13
+    e14
+    e15
+    e16
+    e17
+    e18
+    e19
+    e20
+    e21
+    ooh
+    a
+}
+
+object Context #aaffff {
+    e2
+    data
+}
+@enduml

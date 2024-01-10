@@ -1,5 +1,6 @@
 from controllers.child_controller import ChildController
 from controllers.export_controller import ExportController
+from controllers.import_controller import ImportController
 from dialogs.main_window2_dialog import MainWindow2Dialog
 from model import ConfigTable
 from model.models import FileType, ReportType
@@ -612,6 +613,7 @@ class MainWindow2Controller:
 
         self.window.on_close = self.save_defaults
         self.window.on_export = self.do_export
+        self.window.on_import = self.do_import
 
     def show(self):
         self.load_defaults()
@@ -680,6 +682,10 @@ class MainWindow2Controller:
         controller: ExportController = ExportController(self.window)
         controller.e1 = self.e1
         controller.e2 = self.window.reporting_period
-        controller.report_type =self.window.report_type
+        controller.report_type = self.window.report_type
         controller.file_type = self.window.file_type
+        controller.show()
+
+    def do_import(self):
+        controller: ImportController = ImportController(self.window)
         controller.show()

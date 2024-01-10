@@ -1,0 +1,105 @@
+@startuml
+'https://plantuml.com/object-diagram
+
+
+object "<data>..</data>" as data #ffffaa {
+    A1_title_iv_agency
+    A2_report_date
+    records
+}
+
+object "<records>..</records>" as records #ffffaa {
+    record
+}
+object "<record>..</record>" as record #ffffaa {
+    A3_child_record_number
+    A4_child_date_of_birth
+    A5_child_sex
+    A6_child_race_american_indian_alaska_native
+    A7_child_race_asian
+    A8_child_race_black_african_american
+    A9_child_race_hawaiian_pacific_islander
+    A10_child_race_white
+    A11_child_race_unknown
+    A12_child_race_abandoned
+    A13_child_race_declined
+    A14_child_hispanic_latino
+    A15_assistance_agreement_type
+    A16_adoption_subsidy_amount
+    A17_adoption_finalization_date
+    A18_agreement_termination_date
+    A19_adoption_placing_agency
+}
+
+object BaseChild #aaffff {
+    last_name
+    first_name
+    date_created
+    last_removal
+    last_adoption
+    last_exit
+    last_termination
+    e1
+    e4
+}
+
+object Child #ddddff {
+    e5
+    e6
+    e13
+    e14
+    e15
+    e16
+    e17
+    e18
+    e19
+    e20
+    e21
+    ooh
+    a
+}
+
+object Context #aaffff {
+    e2
+    data
+}
+
+object ARecord #ddddff {
+    a15
+    a16
+    a17
+    a18
+    a19
+}
+
+data::records --> records
+data::A2_report_date ---> Context::e2 #008000
+records::record +--> record
+
+record::A4_child_date_of_birth -> Child::e5 #ff0000
+record::A5_child_sex -> Child::e6 #ff0000
+record::A6_child_race_american_indian_alaska_native -> Child::e13 #ff0000
+record::A7_child_race_asian -> Child::e14 #ff0000
+record::A8_child_race_black_african_american -> Child::e15 #ff0000
+record::A9_child_race_hawaiian_pacific_islander -> Child::e16 #ff0000
+record::A10_child_race_white -> Child::e17 #ff0000
+record::A11_child_race_unknown -> Child::e18 #ff0000
+record::A12_child_race_abandoned -> Child::e19 #ff0000
+record::A13_child_race_declined -> Child::e20 #ff0000
+record::A14_child_hispanic_latino -> Child::e21 #ff0000
+
+
+BaseChild ---o Context
+
+data::A1_title_iv_agency -> BaseChild::e1 #008000
+record::A3_child_record_number -> BaseChild::e4 #008000
+Context::data --* Child
+
+Child::a --* ARecord
+record::A15_assistance_agreement_type --> ARecord::a15 #0000ff
+record::A16_adoption_subsidy_amount --> ARecord::a16 #0000ff
+record::A17_adoption_finalization_date --> ARecord::a17 #0000ff
+record::A18_agreement_termination_date --> ARecord::a18 #0000ff
+record::A19_adoption_placing_agency --> ARecord::a19 #0000ff
+
+@enduml
