@@ -24,7 +24,8 @@ try:
     import model
     from controllers.ooh_controller import OOHController
     from controllers.a_controller import AController
-    from model import TribeTable, OOHRecord, Child, Context, ContextTable, StateTable, TribeStateTable, BaseChildTable
+    from model import TribeTable, OOHRecord, Child, Context, ContextTable, StateTable, TribeStateTable, BaseChildTable, \
+    ConfigTable
 
 
     def initialize_database() -> None:
@@ -82,7 +83,7 @@ try:
             model.open_database(str(database_path))
 
             try:
-                if ContextTable.select().count() == 0:
+                if ConfigTable.select().count() == 0:
                     splash.showMessage("Initializing new database...", color=QColor.fromRgb(255, 255, 255, 255))
                     QCoreApplication.processEvents()
                     initialize_database()

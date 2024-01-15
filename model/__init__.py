@@ -26,7 +26,7 @@ def close_database():
 
 def create_tables():
     database.create_tables(
-        [DatabaseVersion, BaseChildTable, ConfigTable, ContextTable, StateTable, TribeTable, TribeStateTable]
+        [Version, BaseChildTable, ConfigTable, ContextTable, StateTable, TribeTable, TribeStateTable]
     )
 
     # print(BaseChildTable.create_table())
@@ -47,10 +47,6 @@ def apply_migrations(connection) -> None:
     if DATABASE_VERSION > current_version:
         while current_version := current_version + 1 <= DATABASE_VERSION:
             _do_migration(current_version)
-
-    config = ConfigTable.get_by_id(1)
-    config.database_version = DATABASE_VERSION
-    config.save()
 
 
 def _do_migration(version: int) -> None:
