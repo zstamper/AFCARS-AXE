@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: LicenseRef-Qt-Commercial OR BSD-3-Clause
 
 """PySide6 port of the widgets/gallery example from Qt v5.15"""
+import datetime
 import traceback
 
 import peewee
@@ -97,6 +98,10 @@ try:
 
         except Exception as e:
             traceback.print_exc()
+            with open('stderr.txt', 'w+') as stderr:
+                print(datetime.time.strftime("%Y-%m-%d %H:%M:%S"), file=stderr)
+                traceback.print_exc(file=stderr)
+                print('-'*80, file=stderr)
 
 
     if __name__ == '__main__':
@@ -104,5 +109,7 @@ try:
 
 except Exception as e:
     traceback.print_exc()
-    with open('./stderr.txt', 'w') as stderr:
+    with open('stderr.txt', 'w') as stderr:
+        print(datetime.time.strftime("%Y-%m-%d %H:%M:%S"), file=stderr)
         traceback.print_exc(file=stderr)
+        print('-' * 80, file=stderr)

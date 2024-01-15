@@ -5,7 +5,6 @@ from playhouse.sqlite_ext import JSONField
 
 from .models import (Child, Context, Tribe, State, FileType, BaseChild, ReportType)
 
-
 database = SqliteDatabase(None, pragmas={
     'journal_mode': 'wal',
     'cache_size': -1 * 64000,  # 64MB
@@ -73,9 +72,13 @@ class BaseModel(Model):
         database = database
 
 
-class ConfigTable(BaseModel):
+class Version(BaseModel):
     id = AutoField(primary_key=True)
     database_version = IntegerField()
+
+
+class ConfigTable(BaseModel):
+    id = AutoField(primary_key=True)
     fips_code = EPACodeField(null=True)
     epa_code = EPACodeField(null=True)
     reporting_period = TextField(null=True)

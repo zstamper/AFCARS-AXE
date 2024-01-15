@@ -5,7 +5,8 @@ from playhouse.migrate import SqliteMigrator
 from .models import (BaseChild, Context, Child, OOHRecord, RecognizedTribe, SecondParent, Removal1993, Removal2020,
                      LivingArrangement, PermanencyPlan, PeriodicReview, PermanencyHearing, CaseVisit,
                      ARecord, Export)
-from .tables import (database, BaseChildTable, ConfigTable, ContextTable, StateTable, TribeTable, TribeStateTable)
+from .tables import (database, BaseChildTable, ConfigTable, ContextTable, StateTable, TribeTable, TribeStateTable,
+                     Version)
 from .migrations import *
 
 DATABASE_VERSION: int = 0
@@ -25,7 +26,7 @@ def close_database():
 
 def create_tables():
     database.create_tables(
-        [BaseChildTable, ConfigTable, ContextTable, StateTable, TribeTable, TribeStateTable]
+        [DatabaseVersion, BaseChildTable, ConfigTable, ContextTable, StateTable, TribeTable, TribeStateTable]
     )
 
     # print(BaseChildTable.create_table())
@@ -37,15 +38,19 @@ def create_tables():
 def apply_migrations(connection) -> None:
     cursor = connection.cursor()
     try:
-        result = cursor.execute('SELECT database_version FROM configtable WHERE id=1')
+        result = cursor.execute('SELECT database_version FROM version WHERE id=1')
         current_version = result.fetchone()[0]
     except OperationalError as oe:
-
         _do_migration(0)
         current_version = 0
+
     if DATABASE_VERSION > current_version:
         while current_version := current_version + 1 <= DATABASE_VERSION:
             _do_migration(current_version)
+
+    config = ConfigTable.get_by_id(1)
+    config.database_version = DATABASE_VERSION
+    config.save()
 
 
 def _do_migration(version: int) -> None:
