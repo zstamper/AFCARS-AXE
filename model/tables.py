@@ -1,9 +1,10 @@
 import datetime
 
-from peewee import Model, SqliteDatabase, TextField, ForeignKeyField, AutoField, Field, DateField
+from peewee import Model, SqliteDatabase, TextField, ForeignKeyField, AutoField, Field, DateField, IntegerField
 from playhouse.sqlite_ext import JSONField
 
 from .models import (Child, Context, Tribe, State, FileType, BaseChild, ReportType)
+
 
 database = SqliteDatabase(None, pragmas={
     'journal_mode': 'wal',
@@ -74,6 +75,7 @@ class BaseModel(Model):
 
 class ConfigTable(BaseModel):
     id = AutoField(primary_key=True)
+    database_version = IntegerField()
     fips_code = EPACodeField(null=True)
     epa_code = EPACodeField(null=True)
     reporting_period = TextField(null=True)

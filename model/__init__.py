@@ -1,13 +1,22 @@
+from sqlite3 import OperationalError
+
+from playhouse.migrate import SqliteMigrator
+
 from .models import (BaseChild, Context, Child, OOHRecord, RecognizedTribe, SecondParent, Removal1993, Removal2020,
                      LivingArrangement, PermanencyPlan, PeriodicReview, PermanencyHearing, CaseVisit,
                      ARecord, Export)
 from .tables import (database, BaseChildTable, ConfigTable, ContextTable, StateTable, TribeTable, TribeStateTable)
+from .migrations import *
+
+DATABASE_VERSION: int = 0
 
 
 def open_database(database_name: str):
     close_database()
     database.init(database_name)
     database.connect()
+    apply_migrations(database.connection())
+
 
 def close_database():
     if not database.is_closed():
@@ -23,6 +32,28 @@ def create_tables():
     bootstrap_states()
     bootstrap_tribes()
     bootstrap_fips_codes()
+
+
+def apply_migrations(connection) -> None:
+    cursor = connection.cursor()
+    try:
+        result = cursor.execute('SELECT database_version FROM configtable WHERE id=1')
+        current_version = result.fetchone()[0]
+    except OperationalError as oe:
+
+        _do_migration(0)
+        current_version = 0
+    if DATABASE_VERSION > current_version:
+        while current_version := current_version + 1 <= DATABASE_VERSION:
+            _do_migration(current_version)
+
+
+def _do_migration(version: int) -> None:
+    migrator = SqliteMigrator(database)
+    func_name = f"migration_{version}"
+    if func_name in globals() and callable(globals()[func_name]):
+        func = globals()[func_name]
+        func(migrator)
 
 
 def bootstrap_states():
@@ -711,7 +742,7 @@ def bootstrap_fips_codes():
         ("Wyoming", "56"),
         ("U.S. Virgin Islands", "78"),
         ("Guam", "66"),
-        ("Northern Mariana Islands","69"),
+        ("Northern Mariana Islands", "69"),
         ("American Samoa", "60"),
         ("Puerto Rico", "72")
     ]
