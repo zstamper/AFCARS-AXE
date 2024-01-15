@@ -98,8 +98,8 @@ try:
 
         except Exception as e:
             traceback.print_exc()
-            with open('stderr.txt', 'w+') as stderr:
-                print(datetime.time.strftime("%Y-%m-%d %H:%M:%S"), file=stderr)
+            with open(Path.home() / 'stderr.txt', 'w+') as stderr:
+                print(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), file=stderr)
                 traceback.print_exc(file=stderr)
                 print('-'*80, file=stderr)
 
@@ -109,7 +109,7 @@ try:
 
 except Exception as e:
     traceback.print_exc()
-    with open('stderr.txt', 'w') as stderr:
-        print(datetime.time.strftime("%Y-%m-%d %H:%M:%S"), file=stderr)
+    with open(Path.home() / 'stderr.txt', 'w+') as stderr:
+        print(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), file=stderr)
         traceback.print_exc(file=stderr)
         print('-' * 80, file=stderr)
