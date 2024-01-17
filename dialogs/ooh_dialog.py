@@ -59,7 +59,7 @@ class OOHDialog(BaseDialog):
         self.setFixedSize(self.ui.size())
 
     def clear(self) -> None:
-        super().clear(exclude=['epa_tribes',])
+        super().clear(exclude=['epa_tribes', ])
         self.setWindowTitle("")
         self.current_tab = 0
 
@@ -71,6 +71,9 @@ class OOHDialog(BaseDialog):
             for tribe in tribes:
                 item = QListWidgetItem(f"{state} - {tribe.tribe}")
                 self.ui.tribes.addItem(QListWidgetItem(item))
+
+    def enable_icwa(self, is_enabled: bool) -> None:
+        self.ui.tabWidget.tabBar().setTabEnabled(1, is_enabled)
 
     # ==================================================================================================================
 

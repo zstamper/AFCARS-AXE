@@ -17,7 +17,7 @@ class OOHController:
      and editing model data using the view provided at time of controller instantiation.
      """
 
-    def __init__(self, parent):
+    def __init__(self, parent, e1: str = ""):
         self.dialog = OOHDialog(parent)
         self.new_data: Child | None = None
         self.validator = OOHValidator(self.dialog)
@@ -26,6 +26,7 @@ class OOHController:
         self._base_child: BaseChild | None = None
         self._child: Child | None = None
         self.on_accept: Optional[Callable] = None
+        self.e1: str = e1
 
         # Wire up the dialog to our event handlers
         self.dialog.on_accept = self.do_accept
@@ -106,6 +107,7 @@ class OOHController:
         return False
 
     def show(self):
+        self.dialog.enable_icwa(not self.is_tribe())
         self.dialog.exec()
 
     def clear(self):
@@ -210,3 +212,6 @@ class OOHController:
         if row >= 0:
             del self.dialog.tribes[row]
             self.dialog.refresh_tribes()
+
+    def is_tribe(self) -> bool:
+        return len(self.e1) == 3

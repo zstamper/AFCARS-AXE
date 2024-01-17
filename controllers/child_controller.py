@@ -77,7 +77,7 @@ class ChildController:
 
         controller = None
         if self.report_type == ReportType.OOH:
-            controller = OOHController(parent=self.dialog)
+            controller = OOHController(parent=self.dialog, e1=self.e1)
         elif self.report_type == ReportType.A:
             controller = AController(parent=self.dialog)
         if controller:
@@ -107,7 +107,7 @@ class ChildController:
             return
         controller = None
         if self.report_type == ReportType.OOH:
-            controller = OOHController(parent=self.dialog)
+            controller = OOHController(parent=self.dialog, e1=self.e1)
         elif self.report_type == ReportType.A:
             controller = AController(parent=self.dialog)
         if controller:
