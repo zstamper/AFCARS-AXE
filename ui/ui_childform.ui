@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string>Child name and ID goes here</string>
   </property>
-  <layout class="QHBoxLayout" name="horizontalLayout">
+  <layout class="QHBoxLayout" name="horizontalLayout_44">
    <item>
     <layout class="QVBoxLayout" name="verticalLayout_16">
      <item>
@@ -164,22 +164,9 @@
         <attribute name="title">
          <string>Demographics</string>
         </attribute>
-        <layout class="QVBoxLayout" name="verticalLayout_9">
+        <layout class="QHBoxLayout" name="horizontalLayout">
          <item>
           <layout class="QGridLayout" name="gridLayout">
-           <item row="1" column="0">
-            <spacer name="verticalSpacer_2">
-             <property name="orientation">
-              <enum>Qt::Vertical</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>20</width>
-               <height>40</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
            <item row="0" column="0">
             <layout class="QVBoxLayout" name="verticalLayout_6">
              <item>
@@ -193,192 +180,137 @@
                <property name="title">
                 <string>Race</string>
                </property>
-               <widget class="QCheckBox" name="e13">
-                <property name="geometry">
-                 <rect>
-                  <x>13</x>
-                  <y>53</y>
-                  <width>256</width>
-                  <height>20</height>
-                 </rect>
-                </property>
-                <property name="text">
-                 <string>American Indian or Alaska Native (E13)</string>
-                </property>
-               </widget>
-               <widget class="QCheckBox" name="e14">
-                <property name="geometry">
-                 <rect>
-                  <x>13</x>
-                  <y>74</y>
-                  <width>93</width>
-                  <height>20</height>
-                 </rect>
-                </property>
-                <property name="text">
-                 <string>Asian (E14)</string>
-                </property>
-               </widget>
-               <widget class="QCheckBox" name="e15">
-                <property name="geometry">
-                 <rect>
-                  <x>13</x>
-                  <y>95</y>
-                  <width>214</width>
-                  <height>20</height>
-                 </rect>
-                </property>
-                <property name="text">
-                 <string>Black or African American (E15)</string>
-                </property>
-               </widget>
-               <widget class="QCheckBox" name="e16">
-                <property name="geometry">
-                 <rect>
-                  <x>13</x>
-                  <y>116</y>
-                  <width>302</width>
-                  <height>20</height>
-                 </rect>
-                </property>
-                <property name="text">
-                 <string>Native Hawaiian or Other Pacific Islander (E16)</string>
-                </property>
-               </widget>
-               <widget class="QCheckBox" name="e17">
-                <property name="geometry">
-                 <rect>
-                  <x>13</x>
-                  <y>137</y>
-                  <width>94</width>
-                  <height>20</height>
-                 </rect>
-                </property>
-                <property name="text">
-                 <string>White (E17)</string>
-                </property>
-               </widget>
-               <widget class="QCheckBox" name="e18">
-                <property name="geometry">
-                 <rect>
-                  <x>13</x>
-                  <y>158</y>
-                  <width>116</width>
-                  <height>20</height>
-                 </rect>
-                </property>
-                <property name="text">
-                 <string>Unknown (E18)</string>
-                </property>
-               </widget>
-               <widget class="QCheckBox" name="e19">
-                <property name="geometry">
-                 <rect>
-                  <x>13</x>
-                  <y>179</y>
-                  <width>129</width>
-                  <height>20</height>
-                 </rect>
-                </property>
-                <property name="text">
-                 <string>Abandoned (E19)</string>
-                </property>
-               </widget>
-               <widget class="QCheckBox" name="e20">
-                <property name="geometry">
-                 <rect>
-                  <x>13</x>
-                  <y>200</y>
-                  <width>114</width>
-                  <height>20</height>
-                 </rect>
-                </property>
-                <property name="text">
-                 <string>Declined (E20)</string>
-                </property>
-               </widget>
-               <widget class="QLabel" name="e21_label">
-                <property name="geometry">
-                 <rect>
-                  <x>15</x>
-                  <y>226</y>
-                  <width>216</width>
-                  <height>16</height>
-                 </rect>
-                </property>
-                <property name="text">
-                 <string>Child Hispanic or Latino Origin (E21)</string>
-                </property>
-                <property name="alignment">
-                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                </property>
-               </widget>
-               <widget class="QComboBox" name="e21">
-                <property name="geometry">
-                 <rect>
-                  <x>12</x>
-                  <y>247</y>
-                  <width>297</width>
-                  <height>21</height>
-                 </rect>
-                </property>
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="maximumSize">
-                 <size>
-                  <width>297</width>
-                  <height>16777215</height>
-                 </size>
-                </property>
-                <property name="currentIndex">
-                 <number>-1</number>
-                </property>
-                <property name="placeholderText">
-                 <string>Select</string>
-                </property>
+               <layout class="QVBoxLayout" name="verticalLayout_9">
                 <item>
-                 <property name="text">
-                  <string>Yes</string>
-                 </property>
+                 <widget class="QLabel" name="label_11">
+                  <property name="text">
+                   <string>&lt;i&gt;Check all that apply&lt;/i&gt;</string>
+                  </property>
+                 </widget>
                 </item>
                 <item>
-                 <property name="text">
-                  <string>No</string>
-                 </property>
+                 <widget class="QCheckBox" name="e13">
+                  <property name="text">
+                   <string>American Indian or Alaska Native (E13)</string>
+                  </property>
+                 </widget>
                 </item>
                 <item>
-                 <property name="text">
-                  <string>Unknown</string>
-                 </property>
+                 <widget class="QCheckBox" name="e14">
+                  <property name="text">
+                   <string>Asian (E14)</string>
+                  </property>
+                 </widget>
                 </item>
                 <item>
-                 <property name="text">
-                  <string>Abandoned</string>
-                 </property>
+                 <widget class="QCheckBox" name="e15">
+                  <property name="text">
+                   <string>Black or African American (E15)</string>
+                  </property>
+                 </widget>
                 </item>
                 <item>
-                 <property name="text">
-                  <string>Declined</string>
-                 </property>
+                 <widget class="QCheckBox" name="e16">
+                  <property name="text">
+                   <string>Native Hawaiian or Other Pacific Islander (E16)</string>
+                  </property>
+                 </widget>
                 </item>
-               </widget>
-               <widget class="QLabel" name="label_11">
-                <property name="geometry">
-                 <rect>
-                  <x>15</x>
-                  <y>33</y>
-                  <width>119</width>
-                  <height>16</height>
-                 </rect>
-                </property>
-                <property name="text">
-                 <string>&lt;i&gt;Check all that apply&lt;/i&gt;</string>
-                </property>
-               </widget>
+                <item>
+                 <widget class="QCheckBox" name="e17">
+                  <property name="text">
+                   <string>White (E17)</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="e18">
+                  <property name="text">
+                   <string>Unknown (E18)</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="e19">
+                  <property name="text">
+                   <string>Abandoned (E19)</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="e20">
+                  <property name="text">
+                   <string>Declined (E20)</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item>
+              <widget class="QGroupBox" name="groupBox_4">
+               <property name="title">
+                <string>Ethnicity</string>
+               </property>
+               <layout class="QVBoxLayout" name="verticalLayout_24">
+                <item>
+                 <widget class="QLabel" name="e21_label">
+                  <property name="text">
+                   <string>Child Hispanic or Latino Origin (E21)</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QComboBox" name="e21">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>297</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="currentIndex">
+                   <number>-1</number>
+                  </property>
+                  <property name="placeholderText">
+                   <string>Select</string>
+                  </property>
+                  <item>
+                   <property name="text">
+                    <string>Yes</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>No</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>Unknown</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>Abandoned</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>Declined</string>
+                   </property>
+                  </item>
+                 </widget>
+                </item>
+               </layout>
               </widget>
              </item>
             </layout>
@@ -430,8 +362,8 @@
                   <height>21</height>
                  </rect>
                 </property>
-                <property name="inputMask">
-                 <string>000000</string>
+                <property name="maxLength">
+                 <number>6</number>
                 </property>
                 <property name="placeholderText">
                  <string>YYYYMM</string>
@@ -463,7 +395,10 @@
                  </rect>
                 </property>
                 <property name="inputMask">
-                 <string>000000</string>
+                 <string/>
+                </property>
+                <property name="maxLength">
+                 <number>6</number>
                 </property>
                 <property name="placeholderText">
                  <string>YYYYMM</string>
@@ -576,6 +511,19 @@
              </item>
             </layout>
            </item>
+           <item row="1" column="0">
+            <spacer name="verticalSpacer_2">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
           </layout>
          </item>
         </layout>
@@ -591,16 +539,6 @@
             <string>Indian Child Welfare Act</string>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_22">
-            <item>
-             <widget class="QLabel" name="label_4">
-              <property name="text">
-               <string>&lt;i&gt;State skips if this is a child in the placement and care of a tribe (E104)&lt;/i&gt;</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignCenter</set>
-              </property>
-             </widget>
-            </item>
             <item>
              <widget class="QLabel" name="label_12">
               <property name="text">
@@ -901,7 +839,10 @@
                   <item>
                    <widget class="QLineEdit" name="e11">
                     <property name="inputMask">
-                     <string>00000000</string>
+                     <string/>
+                    </property>
+                    <property name="maxLength">
+                     <number>8</number>
                     </property>
                     <property name="placeholderText">
                      <string>YYYYMMDD</string>
@@ -1819,7 +1760,10 @@
                 <item>
                  <widget class="QLineEdit" name="e59">
                   <property name="inputMask">
-                   <string>9999</string>
+                   <string/>
+                  </property>
+                  <property name="maxLength">
+                   <number>4</number>
                   </property>
                   <property name="placeholderText">
                    <string>YYYY</string>
@@ -2071,7 +2015,10 @@
                 <item>
                  <widget class="QLineEdit" name="e60">
                   <property name="inputMask">
-                   <string>9999</string>
+                   <string/>
+                  </property>
+                  <property name="maxLength">
+                   <number>4</number>
                   </property>
                   <property name="placeholderText">
                    <string>YYYY</string>
@@ -2977,7 +2924,10 @@ Leave blank if law enforcement was not notified.&lt;/i&gt;</string>
            <item>
             <widget class="QLineEdit" name="e108">
              <property name="inputMask">
-              <string>99999999</string>
+              <string/>
+             </property>
+             <property name="maxLength">
+              <number>8</number>
              </property>
              <property name="placeholderText">
               <string>YYYYMMDD</string>
@@ -3106,7 +3056,10 @@ Leave blank if law enforcement was not notified.&lt;/i&gt;</string>
            <item>
             <widget class="QLineEdit" name="e111">
              <property name="inputMask">
-              <string>99999999</string>
+              <string/>
+             </property>
+             <property name="maxLength">
+              <number>8</number>
              </property>
              <property name="placeholderText">
               <string>YYYYMMDD</string>
@@ -3365,7 +3318,6 @@ Leave blank if law enforcement was not notified.&lt;/i&gt;</string>
   <tabstop>e18</tabstop>
   <tabstop>e19</tabstop>
   <tabstop>e20</tabstop>
-  <tabstop>e21</tabstop>
   <tabstop>e45</tabstop>
   <tabstop>e42</tabstop>
   <tabstop>e43</tabstop>
@@ -3489,19 +3441,19 @@ Leave blank if law enforcement was not notified.&lt;/i&gt;</string>
   </connection>
  </connections>
  <buttongroups>
-  <buttongroup name="e7"/>
-  <buttongroup name="e12"/>
-  <buttongroup name="e10"/>
   <buttongroup name="e63"/>
   <buttongroup name="e62"/>
-  <buttongroup name="e107"/>
-  <buttongroup name="e106"/>
   <buttongroup name="e109"/>
+  <buttongroup name="e12"/>
+  <buttongroup name="e10"/>
+  <buttongroup name="e7"/>
+  <buttongroup name="e6"/>
+  <buttongroup name="e61"/>
+  <buttongroup name="e106"/>
+  <buttongroup name="funding"/>
   <buttongroup name="e22"/>
   <buttongroup name="e110"/>
   <buttongroup name="e8"/>
-  <buttongroup name="e61"/>
-  <buttongroup name="funding"/>
-  <buttongroup name="e6"/>
+  <buttongroup name="e107"/>
  </buttongroups>
 </ui>

@@ -9,8 +9,8 @@ from model.models import Tribe
 
 
 def get_epa_tribes() -> list[Tribe]:
-    results = {}
-    query = TribeTable.select().order_by(TribeTable.tribe).prefetch(TribeStateTable, StateTable)
+    # results = {}
+    # query = TribeTable.select().order_by(TribeTable.tribe).prefetch(TribeStateTable, StateTable)
     return [Tribe(id=tribe.id, tribe=tribe.tribe, epa_code=tribe.epa_code, states=[tribestate.state.code for tribestate in tribe.states])
             for tribe in TribeTable.select().order_by(TribeTable.tribe).prefetch(TribeStateTable, StateTable)]
     # for tribe in query:

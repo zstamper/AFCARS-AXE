@@ -22,10 +22,8 @@ try:
         QTableWidget, QSplashScreen
 
     import model
-    from controllers.ooh_controller import OOHController
-    from controllers.a_controller import AController
     from model import TribeTable, OOHRecord, Child, Context, ContextTable, StateTable, TribeStateTable, BaseChildTable, \
-    ConfigTable
+        ConfigTable
 
 
     def initialize_database() -> None:
@@ -35,12 +33,14 @@ try:
     def epa_tribes() -> list[Tribe]:
         results = {}
         query = TribeTable.select().order_by(TribeTable.tribe).prefetch(TribeStateTable, StateTable)
-        return [Tribe(id=tribe.id, tribe=tribe.tribe, epa_code=tribe.epa_code, states=[tribestate.state.code for tribestate in tribe.states])
+        return [Tribe(id=tribe.id, tribe=tribe.tribe, epa_code=tribe.epa_code,
+                      states=[tribestate.state.code for tribestate in tribe.states])
                 for tribe in TribeTable.select().order_by(TribeTable.tribe).prefetch(TribeStateTable, StateTable)]
         # for tribe in query:
         #     states = ", ".join([state.state.code for state in tribe.states])
         #     results[tribe.id] = f"{tribe.tribe} ({states})"
         # return results
+
 
     def main():
         """
@@ -102,7 +102,7 @@ try:
             with open(Path.home() / 'stderr.txt', 'w+') as stderr:
                 print(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), file=stderr)
                 traceback.print_exc(file=stderr)
-                print('-'*80, file=stderr)
+                print('-' * 80, file=stderr)
 
 
     if __name__ == '__main__':

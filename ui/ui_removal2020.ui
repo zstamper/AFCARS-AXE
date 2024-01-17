@@ -86,7 +86,10 @@
             </size>
            </property>
            <property name="inputMask">
-            <string>00000000</string>
+            <string/>
+           </property>
+           <property name="maxLength">
+            <number>8</number>
            </property>
            <property name="placeholderText">
             <string>YYYYMMDD</string>
@@ -1968,11 +1971,11 @@ is Jurisdiction Transfer&lt;/i&gt;</string>
   </connection>
  </connections>
  <buttongroups>
-  <buttongroup name="e183"/>
-  <buttongroup name="e174"/>
   <buttongroup name="e182"/>
+  <buttongroup name="e172"/>
+  <buttongroup name="e183"/>
   <buttongroup name="e163"/>
   <buttongroup name="e171"/>
-  <buttongroup name="e172"/>
+  <buttongroup name="e174"/>
  </buttongroups>
 </ui>

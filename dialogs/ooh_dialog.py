@@ -59,7 +59,7 @@ class OOHDialog(BaseDialog):
         self.setFixedSize(self.ui.size())
 
     def clear(self) -> None:
-        super().clear()
+        super().clear(exclude=['epa_tribes',])
         self.setWindowTitle("")
         self.current_tab = 0
 

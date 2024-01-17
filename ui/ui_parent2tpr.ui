@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>518</width>
+    <width>523</width>
     <height>242</height>
    </rect>
   </property>
@@ -107,7 +107,10 @@
         <item row="0" column="1">
          <widget class="QLineEdit" name="e66">
           <property name="inputMask">
-           <string>99999999</string>
+           <string/>
+          </property>
+          <property name="maxLength">
+           <number>8</number>
           </property>
           <property name="placeholderText">
            <string>YYYYMMDD</string>
@@ -117,7 +120,10 @@
         <item row="1" column="1">
          <widget class="QLineEdit" name="e68">
           <property name="inputMask">
-           <string>99999999</string>
+           <string/>
+          </property>
+          <property name="maxLength">
+           <number>8</number>
           </property>
           <property name="placeholderText">
            <string>YYYYMMDD</string>

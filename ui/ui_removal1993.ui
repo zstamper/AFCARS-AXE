@@ -90,6 +90,12 @@
      </item>
      <item row="2" column="1">
       <widget class="QComboBox" name="e155">
+       <property name="currentIndex">
+        <number>-1</number>
+       </property>
+       <property name="placeholderText">
+        <string>Select</string>
+       </property>
        <item>
         <property name="text">
          <string>Reunify with parent or legal guardian</string>

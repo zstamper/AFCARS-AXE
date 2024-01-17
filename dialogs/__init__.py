@@ -27,9 +27,13 @@ class BaseMixin:
         ui_file.close()
         return ui
 
-    def clear(self) -> None:
+    def clear(self, exclude: list[str] = None) -> None:
+        if exclude is None:
+            exclude = []
         self.id = None
         for name in dir(self.ui):
+            if name in exclude:
+                continue
             widget = getattr(self.ui, name)
             match widget:
                 case QLineEdit():

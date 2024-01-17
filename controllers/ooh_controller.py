@@ -5,7 +5,7 @@ from pydantic import ValidationError
 from controllers.removal1993_controller import Removal1993Controller
 from controllers.removal_2020_controller import Removal2020Controller
 from controllers.second_parent_controller import SecondParentController
-from controllers.utilities import show_error_dialog
+from controllers.utilities import show_error_dialog, get_epa_tribes
 from controllers.validators.ooh_validator import OOHValidator
 from dialogs.ooh_dialog import OOHDialog
 from model.models import Removal1993, Removal2020, SecondParent, RecognizedTribe, BaseChild, Child
@@ -42,6 +42,8 @@ class OOHController:
         self.dialog.on_delete_second_parent = self.do_delete_second_parent
         self.dialog.on_add_tribe_clicked = self.do_add_tribe
         self.dialog.on_remove_tribe_clicked = self.do_remove_tribe
+
+        self.dialog.epa_tribes = get_epa_tribes()
 
     @property
     def child_name(self) -> str:
