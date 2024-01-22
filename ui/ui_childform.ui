@@ -473,19 +473,6 @@
                   </property>
                  </widget>
                 </item>
-                <item row="0" column="1">
-                 <widget class="QLineEdit" name="e56">
-                  <property name="maximumSize">
-                   <size>
-                    <width>50</width>
-                    <height>16777215</height>
-                   </size>
-                  </property>
-                  <property name="inputMask">
-                   <string>00</string>
-                  </property>
-                 </widget>
-                </item>
                 <item row="1" column="0">
                  <widget class="QLabel" name="e57_label">
                   <property name="text">
@@ -503,6 +490,25 @@
                     <width>50</width>
                     <height>16777215</height>
                    </size>
+                  </property>
+                  <property name="maxLength">
+                   <number>2</number>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="1">
+                 <widget class="QLineEdit" name="e56">
+                  <property name="maximumSize">
+                   <size>
+                    <width>50</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="inputMask">
+                   <string/>
+                  </property>
+                  <property name="maxLength">
+                   <number>2</number>
                   </property>
                  </widget>
                 </item>
@@ -3441,19 +3447,19 @@ Leave blank if law enforcement was not notified.&lt;/i&gt;</string>
   </connection>
  </connections>
  <buttongroups>
+  <buttongroup name="e106"/>
+  <buttongroup name="e8"/>
+  <buttongroup name="e10"/>
+  <buttongroup name="e107"/>
+  <buttongroup name="e7"/>
   <buttongroup name="e63"/>
-  <buttongroup name="e62"/>
   <buttongroup name="e109"/>
   <buttongroup name="e12"/>
-  <buttongroup name="e10"/>
-  <buttongroup name="e7"/>
-  <buttongroup name="e6"/>
-  <buttongroup name="e61"/>
-  <buttongroup name="e106"/>
-  <buttongroup name="funding"/>
+  <buttongroup name="e62"/>
   <buttongroup name="e22"/>
+  <buttongroup name="e61"/>
+  <buttongroup name="e6"/>
   <buttongroup name="e110"/>
-  <buttongroup name="e8"/>
-  <buttongroup name="e107"/>
+  <buttongroup name="funding"/>
  </buttongroups>
 </ui>
