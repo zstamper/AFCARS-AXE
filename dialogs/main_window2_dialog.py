@@ -34,6 +34,24 @@ class MainWindow2Dialog(QMainWindow, BaseMixin):
         self.ui.actionQuit.triggered.connect(self._on_close_button_clicked)
         self.ui.actionExport.triggered.connect(self._on_export_button_clicked)
         self.ui.actionImport.triggered.connect(self._on_import_button_clicked)
+        self.ui.fips_code.currentIndexChanged.connect(self._on_fips_code_changed)
+        self.ui.epa_code.currentIndexChanged.connect(self._on_epa_code_changed)
+
+    def _on_fips_code_changed(self):
+        if self.ui.fips_code.currentIndex() >= 0:
+            self.ui.epa_code.setCurrentIndex(-1)
+        self._update_go_button_enabled()
+
+    def _on_epa_code_changed(self):
+        if self.ui.epa_code.currentIndex() >= 0:
+            self.ui.fips_code.setCurrentIndex(-1)
+        self._update_go_button_enabled()
+
+    def _update_go_button_enabled(self):
+        epa = self.ui.epa_code.currentIndex() >= 0
+        fips = self.ui.fips_code.currentIndex() >= 0
+        enabled = (epa and not fips) or (not epa and fips)
+        self.ui.go_button.setEnabled(enabled)
 
     def close(self):
         if self.on_close:
@@ -79,7 +97,7 @@ class MainWindow2Dialog(QMainWindow, BaseMixin):
             if current_index >= 0:
                 self.ui.fips_code.setCurrentIndex(current_index)
         except ValueError:
-            pass
+            self.ui.fips_code.setCurrentIndex(-1)
 
     @property
     def epa_codes(self) -> list:
@@ -105,7 +123,7 @@ class MainWindow2Dialog(QMainWindow, BaseMixin):
             if current_index >= 0:
                 self.ui.epa_code.setCurrentIndex(current_index)
         except ValueError:
-            pass
+            self.ui.epa_code.setCurrentIndex(-1)
 
     @property
     def reporting_periods(self) -> list:
