@@ -515,7 +515,7 @@
      </widget>
      <widget class="QWidget" name="permanency_tab">
       <attribute name="title">
-       <string>Permancy Plan</string>
+       <string>Permanency Plan</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_4">
        <item row="0" column="0">
@@ -1971,11 +1971,11 @@ is Jurisdiction Transfer&lt;/i&gt;</string>
   </connection>
  </connections>
  <buttongroups>
-  <buttongroup name="e182"/>
-  <buttongroup name="e172"/>
-  <buttongroup name="e183"/>
-  <buttongroup name="e163"/>
   <buttongroup name="e171"/>
   <buttongroup name="e174"/>
+  <buttongroup name="e172"/>
+  <buttongroup name="e182"/>
+  <buttongroup name="e183"/>
+  <buttongroup name="e163"/>
  </buttongroups>
 </ui>
