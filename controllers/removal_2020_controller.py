@@ -36,7 +36,7 @@ class Removal2020Controller:
         self.dialog.on_edit_case_worker_visit = self.do_edit_case_worker_visit
         self.dialog.on_delete_case_worker_visit = self.do_edit_case_worker_visit
         self.dialog.on_add_permanency_plan = self.do_add_permanency_plan
-        self.dialog.on_edit_permanency_plan = self.do_add_permanency_plan
+        self.dialog.on_edit_permanency_plan = self.do_edit_permanency_plan
         self.dialog.on_delete_permanency_plan = self.do_delete_permanency_plan
         self.dialog.on_add_permanency_hearing = self.do_add_permanency_hearing
         self.dialog.on_edit_permanency_hearing = self.do_edit_permanency_hearing

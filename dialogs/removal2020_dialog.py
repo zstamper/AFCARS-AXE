@@ -100,10 +100,12 @@ class Removal2020Dialog(BaseDialog):
         ui.form_action.rejected.connect(self.reject)
 
         ui.living_arrangement_add_button.clicked.connect(self._on_add_living_arrangement)
+        ui.living_arrangement_edit_button.clicked.connect(self._on_edit_living_arrangement)
         ui.living_arrangement_delete_button.clicked.connect(self._on_delete_living_arrangement)
         ui.living_arrangements_table.cellDoubleClicked.connect(self._on_edit_living_arrangement)
 
         ui.permanency_plan_add_button.clicked.connect(self._on_add_permanency_plan)
+        ui.permanency_plan_edit_button.clicked.connect(self._on_edit_permanency_plan)
         ui.permanency_plan_delete_button.clicked.connect(self._on_delete_permanency_plan)
         ui.permanency_plans_table.cellDoubleClicked.connect(self._on_edit_permanency_plan)
 
@@ -113,10 +115,12 @@ class Removal2020Dialog(BaseDialog):
         ui.case_visits_table.cellDoubleClicked.connect(self._on_edit_case_worker_visit)
 
         ui.permanency_hearing_add_button.clicked.connect(self._on_add_permanency_hearing)
+        ui.permanency_hearing_edit_button.clicked.connect(self._on_edit_permanency_hearing)
         ui.permanency_hearing_delete_button.clicked.connect(self._on_delete_permanency_hearing)
         ui.permanency_hearings_table.cellDoubleClicked.connect(self._on_edit_permanency_hearing)
 
         ui.periodic_review_add_button.clicked.connect(self._on_add_periodic_review)
+        ui.periodic_review_edit_button.clicked.connect(self._on_edit_periodic_review)
         ui.periodic_review_delete_button.clicked.connect(self._on_delete_periodic_review)
         ui.periodic_reviews_table.cellDoubleClicked.connect(self._on_edit_periodic_review)
 
@@ -167,18 +171,15 @@ class Removal2020Dialog(BaseDialog):
         self.ui.living_arrangements_table.setCurrentRow(v)
 
     def refresh_living_arrangements(self):
-        self.ui.living_arrangements_table.clearContents()
+        while self.ui.living_arrangements_table.rowCount() > 0:
+            self.ui.living_arrangements_table.removeRow(0)
         row = 0
         for data in self.living_arrangements:
-            if row >= self.ui.living_arrangements_table.rowCount():
-                self.ui.living_arrangements_table.insertRow(row)
+            self.ui.living_arrangements_table.insertRow(row)
             self.ui.living_arrangements_table.setItem(row, 0, QTableWidgetItem(str(data.e112)))
             self.ui.living_arrangements_table.setItem(row, 1, QTableWidgetItem(e120_to_str(data.e120)))
             self.ui.living_arrangements_table.setItem(row, 2, QTableWidgetItem(""))
             row += 1
-        max_len: int = len(self.living_arrangements)
-        while self.ui.living_arrangements_table.rowCount() > max_len:
-            self.ui.living_arrangements_table.removeRow(max_len - 1)
 
     # ----- Permanency Plan Automation ----------------------------------------
 
@@ -195,16 +196,14 @@ class Removal2020Dialog(BaseDialog):
             self.on_delete_permanency_plan(*args, **kwargs)
 
     def refresh_permanency_plans(self):
+        while self.ui.permanency_plans_table.rowCount() > 0:
+            self.ui.permanency_plans_table.removeRow(0)
         row: int = 0
         for data in self.permanency_plans:
-            if row >= self.ui.permanency_plans_table.rowCount():
-                self.ui.permanency_plans_table.insertRow(row)
+            self.ui.permanency_plans_table.insertRow(row)
             self.ui.permanency_plans_table.setItem(row, 0, QTableWidgetItem(str(data.e147)))
             self.ui.permanency_plans_table.setItem(row, 1, QTableWidgetItem(e148_to_str(data.e148)))
             row += 1
-        max_len: int = len(self.permanency_plans)
-        while self.ui.permanency_plans_table.rowCount() > max_len:
-            self.ui.permanency_plans_table.removeRow(max_len - 1)
 
     @property
     def permanency_plan_current_row(self) -> int:
@@ -229,16 +228,14 @@ class Removal2020Dialog(BaseDialog):
             self.on_delete_case_worker_visit(*args, **kwargs)
 
     def refresh_case_worker_visits(self):
+        while self.ui.case_visits_table.rowCount() > 0:
+            self.ui.case_visits_table.removeRow(0)
         row: int = 0
         for data in self.case_worker_visits:
-            if row >= self.ui.case_visits_table.rowCount():
-                self.ui.case_visits_table.insertRow(row)
+            self.ui.case_visits_table.insertRow(row)
             self.ui.case_visits_table.setItem(row, 0, QTableWidgetItem(str(data.e151)))
             self.ui.case_visits_table.setItem(row, 1, QTableWidgetItem(e148_to_str(data.e152)))
             row += 1
-        max_len: int = len(self.permanency_plans)
-        while self.ui.case_visits_table.rowCount() > max_len:
-            self.ui.case_visits_table.removeRow(max_len - 1)
 
     @property
     def case_worker_visit_current_row(self) -> int:
@@ -263,15 +260,13 @@ class Removal2020Dialog(BaseDialog):
             self.on_delete_permanency_hearing(*args, **kwargs)
 
     def refresh_permanency_hearings(self):
+        while self.ui.permanency_hearings_table.rowCount() > 0:
+            self.ui.permanency_hearings_table.removeRow(0)
         row: int = 0
         for data in self.permanency_hearings:
-            if row >= self.ui.permanency_hearings_table.rowCount():
-                self.ui.permanency_hearings_table.inserRow(row)
+            self.ui.permanency_hearings_table.insertRow(row)
             self.ui.permanency_hearings_table.setItem(row, 0, QTableWidgetItem(str(data.e150)))
             row += 1
-        max_len: int = len(self.permanency_hearings)
-        while self.ui.permanency_hearings_table.rowCount() > max_len:
-            self.ui.permanency_hearings_table.removeRow(max_len - 1)
 
     @property
     def permanency_hearings_current_row(self) -> int:
@@ -296,15 +291,13 @@ class Removal2020Dialog(BaseDialog):
             self.on_delete_periodic_review(*args, **kwargs)
 
     def refresh_periodic_reviews(self):
+        while self.ui.periodic_reviews_table.rowCount() > 0:
+            self.ui.periodic_reviews_table.removeRow(0)
         row: int = 0
         for data in self.periodic_reviews:
-            if row >= self.ui.periodic_reviews_table.rowCount():
-                self.ui.periodic_reviews_table.insertRow(row)
+            self.ui.periodic_reviews_table.insertRow(row)
             self.ui.periodic_reviews_table.setItem(row, 0, QTableWidgetItem(str(data.e149)))
             row += 1
-        max_len: int = len(self.periodic_reviews)
-        while self.ui.periodic_reviews_table.rowCount() > max_len:
-            self.ui.periodic_reviews_table.removeRow(max_len - 1)
 
     @property
     def periodic_reviews_current_row(self) -> int:
