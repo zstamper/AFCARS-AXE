@@ -36,6 +36,9 @@ class MainWindow2Dialog(QMainWindow, BaseMixin):
         self.ui.actionImport.triggered.connect(self._on_import_button_clicked)
         self.ui.fips_code.currentIndexChanged.connect(self._on_fips_code_changed)
         self.ui.epa_code.currentIndexChanged.connect(self._on_epa_code_changed)
+        self.ui.report_type.currentIndexChanged.connect(self._update_go_button_enabled)
+        self.ui.file_type_production.clicked.connect(self._update_go_button_enabled)
+        self.ui.file_type_test.clicked.connect(self._update_go_button_enabled)
 
     def _on_fips_code_changed(self):
         if self.ui.fips_code.currentIndex() >= 0:
@@ -50,7 +53,9 @@ class MainWindow2Dialog(QMainWindow, BaseMixin):
     def _update_go_button_enabled(self):
         epa = self.ui.epa_code.currentIndex() >= 0
         fips = self.ui.fips_code.currentIndex() >= 0
-        enabled = (epa and not fips) or (not epa and fips)
+        file_type = self.file_type is not None
+        report_type = self.report_type is not None
+        enabled = (epa ^ fips) and file_type and report_type
         self.ui.go_button.setEnabled(enabled)
 
     def close(self):
@@ -175,6 +180,7 @@ class MainWindow2Dialog(QMainWindow, BaseMixin):
         current_index = self._report_types.index(v.value)
         if current_index >= 0:
             self.ui.report_type.setCurrentIndex(current_index)
+            self._update_go_button_enabled()
 
     @property
     def file_type(self) -> FileType | None:
@@ -188,3 +194,4 @@ class MainWindow2Dialog(QMainWindow, BaseMixin):
     def file_type(self, v: FileType | None):
         self.ui.file_type_production.setChecked(v == FileType.PRODUCTION)
         self.ui.file_type_test.setChecked(v == FileType.TEST)
+        self._update_go_button_enabled()
