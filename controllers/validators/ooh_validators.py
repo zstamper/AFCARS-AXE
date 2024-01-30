@@ -16,9 +16,15 @@ class OOHBaseValidator:
             year = int(s[0:4])
             month = int(s[4:6])
             day = int(s[6:8])
-            date(year=year, month=month, day=day)
+            d = date(year=year, month=month, day=day)
+            today = date.today()
+            min_d = date(year=today.year-100, month=today.month, day=today.day)
+            assert d <= date.today()
+            assert d >= min_d
             return True
         except ValueError:
+            return False
+        except AssertionError:
             return False
 
 
