@@ -58,6 +58,10 @@ class LivingArrangementValidators:
             raise ValueError(
                 "Marital status of the foster parent (E123) does not apply when child is not placed in foster family home (E113/E120)."
             )
+        if self.dialog.e113 == 1 and self.dialog.e123 not in (1,2,3,4):
+            raise ValueError(
+                "Marital status of the foster parent(E123) is required when child is placed in foster family home (E113/E120)."
+            )
 
     def validate_e124(self):
         if self.dialog.e113 == 0 and self.dialog.e124 is not None:
@@ -112,7 +116,7 @@ class LivingArrangementValidators:
         if self.dialog.e113 == 1 and self.dialog.e123 in (1, 2):
             if not self.dialog.e136:
                 raise ValueError(
-                    "Second foster parent's year of birth (E136) is required based on living arrangement type (E113, E120).")
+                    "Second foster parent's year of birth (E136) is required based on living arrangement type (E113, E120, E123).")
             year = datetime.date.today().year
             if not 10 <= year - self.dialog.e125 < 100:
                 raise ValueError(

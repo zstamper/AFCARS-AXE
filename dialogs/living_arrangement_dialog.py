@@ -10,6 +10,7 @@ class LivingArrangementDialog(BaseDialog):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.ui = self.load_ui('ui_living_arrangement.ui')
+        self._e113 = None
         self._wire_ui()
         self.setLayout(self.ui.layout())
         self.setFixedSize(self.ui.size())
@@ -120,10 +121,11 @@ class LivingArrangementDialog(BaseDialog):
 
     @property
     def e113(self) -> int:
-        return 1 if self.e120 == 0 else 0
+        return 1 if self._get_combobox_selection(self.ui.e120) == 0 else 0
 
     @e113.setter
     def e113(self, v: int) -> None:
+        self._e113 = v
         if v:
             self.e120 = 0
 
@@ -184,7 +186,11 @@ class LivingArrangementDialog(BaseDialog):
 
     @e120.setter
     def e120(self, v: int) -> None:
-        if v is not None and v != 0:
+        if v is None and self._e113 in (0, None):
+            self._set_combobox_selection(self.ui.e120, -1)
+        elif v == 0:
+            self._set_combobox_selection(self.ui.e120, 0)
+        else:
             self._set_combobox_selection(self.ui.e120, v)
 
     @property
