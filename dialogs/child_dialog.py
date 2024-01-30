@@ -33,6 +33,7 @@ class ChildDialog(BaseDialog):
     def _wire_ui(self):
         self.ui.add_child.clicked.connect(self._on_add_clicked)
         self.ui.edit_child.clicked.connect(self._on_edit_clicked)
+        self.ui.child_table.doubleClicked.connect(self._on_edit_clicked)
         self.ui.delete_child.clicked.connect(self._on_delete_clicked)
         self.ui.reporting_period_filter.currentIndexChanged.connect(self._refresh_data)
         self.ui.filter_a.clicked.connect(self._refresh_data)

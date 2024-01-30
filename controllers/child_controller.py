@@ -92,7 +92,7 @@ class ChildController:
             controller.on_accept = add_child
             controller.show()
 
-    def do_edit(self):
+    def do_edit(self, *args, **kwargs):
 
         def update_child():
             self.refresh_dates(base_child, controller.child)
