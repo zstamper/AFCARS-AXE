@@ -130,7 +130,7 @@ class LivingArrangementValidators:
     def validate_e138_e144(self):
         fields = [self.dialog.e138, self.dialog.e139, self.dialog.e140, self.dialog.e141, self.dialog.e142,
                   self.dialog.e143, self.dialog.e144]
-        if self.dialog.e113 == 1 and self.dialog.e123 in (3, 4):
+        if self.dialog.e113 == 1 and self.dialog.e123 in (1, 2):
             if all([x == 0 for x in fields]):
                 raise ValueError("Second foster parent's race is required (E138 - E144).")
 
