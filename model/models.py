@@ -113,36 +113,36 @@ class Removal1993(MyBaseModel):
     e153: int | None
     e155: int | None
 
-    @field_validator('e69', 'e153')
-    @classmethod
-    def check_date(cls, v: int, info: FieldValidationInfo) -> int:
-        s = str(v)
-        y = s[0:4]
-        m = s[4:6]
-        d = s[6:]
-        err_msg = f"{d} is not a valid date in YYYYMMDD format for {info.field_name}"
-        if len(s) != 8 or \
-                int(y) <= 1980 or \
-                int(y) > datetime.today().year or \
-                not ("01" <= m <= "12") or \
-                not ("01" <= d <=
-                     {"01": "31", "02": "29", "03": "31", "04": "30", "05": "31", "06": "30", "07": "31", "08": "31",
-                      "09": "30", "10": "31", "11": "30", "12": "31"}[m]):
-            raise ValueError(err_msg)
-        return v
-
-    @field_validator('e155')
-    @classmethod
-    def e155_valid(cls, v: int, info: FieldValidationInfo) -> int:
-        if v not in (1, 2, 3, 4, 5, 6, 8):
-            raise ValueError(f"Invalid selection for {info.field_name.upper()}")
-        return v
-
-    @model_validator(mode='after')
-    def e69_e153(self):
-        if self.e69 >= self.e153:
-            raise ValueError(f"Date of Removal (E69) must be prior to the Date of Exit (E153) for the same removal")
-        return self
+    # @field_validator('e69', 'e153')
+    # @classmethod
+    # def check_date(cls, v: int, info: FieldValidationInfo) -> int:
+    #     s = str(v)
+    #     y = s[0:4]
+    #     m = s[4:6]
+    #     d = s[6:]
+    #     err_msg = f"{d} is not a valid date in YYYYMMDD format for {info.field_name}"
+    #     if len(s) != 8 or \
+    #             int(y) <= 1980 or \
+    #             int(y) > datetime.today().year or \
+    #             not ("01" <= m <= "12") or \
+    #             not ("01" <= d <=
+    #                  {"01": "31", "02": "29", "03": "31", "04": "30", "05": "31", "06": "30", "07": "31", "08": "31",
+    #                   "09": "30", "10": "31", "11": "30", "12": "31"}[m]):
+    #         raise ValueError(err_msg)
+    #     return v
+    #
+    # @field_validator('e155')
+    # @classmethod
+    # def e155_valid(cls, v: int, info: FieldValidationInfo) -> int:
+    #     if v not in (1, 2, 3, 4, 5, 6, 8):
+    #         raise ValueError(f"Invalid selection for {info.field_name.upper()}")
+    #     return v
+    #
+    # @model_validator(mode='after')
+    # def e69_e153(self):
+    #     if self.e69 >= self.e153:
+    #         raise ValueError(f"Date of Removal (E69) must be prior to the Date of Exit (E153) for the same removal")
+    #     return self
 
 
 class PermanencyPlan(MyBaseModel):
