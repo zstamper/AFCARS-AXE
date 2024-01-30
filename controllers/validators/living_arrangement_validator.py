@@ -53,7 +53,17 @@ class LivingArrangementValidators:
                 raise ValueError(
                     "Jurisdiction (E122) is required when Living Arrangement (E121) is 'out of state' or 'out of country'.")
 
+    def validate_e123(self):
+        if self.dialog.e113 == 0 and self.dialog.e123 is not None:
+            raise ValueError(
+                "Marital status of the foster parent (E123) does not apply when child is not placed in foster family home (E113/E120)."
+            )
+
     def validate_e124(self):
+        if self.dialog.e113 == 0 and self.dialog.e124 is not None:
+            raise ValueError(
+                "Child's relationship to foster parent (E124) does not apply when childs if not placed in foster family home (E113/E120)."
+            )
         if (self.dialog.e117 == 1 or self.dialog.e119 == 1) and self.dialog.e124 != 2:
             raise ValueError(
                 "Child's relationship (E124) is required and must be 'non-relative' based on living arrangement type (E113, E120).")
