@@ -460,6 +460,12 @@
          <layout class="QHBoxLayout" name="horizontalLayout_2">
           <item>
            <widget class="QTableWidget" name="living_arrangements_table">
+            <property name="editTriggers">
+             <set>QAbstractItemView::NoEditTriggers</set>
+            </property>
+            <property name="selectionBehavior">
+             <enum>QAbstractItemView::SelectRows</enum>
+            </property>
             <column>
              <property name="text">
               <string>Start Date</string>
@@ -483,6 +489,13 @@
              <widget class="QPushButton" name="living_arrangement_add_button">
               <property name="text">
                <string>Add</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="living_arrangement_edit_button">
+              <property name="text">
+               <string>Edit</string>
               </property>
              </widget>
             </item>
@@ -526,6 +539,15 @@
          <layout class="QHBoxLayout" name="horizontalLayout_15">
           <item>
            <widget class="QTableWidget" name="permanency_plans_table">
+            <property name="editTriggers">
+             <set>QAbstractItemView::NoEditTriggers</set>
+            </property>
+            <property name="selectionMode">
+             <enum>QAbstractItemView::SingleSelection</enum>
+            </property>
+            <property name="selectionBehavior">
+             <enum>QAbstractItemView::SelectRows</enum>
+            </property>
             <column>
              <property name="text">
               <string>Plan Date</string>
@@ -548,7 +570,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QPushButton" name="permanency_plan_edit">
+             <widget class="QPushButton" name="permanency_plan_edit_button">
               <property name="text">
                <string>Edit</string>
               </property>
@@ -594,6 +616,15 @@
          <layout class="QHBoxLayout" name="horizontalLayout_24">
           <item>
            <widget class="QTableWidget" name="case_visits_table">
+            <property name="editTriggers">
+             <set>QAbstractItemView::NoEditTriggers</set>
+            </property>
+            <property name="selectionMode">
+             <enum>QAbstractItemView::SingleSelection</enum>
+            </property>
+            <property name="selectionBehavior">
+             <enum>QAbstractItemView::SelectRows</enum>
+            </property>
             <column>
              <property name="text">
               <string>Date</string>
@@ -662,6 +693,15 @@
          <layout class="QHBoxLayout" name="horizontalLayout_25">
           <item>
            <widget class="QTableWidget" name="permanency_hearings_table">
+            <property name="editTriggers">
+             <set>QAbstractItemView::NoEditTriggers</set>
+            </property>
+            <property name="selectionMode">
+             <enum>QAbstractItemView::SingleSelection</enum>
+            </property>
+            <property name="selectionBehavior">
+             <enum>QAbstractItemView::SelectRows</enum>
+            </property>
             <column>
              <property name="text">
               <string>Date</string>
@@ -725,6 +765,15 @@
          <layout class="QHBoxLayout" name="horizontalLayout_26">
           <item>
            <widget class="QTableWidget" name="periodic_reviews_table">
+            <property name="editTriggers">
+             <set>QAbstractItemView::NoEditTriggers</set>
+            </property>
+            <property name="selectionMode">
+             <enum>QAbstractItemView::SingleSelection</enum>
+            </property>
+            <property name="selectionBehavior">
+             <enum>QAbstractItemView::SelectRows</enum>
+            </property>
             <column>
              <property name="text">
               <string>Date</string>
@@ -1874,7 +1923,7 @@ is Jurisdiction Transfer&lt;/i&gt;</string>
   <tabstop>living_arrangement_delete_button</tabstop>
   <tabstop>permanency_plans_table</tabstop>
   <tabstop>permanency_plan_add_button</tabstop>
-  <tabstop>permanency_plan_edit</tabstop>
+  <tabstop>permanency_plan_edit_button</tabstop>
   <tabstop>permanency_plan_delete_button</tabstop>
   <tabstop>case_visits_table</tabstop>
   <tabstop>case_visit_add_button</tabstop>
@@ -1973,9 +2022,9 @@ is Jurisdiction Transfer&lt;/i&gt;</string>
  <buttongroups>
   <buttongroup name="e171"/>
   <buttongroup name="e174"/>
-  <buttongroup name="e172"/>
   <buttongroup name="e182"/>
-  <buttongroup name="e183"/>
   <buttongroup name="e163"/>
+  <buttongroup name="e183"/>
+  <buttongroup name="e172"/>
  </buttongroups>
 </ui>
