@@ -49,6 +49,11 @@ class Removal2020Controller:
         """Shows an empty dialog, lets the user do what they will, then returns either a new model instance or None,
         depending on whether the form contents are "valid" or not. The "valid" determination is handled by the model
         as a feature of pydantic."""
+        self.dialog.refresh_case_worker_visits()
+        self.dialog.refresh_living_arrangements()
+        self.dialog.refresh_permanency_plans()
+        self.dialog.refresh_periodic_reviews()
+        self.dialog.refresh_permanency_hearings()
         self.dialog.exec()
         if self.dialog.result() == QDialog.Accepted:
             return self.new_data
@@ -59,6 +64,11 @@ class Removal2020Controller:
         contents are valid, the model instance is modified with the new form contents. Otherwise, the model contents are
         left unchanged. Like the add() method, "valid" is determined by rules in the model using pydantic."""
         data.scatter(self.dialog)
+        self.dialog.refresh_case_worker_visits()
+        self.dialog.refresh_living_arrangements()
+        self.dialog.refresh_permanency_plans()
+        self.dialog.refresh_periodic_reviews()
+        self.dialog.refresh_permanency_hearings()
         self.dialog.exec()
         if self.dialog.result() == QDialog.Accepted:
             data.gather(self.dialog)

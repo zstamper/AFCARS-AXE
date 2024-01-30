@@ -141,41 +141,41 @@ class OOHDialog(BaseDialog):
     #
     # ==================================================================================================================
 
-    def _on_add_second_parent(self, *args, **kwargs) -> Any:
-        return self.on_add_second_parent(*args, **kwargs) if self.on_add_second_parent else None
+    def _on_add_second_parent(self) -> Any:
+        return self.on_add_second_parent() if self.on_add_second_parent else None
 
-    def _on_edit_second_parent(self, *args, **kwargs) -> Any:
-        return self.on_edit_second_parent(*args, **kwargs) if self.on_edit_second_parent else None
+    def _on_edit_second_parent(self) -> Any:
+        return self.on_edit_second_parent() if self.on_edit_second_parent else None
 
-    def _on_add_tribe_clicked(self, *args, **kwargs) -> Any:
-        return self.on_add_tribe_clicked(*args, **kwargs) if self.on_add_tribe_clicked else None
+    def _on_add_tribe_clicked(self) -> Any:
+        return self.on_add_tribe_clicked() if self.on_add_tribe_clicked else None
 
-    def _on_remove_tribe_clicked(self, *args, **kwargs) -> Any:
-        return self.on_remove_tribe_clicked(*args, **kwargs) if self.on_remove_tribe_clicked else None
+    def _on_remove_tribe_clicked(self) -> Any:
+        return self.on_remove_tribe_clicked() if self.on_remove_tribe_clicked else None
 
-    def _on_add_removal1993_clicked(self, *args, **kwargs) -> Any:
-        return self.on_add_removal1993_clicked(*args, **kwargs) if self.on_add_removal1993_clicked else None
+    def _on_add_removal1993_clicked(self) -> Any:
+        return self.on_add_removal1993_clicked() if self.on_add_removal1993_clicked else None
 
-    def _on_edit_removal1993_clicked(self, *args, **kwargs) -> Any:
-        return self.on_edit_removal1993_clicked(*args, **kwargs) if self.on_edit_removal1993_clicked else None
+    def _on_edit_removal1993_clicked(self) -> Any:
+        return self.on_edit_removal1993_clicked() if self.on_edit_removal1993_clicked else None
 
-    def _on_delete_removal1993_clicked(self, *args, **kwargs) -> Any:
-        return self.on_delete_removal1993_clicked(*args, **kwargs) if self.on_delete_removal1993_clicked else None
+    def _on_delete_removal1993_clicked(self) -> Any:
+        return self.on_delete_removal1993_clicked() if self.on_delete_removal1993_clicked else None
 
-    def _on_add_removal2020_clicked(self, *args, **kwargs) -> Any:
-        return self.on_add_removal2020_clicked(*args, **kwargs) if self.on_add_removal2020_clicked else None
+    def _on_add_removal2020_clicked(self) -> Any:
+        return self.on_add_removal2020_clicked() if self.on_add_removal2020_clicked else None
 
-    def _on_edit_removal2020_clicked(self, *args, **kwargs) -> Any:
-        return self.on_edit_removal2020_clicked(*args, **kwargs) if self.on_edit_removal2020_clicked else None
+    def _on_edit_removal2020_clicked(self) -> Any:
+        return self.on_edit_removal2020_clicked() if self.on_edit_removal2020_clicked else None
 
-    def _on_delete_removal2020_clicked(self, *args, **kwargs) -> Any:
-        return self.on_delete_removal2020_clicked(*args, **kwargs) if self.on_delete_removal2020_clicked else None
+    def _on_delete_removal2020_clicked(self) -> Any:
+        return self.on_delete_removal2020_clicked() if self.on_delete_removal2020_clicked else None
 
-    def _on_tab_changed(self, *args, **kwargs) -> Any:
-        return self.on_tab_changed(*args, **kwargs) if self.on_tab_changed else None
+    def _on_tab_changed(self, new_tab: int) -> Any:
+        return self.on_tab_changed(new_tab) if self.on_tab_changed else None
 
-    def _on_validate_clicked(self, *args, **kwargs) -> Any:
-        return self.on_validate_clicked(*args, **kwargs) if self.on_validate_clicked else None
+    def _on_validate_clicked(self) -> Any:
+        return self.on_validate_clicked() if self.on_validate_clicked else None
 
     def tab_label(self, tab: int) -> str:
         return self.ui.tabWidget.tabText(tab)

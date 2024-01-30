@@ -70,10 +70,10 @@ class MyBaseModel(BaseModel):
         d = {}
         for fld in cls.model_fields:
             try:
-                if hasattr(obj, fld) and isinstance(getattr(obj, fld), cls.model_fields[fld].annotation):
+                if hasattr(obj, fld) and isinstance(getattr(obj, fld), list) or isinstance(getattr(obj, fld), cls.model_fields[fld].annotation):
                     d[fld] = getattr(obj, fld)
             except TypeError as te:
-                print(f"{te}, {te.args}, {fld}, {cls.model_fields[fld].annotation}")
+                print(f"crib error: {te}, {te.args}, {fld}, {cls.model_fields[fld].annotation}")
                 # pass
         # print(f"cribbing {cls.__name__} with {d}")
         return cls(**d)

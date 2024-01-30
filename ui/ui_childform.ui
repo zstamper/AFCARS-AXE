@@ -3287,6 +3287,9 @@ Leave blank if law enforcement was not notified.&lt;/i&gt;</string>
            <layout class="QHBoxLayout" name="horizontalLayout_12">
             <item>
              <widget class="QTableWidget" name="removal_2020_table">
+              <property name="editTriggers">
+               <set>QAbstractItemView::NoEditTriggers</set>
+              </property>
               <property name="alternatingRowColors">
                <bool>true</bool>
               </property>

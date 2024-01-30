@@ -234,7 +234,7 @@ class Removal2020Dialog(BaseDialog):
         for data in self.case_worker_visits:
             self.ui.case_visits_table.insertRow(row)
             self.ui.case_visits_table.setItem(row, 0, QTableWidgetItem(str(data.e151)))
-            self.ui.case_visits_table.setItem(row, 1, QTableWidgetItem(e148_to_str(data.e152)))
+            self.ui.case_visits_table.setItem(row, 1, QTableWidgetItem(e152_to_str(data.e152)))
             row += 1
 
     @property
