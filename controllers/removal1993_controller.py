@@ -12,7 +12,7 @@ from model import Removal1993
 class Removal1993Controller:
 
     def __init__(self, parent, child_name: str):
-        self.dialog = Removal1993Dialog(parent, child_name)
+        self.dialog = Removal1993Dialog(parent)
         self.child_name = child_name
         self.dialog.on_accept = self.do_accept
         self.new_data = None
