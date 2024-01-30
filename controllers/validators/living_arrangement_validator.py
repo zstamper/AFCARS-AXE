@@ -30,8 +30,10 @@ class LivingArrangementValidators:
             raise ValueError("Foster family home (E113) is required.")
 
     def validate_e120(self):
-        if self.dialog.e120 not in (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14):
-            raise ValueError("Invalid selection for Living arrangement type (E120).")
+        if self.dialog.e113 == 1 and self.dialog.e120 is not None:
+            print(f"e120=({type(self.dialog.e120)}) {self.dialog.e120}")
+            if self.dialog.e120 not in (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14):
+                raise ValueError("Invalid selection for Living arrangement type (E120).")
 
     def validate_e114_e118(self):
         fields = [self.dialog.e114, self.dialog.e115, self.dialog.e116, self.dialog.e117, self.dialog.e118,
