@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>523</width>
-    <height>242</height>
+    <height>226</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -78,7 +78,7 @@
         <item row="0" column="0">
          <widget class="QLabel" name="e66_label">
           <property name="text">
-           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Date of the petition to modify or &lt;br/&gt;terminate parental rights (E66)&lt;br/&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;If deceased - use 66666666&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           <string>Date of the petition to modify or &lt;br/&gt;terminate parental rights (E66)&lt;br/&gt;&lt;i&gt;If deceased - use 66666666&lt;/i&gt;</string>
           </property>
           <property name="textFormat">
            <enum>Qt::RichText</enum>
@@ -94,7 +94,7 @@
         <item row="1" column="0">
          <widget class="QLabel" name="e68_label">
           <property name="text">
-           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Date of modified or terminated &lt;br/&gt;parental rights (E68)&lt;br/&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;If deceased - use the deceased date&lt;/span&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           <string>Date of modified or terminated &lt;br/&gt;parental rights (E68)&lt;br/&gt;&lt;i&gt;If deceased - use the deceased date&lt;/i&gt;</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
