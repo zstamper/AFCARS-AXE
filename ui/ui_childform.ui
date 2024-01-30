@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1162</width>
-    <height>814</height>
+    <width>1180</width>
+    <height>837</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -153,6 +153,12 @@
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
+       </property>
+       <property name="toolTip">
+        <string/>
+       </property>
+       <property name="whatsThis">
+        <string/>
        </property>
        <property name="tabPosition">
         <enum>QTabWidget::North</enum>
@@ -735,7 +741,7 @@
             <item>
              <widget class="QLabel" name="label_8">
               <property name="text">
-               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Select all possible tribes (EPA IDs) where the child may be a member (or eligible member)? (E9)&lt;br/&gt;&lt;span style=&quot; font-size:12pt; font-style:italic;&quot;&gt;Skip element if not applicable&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               <string>Select all possible tribes (EPA IDs) where the child may be a member (or eligible member)? (E9)&lt;br/&gt;&lt;i&gt;Skip element if not applicable&lt;/i&gt;</string>
               </property>
              </widget>
             </item>
@@ -861,7 +867,7 @@
                 <item>
                  <widget class="QLabel" name="label_9">
                   <property name="text">
-                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If ICWA applies, enter the date the tribe notified the state. (E11)&lt;br/&gt;&lt;span style=&quot; font-size:12pt; font-style:italic;&quot;&gt;Leave blank if the tribe(s) have not notified you of the child's membership&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                   <string>If ICWA applies, enter the date the tribe notified the state. (E11)&lt;br/&gt;&lt;i&gt;Leave blank if the tribe(s) have not notified you of the child's membership&lt;/i&gt;</string>
                   </property>
                  </widget>
                 </item>
@@ -1973,7 +1979,7 @@
               <item row="1" column="0">
                <widget class="QLabel" name="e65_label">
                 <property name="text">
-                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Date of the petition to modify or &lt;br/&gt;terminate parental rights (E65)&lt;br/&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;If deceased - use 66666666&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                 <string>Date of modified or terminated &lt;br/&gt;parental rights (E67)&lt;br/&gt;&lt;i&gt;If deceased - use the deceased date&lt;/&gt;</string>
                 </property>
                 <property name="textFormat">
                  <enum>Qt::RichText</enum>
@@ -2016,7 +2022,7 @@
               <item row="2" column="0">
                <widget class="QLabel" name="e67_label">
                 <property name="text">
-                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Date of modified or terminated &lt;br/&gt;parental rights (E67)&lt;br/&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;If deceased - use the deceased date&lt;/span&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                 <string>Date of modified or terminated &lt;br/&gt;parental rights (E67)&lt;br/&gt;&lt;i&gt;If deceased - use the deceased date&lt;/&gt;</string>
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -2308,7 +2314,7 @@
               <item row="0" column="0">
                <widget class="QLabel" name="e47_label">
                 <property name="toolTip">
-                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;The child is receiving an adoption subsidy or other adoption assistance paid for solely by the tribe.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                 <string/>
                 </property>
                 <property name="text">
                  <string>Tribal adoption assistance&lt;br/&gt;
@@ -2369,7 +2375,7 @@
               <item row="1" column="0">
                <widget class="QLabel" name="e48_label">
                 <property name="toolTip">
-                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;The child is determined eligible for a title IV-E adoption assistance subsidy.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                 <string/>
                 </property>
                 <property name="text">
                  <string>Tribal foster care&lt;br/&gt;
@@ -2436,7 +2442,7 @@
               <item row="2" column="0">
                <widget class="QLabel" name="e49_label">
                 <property name="toolTip">
-                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;The child is receiving a foster care payment that is solely funded by the tribe.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                 <string/>
                 </property>
                 <property name="text">
                  <string>Title IV-E adoption subsidy&lt;br/&gt;
@@ -2497,7 +2503,7 @@
               <item row="3" column="0">
                <widget class="QLabel" name="e50_label">
                 <property name="toolTip">
-                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;The child is determined eligible for a title IV-E guardianship assistance subsidy.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                 <string/>
                 </property>
                 <property name="text">
                  <string>Title IV-E guardianship subsidy&lt;br/&gt;
@@ -2559,7 +2565,7 @@ Title IV-E guardianship assistance subsidy.&lt;/i&gt;</string>
               <item row="4" column="0">
                <widget class="QLabel" name="e51_label">
                 <property name="toolTip">
-                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;The child is living with relatives who receive TANF assistance payment on behalf of the child.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                 <string/>
                 </property>
                 <property name="text">
                  <string>Title IV-A TANF&lt;br/&gt;&lt;i&gt;
@@ -2621,10 +2627,10 @@ TANF assistance payment on behalf of the child.&lt;/i&gt;</string>
               <item row="5" column="0">
                <widget class="QLabel" name="e52_label">
                 <property name="toolTip">
-                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;The child's living arrangement is supported under title IV-B of the act.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                 <string/>
                 </property>
                 <property name="whatsThis">
-                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;The child's living arrangement is supported under title IV-B of the act.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                 <string/>
                 </property>
                 <property name="text">
                  <string>Title IV-B&lt;br/&gt;&lt;i&gt;
@@ -2686,7 +2692,8 @@ by funds under Title IV-B of the Act.&lt;/i&gt;</string>
               <item row="6" column="0">
                <widget class="QLabel" name="e53_label">
                 <property name="toolTip">
-                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;The child is living independently and is supported by funds Chafee Foster Care Independence Program.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                 <string>
+</string>
                 </property>
                 <property name="text">
                  <string>Chafee Foster Care Independence Program&lt;br/&gt;&lt;i&gt;
@@ -2745,7 +2752,7 @@ funds Chaffee Foster Card Independence Program.&lt;/i&gt;</string>
               <item row="7" column="0">
                <widget class="QLabel" name="e54_label">
                 <property name="toolTip">
-                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;The child is receiving financial support from another source previously listed(e.g., BIA 638, SSI, Child Support, Trust, Grant, etc.).&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                 <string/>
                 </property>
                 <property name="text">
                  <string>Other financial support&lt;br/&gt;&lt;i&gt;
@@ -2805,7 +2812,7 @@ SSI, Child Support, Trust, Grant, etc.).&lt;/i&gt;</string>
               <item row="8" column="0">
                <widget class="QLabel" name="label_2">
                 <property name="toolTip">
-                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;Indicate whether a title IV-E foster care maintenance payment was paid or will be claimed for the child.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                 <string/>
                 </property>
                 <property name="text">
                  <string>Title IV-E Foster Care (E55)&lt;br/&gt;&lt;i&gt;
@@ -2991,7 +2998,7 @@ payment was paid or will be claimed for the child.&lt;/i&gt;</string>
          <item row="2" column="0">
           <widget class="QLabel" name="e108_label">
            <property name="toolTip">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;Leave blank if law enforcement was not notified.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            <string/>
            </property>
            <property name="text">
             <string>Date law enforcement was notified? (E108)&lt;br/&gt;&lt;i&gt;
@@ -3137,7 +3144,7 @@ Leave blank if law enforcement was not notified.&lt;/i&gt;</string>
          <item row="5" column="0">
           <widget class="QLabel" name="e111_label">
            <property name="toolTip">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;Leave blank if law enforcement was not notified.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            <string/>
            </property>
            <property name="text">
             <string>Date law enforcement was notified? (E111)&lt;br/&gt;&lt;i&gt;
