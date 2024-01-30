@@ -38,4 +38,4 @@ class PeriodicReviewDialog(BaseDialog):
 
     @e149.setter
     def e149(self, v: int) -> None:
-        self._set_text_field(self.ui.e149, v)
+        self._set_int_field(self.ui.e149, v)

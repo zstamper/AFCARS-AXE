@@ -284,7 +284,7 @@ class Removal2020Dialog(BaseDialog):
 
     def _on_edit_periodic_review(self, *args, **kwargs):
         if self.on_edit_periodic_review:
-            self.on_edit_periodic_review(*args, **kwargs)
+            self.on_edit_periodic_review()
 
     def _on_delete_periodic_review(self, *args, **kwargs):
         if self.on_delete_periodic_review:
