@@ -196,7 +196,7 @@ class Removal2020Controller:
         current_row = self.dialog.permanency_hearings_current_row
         if 0 <= current_row < len(self.dialog.permanency_hearings):
             del self.dialog.permanency_hearings[current_row]
-            self.dialog.refresh_permanency_plans()
+            self.dialog.refresh_permanency_hearings()
 
     def do_add_periodic_review(self):
         controller: PeriodicReviewController = PeriodicReviewController(self.dialog, self.dialog.child_name)

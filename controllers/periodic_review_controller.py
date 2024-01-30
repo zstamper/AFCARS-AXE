@@ -16,7 +16,8 @@ class PeriodicReviewController:
      """
 
     def __init__(self, parent, child_name: str):
-        self.dialog = PeriodicReviewDialog(parent, child_name)
+        self.dialog = PeriodicReviewDialog(parent)
+        self.dialog.child_name = child_name
         self.dialog.on_accept = self.do_accept
         self.new_data = None
         self.validator = PeriodicReviewValidator(self.dialog)
