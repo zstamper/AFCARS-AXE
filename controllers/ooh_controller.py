@@ -178,9 +178,18 @@ class OOHController:
 
     # ===== SecondParent ======================================================
 
+    # When a parent is added, is should be assigned the first available parent number >= 2.
+
+    def _next_parent_number(self) -> int:
+        number = 2
+        keys = [d.number for d in self.dialog.second_parents]
+        while number in keys:
+            number += 1
+        return number
+
     def do_add_second_parent(self) -> None:
         controller = SecondParentController(self.dialog, child_name=self.dialog.child_name)
-        data: SecondParent = controller.add()
+        data: SecondParent = controller.add(self._next_parent_number())
         if data is not None:
             self.dialog.second_parents.append(data)
             self.dialog.refresh_second_parents()

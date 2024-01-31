@@ -18,6 +18,7 @@ class Parent2Dialog(BaseDialog):
         self.setFixedSize(self.ui.size())
         self.id: int | None = None
         self.ooh_id: int | None = None
+        self._number: int | None = None
         self._child_name: str = ""
         self.on_validate_clicked: Optional[Callable] = None
 
@@ -46,6 +47,16 @@ class Parent2Dialog(BaseDialog):
             self.setWindowTitle(f"Putative Parent/Guardian for {self.child_name}")
         else:
             self.setWindowTitle("")
+
+    @property
+    def number(self) -> int:
+        return self._number
+
+    @number.setter
+    def number(self, v: int) -> None:
+        self._number = v
+        self.ui.parent2_tpr_group_box.setTitle(
+            f"{'Second' if v == 2 else 'Putative'} Parent/Guardian Modified or Terminated Parental Rights")
 
     @property
     def e64(self) -> int:

@@ -299,6 +299,7 @@ class Removal2020(MyBaseModel):
 class SecondParent(MyBaseModel):
     # id: int | None = Field(default=None)
     # ooh_id: int | None
+    number: int = Field(default=0)
     e64: int | None
     e66: int | None
     e68: int | None

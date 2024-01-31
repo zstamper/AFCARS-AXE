@@ -18,17 +18,19 @@ class SecondParentController:
     def __init__(self, parent, child_name: str):
         self.dialog = Parent2Dialog(parent)
         self.child_name = child_name
+        self.parent_number: int = 0
         self.dialog.on_accept = self.do_accept
         self.new_data = None
         self.validator = SecondParentValidator(self.dialog)
         self.dialog.on_validate_clicked = self.do_validate_clicked
 
-    def add(self) -> Any:
+    def add(self, parent_number: int) -> Any:
         """Shows an empty dialog, lets the user do what they will, then returns either a new model instance or None,
         depending on whether the form contents are "valid" or not. The "valid" determination is handled by the model
         as a feature of pydantic."""
         self.dialog.clear()
         self.dialog.child_name = self.child_name
+        self.dialog.number = parent_number
 
         self.dialog.exec()
         if self.dialog.result() == QDialog.Accepted:
