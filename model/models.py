@@ -211,6 +211,7 @@ class LivingArrangement(MyBaseModel):
     e144: int | None
     e145: int | None
     e146: int | None
+    last_updated: datetime | None = Field(default=None)
 
 
 class Removal2020(MyBaseModel):

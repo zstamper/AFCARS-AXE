@@ -178,7 +178,7 @@ class Removal2020Dialog(BaseDialog):
             self.ui.living_arrangements_table.insertRow(row)
             self.ui.living_arrangements_table.setItem(row, 0, QTableWidgetItem(str(data.e112)))
             self.ui.living_arrangements_table.setItem(row, 1, QTableWidgetItem(e120_to_str(data.e120)))
-            self.ui.living_arrangements_table.setItem(row, 2, QTableWidgetItem(""))
+            self.ui.living_arrangements_table.setItem(row, 2, QTableWidgetItem(data.last_updated.strftime("%m/%d/%Y %H:%M") if data.last_updated else ""))
             row += 1
 
     # ----- Permanency Plan Automation ----------------------------------------

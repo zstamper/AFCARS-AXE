@@ -1,3 +1,4 @@
+import datetime
 from typing import Any
 
 from PySide6.QtWidgets import QDialog
@@ -30,6 +31,7 @@ class LivingArrangementController:
         self.dialog.clear()
         self.dialog.exec()
         if self.dialog.result() == QDialog.Accepted:
+            self.new_data.last_modified = datetime.datetime.now()
             return self.new_data
         return None
 
@@ -42,6 +44,7 @@ class LivingArrangementController:
         self.dialog.exec()
         if self.dialog.result() == QDialog.Accepted:
             data.gather(self.dialog)
+            data.last_updated = datetime.datetime.now()
         else:
             # put the data back in to the dialog so that further queries of the form don't get confused by the form
             # state not matching the data state
