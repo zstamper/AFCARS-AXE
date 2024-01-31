@@ -92,6 +92,7 @@ class BaseChildTable(BaseModel):
     e4 = TextField(null=True)
     first_name = TextField(null=True)
     last_name = TextField(null=True)
+    e5 = DateField(null=True, formats=['%Y%m%d', '%m/%d/%Y', '%Y-%m-%d'])
     date_created = DateField(null=False, default=datetime.date.today(), formats=['%Y%m%d', '%m/%d/%Y', '%Y-%m-%d'])
     last_exit = DateField(null=True, formats=['%Y%m%d', '%m/%d/%Y', '%Y-%m-%d'])
     last_removal = DateField(null=True, formats=['%Y%m%d', '%m/%d/%Y', '%Y-%m-%d'])

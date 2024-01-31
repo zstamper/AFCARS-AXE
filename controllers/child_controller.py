@@ -65,9 +65,13 @@ class ChildController:
     def do_add(self):
 
         def add_child():
+            # the child's birthdate needs to bubble up to the base child table so that it can show up
+            # in the child listing. Don't forget, e5 in the child model is an int, while in the base_child
+            # table it's a date.
             base_child = controller.base_child
+            base_child.e5 = datetime.datetime.strptime(str(controller.child.e5), "%Y%m%d") if controller.child.e5 else None
             self.refresh_dates(base_child, controller.child)
-            base_child_rec = BaseChildTable.create(e1=base_child.e1, e4=base_child.e4,
+            base_child_rec = BaseChildTable.create(e1=base_child.e1, e4=base_child.e4, e5=controller.child.e5,
                                                    first_name=base_child.first_name, last_name=base_child.last_name,
                                                    date_created=datetime.date.today())
             context.data = controller.child
@@ -95,7 +99,10 @@ class ChildController:
     def do_edit(self, *args, **kwargs):
 
         def update_child():
+            # the child's birthdate needs to bubble up to the base child table so that it can show up
+            # in the child listing.
             self.refresh_dates(base_child, controller.child)
+            base_child.e5 = datetime.datetime.strptime(str(controller.child.e5), "%Y%m%d") if controller.child.e5 else None
             BaseChildTable.persist_model(base_child)
             context_rec.base_child = base_child.id
             context_rec.data = controller.child
@@ -172,6 +179,7 @@ class ChildController:
                     if removal.e69:
                         dates.append(datetime.datetime.strptime(str(removal.e69), "%Y%m%d").date())
             base_child.last_removal = max(dates) if dates else None
+            base_child.e5 = child.e5
 
             dates = []
             if base_child.last_exit:

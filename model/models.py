@@ -427,6 +427,7 @@ class BaseChild(MyBaseModel):
     last_termination: date | None = Field(default=None)
     e1: str | None = Field(default=None)
     e4: str | None = Field(default=None)
+    e5: date | None = Field(default=None)
 
 
 class Agency(MyBaseModel):

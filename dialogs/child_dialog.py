@@ -161,7 +161,7 @@ class ChildDialog(BaseDialog):
             self.ui.child_table.setItem(row, 0, QTableWidgetItem(str(data.e4 if data.e4 else "")))
             self.ui.child_table.setItem(row, 1, QTableWidgetItem(str(data.last_name if data.last_name else "")))
             self.ui.child_table.setItem(row, 2, QTableWidgetItem(str(data.first_name if data.first_name else "")))
-            self.ui.child_table.setItem(row, 3, QTableWidgetItem("TBD"))
+            self.ui.child_table.setItem(row, 3, QTableWidgetItem(data.e5.strftime("%m/%d/%Y") if data.e5 else ""))
             self.ui.child_table.setItem(row, 4, QTableWidgetItem(
                 data.date_created.strftime("%m/%d/%Y") if data.date_created else ""))
             self.ui.child_table.setItem(row, 5, QTableWidgetItem(

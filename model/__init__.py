@@ -9,7 +9,7 @@ from .tables import (database, BaseChildTable, ConfigTable, ContextTable, StateT
                      Version)
 from .migrations import *
 
-DATABASE_VERSION: int = 0
+DATABASE_VERSION: int = 1
 
 
 def open_database(database_name: str):
@@ -45,8 +45,11 @@ def apply_migrations(connection) -> None:
         current_version = 0
 
     if DATABASE_VERSION > current_version:
-        while current_version := current_version + 1 <= DATABASE_VERSION:
+        current_version += 1
+        while current_version <= DATABASE_VERSION:
             _do_migration(current_version)
+            cursor.execute('UPDATE version SET database_version=? WHERE id=1', (current_version, ))
+            current_version += 1
 
 
 def _do_migration(version: int) -> None:
