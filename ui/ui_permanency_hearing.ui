@@ -13,6 +13,11 @@
     <height>101</height>
    </rect>
   </property>
+  <property name="font">
+   <font>
+    <family>Arial</family>
+   </font>
+  </property>
   <property name="windowTitle">
    <string>Permanency Hearing</string>
   </property>

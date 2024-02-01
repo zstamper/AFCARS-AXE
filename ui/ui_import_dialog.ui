@@ -10,6 +10,11 @@
     <height>123</height>
    </rect>
   </property>
+  <property name="font">
+   <font>
+    <family>Arial</family>
+   </font>
+  </property>
   <property name="windowTitle">
    <string>Import XML Data</string>
   </property>
@@ -164,7 +169,7 @@
   </connection>
  </connections>
  <buttongroups>
-  <buttongroup name="report_type"/>
   <buttongroup name="file_type"/>
+  <buttongroup name="report_type"/>
  </buttongroups>
 </ui>

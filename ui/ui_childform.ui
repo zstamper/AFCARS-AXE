@@ -6,9 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1180</width>
-    <height>837</height>
+    <width>1039</width>
+    <height>707</height>
    </rect>
+  </property>
+  <property name="font">
+   <font>
+    <family>Arial</family>
+   </font>
   </property>
   <property name="windowTitle">
    <string>Child name and ID goes here</string>
@@ -164,7 +169,7 @@
         <enum>QTabWidget::North</enum>
        </property>
        <property name="currentIndex">
-        <number>0</number>
+        <number>5</number>
        </property>
        <widget class="QWidget" name="demographics_tab">
         <attribute name="title">
@@ -523,8 +528,8 @@
              </item>
             </layout>
            </item>
-           <item row="1" column="0">
-            <spacer name="verticalSpacer_2">
+           <item row="1" column="1">
+            <spacer name="verticalSpacer_8">
              <property name="orientation">
               <enum>Qt::Vertical</enum>
              </property>
@@ -931,21 +936,21 @@
               </item>
              </layout>
             </item>
-            <item>
-             <spacer name="verticalSpacer_8">
-              <property name="orientation">
-               <enum>Qt::Vertical</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>20</width>
-                <height>1</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
            </layout>
           </widget>
+         </item>
+         <item>
+          <spacer name="verticalSpacer_2">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
          </item>
         </layout>
        </widget>
@@ -2261,6 +2266,9 @@
                 <property name="toolTip">
                  <string/>
                 </property>
+                <property name="layoutDirection">
+                 <enum>Qt::LeftToRight</enum>
+                </property>
                 <property name="text">
                  <string>Tribal adoption assistance&lt;br/&gt;
 &lt;i&gt;The child is receiving an adoption subsidy or other&lt;br/&gt;adoption assistance paid for solely by the Tribe.&lt;/i&gt;</string>
@@ -2347,7 +2355,7 @@
                 </property>
                 <layout class="QHBoxLayout" name="horizontalLayout_14" stretch="0,0">
                  <property name="spacing">
-                  <number>-1</number>
+                  <number>6</number>
                  </property>
                  <property name="leftMargin">
                   <number>0</number>
@@ -2813,19 +2821,6 @@ payment was paid or will be claimed for the child.&lt;/i&gt;</string>
                </widget>
               </item>
              </layout>
-            </item>
-            <item>
-             <spacer name="verticalSpacer_5">
-              <property name="orientation">
-               <enum>Qt::Vertical</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>17</width>
-                <height>23</height>
-               </size>
-              </property>
-             </spacer>
             </item>
            </layout>
           </widget>
@@ -3464,19 +3459,19 @@ Leave blank if law enforcement was not notified.&lt;/i&gt;</string>
   </connection>
  </connections>
  <buttongroups>
-  <buttongroup name="e62"/>
-  <buttongroup name="e22"/>
-  <buttongroup name="e7"/>
   <buttongroup name="e61"/>
-  <buttongroup name="e6"/>
-  <buttongroup name="e12"/>
-  <buttongroup name="e109"/>
+  <buttongroup name="e62"/>
   <buttongroup name="e63"/>
+  <buttongroup name="e8"/>
+  <buttongroup name="funding"/>
+  <buttongroup name="e6"/>
   <buttongroup name="e106"/>
   <buttongroup name="e10"/>
-  <buttongroup name="e110"/>
-  <buttongroup name="funding"/>
   <buttongroup name="e107"/>
-  <buttongroup name="e8"/>
+  <buttongroup name="e109"/>
+  <buttongroup name="e110"/>
+  <buttongroup name="e12"/>
+  <buttongroup name="e22"/>
+  <buttongroup name="e7"/>
  </buttongroups>
 </ui>
