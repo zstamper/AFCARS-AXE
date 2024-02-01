@@ -1696,7 +1696,7 @@
                </item>
                <item>
                 <property name="text">
-                 <string>Never attended school</string>
+                 <string>Not school-age</string>
                 </property>
                </item>
               </widget>
