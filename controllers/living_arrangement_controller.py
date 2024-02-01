@@ -17,7 +17,7 @@ class LivingArrangementController:
      """
 
     def __init__(self, parent, child_name: str):
-        self.dialog:LivingArrangementDialog = LivingArrangementDialog(parent)
+        self.dialog: LivingArrangementDialog = LivingArrangementDialog(parent)
         self.dialog.child_name = child_name
         self.dialog.on_accept = self.do_accept
         self.new_data = None

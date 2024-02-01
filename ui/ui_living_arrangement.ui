@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1020</width>
+    <width>1138</width>
     <height>763</height>
    </rect>
   </property>
@@ -160,6 +160,19 @@
          </layout>
         </item>
         <item>
+         <spacer name="horizontalSpacer_12">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
          <layout class="QVBoxLayout" name="verticalLayout_8">
           <item>
            <widget class="QLabel" name="label_6">
@@ -225,6 +238,19 @@
            </widget>
           </item>
          </layout>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer_13">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
         </item>
         <item>
          <layout class="QVBoxLayout" name="verticalLayout_6">
@@ -1203,12 +1229,12 @@
   </connection>
  </connections>
  <buttongroups>
-  <buttongroup name="e134"/>
   <buttongroup name="e145"/>
   <buttongroup name="e40"/>
-  <buttongroup name="e135"/>
   <buttongroup name="e146"/>
+  <buttongroup name="e134"/>
   <buttongroup name="e126"/>
   <buttongroup name="e137"/>
+  <buttongroup name="e135"/>
  </buttongroups>
 </ui>
