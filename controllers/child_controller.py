@@ -33,7 +33,7 @@ class ChildController:
         self.dialog.agency_name = self.agency_name
         self.dialog.agency_code = self.e1
         self.dialog.file_type = self.file_type
-        self.dialog.report_type = self.report_type
+        self.dialog.report_type = self.report_type.value
         self.dialog.reporting_period = self.reporting_period
         self.do_refresh_data()
         self.dialog.exec_()
