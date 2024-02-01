@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1039</width>
-    <height>707</height>
+    <width>1143</width>
+    <height>826</height>
    </rect>
   </property>
   <property name="font">
@@ -3459,19 +3459,19 @@ Leave blank if law enforcement was not notified.&lt;/i&gt;</string>
   </connection>
  </connections>
  <buttongroups>
+  <buttongroup name="funding"/>
+  <buttongroup name="e8"/>
+  <buttongroup name="e109"/>
+  <buttongroup name="e110"/>
   <buttongroup name="e61"/>
+  <buttongroup name="e7"/>
+  <buttongroup name="e107"/>
+  <buttongroup name="e12"/>
   <buttongroup name="e62"/>
   <buttongroup name="e63"/>
-  <buttongroup name="e8"/>
-  <buttongroup name="funding"/>
   <buttongroup name="e6"/>
   <buttongroup name="e106"/>
   <buttongroup name="e10"/>
-  <buttongroup name="e107"/>
-  <buttongroup name="e109"/>
-  <buttongroup name="e110"/>
-  <buttongroup name="e12"/>
   <buttongroup name="e22"/>
-  <buttongroup name="e7"/>
  </buttongroups>
 </ui>
