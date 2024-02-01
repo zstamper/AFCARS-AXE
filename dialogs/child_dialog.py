@@ -22,7 +22,7 @@ class ChildDialog(BaseDialog):
         self._file_type: str = ""
         self._report_type: str = ""
         self._reporting_period: str = ""
-        self._reporting_periods: list[ReportingPeriod]
+        self._reporting_periods: list[ReportingPeriod] = []
         self._child_data: list[BaseChild] = []
 
         self.on_add: Optional[Callable] = None

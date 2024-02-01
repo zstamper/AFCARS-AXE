@@ -16,6 +16,7 @@ class Removal1993Dialog(BaseDialog):
         self.id: int | None = None
         self.ooh_id: int | None = None
         self._child_name: str = ""
+        self.__ooh = None
         self.on_validate_clicked: Optional[Callable] = None
 
         # self.on_accept: Optional[Callable] = None

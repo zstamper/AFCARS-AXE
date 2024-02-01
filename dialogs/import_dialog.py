@@ -57,7 +57,6 @@ class ImportDialog(BaseDialog):
             return ReportType.A
         if self.ui.report_type_ooh.isChecked():
             return ReportType.OOH
-        return None
 
     @report_type.setter
     def report_type(self, v: ReportType) -> None:

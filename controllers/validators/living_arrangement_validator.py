@@ -152,6 +152,7 @@ class LivingArrangementValidator:
     def __init__(self, dialog: LivingArrangementDialog):
         self.dialog = dialog
         self.validator = LivingArrangementValidators(dialog)
+        self._messages: list[Exception] = []
 
     def validate(self) -> bool:
         results = []

@@ -81,9 +81,9 @@ class BaseMixin:
     def _get_combobox_text(ui, obj, mapping=None):
         if obj is None:
             return ""
-        elif type(mapping) == int and obj + mapping >= 0:
+        elif type(mapping) is int and obj + mapping >= 0:
             return ui.itemText(obj + mapping)
-        elif type(mapping) == dict and obj in mapping:
+        elif type(mapping) is dict and obj in mapping:
             return ui.itemText(mapping[obj])
         return ui.itemText(obj)
 
@@ -132,12 +132,12 @@ class BaseMixin:
         return ui.checkedId() if ui.checkedId() >= 0 else None
 
     @staticmethod
-    def _set_combobox_selection(widget: QWidget, obj: int, mapping: int | dict | None = None) -> None:
+    def _set_combobox_selection(widget: QComboBox, obj: int, mapping: int | dict | None = None) -> None:
         if obj is None:
             widget.setCurrentIndex(-1)
         elif mapping is None:
             widget.setCurrentIndex(obj)
-        elif type(mapping) == int:
+        elif type(mapping) is int:
             widget.setCurrentIndex(obj + mapping)
         elif obj in mapping:
             widget.setCurrentIndex(mapping[obj])
@@ -151,7 +151,7 @@ class BaseMixin:
             return None
         if mapping is None:
             return current_index if current_index >= 0 else None
-        if type(mapping) == int:
+        if type(mapping) is int:
             return current_index + mapping
         return mapping[current_index]
 
@@ -169,7 +169,7 @@ class BaseDialog(QDialog, BaseMixin):
         self.is_dirty: bool = False
         self.errors: list[str] = []
         self.relaxed_rules = relaxed_rules
-        self._on_accept = None
+        self._on_accept: Optional[Callable] = None
 
     @property
     def on_accept(self) -> Callable:

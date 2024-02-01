@@ -31,7 +31,7 @@ class LivingArrangementController:
         self.dialog.clear()
         self.dialog.exec()
         if self.dialog.result() == QDialog.Accepted:
-            self.new_data.last_modified = datetime.datetime.now()
+            self.new_data.last_updated = datetime.datetime.now()
             return self.new_data
         return None
 

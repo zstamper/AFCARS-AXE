@@ -1,3 +1,4 @@
+import datetime
 from typing import Optional, Callable
 
 from PySide6.QtWidgets import QWidget
@@ -11,6 +12,7 @@ class LivingArrangementDialog(BaseDialog):
         super().__init__(*args, **kwargs)
         self.ui = self.load_ui('ui_living_arrangement.ui')
         self._e113 = None
+        self.last_updated: Optional[datetime.datetime] = None
         self._wire_ui()
         self.setLayout(self.ui.layout())
         self.setFixedSize(self.ui.size())
