@@ -495,6 +495,9 @@
               <property name="text">
                <string>Add</string>
               </property>
+              <property name="autoDefault">
+               <bool>false</bool>
+              </property>
              </widget>
             </item>
             <item>
@@ -502,12 +505,18 @@
               <property name="text">
                <string>Edit</string>
               </property>
+              <property name="autoDefault">
+               <bool>false</bool>
+              </property>
              </widget>
             </item>
             <item>
              <widget class="QPushButton" name="living_arrangement_delete_button">
               <property name="text">
                <string>Delete</string>
+              </property>
+              <property name="autoDefault">
+               <bool>false</bool>
               </property>
              </widget>
             </item>
@@ -572,6 +581,9 @@
               <property name="text">
                <string>Add</string>
               </property>
+              <property name="autoDefault">
+               <bool>false</bool>
+              </property>
              </widget>
             </item>
             <item>
@@ -579,12 +591,18 @@
               <property name="text">
                <string>Edit</string>
               </property>
+              <property name="autoDefault">
+               <bool>false</bool>
+              </property>
              </widget>
             </item>
             <item>
              <widget class="QPushButton" name="permanency_plan_delete_button">
               <property name="text">
                <string>Delete</string>
+              </property>
+              <property name="autoDefault">
+               <bool>false</bool>
               </property>
              </widget>
             </item>
@@ -649,6 +667,9 @@
               <property name="text">
                <string>Add</string>
               </property>
+              <property name="autoDefault">
+               <bool>false</bool>
+              </property>
              </widget>
             </item>
             <item>
@@ -656,12 +677,18 @@
               <property name="text">
                <string>Edit</string>
               </property>
+              <property name="autoDefault">
+               <bool>false</bool>
+              </property>
              </widget>
             </item>
             <item>
              <widget class="QPushButton" name="case_visit_delete_button">
               <property name="text">
                <string>Delete</string>
+              </property>
+              <property name="autoDefault">
+               <bool>false</bool>
               </property>
              </widget>
             </item>
@@ -721,6 +748,9 @@
               <property name="text">
                <string>Add</string>
               </property>
+              <property name="autoDefault">
+               <bool>false</bool>
+              </property>
              </widget>
             </item>
             <item>
@@ -728,12 +758,18 @@
               <property name="text">
                <string>Edit</string>
               </property>
+              <property name="autoDefault">
+               <bool>false</bool>
+              </property>
              </widget>
             </item>
             <item>
              <widget class="QPushButton" name="permanency_hearing_delete_button">
               <property name="text">
                <string>Delete</string>
+              </property>
+              <property name="autoDefault">
+               <bool>false</bool>
               </property>
              </widget>
             </item>
@@ -793,6 +829,9 @@
               <property name="text">
                <string>Add</string>
               </property>
+              <property name="autoDefault">
+               <bool>false</bool>
+              </property>
              </widget>
             </item>
             <item>
@@ -800,12 +839,18 @@
               <property name="text">
                <string>Edit</string>
               </property>
+              <property name="autoDefault">
+               <bool>false</bool>
+              </property>
              </widget>
             </item>
             <item>
              <widget class="QPushButton" name="periodic_review_delete_button">
               <property name="text">
                <string>Delete</string>
+              </property>
+              <property name="autoDefault">
+               <bool>false</bool>
               </property>
              </widget>
             </item>
@@ -1846,23 +1891,40 @@ is Jurisdiction Transfer&lt;/i&gt;</string>
     </widget>
    </item>
    <item>
-    <layout class="QVBoxLayout" name="verticalLayout_28">
+    <layout class="QVBoxLayout" name="verticalLayout_29">
      <item>
-      <widget class="QDialogButtonBox" name="form_action">
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
-       </property>
-       <property name="standardButtons">
-        <set>QDialogButtonBox::Cancel|QDialogButtonBox::Save</set>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="validate_button">
-       <property name="text">
-        <string>Validate</string>
-       </property>
-      </widget>
+      <layout class="QVBoxLayout" name="verticalLayout_28">
+       <item>
+        <widget class="QPushButton" name="validate_button">
+         <property name="text">
+          <string>Validate</string>
+         </property>
+         <property name="autoDefault">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="save_button">
+         <property name="text">
+          <string>Save</string>
+         </property>
+         <property name="autoDefault">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="close_button">
+         <property name="text">
+          <string>Close</string>
+         </property>
+         <property name="autoDefault">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </item>
      <item>
       <spacer name="verticalSpacer_12">
@@ -1990,46 +2052,13 @@ is Jurisdiction Transfer&lt;/i&gt;</string>
   <tabstop>e185</tabstop>
  </tabstops>
  <resources/>
- <connections>
-  <connection>
-   <sender>form_action</sender>
-   <signal>accepted()</signal>
-   <receiver>Removal2020Dialog</receiver>
-   <slot>accept()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>248</x>
-     <y>254</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>157</x>
-     <y>274</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>form_action</sender>
-   <signal>rejected()</signal>
-   <receiver>Removal2020Dialog</receiver>
-   <slot>reject()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>316</x>
-     <y>260</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>286</x>
-     <y>274</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
  <buttongroups>
-  <buttongroup name="e172"/>
   <buttongroup name="e163"/>
   <buttongroup name="e182"/>
+  <buttongroup name="e174"/>
+  <buttongroup name="e172"/>
   <buttongroup name="e171"/>
   <buttongroup name="e183"/>
-  <buttongroup name="e174"/>
  </buttongroups>
 </ui>

@@ -1,5 +1,6 @@
 from typing import Optional, Callable
 
+from PySide6.QtWidgets import QMessageBox
 from pydantic import ValidationError
 
 from controllers.removal1993_controller import Removal1993Controller
@@ -19,17 +20,20 @@ class OOHController:
 
     def __init__(self, parent, e1: str = ""):
         self.dialog = OOHDialog(parent)
-        self.new_data: Child | None = None
+        # self.new_data: Child | None = None
         self.validator = OOHValidator(self.dialog)
         self.dialog.current_tab = 0
         self.previous_tab = 0
         self._base_child: BaseChild | None = None
         self._child: Child | None = None
-        self.on_accept: Optional[Callable] = None
+        self.on_save: Optional[Callable] = None
         self.e1: str = e1
 
         # Wire up the dialog to our event handlers
-        self.dialog.on_accept = self.do_accept
+        self.dialog.on_accept = self.serialize
+
+        self.dialog.on_close = self.do_close
+        self.dialog.on_save = self.do_save
         self.dialog.on_tab_changed = self.do_tab_changed
         self.dialog.on_validate_clicked = self.do_validate_clicked
         self.dialog.on_add_removal1993_clicked = self.do_add_removal1993
@@ -87,7 +91,27 @@ class OOHController:
                 if hasattr(self.dialog, key):
                     setattr(self.dialog, key, getattr(v.ooh, key))
 
-    def do_accept(self) -> bool:
+    @staticmethod
+    def confirm_save() -> bool:
+        msgBox = QMessageBox()
+        msgBox.setText("The document has been modified.")
+        msgBox.setInformativeText("Do you want to save your changes?")
+        msgBox.setStandardButtons(QMessageBox.Save | QMessageBox.Close)
+        msgBox.setDefaultButton(QMessageBox.Save)
+        return msgBox.exec() == QMessageBox.Save
+
+    def is_dirty(self) -> bool:
+        for key in vars(self.child).keys():
+            if hasattr(self.dialog, key):
+                if getattr(self.dialog, key) != getattr(self.child, key):
+                    return True
+        for key in vars(self.child.ooh).keys():
+            if hasattr(self.dialog, key):
+                if getattr(self.dialog, key) != getattr(self.child.ooh, key):
+                    return True
+        return False
+
+    def serialize(self) -> bool:
         try:
             for key in vars(self.base_child).keys():
                 if key != 'id':
@@ -99,14 +123,25 @@ class OOHController:
             for key in vars(self.child.ooh).keys():
                 if hasattr(self.dialog, key):
                     setattr(self.child.ooh, key, getattr(self.dialog, key))
-            if self.on_accept:
-                self.on_accept()
             return True
         except ValidationError as ve:
             show_error_dialog(self.dialog, ve=ve)
         return False
 
-    def show(self):
+    def do_save(self) -> None:
+        # gather model fields from the view
+        # bubble the save operation up the call stack until the record is saved in the database
+        if self.serialize():
+            if self.on_save:
+                self.on_save()
+
+    def do_close(self) -> bool:
+        if self.is_dirty():
+            if self.confirm_save():
+                self.do_save()
+        return True
+
+    def exec(self):
         self.dialog.enable_icwa(not self.is_tribe())
         self.dialog.exec()
 
@@ -133,20 +168,32 @@ class OOHController:
             show_error_dialog(self.dialog, messages=self.validator.messages)
 
     def do_add_removal1993(self) -> None:
-        controller: Removal1993Controller = Removal1993Controller(self.dialog, self.dialog.child_name)
-        data: Removal1993 = controller.add()
-        if data is not None:
-            self.dialog.removals1993.append(data)
+        is_new = [True]
+        data = Removal1993()
+
+        def save():
+            if is_new[0]:
+                is_new[0] = False
+                self.dialog.removals1993.append(data)
             self.dialog.refresh_removals1993()
+            self.do_save()
+
+        controller: Removal1993Controller = Removal1993Controller(self.dialog, self.dialog.child_name, data=data)
+        controller.on_save = save
+        controller.exec()
 
     def do_edit_removal1993(self) -> None:
+
+        def save():
+            self.dialog.refresh_removals1993()
+            self.do_save()
+
         current_row = self.dialog.current_removal1993_row()
         if current_row >= 0:
-            controller: Removal1993Controller = Removal1993Controller(self.dialog, self.dialog.child_name)
-            data: Removal1993 = self.dialog.removals1993[current_row]
-            controller.edit(data)
-            self.dialog.removals1993[current_row] = data
-            self.dialog.refresh_removals1993()
+            controller: Removal1993Controller = Removal1993Controller(self.dialog, child_name=self.dialog.child_name,
+                                                                      data=self.dialog.removals1993[current_row])
+            controller.on_save = save
+            controller.exec()
 
     def do_delete_removal1993(self) -> None:
         current_row = self.dialog.current_removal1993_row()
@@ -155,20 +202,29 @@ class OOHController:
             self.dialog.refresh_removals1993()
 
     def do_add_removal2020(self) -> None:
-        controller: Removal2020Controller = Removal2020Controller(self.dialog, self.dialog.child_name)
-        data: Removal2020 = controller.add()
-        if data is not None:
+        data = Removal2020()
+
+        def save():
             self.dialog.removals2020.append(data)
             self.dialog.refresh_removals2020()
+            self.do_save()
+
+        controller: Removal2020Controller = Removal2020Controller(self.dialog, child_name=self.dialog.child_name,
+                                                                  data=data)
+        controller.on_save = save
+        controller.exec()
 
     def do_edit_removal2020(self) -> None:
+        def save():
+            self.dialog.refresh_removals2020()
+            self.do_save()
+
         current_row = self.dialog.current_removal2020_row()
         if current_row >= 0:
-            controller: Removal2020Controller = Removal2020Controller(self.dialog, self.dialog.child_name)
-            data: Removal2020 = self.dialog.removals2020[current_row]
-            controller.edit(data)
-            self.dialog.removals2020[current_row] = data
-            self.dialog.refresh_removals2020()
+            controller: Removal2020Controller = Removal2020Controller(self.dialog, self.dialog.child_name,
+                                                                      self.dialog.removals2020[current_row])
+            controller.on_save = save
+            controller.exec()
 
     def do_delete_removal2020(self) -> None:
         current_row = self.dialog.current_removal2020_row()
@@ -178,7 +234,7 @@ class OOHController:
 
     # ===== SecondParent ======================================================
 
-    # When a parent is added, is should be assigned the first available parent number >= 2.
+    # When a parent is added, it should be assigned the first available parent number >= 2.
 
     def _next_parent_number(self) -> int:
         number = 2
@@ -188,20 +244,31 @@ class OOHController:
         return number
 
     def do_add_second_parent(self) -> None:
-        controller = SecondParentController(self.dialog, child_name=self.dialog.child_name)
-        data: SecondParent = controller.add(self._next_parent_number())
-        if data is not None:
-            self.dialog.second_parents.append(data)
+        is_new = [True]
+
+        def save():
+            if is_new[0]:
+                self.dialog.second_parents.append(controller.data)
+                is_new[0] = False
             self.dialog.refresh_second_parents()
+            self.do_save()
+
+        controller = SecondParentController(self.dialog, child_name=self.dialog.child_name,
+                                            data=SecondParent(number=self._next_parent_number()))
+        controller.on_save = save
+        controller.exec()
 
     def do_edit_second_parent(self) -> None:
+        def save():
+            self.dialog.refresh_second_parents()
+            self.do_save()
+
         current_row = self.dialog.current_second_parents_row()
         if current_row >= 0:
-            controller = SecondParentController(self.dialog, child_name=self.dialog.child_name)
-            data = self.dialog.second_parents[current_row]
-            controller.edit(data)
-            self.dialog.second_parents[current_row] = data
-            self.dialog.refresh_second_parents()
+            controller = SecondParentController(self.dialog, child_name=self.dialog.child_name,
+                                                data=self.dialog.second_parents[current_row])
+            controller.on_save = save
+            controller.exec()
 
     def do_delete_second_parent(self) -> None:
         current_row = self.dialog.current_second_parents_row()

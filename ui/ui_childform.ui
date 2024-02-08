@@ -169,7 +169,7 @@
         <enum>QTabWidget::North</enum>
        </property>
        <property name="currentIndex">
-        <number>5</number>
+        <number>0</number>
        </property>
        <widget class="QWidget" name="demographics_tab">
         <attribute name="title">
@@ -178,6 +178,19 @@
         <layout class="QHBoxLayout" name="horizontalLayout">
          <item>
           <layout class="QGridLayout" name="gridLayout">
+           <item row="1" column="1">
+            <spacer name="verticalSpacer_8">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
            <item row="0" column="0">
             <layout class="QVBoxLayout" name="verticalLayout_6">
              <item>
@@ -527,19 +540,6 @@
               </widget>
              </item>
             </layout>
-           </item>
-           <item row="1" column="1">
-            <spacer name="verticalSpacer_8">
-             <property name="orientation">
-              <enum>Qt::Vertical</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>20</width>
-               <height>40</height>
-              </size>
-             </property>
-            </spacer>
            </item>
           </layout>
          </item>
@@ -3124,6 +3124,9 @@ Leave blank if law enforcement was not notified.&lt;/i&gt;</string>
            <layout class="QHBoxLayout" name="horizontalLayout_24">
             <item>
              <widget class="QTableWidget" name="removal_1993_table">
+              <property name="editTriggers">
+               <set>QAbstractItemView::NoEditTriggers</set>
+              </property>
               <property name="alternatingRowColors">
                <bool>true</bool>
               </property>
@@ -3163,6 +3166,9 @@ Leave blank if law enforcement was not notified.&lt;/i&gt;</string>
                 <property name="text">
                  <string>Add</string>
                 </property>
+                <property name="autoDefault">
+                 <bool>false</bool>
+                </property>
                </widget>
               </item>
               <item>
@@ -3170,12 +3176,18 @@ Leave blank if law enforcement was not notified.&lt;/i&gt;</string>
                 <property name="text">
                  <string>Edit</string>
                 </property>
+                <property name="autoDefault">
+                 <bool>false</bool>
+                </property>
                </widget>
               </item>
               <item>
                <widget class="QPushButton" name="removal_1993_delete_button">
                 <property name="text">
                  <string>Delete</string>
+                </property>
+                <property name="autoDefault">
+                 <bool>false</bool>
                 </property>
                </widget>
               </item>
@@ -3241,6 +3253,9 @@ Leave blank if law enforcement was not notified.&lt;/i&gt;</string>
                 <property name="text">
                  <string>Add</string>
                 </property>
+                <property name="autoDefault">
+                 <bool>false</bool>
+                </property>
                </widget>
               </item>
               <item>
@@ -3248,12 +3263,18 @@ Leave blank if law enforcement was not notified.&lt;/i&gt;</string>
                 <property name="text">
                  <string>Edit</string>
                 </property>
+                <property name="autoDefault">
+                 <bool>false</bool>
+                </property>
                </widget>
               </item>
               <item>
                <widget class="QPushButton" name="removal_2020_delete_button">
                 <property name="text">
                  <string>Delete</string>
+                </property>
+                <property name="autoDefault">
+                 <bool>false</bool>
                 </property>
                </widget>
               </item>
@@ -3284,16 +3305,6 @@ Leave blank if law enforcement was not notified.&lt;/i&gt;</string>
    <item>
     <layout class="QVBoxLayout" name="verticalLayout_23">
      <item>
-      <widget class="QDialogButtonBox" name="form_action">
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
-       </property>
-       <property name="standardButtons">
-        <set>QDialogButtonBox::Cancel|QDialogButtonBox::Save</set>
-       </property>
-      </widget>
-     </item>
-     <item>
       <widget class="QPushButton" name="validate_button">
        <property name="text">
         <string>Validate</string>
@@ -3301,17 +3312,28 @@ Leave blank if law enforcement was not notified.&lt;/i&gt;</string>
       </widget>
      </item>
      <item>
-      <spacer name="verticalSpacer_12">
+      <widget class="QPushButton" name="save_button">
+       <property name="text">
+        <string>Save</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="close_button">
+       <property name="text">
+        <string>Close</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="verticalSpacer_5">
        <property name="orientation">
         <enum>Qt::Vertical</enum>
-       </property>
-       <property name="sizeType">
-        <enum>QSizePolicy::Maximum</enum>
        </property>
        <property name="sizeHint" stdset="0">
         <size>
          <width>20</width>
-         <height>600</height>
+         <height>40</height>
         </size>
        </property>
       </spacer>
@@ -3321,7 +3343,6 @@ Leave blank if law enforcement was not notified.&lt;/i&gt;</string>
   </layout>
  </widget>
  <tabstops>
-  <tabstop>last_name</tabstop>
   <tabstop>first_name</tabstop>
   <tabstop>e4</tabstop>
   <tabstop>e4_generate</tabstop>
@@ -3341,7 +3362,7 @@ Leave blank if law enforcement was not notified.&lt;/i&gt;</string>
   <tabstop>e43</tabstop>
   <tabstop>e56</tabstop>
   <tabstop>e57</tabstop>
-  <tabstop>removal_2020_add_button</tabstop>
+  <tabstop>last_name</tabstop>
   <tabstop>funding_y</tabstop>
   <tabstop>funding_n</tabstop>
   <tabstop>e7_y</tabstop>
@@ -3419,59 +3440,30 @@ Leave blank if law enforcement was not notified.&lt;/i&gt;</string>
   <tabstop>removal_1993_delete_button</tabstop>
   <tabstop>removal_2020_table</tabstop>
   <tabstop>tabWidget</tabstop>
+  <tabstop>removal_2020_add_button</tabstop>
   <tabstop>removal_2020_edit_button</tabstop>
   <tabstop>removal_2020_delete_button</tabstop>
   <tabstop>validate_button</tabstop>
+  <tabstop>e21</tabstop>
+  <tabstop>save_button</tabstop>
+  <tabstop>close_button</tabstop>
  </tabstops>
  <resources/>
- <connections>
-  <connection>
-   <sender>form_action</sender>
-   <signal>accepted()</signal>
-   <receiver>ChildForm</receiver>
-   <slot>accept()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>1005</x>
-     <y>242</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>157</x>
-     <y>274</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>form_action</sender>
-   <signal>rejected()</signal>
-   <receiver>ChildForm</receiver>
-   <slot>reject()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>1031</x>
-     <y>248</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>286</x>
-     <y>274</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
  <buttongroups>
-  <buttongroup name="funding"/>
-  <buttongroup name="e8"/>
   <buttongroup name="e109"/>
-  <buttongroup name="e110"/>
-  <buttongroup name="e61"/>
-  <buttongroup name="e7"/>
-  <buttongroup name="e107"/>
-  <buttongroup name="e12"/>
-  <buttongroup name="e62"/>
   <buttongroup name="e63"/>
+  <buttongroup name="e61"/>
+  <buttongroup name="e62"/>
   <buttongroup name="e6"/>
-  <buttongroup name="e106"/>
+  <buttongroup name="e8"/>
+  <buttongroup name="e7"/>
+  <buttongroup name="funding"/>
+  <buttongroup name="e110"/>
   <buttongroup name="e10"/>
   <buttongroup name="e22"/>
+  <buttongroup name="e106"/>
+  <buttongroup name="e12"/>
+  <buttongroup name="e107"/>
  </buttongroups>
 </ui>

@@ -41,11 +41,11 @@ def e148_to_str(v: int | None) -> str:
 
 
 def e152_to_str(v: int | None) -> str:
-    mapper: dict = {0: "Child's Residence",
-                    1: "Other Location"
+    mapper: dict = {1: "Child's Residence",
+                    2: "Other Location"
                     }
     if v is None or v not in mapper:
-        return mapper[0]
+        return ""
     return mapper[v]
 
 
@@ -67,7 +67,9 @@ class Removal2020Dialog(BaseDialog):
         self.ooh_id: int | None = None
         self._child_name: str = ""
         self.on_tab_changed: Optional[Callable] = None
-        self.on_validate_clicked: Optional[Callable] = None
+        self.on_validate: Optional[Callable] = None
+        self.on_save: Optional[Callable] = None
+        self.on_close: Optional[Callable] = None
         self.on_add_living_arrangement: Optional[Callable] = None
         self.on_edit_living_arrangement: Optional[Callable] = None
         self.on_delete_living_arrangement: Optional[Callable] = None
@@ -86,7 +88,7 @@ class Removal2020Dialog(BaseDialog):
 
     # ------------------------------------------------------------------------
 
-    def clear(self) -> None:
+    def clear(self, exclude: list[str] = None) -> None:
         super().clear()
         self.child_name = ""
         self.ooh_id = None
@@ -96,8 +98,9 @@ class Removal2020Dialog(BaseDialog):
 
         ui = self.ui
         """add event handlers to the form"""
-        ui.form_action.accepted.connect(self.accept)
-        ui.form_action.rejected.connect(self.reject)
+        ui.validate_button.clicked.connect(self.validate_button_clicked)
+        ui.save_button.clicked.connect(self.save_button_clicked)
+        ui.close_button.clicked.connect(self.close_button_clicked)
 
         ui.living_arrangement_add_button.clicked.connect(self._on_add_living_arrangement)
         ui.living_arrangement_edit_button.clicked.connect(self._on_edit_living_arrangement)
@@ -136,14 +139,21 @@ class Removal2020Dialog(BaseDialog):
         self._init_radio_ynud(ui, 'e182')
         self._init_radio_mf(ui, 'e183')
 
-        self.ui.validate_button.clicked.connect(self.do_validate_button_clicked)
         self.ui.tab_widget.currentChanged.connect(self.do_tab_changed)
 
     # ----- Living Arrangements Automation ------------------------------------
 
-    def do_validate_button_clicked(self):
-        if self.on_validate_clicked:
-            self.on_validate_clicked()
+    def validate_button_clicked(self):
+        if self.on_validate:
+            self.on_validate()
+
+    def save_button_clicked(self):
+        if self.on_save:
+            self.on_save()
+
+    def close_button_clicked(self):
+        if not self.on_close or self.on_close():
+            self.close()
 
     def do_tab_changed(self, new_index: int):
         if self.on_tab_changed:

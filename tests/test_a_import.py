@@ -3,6 +3,7 @@ from xml.etree.ElementTree import Element
 
 import model
 import utils.xml_parser
+from model.models import FileType
 
 
 class TestAImport:
@@ -28,7 +29,7 @@ class TestAImport:
         tree = utils.xml_parser.parse_file('Test Cases Revised v5_Person 03 - Adopt - Safe Haven_OOH.xml')
         assert isinstance(tree, Element)
 
-        utils.xml_parser.import_a_tree(tree)
+        utils.xml_parser.import_a_tree(tree, FileType.TEST)
 
         assert model.BaseChildTable.get_or_create.call_count == 1
         assert model.BaseChildTable.save.call_count == 1

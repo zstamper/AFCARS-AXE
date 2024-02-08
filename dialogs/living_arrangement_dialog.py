@@ -19,14 +19,13 @@ class LivingArrangementDialog(BaseDialog):
         self.id: int | None = None
         self.removal_id: int | None = None
         self._child_name: str = ""
-        self.on_validate_clicked: Optional[Callable] = None
+        self.on_validate: Optional[Callable] = None
+        self.on_save: Optional[Callable] = None
+        self.on_close: Optional[Callable] = None
 
     def _wire_ui(self) -> None:
         self.setModal(True)
         ui = self.ui
-
-        ui.form_action.accepted.connect(self.accept)
-        ui.form_action.rejected.connect(self.reject)
 
         # assign id numbers to the radio buttons -- can't be done through the UI app
         self._init_radio_ynna(ui, 'e40')
@@ -40,7 +39,9 @@ class LivingArrangementDialog(BaseDialog):
         self.ui.e121.currentIndexChanged.connect(self._e121_changed)
         self.ui.e123.currentIndexChanged.connect(self._e123_changed)
 
-        self.ui.validate_button.clicked.connect(self.do_validate_button_clicked)
+        self.ui.validate_button.clicked.connect(self.validate_button_clicked)
+        self.ui.save_button.clicked.connect(self.save_button_clicked)
+        self.ui.close_button.clicked.connect(self.close_button_clicked)
 
     def _e121_changed(self):
         self.ui.e122.setEnabled(self.e121 not in (1, 4))
@@ -81,9 +82,17 @@ class LivingArrangementDialog(BaseDialog):
             self.e131 = 0
             self.e132 = 0
 
-    def do_validate_button_clicked(self):
-        if self.on_validate_clicked:
-            self.on_validate_clicked()
+    def validate_button_clicked(self):
+        if self.on_validate:
+            self.on_validate()
+
+    def save_button_clicked(self):
+        if self.on_save:
+            self.on_save()
+
+    def close_button_clicked(self):
+        if not self.on_close or self.on_close():
+            self.close()
 
     @property
     def child_name(self) -> str:

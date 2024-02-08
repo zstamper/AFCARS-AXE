@@ -12,11 +12,12 @@ from .migrations import *
 DATABASE_VERSION: int = 2
 
 
-def open_database(database_name: str):
+def open_database(database_name: str, testing: bool = False):
     close_database()
     database.init(database_name)
     database.connect()
-    apply_migrations(database.connection())
+    if not testing:
+        apply_migrations(database.connection())
 
 
 def close_database():
@@ -33,6 +34,7 @@ def create_tables():
     bootstrap_states()
     bootstrap_tribes()
     bootstrap_fips_codes()
+    Version.get_or_create(database_version=DATABASE_VERSION)
 
 
 def apply_migrations(connection) -> None:

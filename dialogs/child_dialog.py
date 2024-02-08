@@ -39,6 +39,7 @@ class ChildDialog(BaseDialog):
         self.ui.filter_a.clicked.connect(self._refresh_data)
         self.ui.filter_all.clicked.connect(self._refresh_data)
         self.ui.filter_ooh.clicked.connect(self._refresh_data)
+        self.ui.close_button.clicked.connect(self.close)
 
     def _on_add_clicked(self, *args, **kwargs):
         if self.on_add:

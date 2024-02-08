@@ -1,40 +1,49 @@
 from typing import Optional, Callable
 
-from PySide6.QtWidgets import QDialog
-
 from dialogs import BaseDialog
 
 
 class Parent2Dialog(BaseDialog):
     def __init__(self, *args, relaxed_rules: bool = False, **kwargs):
         super().__init__(*args, **kwargs)
+
+        self._number: int | None = None
+        self._child_name: str = ""
+        self.on_validate: Optional[Callable] = None
+        self.on_save: Optional[Callable] = None
+        self.on_close: Optional[Callable] = None
+
+        self.id: int | None = None
+        self.ooh_id: int | None = None
         self.relaxed_rules: bool = relaxed_rules
-        self.ui: QDialog
-        self.obj = None
         self.ui = self.load_ui('ui_parent2tpr.ui')
+
         self._wire_ui()
         self.ui.adjustSize()
         self.setLayout(self.ui.layout())
         self.setFixedSize(self.ui.size())
-        self.id: int | None = None
-        self.ooh_id: int | None = None
-        self._number: int | None = None
-        self._child_name: str = ""
-        self.on_validate_clicked: Optional[Callable] = None
 
     def _wire_ui(self):
         self._init_radio(self.ui, 'e64', {'na': 0, 'v': 1, 'i': 2})
-        self.ui.buttonBox.accepted.connect(self.accept)
-        self.ui.buttonBox.rejected.connect(self.reject)
-        self.ui.validate_button.clicked.connect(self.do_validate_clicked)
+        self.ui.save_button.clicked.connect(self.save_button_clicked)
+        self.ui.close_button.clicked.connect(self.close_button_clicked)
+        self.ui.validate_button.clicked.connect(self.validate_button_clicked)
 
-    def clear(self):
+    def clear(self, exclude: list[str] = None):
         super().clear()
         self.child_name = ""
 
-    def do_validate_clicked(self):
-        if self.on_validate_clicked:
-            self.on_validate_clicked()
+    def validate_button_clicked(self):
+        if self.on_validate:
+            self.on_validate()
+
+    def save_button_clicked(self):
+        if self.on_save:
+            self.on_save()
+
+    def close_button_clicked(self):
+        if not self.on_close or self.on_close():
+            self.close()
 
     @property
     def child_name(self) -> str:

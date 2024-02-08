@@ -1,3 +1,5 @@
+from typing import Optional, Callable
+
 from PySide6.QtCore import QRegularExpression
 from PySide6.QtGui import QRegularExpressionValidator
 from PySide6.QtWidgets import QWidget
@@ -14,6 +16,9 @@ class ADialog(BaseDialog):
         self.ui: QWidget = self.load_ui('ui_adoption_subsidy.ui')
 
         self.ooh: OOHRecord | None = None
+        self.on_save: Optional[Callable] = None
+        self.on_close: Optional[Callable] = None
+        self.on_validate: Optional[Callable] = None
 
         self._child_name: str = ""
 
@@ -27,8 +32,12 @@ class ADialog(BaseDialog):
         self._init_radio(ui, 'a15', {'a': 1, 'g': 2})
         self._init_radio(ui, 'a19', {'1': 1, '2': 2, '3': 3})
 
-        ui.form_action.accepted.connect(self.accept)
-        ui.form_action.rejected.connect(self.reject)
+        # ui.form_action.accepted.connect(self.accept)
+        # ui.form_action.rejected.connect(self.reject)
+
+        ui.save_button.clicked.connect(self.save_button_clicked)
+        ui.close_button.clicked.connect(self.close_button_clicked)
+        ui.validate_button.clicked.connect(self.validate_button_clicked)
 
         ui.last_name.textChanged.connect(self._last_name_text_changed)
         ui.first_name.textChanged.connect(self._first_name_text_changed)
@@ -37,13 +46,25 @@ class ADialog(BaseDialog):
         ui.e4.setValidator(QRegularExpressionValidator(QRegularExpression(r'[0-9a-zA-Z]{12}')))
         ui.e4_generate.clicked.connect(self._e4_generate_clicked)
 
+    def save_button_clicked(self):
+        if self.on_save:
+            self.on_save()
+
+    def close_button_clicked(self):
+        if not self.on_close and not self.on_close():
+            return
+        self.close()
+
+    def validate_button_clicked(self):
+        return self.on_validate() if self.on_validate else None
+
     def _last_name_text_changed(self, text: str) -> None:
         self.child_name = f"{self.last_name}{', ' if self.last_name and self.first_name else ''}{self.first_name}"
 
     def _first_name_text_changed(self, text: str) -> None:
         self.child_name = f"{self.last_name}{', ' if self.last_name and self.first_name else ''}{self.first_name}"
 
-    def clear(self) -> None:
+    def clear(self, exclude: list[str] = None) -> None:
         super().clear()
         self.child_name = ""
         self.id = None

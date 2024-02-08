@@ -109,9 +109,9 @@ class State(MyBaseModel):
 class Removal1993(MyBaseModel):
     # id: int | None = Field(default=None)
     # ooh_id: int | None
-    e69: int | None
-    e153: int | None
-    e155: int | None
+    e69: int | None = Field(default=None)
+    e153: int | None = Field(default=None)
+    e155: int | None = Field(default=None)
 
     # @field_validator('e69', 'e153')
     # @classmethod
@@ -148,161 +148,161 @@ class Removal1993(MyBaseModel):
 class PermanencyPlan(MyBaseModel):
     # id: int | None = Field(default=None)
     # removal_id: int | None
-    e147: int | None
-    e148: int | None
+    e147: int | None = Field(default=None)
+    e148: int | None = Field(default=None)
 
 
 class PermanencyHearing(MyBaseModel):
     # id: int | None = Field(default=None)
     # removal_id: int | None
-    e150: int | None
+    e150: int | None = Field(default=None)
 
 
 class PeriodicReview(MyBaseModel):
     # id: int | None = Field(default=None)
     # removal_id: int | None
-    e149: int | None
+    e149: int | None = Field(default=None)
 
 
 class CaseVisit(MyBaseModel):
     # id: int | None
     # removal_id: int | None
-    e151: int | None
-    e152: int | None
+    e151: int | None = Field(default=None)
+    e152: int | None = Field(default=None)
 
 
 class LivingArrangement(MyBaseModel):
     # id: int | None = Field(default=None)
     # removal_id: int | None
-    e40: int | None
-    e58: int | None
-    e112: int | None
-    e113: int | None
-    e114: int | None
-    e115: int | None
-    e116: int | None
-    e117: int | None
-    e118: int | None
-    e119: int | None
-    e120: int | None
-    e121: int | None
-    e122: int | None
-    e123: int | None
-    e124: int | None
-    e125: int | None
-    e126: int | None
-    e127: int | None
-    e128: int | None
-    e129: int | None
-    e130: int | None
-    e131: int | None
-    e132: int | None
-    e133: int | None
-    e134: int | None
-    e135: int | None
-    e136: int | None
-    e137: int | None
-    e138: int | None
-    e139: int | None
-    e140: int | None
-    e141: int | None
-    e142: int | None
-    e143: int | None
-    e144: int | None
-    e145: int | None
-    e146: int | None
+    e40: int | None = Field(default=None)
+    e58: int | None = Field(default=None)
+    e112: int | None = Field(default=None)
+    e113: int | None = Field(default=None)
+    e114: int | None = Field(default=None)
+    e115: int | None = Field(default=None)
+    e116: int | None = Field(default=None)
+    e117: int | None = Field(default=None)
+    e118: int | None = Field(default=None)
+    e119: int | None = Field(default=None)
+    e120: int | None = Field(default=None)
+    e121: int | None = Field(default=None)
+    e122: int | None = Field(default=None)
+    e123: int | None = Field(default=None)
+    e124: int | None = Field(default=None)
+    e125: int | None = Field(default=None)
+    e126: int | None = Field(default=None)
+    e127: int | None = Field(default=None)
+    e128: int | None = Field(default=None)
+    e129: int | None = Field(default=None)
+    e130: int | None = Field(default=None)
+    e131: int | None = Field(default=None)
+    e132: int | None = Field(default=None)
+    e133: int | None = Field(default=None)
+    e134: int | None = Field(default=None)
+    e135: int | None = Field(default=None)
+    e136: int | None = Field(default=None)
+    e137: int | None = Field(default=None)
+    e138: int | None = Field(default=None)
+    e139: int | None = Field(default=None)
+    e140: int | None = Field(default=None)
+    e141: int | None = Field(default=None)
+    e142: int | None = Field(default=None)
+    e143: int | None = Field(default=None)
+    e144: int | None = Field(default=None)
+    e145: int | None = Field(default=None)
+    e146: int | None = Field(default=None)
     last_updated: datetime | None = Field(default=None)
 
 
 class Removal2020(MyBaseModel):
     # id: int | None = Field(default=None)
     # ooh_id: int | None
-    e3: str | None
-    e69: int | None
-    e70: int | None
-    e71: int | None
-    e72: int | None
-    e73: int | None
-    e74: int | None
-    e75: int | None
-    e76: int | None
-    e77: int | None
-    e78: int | None
-    e79: int | None
-    e80: int | None
-    e81: int | None
-    e82: int | None
-    e83: int | None
-    e84: int | None
-    e85: int | None
-    e86: int | None
-    e87: int | None
-    e88: int | None
-    e89: int | None
-    e90: int | None
-    e91: int | None
-    e92: int | None
-    e93: int | None
-    e94: int | None
-    e95: int | None
-    e96: int | None
-    e97: int | None
-    e98: int | None
-    e99: int | None
-    e100: int | None
-    e101: int | None
-    e102: int | None
-    e103: int | None
-    e104: int | None
-    e105: int | None
+    e3: str | None = Field(default=None)
+    e69: int | None = Field(default=None)
+    e70: int | None = Field(default=None)
+    e71: int | None = Field(default=None)
+    e72: int | None = Field(default=None)
+    e73: int | None = Field(default=None)
+    e74: int | None = Field(default=None)
+    e75: int | None = Field(default=None)
+    e76: int | None = Field(default=None)
+    e77: int | None = Field(default=None)
+    e78: int | None = Field(default=None)
+    e79: int | None = Field(default=None)
+    e80: int | None = Field(default=None)
+    e81: int | None = Field(default=None)
+    e82: int | None = Field(default=None)
+    e83: int | None = Field(default=None)
+    e84: int | None = Field(default=None)
+    e85: int | None = Field(default=None)
+    e86: int | None = Field(default=None)
+    e87: int | None = Field(default=None)
+    e88: int | None = Field(default=None)
+    e89: int | None = Field(default=None)
+    e90: int | None = Field(default=None)
+    e91: int | None = Field(default=None)
+    e92: int | None = Field(default=None)
+    e93: int | None = Field(default=None)
+    e94: int | None = Field(default=None)
+    e95: int | None = Field(default=None)
+    e96: int | None = Field(default=None)
+    e97: int | None = Field(default=None)
+    e98: int | None = Field(default=None)
+    e99: int | None = Field(default=None)
+    e100: int | None = Field(default=None)
+    e101: int | None = Field(default=None)
+    e102: int | None = Field(default=None)
+    e103: int | None = Field(default=None)
+    e104: int | None = Field(default=None)
+    e105: int | None = Field(default=None)
     living_arrangements: list[LivingArrangement] = Field(default_factory=list)
     permanency_plans: list[PermanencyPlan] = Field(default_factory=list)
     periodic_reviews: list[PeriodicReview] = Field(default_factory=list)
     permanency_hearings: list[PermanencyHearing] = Field(default_factory=list)
     case_worker_visits: list[CaseVisit] = Field(default_factory=list)
-    e153: int | None
-    e154: int | None
-    e155: int | None
-    e156: int | None
-    e157: int | None
-    e158: int | None
-    e159: int | None
-    e160: int | None
-    e161: int | None
-    e162: int | None
-    e163: int | None
-    e164: int | None
-    e165: int | None
-    e166: int | None
-    e167: int | None
-    e168: int | None
-    e169: int | None
-    e170: int | None
-    e171: int | None
-    e172: int | None
-    e173: int | None
-    e174: int | None
-    e175: int | None
-    e176: int | None
-    e177: int | None
-    e178: int | None
-    e179: int | None
-    e180: int | None
-    e181: int | None
-    e182: int | None
-    e183: int | None
-    e184: int | None
-    e185: int | None
-    e186: int | None
+    e153: int | None = Field(default=None)
+    e154: int | None = Field(default=None)
+    e155: int | None = Field(default=None)
+    e156: int | None = Field(default=None)
+    e157: int | None = Field(default=None)
+    e158: int | None = Field(default=None)
+    e159: int | None = Field(default=None)
+    e160: int | None = Field(default=None)
+    e161: int | None = Field(default=None)
+    e162: int | None = Field(default=None)
+    e163: int | None = Field(default=None)
+    e164: int | None = Field(default=None)
+    e165: int | None = Field(default=None)
+    e166: int | None = Field(default=None)
+    e167: int | None = Field(default=None)
+    e168: int | None = Field(default=None)
+    e169: int | None = Field(default=None)
+    e170: int | None = Field(default=None)
+    e171: int | None = Field(default=None)
+    e172: int | None = Field(default=None)
+    e173: int | None = Field(default=None)
+    e174: int | None = Field(default=None)
+    e175: int | None = Field(default=None)
+    e176: int | None = Field(default=None)
+    e177: int | None = Field(default=None)
+    e178: int | None = Field(default=None)
+    e179: int | None = Field(default=None)
+    e180: int | None = Field(default=None)
+    e181: int | None = Field(default=None)
+    e182: int | None = Field(default=None)
+    e183: int | None = Field(default=None)
+    e184: int | None = Field(default=None)
+    e185: int | None = Field(default=None)
+    e186: int | None = Field(default=None)
 
 
 class SecondParent(MyBaseModel):
     # id: int | None = Field(default=None)
     # ooh_id: int | None
     number: int = Field(default=0)
-    e64: int | None
-    e66: int | None
-    e68: int | None
+    e64: int | None = Field(default=None)
+    e66: int | None = Field(default=None)
+    e68: int | None = Field(default=None)
 
     def __init__(self, **data: Any):
         super().__init__(**data)
@@ -314,7 +314,7 @@ class SecondParent(MyBaseModel):
 class RecognizedTribe(MyBaseModel):
     # id: int | None = Field(default=None)
     # ooh_id: int | None
-    e9: int | None
+    e9: int | None = Field(default=None)
 
 
 class OOHRecord(MyBaseModel):
@@ -413,7 +413,7 @@ class Context(MyBaseModel):
     # first_name: str | None = Field(default="")
     # last_name: str | None = Field(default="")
     id: int | None = Field(default=None)
-    e2: str | None
+    e2: str | None = Field(default=None)
     file_type: FileType
     data: Child = Field(default_factory=Child)
 

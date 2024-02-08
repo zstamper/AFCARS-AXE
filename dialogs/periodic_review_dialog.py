@@ -1,3 +1,5 @@
+from typing import Optional, Callable
+
 from PySide6.QtWidgets import QWidget
 
 from dialogs import BaseDialog
@@ -7,18 +9,34 @@ class PeriodicReviewDialog(BaseDialog):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self._child_name: str = ""
+        self.on_validate: Optional[Callable] = None
+        self.on_save: Optional[Callable] = None
+        self.on_close: Optional[Callable] = None
+        self.id: int | None = None
+        self.removal_id: int | None = None
         self.ui: QWidget = self.load_ui('ui_periodic_review.ui')
         self._wire_ui()
         self.setLayout(self.ui.layout())
         self.setFixedSize(self.ui.size())
-        self.id: int | None = None
-        self.removal_id: int | None = None
-        self._child_name: str = ""
 
     def _wire_ui(self) -> None:
         self.setModal(True)
-        self.ui.form_action.accepted.connect(self.accept)
-        self.ui.form_action.rejected.connect(self.reject)
+        self.ui.validate_button.clicked.connect(self.validate_button_clicked)
+        self.ui.save_button.clicked.connect(self.save_button_clicked)
+        self.ui.close_button.clicked.connect(self.close_button_clicked)
+
+    def validate_button_clicked(self):
+        if self.on_validate:
+            self.on_validate()
+
+    def save_button_clicked(self):
+        if self.on_save:
+            self.on_save()
+
+    def close_button_clicked(self):
+        if not self.on_close or self.on_close():
+            self.close()
 
     @property
     def child_name(self) -> str:

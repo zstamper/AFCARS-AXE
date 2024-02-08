@@ -1,6 +1,6 @@
-from typing import Any
+from typing import Any, Optional, Callable
 
-from PySide6.QtWidgets import QDialog
+from PySide6.QtWidgets import QDialog, QMessageBox
 from pydantic import ValidationError
 
 from controllers.case_worker_visit_controller import CaseWorkerVisitController
@@ -21,14 +21,12 @@ class Removal2020Controller:
      and editing model data using the view provided at time of controller instantiation.
      """
 
-    def __init__(self, parent, child_name: str):
+    def __init__(self, parent, child_name: str, data: Removal2020):
+        self._data = None
         self.dialog: Removal2020Dialog = Removal2020Dialog(parent)
-        self.dialog.child_name = child_name
         self.validator: Removal2020Validator = Removal2020Validator(self.dialog)
-        self.dialog.on_accept = self.do_accept
+        self.dialog.child_name = child_name
         self.dialog.on_tab_changed = self.do_tab_changed
-        self.new_data = None
-        self.previous_tab = 0
         self.dialog.on_add_living_arrangement = self.do_add_living_arrangement
         self.dialog.on_edit_living_arrangement = self.do_edit_living_arrangement
         self.dialog.on_delete_living_arrangement = self.do_delete_living_arrangement
@@ -44,45 +42,64 @@ class Removal2020Controller:
         self.dialog.on_add_periodic_review = self.do_add_periodic_review
         self.dialog.on_edit_periodic_review = self.do_edit_periodic_review
         self.dialog.on_delete_periodic_review = self.do_delete_periodic_review
+        self.on_save: Optional[Callable] = None
+        self.dialog.on_save = self.do_save
+        self.dialog.on_close = self.do_close
+        self.data = data
+        self.previous_tab = 0
 
-    def add(self) -> Any:
-        """Shows an empty dialog, lets the user do what they will, then returns either a new model instance or None,
-        depending on whether the form contents are "valid" or not. The "valid" determination is handled by the model
-        as a feature of pydantic."""
+    def exec(self):
+        self.dialog.exec()
+
+    @property
+    def data(self) -> Removal2020:
+        return self._data
+
+    @data.setter
+    def data(self, v: Removal2020) -> None:
+        self._data = v
+        self._data.scatter(self.dialog)
         self.dialog.refresh_case_worker_visits()
         self.dialog.refresh_living_arrangements()
         self.dialog.refresh_permanency_plans()
         self.dialog.refresh_periodic_reviews()
         self.dialog.refresh_permanency_hearings()
-        self.dialog.exec()
-        if self.dialog.result() == QDialog.Accepted:
-            return self.new_data
-        return None
 
-    def edit(self, data: MyBaseModel) -> None:
-        """Pushes the model data into the form, shows the form, and lets the user do what they will. If the form
-        contents are valid, the model instance is modified with the new form contents. Otherwise, the model contents are
-        left unchanged. Like the add() method, "valid" is determined by rules in the model using pydantic."""
-        data.scatter(self.dialog)
-        self.dialog.refresh_case_worker_visits()
-        self.dialog.refresh_living_arrangements()
-        self.dialog.refresh_permanency_plans()
-        self.dialog.refresh_periodic_reviews()
-        self.dialog.refresh_permanency_hearings()
-        self.dialog.exec()
-        if self.dialog.result() == QDialog.Accepted:
-            data.gather(self.dialog)
-        else:
-            # put the data back in to the dialog so that further queries of the form don't get confused by the form
-            # state not matching the data state
-            data.scatter(self.dialog)
+    def do_save(self) -> None:
+        # gather model fields from the view
+        # bubble the save operation up the call stack until the record is saved in the database
+        if self.serialize():
+            if self.on_save:
+                self.on_save()
 
-    def do_accept(self) -> bool:
+    @staticmethod
+    def confirm_save() -> bool:
+        msgBox = QMessageBox()
+        msgBox.setText("The document has been modified.")
+        msgBox.setInformativeText("Do you want to save your changes?")
+        msgBox.setStandardButtons(QMessageBox.Save | QMessageBox.Close)
+        msgBox.setDefaultButton(QMessageBox.Save)
+        return msgBox.exec() == QMessageBox.Save
+
+    def do_close(self) -> bool:
+        if self.is_dirty():
+            if self.confirm_save():
+                self.do_save()
+        return True
+
+    def is_dirty(self) -> bool:
+        for key in vars(self.data).keys():
+            if hasattr(self.dialog, key):
+                if getattr(self.dialog, key) != getattr(self.data, key):
+                    return True
+        return False
+
+    def serialize(self) -> bool:
         try:
             if hasattr(self.dialog, 'validate_on_accept') and self.dialog.validate_on_accept:
                 if not self.do_validate_clicked():
                     return False
-            self.new_data = Removal2020.crib(self.dialog)
+            self.data.gather(self.dialog)
             return True
         except ValidationError as ve:
             show_error_dialog(self.dialog, ve=ve)
@@ -110,20 +127,29 @@ class Removal2020Controller:
         return tab_ok
 
     def do_add_living_arrangement(self, *args, **kwargs):
-        controller = LivingArrangementController(self.dialog, self.dialog.child_name)
-        data: LivingArrangement = controller.add()
-        if data is not None:
+        data = LivingArrangement()
+
+        def save():
             self.dialog.living_arrangements.append(data)
             self.dialog.refresh_living_arrangements()
+            self.do_save()
+
+        controller = LivingArrangementController(self.dialog, self.dialog.child_name)
+        controller.on_save = self.do_save
+        controller.exec()
 
     def do_edit_living_arrangement(self, *args, **kwargs):
+        def save():
+            self.dialog.refresh_living_arrangements()
+            self.do_save()
+
         # if the living_arrangement_table has a current row, pass the corresponding obj item to the dialog
         current_row = self.dialog.living_arrangements_current_row
         if current_row >= 0:
-            controller = LivingArrangementController(self.dialog, self.dialog.child_name)
-            data = self.dialog.living_arrangements[current_row]
-            controller.edit(data)
-            self.dialog.refresh_living_arrangements()
+            controller = LivingArrangementController(self.dialog, self.dialog.child_name,
+                                                     data=self.dialog.living_arrangements[current_row])
+            controller.on_save = save
+            controller.exec()
 
     def do_delete_living_arrangement(self, *args, **kwargs):
         current_row = self.dialog.living_arrangements_current_row
@@ -132,19 +158,30 @@ class Removal2020Controller:
             self.dialog.refresh_living_arrangements()
 
     def do_add_permanency_plan(self, *args, **kwargs):
-        controller = PermanencyPlanController(self.dialog, self.dialog.child_name)
-        data: PermanencyPlan = controller.add()
-        if data is not None:
-            self.dialog.permanency_plans.append(data)
+
+        def save():
+            self.dialog.permanency_plans.append(controller.data)
             self.dialog.refresh_permanency_plans()
+            if self.on_save:
+                self.on_save()
+
+        controller = PermanencyPlanController(self.dialog, self.dialog.child_name, PermanencyPlan())
+        controller.on_save = save
+        controller.exec()
 
     def do_edit_permanency_plan(self, *args, **kwargs):
+
+        def save():
+            self.dialog.refresh_permanency_plans()
+            if self.on_save:
+                self.on_save()
+
         current_row = self.dialog.permanency_plan_current_row
         if current_row >= 0:
-            controller = PermanencyPlanController(self.dialog, self.dialog.child_name)
-            data = self.dialog.permanency_plans[current_row]
-            controller.edit(data)
-            self.dialog.refresh_permanency_plans()
+            controller = PermanencyPlanController(self.dialog, self.dialog.child_name,
+                                                  self.dialog.permanency_plans[current_row])
+            controller.on_save = save
+            controller.exec()
 
     def do_delete_permanency_plan(self, *args, **kwargs):
         current_row = self.dialog.permanency_plan_current_row
@@ -153,21 +190,32 @@ class Removal2020Controller:
             self.dialog.refresh_permanency_plans()
 
     def do_add_case_worker_visit(self, *args, **kwargs):
-        controller: CaseWorkerVisitController = CaseWorkerVisitController(self.dialog, self.dialog.child_name)
-        data: CaseVisit = controller.add()
-        if data is not None:
-            self.dialog.case_worker_visits.append(data)
+        is_new = [True]
+        data = CaseVisit()
+
+        def save():
+            if is_new[0]:
+                self.dialog.case_worker_visits.append(data)
             self.dialog.refresh_case_worker_visits()
+            self.do_save()
+
+        controller: CaseWorkerVisitController = CaseWorkerVisitController(self.dialog, self.dialog.child_name, data)
+        controller.on_save = save
+        controller.exec()
 
     def do_edit_case_worker_visit(self, *args, **kwargs):
+        def save():
+            self.dialog.refresh_case_worker_visits()
+            self.do_save()
+
         # if the case_worker_visit_table has a current row, pass the corresponding obj item to the dialog
         current_row: int = self.dialog.case_worker_visit_current_row
         if current_row >= 0:
-            controller: CaseWorkerVisitController = CaseWorkerVisitController(self.dialog, self.dialog.child_name)
-            controller.clear()
-            data: CaseVisit = self.dialog.case_worker_visits[current_row]
-            controller.edit(data)
-            self.dialog.refresh_case_worker_visits()
+            controller: CaseWorkerVisitController = CaseWorkerVisitController(self.dialog, self.dialog.child_name,
+                                                                              self.dialog.case_worker_visits[
+                                                                                  current_row])
+            controller.on_save = save
+            controller.exec()
 
     def do_delete_case_worker_visit(self, *args, **kwargs):
         # if the case_worker_visit_table has a current row, delete it from the obj and refresh the table
@@ -177,20 +225,31 @@ class Removal2020Controller:
             self.dialog.refresh_case_worker_visits()
 
     def do_add_permanency_hearing(self) -> None:
-        controller = PermanencyHearingController(self.dialog, self.dialog.child_name)
-        data: PermanencyHearing = controller.add()
-        if data is not None:
-            self.dialog.permanency_hearings.append(data)
-            self.dialog.refresh_permanency_hearings()
 
-    def do_edit_permanency_hearing(self) -> None:
+        def save():
+            self.dialog.permanency_hearings.append(controller.data)
+            self.dialog.refresh_permanency_hearings()
+            if self.on_save:
+                self.on_save()
+
+        controller = PermanencyHearingController(self.dialog, self.dialog.child_name, PermanencyHearing())
+        controller.on_save = save
+        controller.exec()
+
+    def do_edit_permanency_hearing(self, *args, **kwargs) -> None:
+
+        def save():
+            self.dialog.refresh_permanency_hearings()
+            if self.on_save:
+                self.on_save()
+
         # if the permanency_hearing_table has a current row, pass the corresponding obj item to the dialog
         current_row: int = self.dialog.permanency_hearings_current_row
         if current_row >= 0:
-            controller: PermanencyHearingController = PermanencyHearingController(self.dialog, self.dialog.child_name)
-            data: PermanencyHearing = self.dialog.permanency_hearings[current_row]
-            controller.edit(data)
-            self.dialog.refresh_permanency_hearings()
+            controller = PermanencyHearingController(self.dialog, self.dialog.child_name,
+                                                     self.dialog.permanency_hearings[current_row])
+            controller.on_save = save
+            controller.exec()
 
     def do_delete_permanency_hearing(self):
         current_row = self.dialog.permanency_hearings_current_row
@@ -199,19 +258,29 @@ class Removal2020Controller:
             self.dialog.refresh_permanency_hearings()
 
     def do_add_periodic_review(self):
-        controller: PeriodicReviewController = PeriodicReviewController(self.dialog, self.dialog.child_name)
-        data: PeriodicReview = controller.add()
-        if data is not None:
+        data = PeriodicReview()
+
+        def save():
             self.dialog.periodic_reviews.append(data)
             self.dialog.refresh_periodic_reviews()
+            self.do_save()
+
+        controller: PeriodicReviewController = PeriodicReviewController(self.dialog, self.dialog.child_name)
+        controller.on_save = save
+        controller.exec()
 
     def do_edit_periodic_review(self):
+        def save():
+            self.dialog.refresh_periodic_reviews()
+            self.do_save()
+
         current_row: int = self.dialog.periodic_reviews_current_row
         if current_row >= 0:
-            controller: PeriodicReviewController = PeriodicReviewController(self.dialog, self.dialog.child_name)
-            data: PeriodicReview = self.dialog.periodic_reviews[current_row]
-            controller.edit(data)
-            self.dialog.refresh_periodic_reviews()
+            controller: PeriodicReviewController = PeriodicReviewController(self.dialog, self.dialog.child_name,
+                                                                            data=self.dialog.periodic_reviews[
+                                                                                current_row])
+            controller.on_save = save
+            controller.exec()
 
     def do_delete_periodic_review(self):
         current_row: int = self.dialog.periodic_reviews_current_row

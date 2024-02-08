@@ -3,6 +3,7 @@ from xml.etree.ElementTree import Element
 
 import model
 import utils.xml_parser
+from model.models import FileType
 
 TEST_DATA_FILE_NAME = 'Test Cases Revised v5_Person 01 -Multi-Removals_OOH.xml'
 
@@ -30,7 +31,7 @@ class TestOOHImport:
         tree = utils.xml_parser.parse_file(TEST_DATA_FILE_NAME)
         assert isinstance(tree, Element)
 
-        utils.xml_parser.import_ooh_tree(tree)
+        utils.xml_parser.import_ooh_tree(tree, FileType.TEST)
 
         assert model.BaseChildTable.get_or_create.call_count == 1
         assert model.BaseChildTable.save.call_count == 1

@@ -9,25 +9,23 @@ class Removal1993Dialog(BaseDialog):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+        self.__ooh = None
+        self._child_name: str = ""
+        self.id: int | None = None
+        self.ooh_id: int | None = None
         self.ui: QWidget = self.load_ui('ui_removal1993.ui')
+        self.on_validate: Optional[Callable] = None
+        self.on_save: Optional[Callable] = None
+        self.on_close: Optional[Callable] = None
+
         self._wire_ui()
         self.setLayout(self.ui.layout())
         self.setFixedSize(self.ui.size())
-        self.id: int | None = None
-        self.ooh_id: int | None = None
-        self._child_name: str = ""
-        self.__ooh = None
-        self.on_validate_clicked: Optional[Callable] = None
-
-        # self.on_accept: Optional[Callable] = None
-
-    # def accept(self):
-    #     if self.on_accept and self.on_accept():
-    #         super().accept()
 
     # ------------------------------------------------------------------------
 
-    def clear(self) -> None:
+    def clear(self, exclude: list[str] = None) -> None:
         super().clear()
         self.child_name = ""
         self.id = None
@@ -92,10 +90,18 @@ class Removal1993Dialog(BaseDialog):
 
         ui = self.ui
         """add event handlers to the form"""
-        ui.form_action.accepted.connect(self.accept)
-        ui.form_action.rejected.connect(self.reject)
+        self.ui.save_button.clicked.connect(self.save_button_clicked)
+        self.ui.close_button.clicked.connect(self.close_button_clicked)
         self.ui.validate_button.clicked.connect(self.validate_button_clicked)
 
     def validate_button_clicked(self):
-        if self.on_validate_clicked:
-            self.on_validate_clicked()
+        if self.on_validate:
+            self.on_validate()
+
+    def save_button_clicked(self):
+        if self.on_save:
+            self.on_save()
+
+    def close_button_clicked(self):
+        if not self.on_close or self.on_close():
+            self.close()

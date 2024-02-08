@@ -64,7 +64,7 @@ class ChildController:
 
     def do_add(self):
 
-        def add_child():
+        def save():
             # the child's birthdate needs to bubble up to the base child table so that it can show up
             # in the child listing. Don't forget, e5 in the child model is an int, while in the base_child
             # table it's a date.
@@ -93,12 +93,12 @@ class ChildController:
             elif self.report_type == ReportType.A:
                 child.a = ARecord()
             controller.child = child
-            controller.on_accept = add_child
-            controller.show()
+            controller.on_save = save
+            controller.exec()
 
     def do_edit(self, *args, **kwargs):
 
-        def update_child():
+        def save():
             # the child's birthdate needs to bubble up to the base child table so that it can show up
             # in the child listing.
             self.refresh_dates(base_child, controller.child)
@@ -123,8 +123,8 @@ class ChildController:
             controller.clear()
             controller.base_child = base_child
             controller.child = context_rec.data
-            controller.on_accept = update_child
-            controller.show()
+            controller.on_save = save
+            controller.exec()
 
     def _context_for(self, base_child: BaseChild, reporting_period: str, file_type: FileType) -> ContextTable:
         """Retrieve the indicated context record. If the context doesn't exist, copy the most recent one, and
@@ -168,8 +168,15 @@ class ChildController:
     def refresh_dates(self, base_child: BaseChild, child: Child):
         if self.report_type == ReportType.OOH:
             dates = []
-            if base_child.last_removal:
-                dates.append(base_child.last_removal)
+            for context in ContextTable.select().where(ContextTable.base_child_id == base_child.id):
+                if hasattr(context.data, 'ooh') and hasattr(context.data.ooh, 'removals1993'):
+                    for removal in context.data.ooh.removals1993:
+                        if removal.e69:
+                            dates.append(datetime.datetime.strptime(str(removal.e69), "%Y%m%d").date())
+                if hasattr(context.data, 'ooh') and hasattr(context.data.ooh, 'removals2020'):
+                    for removal in context.data.ooh.removals2020:
+                        if removal.e69:
+                            dates.append(datetime.datetime.strptime(str(removal.e69), "%Y%m%d").date())
             if child.ooh and child.ooh.removals1993:
                 for removal in child.ooh.removals1993:
                     if removal.e69:
@@ -182,8 +189,15 @@ class ChildController:
             base_child.e5 = child.e5
 
             dates = []
-            if base_child.last_exit:
-                dates.append(base_child.last_exit)
+            for context in ContextTable.select().where(ContextTable.base_child_id == base_child.id):
+                if hasattr(context.data, 'ooh') and hasattr(context.data.ooh, 'removals1993'):
+                    for removal in context.data.ooh.removals1993:
+                        if removal.e153:
+                            dates.append(datetime.datetime.strptime(str(removal.e69), "%Y%m%d").date())
+                if hasattr(context.data, 'ooh') and hasattr(context.data.ooh, 'removals2020'):
+                    for removal in context.data.ooh.removals2020:
+                        if removal.e153:
+                            dates.append(datetime.datetime.strptime(str(removal.e69), "%Y%m%d").date())
             if child.ooh and child.ooh.removals1993:
                 for removal in child.ooh.removals1993:
                     if removal.e153:

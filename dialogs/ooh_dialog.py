@@ -53,12 +53,14 @@ class OOHDialog(BaseDialog):
         self.on_delete_removal2020_clicked: Optional[Callable] = None
         self.on_tab_changed: Optional[Callable] = None
         self.on_validate_clicked: Optional[Callable] = None
+        self.on_save: Optional[Callable] = None
+        self.on_close: Optional[Callable] = None
 
         self._wire_ui()
         self.setLayout(self.ui.layout())
         self.setFixedSize(self.ui.size())
 
-    def clear(self) -> None:
+    def clear(self, exclude: list[str] = None) -> None:
         super().clear(exclude=['epa_tribes', ])
         self.setWindowTitle("")
         self.current_tab = 0
@@ -95,8 +97,8 @@ class OOHDialog(BaseDialog):
         self._init_radio_yn(ui, 'e109')
 
         "Set-up business rules implemented at UI level"
-        ui.form_action.accepted.connect(self.accept)
-        ui.form_action.rejected.connect(self.reject)
+        ui.save_button.clicked.connect(self.do_save_clicked)
+        ui.close_button.clicked.connect(self.do_close_clicked)
 
         ui.last_name.textChanged.connect(self._last_name_text_changed)
         ui.first_name.textChanged.connect(self._first_name_text_changed)
@@ -133,7 +135,7 @@ class OOHDialog(BaseDialog):
         ui.removal_2020_table.cellDoubleClicked.connect(self._on_edit_removal2020_clicked)
 
         ui.tabWidget.currentChanged.connect(self._on_tab_changed)
-        ui.validate_button.clicked.connect(self._on_validate_clicked)
+        ui.validate_button.clicked.connect(self.do_validate_clicked)
 
     # ==================================================================================================================
     #
@@ -174,8 +176,16 @@ class OOHDialog(BaseDialog):
     def _on_tab_changed(self, new_tab: int) -> Any:
         return self.on_tab_changed(new_tab) if self.on_tab_changed else None
 
-    def _on_validate_clicked(self) -> Any:
+    def do_validate_clicked(self) -> Any:
         return self.on_validate_clicked() if self.on_validate_clicked else None
+
+    def do_save_clicked(self) -> Any:
+        return self.on_save() if self.on_save else None
+
+    def do_close_clicked(self) -> Any:
+        if self.on_close:
+            if self.on_close():
+                self.close()
 
     def tab_label(self, tab: int) -> str:
         return self.ui.tabWidget.tabText(tab)

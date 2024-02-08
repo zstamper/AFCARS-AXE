@@ -1,11 +1,11 @@
+from typing import Optional, Callable
+
 from PySide6.QtWidgets import QWidget
 
 from dialogs import BaseDialog
 
 
 class CaseVisitDialog(BaseDialog):
-    obj_to_e152_mapping = {0: 1, 1: 2}
-    e152_to_obj_mapping = {1: 0, 2: 1}
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -16,15 +16,30 @@ class CaseVisitDialog(BaseDialog):
         self.id: int | None = None
         self.removal_id: int | None = None
         self._child_name: str = ""
+        self.on_validate: Optional[Callable] = None
+        self.on_save: Optional[Callable] = None
+        self.on_close: Optional[Callable] = None
 
-    def clear(self) -> None:
+    def clear(self, exclude: list[str] = None) -> None:
         super().clear()
         self.child_name = ""
 
     def _wire_ui(self) -> None:
         self.setModal(True)
-        self.ui.form_action.accepted.connect(self.accept)
-        self.ui.form_action.rejected.connect(self.reject)
+        self.ui.validate_button.clicked.connect(self.validate_button_clicked)
+        self.ui.save_button.clicked.connect(self.save_button_clicked)
+        self.ui.close_button.clicked.connect(self.close_button_clicked)
+
+    def validate_button_clicked(self):
+        self.on_validate() if self.on_validate else None
+
+    def save_button_clicked(self):
+        self.on_save() if self.on_save else None
+
+    def close_button_clicked(self):
+        if self.on_close and not self.on_close():
+            return
+        self.close()
 
     @property
     def child_name(self) -> str:
