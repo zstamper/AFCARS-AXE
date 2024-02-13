@@ -60,7 +60,7 @@ class MyBaseModel(BaseModel):
 
     def gather(self, obj, ignore: Optional[list[str]] = None):
         """Copy model fields from another object"""
-        for fld in self.model_fields_set:
+        for fld in self.model_fields:
             if not ignore or fld not in ignore:
                 setattr(self, fld, getattr(obj, fld))
 

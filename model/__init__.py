@@ -1,3 +1,4 @@
+from pathlib import Path
 from sqlite3 import OperationalError
 
 from playhouse.migrate import SqliteMigrator
@@ -14,8 +15,11 @@ DATABASE_VERSION: int = 2
 
 def open_database(database_name: str, testing: bool = False):
     close_database()
+    init_needed = (database_name == ':memory:') or (not Path(database_name).exists())
     database.init(database_name)
     database.connect()
+    if init_needed:
+        create_tables()
     if not testing:
         apply_migrations(database.connection())
 
