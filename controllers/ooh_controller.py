@@ -28,6 +28,8 @@ class OOHController:
         self._child: Child | None = None
         self.on_save: Optional[Callable] = None
         self.e1: str = e1
+        self.context_rec_id: int = 0
+        self.base_child_rec_id: int = 0
 
         # Wire up the dialog to our event handlers
         self.dialog.on_accept = self.serialize

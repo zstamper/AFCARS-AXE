@@ -127,18 +127,23 @@ class Removal2020Controller:
         return tab_ok
 
     def do_add_living_arrangement(self, *args, **kwargs):
+        is_new = True
         data = LivingArrangement()
 
         def save():
-            self.dialog.living_arrangements.append(data)
+            nonlocal is_new, data
+            if is_new:
+                self.dialog.living_arrangements.append(data)
+                is_new = False
             self.dialog.refresh_living_arrangements()
             self.do_save()
 
-        controller = LivingArrangementController(self.dialog, self.dialog.child_name)
-        controller.on_save = self.do_save
+        controller = LivingArrangementController(self.dialog, self.dialog.child_name, data)
+        controller.on_save = save
         controller.exec()
 
     def do_edit_living_arrangement(self, *args, **kwargs):
+
         def save():
             self.dialog.refresh_living_arrangements()
             self.do_save()
@@ -158,14 +163,18 @@ class Removal2020Controller:
             self.dialog.refresh_living_arrangements()
 
     def do_add_permanency_plan(self, *args, **kwargs):
+        is_new = True
+        data = PermanencyPlan()
 
         def save():
-            self.dialog.permanency_plans.append(controller.data)
+            nonlocal is_new, data
+            if is_new:
+                self.dialog.permanency_plans.append(data)
+                is_new = False
             self.dialog.refresh_permanency_plans()
-            if self.on_save:
-                self.on_save()
+            self.do_save()
 
-        controller = PermanencyPlanController(self.dialog, self.dialog.child_name, PermanencyPlan())
+        controller = PermanencyPlanController(self.dialog, self.dialog.child_name, data)
         controller.on_save = save
         controller.exec()
 
@@ -173,8 +182,7 @@ class Removal2020Controller:
 
         def save():
             self.dialog.refresh_permanency_plans()
-            if self.on_save:
-                self.on_save()
+            self.do_save()
 
         current_row = self.dialog.permanency_plan_current_row
         if current_row >= 0:
@@ -190,12 +198,14 @@ class Removal2020Controller:
             self.dialog.refresh_permanency_plans()
 
     def do_add_case_worker_visit(self, *args, **kwargs):
-        is_new = [True]
+        is_new = True
         data = CaseVisit()
 
         def save():
-            if is_new[0]:
+            nonlocal is_new, data
+            if is_new:
                 self.dialog.case_worker_visits.append(data)
+                is_new = False
             self.dialog.refresh_case_worker_visits()
             self.do_save()
 
@@ -225,14 +235,18 @@ class Removal2020Controller:
             self.dialog.refresh_case_worker_visits()
 
     def do_add_permanency_hearing(self) -> None:
+        is_new = True
+        data = PermanencyHearing()
 
         def save():
-            self.dialog.permanency_hearings.append(controller.data)
+            nonlocal is_new, data
+            if is_new:
+                self.dialog.permanency_hearings.append(data)
+                is_new = False
             self.dialog.refresh_permanency_hearings()
-            if self.on_save:
-                self.on_save()
+            self.do_save()
 
-        controller = PermanencyHearingController(self.dialog, self.dialog.child_name, PermanencyHearing())
+        controller = PermanencyHearingController(self.dialog, self.dialog.child_name, data)
         controller.on_save = save
         controller.exec()
 
@@ -240,8 +254,7 @@ class Removal2020Controller:
 
         def save():
             self.dialog.refresh_permanency_hearings()
-            if self.on_save:
-                self.on_save()
+            self.do_save()
 
         # if the permanency_hearing_table has a current row, pass the corresponding obj item to the dialog
         current_row: int = self.dialog.permanency_hearings_current_row
@@ -258,10 +271,14 @@ class Removal2020Controller:
             self.dialog.refresh_permanency_hearings()
 
     def do_add_periodic_review(self):
+        is_new = True
         data = PeriodicReview()
 
         def save():
-            self.dialog.periodic_reviews.append(data)
+            nonlocal is_new, data
+            if is_new:
+                self.dialog.periodic_reviews.append(data)
+                is_new = False
             self.dialog.refresh_periodic_reviews()
             self.do_save()
 

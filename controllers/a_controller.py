@@ -27,6 +27,8 @@ class AController:
         self.dialog.child_name = self.child_name
         self.dialog.on_save = self.do_save
         self.e1 = e1
+        self.context_rec_id: int = 0
+        self.base_child_rec_id: int = 0
 
         # Wire our callbacks into the dialog
         # self.dialog.on_save = self.do_save
