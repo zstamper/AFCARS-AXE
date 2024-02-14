@@ -80,17 +80,11 @@ try:
                 database_path = Path.home() / 'axe.db'
             else:
                 database_path = 'axe.db'
-            model.open_database(str(database_path))
-
-            try:
-                if ConfigTable.select().count() == 0:
-                    splash.showMessage("Initializing new database...", color=QColor.fromRgb(255, 255, 255, 255))
-                    QCoreApplication.processEvents()
-                    initialize_database()
-            except (peewee.OperationalError, peewee.DoesNotExist) as e:
+            init_needed = not Path(database_path).exists()
+            if init_needed:
                 splash.showMessage("Initializing new database...", color=QColor.fromRgb(255, 255, 255, 255))
                 QCoreApplication.processEvents()
-                initialize_database()
+            model.open_database(str(database_path))
 
             main_window = MainWindow2Controller()
             main_window.show()
