@@ -142,13 +142,13 @@ class HealthValidator(OOHBaseValidator):
                      self.dialog.e29, self.dialog.e30, self.dialog.e31, self.dialog.e32, self.dialog.e33,
                      self.dialog.e34]]):
                 raise ValueError(
-                    "All health conditions (E24-E34) are required if the child has a diagnosed condition (E23).")
+                    "Responses are required for all health conditions (E24-E34) are when the child has a diagnosed condition (E23).")
             if all([e == 0 for e in
                     [self.dialog.e24, self.dialog.e25, self.dialog.e26, self.dialog.e27, self.dialog.e28,
                      self.dialog.e29, self.dialog.e30, self.dialog.e31, self.dialog.e32, self.dialog.e33,
                      self.dialog.e34]]):
                 raise ValueError(
-                    "All health condition must be indicated (E24-E34) if the child has a diagnosed condition (E23).")
+                    "Responses are required for all health conditions (E24-E34) are when the child has a diagnosed condition (E23).")
 
     def validate_e6_e38(self):
         if self.dialog.e6 == 2 and self.dialog.e38 not in [0, 1]:
