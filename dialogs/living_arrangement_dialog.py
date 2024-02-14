@@ -36,35 +36,26 @@ class LivingArrangementDialog(BaseDialog):
         self._init_radio_ynud(ui, 'e145')
         self._init_radio_mf(ui, 'e146')
 
+        self.ui.e120.currentIndexChanged.connect(self._e113_changed)
         self.ui.e121.currentIndexChanged.connect(self._e121_changed)
         self.ui.e123.currentIndexChanged.connect(self._e123_changed)
+        self.ui.e133.clicked.connect(self._e133_changed)
+        self.ui.e144.clicked.connect(self._e144_changed)
 
         self.ui.validate_button.clicked.connect(self.validate_button_clicked)
         self.ui.save_button.clicked.connect(self.save_button_clicked)
         self.ui.close_button.clicked.connect(self.close_button_clicked)
+
+    def _e113_changed(self):
+        self.ui.family_setting_provider_group_box.setEnabled(self.e113 == 1)
 
     def _e121_changed(self):
         self.ui.e122.setEnabled(self.e121 not in (1, 4))
 
     def _e123_changed(self):
         enabled = self.e123 in (1, 2)
-        self.ui.e136.setEnabled(enabled)
-        self.ui.e146_m.setEnabled(enabled)
-        self.ui.e146_f.setEnabled(enabled)
-        self.ui.e138.setEnabled(enabled)
-        self.ui.e139.setEnabled(enabled)
-        self.ui.e140.setEnabled(enabled)
-        self.ui.e141.setEnabled(enabled)
-        self.ui.e142.setEnabled(enabled)
-        self.ui.e143.setEnabled(enabled)
-        self.ui.e144.setEnabled(enabled)
-        self.ui.e145_d.setEnabled(enabled)
-        self.ui.e145_n.setEnabled(enabled)
-        self.ui.e145_u.setEnabled(enabled)
-        self.ui.e145_y.setEnabled(enabled)
-        self.ui.e137_n.setEnabled(enabled)
-        self.ui.e137_u.setEnabled(enabled)
-        self.ui.e137_y.setEnabled(enabled)
+        self.ui.foster_parent_2_group_box.setEnabled(enabled)
+
 
     def _e133_changed(self):
         enabled = self.e133 != 1
@@ -81,6 +72,22 @@ class LivingArrangementDialog(BaseDialog):
             self.e130 = 0
             self.e131 = 0
             self.e132 = 0
+
+    def _e144_changed(self):
+        enabled = self.e144 != 1
+        self.ui.e138.setEnabled(enabled)
+        self.ui.e139.setEnabled(enabled)
+        self.ui.e140.setEnabled(enabled)
+        self.ui.e141.setEnabled(enabled)
+        self.ui.e142.setEnabled(enabled)
+        self.ui.e143.setEnabled(enabled)
+        if self.e144 == 1:
+            self.e138 = 0
+            self.e139 = 0
+            self.e140 = 0
+            self.e141 = 0
+            self.e142 = 0
+            self.e143 = 0
 
     def validate_button_clicked(self):
         if self.on_validate:
@@ -139,6 +146,7 @@ class LivingArrangementDialog(BaseDialog):
         self._e113 = v
         if v:
             self.e120 = 0
+        self._e113_changed()
 
     @property
     def e114(self) -> int:
@@ -203,6 +211,7 @@ class LivingArrangementDialog(BaseDialog):
             self._set_combobox_selection(self.ui.e120, 0)
         else:
             self._set_combobox_selection(self.ui.e120, v)
+        self._e113_changed()
 
     @property
     def e121(self) -> int:
