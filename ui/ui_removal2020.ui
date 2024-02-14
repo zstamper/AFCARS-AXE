@@ -1089,7 +1089,7 @@ is Jurisdiction Transfer&lt;/i&gt;</string>
         </widget>
        </item>
        <item>
-        <widget class="QGroupBox" name="groupBox_2">
+        <widget class="QGroupBox" name="adoption_group_box">
          <property name="title">
           <string>Adoption and Guardianship Exit Data</string>
          </property>
@@ -1097,7 +1097,7 @@ is Jurisdiction Transfer&lt;/i&gt;</string>
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_18">
             <item>
-             <widget class="QGroupBox" name="groupBox_3">
+             <widget class="QGroupBox" name="parent_1_group_box">
               <property name="title">
                <string>Adopt or Guardian Parent 1</string>
               </property>
@@ -1378,7 +1378,7 @@ is Jurisdiction Transfer&lt;/i&gt;</string>
              </widget>
             </item>
             <item>
-             <widget class="QGroupBox" name="groupBox_4">
+             <widget class="QGroupBox" name="parent_2_group_box">
               <property name="title">
                <string>Adopt or Guardian Parent 2</string>
               </property>

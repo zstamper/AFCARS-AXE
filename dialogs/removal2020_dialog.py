@@ -142,6 +142,8 @@ class Removal2020Dialog(BaseDialog):
         self.ui.tab_widget.currentChanged.connect(self.do_tab_changed)
 
         self.ui.e155.currentIndexChanged.connect(self._e155_current_index_changed)
+        self.ui.e155.currentIndexChanged.connect(self._update_parent_2_group_box_state)
+        self.ui.e157.currentIndexChanged.connect(self._update_parent_2_group_box_state)
 
     # ----- Living Arrangements Automation ------------------------------------
 
@@ -322,6 +324,19 @@ class Removal2020Dialog(BaseDialog):
 
     def _e155_current_index_changed(self):
         self.ui.e156.setEnabled(self.e155 == 8)
+        enabled = self.e155 in (3,5)
+        self.ui.adoption_group_box.setEnabled(enabled)
+        if not enabled:
+            for n in range(157,186):
+                setattr(self, f"e{n}", None)
+
+    def _update_parent_2_group_box_state(self):
+        enabled = self.e155 in (3,5) and self.e157 in (1,2)
+        self.ui.parent_2_group_box.setEnabled(enabled)
+        if not enabled:
+            for n in range(173,184):
+                setattr(self, f"e{n}", None)
+
 
     # -------------------------------------------------------------------------
     #                       Form Fields As Properties
