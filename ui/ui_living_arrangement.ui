@@ -760,7 +760,7 @@
               <item>
                <widget class="QLabel" name="label_13">
                 <property name="text">
-                 <string>Relationship to Child (E124)</string>
+                 <string>Relationship to Child (E117, E119, E124)</string>
                 </property>
                </widget>
               </item>

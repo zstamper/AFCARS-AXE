@@ -7,7 +7,7 @@ from pydantic import ValidationError
 from controllers.utilities import show_error_dialog
 from controllers.validators.living_arrangement_validator import LivingArrangementValidator
 from dialogs.living_arrangement_dialog import LivingArrangementDialog
-from model.models import MyBaseModel, LivingArrangement
+from model.models import MyBaseModel, LivingArrangement, Removal2020
 
 
 class LivingArrangementController:
@@ -18,8 +18,8 @@ class LivingArrangementController:
 
     def __init__(self, parent, child_name: str, data: LivingArrangement):
         self.dialog: LivingArrangementDialog = LivingArrangementDialog(parent)
-        self._data = None
-        self.data = data
+        self.parent_data: Optional[Removal2020] = None
+        self._data = data
         self.dialog.child_name = child_name
         self.validator = LivingArrangementValidator(self.dialog)
         self.dialog.on_validate = self.do_validate
@@ -40,6 +40,7 @@ class LivingArrangementController:
         self.dialog.exec()
 
     def do_validate(self) -> bool:
+        self.validator.parent_data = self.parent_data
         tab_ok = self.validator.validate()
         if not tab_ok:
             show_error_dialog(self.dialog, messages=self.validator.messages())

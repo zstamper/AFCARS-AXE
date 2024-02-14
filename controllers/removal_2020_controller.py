@@ -140,6 +140,7 @@ class Removal2020Controller:
             self.do_save()
 
         controller = LivingArrangementController(self.dialog, self.dialog.child_name, data)
+        controller.parent_data = self.dialog
         controller.on_save = save
         controller.exec()
 
@@ -155,6 +156,7 @@ class Removal2020Controller:
             controller = LivingArrangementController(self.dialog, self.dialog.child_name,
                                                      data=self.dialog.living_arrangements[current_row])
             controller.on_save = save
+            controller.parent_data = self.dialog
             controller.exec()
 
     def do_delete_living_arrangement(self, *args, **kwargs):
@@ -177,6 +179,7 @@ class Removal2020Controller:
 
         controller = PermanencyPlanController(self.dialog, self.dialog.child_name, data)
         controller.on_save = save
+        controller.parent_data = self.dialog
         controller.exec()
 
     def do_edit_permanency_plan(self, *args, **kwargs):
@@ -190,6 +193,7 @@ class Removal2020Controller:
             controller = PermanencyPlanController(self.dialog, self.dialog.child_name,
                                                   self.dialog.permanency_plans[current_row])
             controller.on_save = save
+            controller.parent_data = self.dialog
             controller.exec()
 
     def do_delete_permanency_plan(self, *args, **kwargs):
@@ -212,6 +216,7 @@ class Removal2020Controller:
 
         controller: CaseWorkerVisitController = CaseWorkerVisitController(self.dialog, self.dialog.child_name, data)
         controller.on_save = save
+        controller.parent_data = self.dialog
         controller.exec()
 
     def do_edit_case_worker_visit(self, *args, **kwargs):
@@ -226,6 +231,7 @@ class Removal2020Controller:
                                                                               self.dialog.case_worker_visits[
                                                                                   current_row])
             controller.on_save = save
+            controller.parent_data = self.dialog
             controller.exec()
 
     def do_delete_case_worker_visit(self, *args, **kwargs):
@@ -249,6 +255,7 @@ class Removal2020Controller:
 
         controller = PermanencyHearingController(self.dialog, self.dialog.child_name, data)
         controller.on_save = save
+        controller.parent_data = self.dialog
         controller.exec()
 
     def do_edit_permanency_hearing(self, *args, **kwargs) -> None:
@@ -263,6 +270,7 @@ class Removal2020Controller:
             controller = PermanencyHearingController(self.dialog, self.dialog.child_name,
                                                      self.dialog.permanency_hearings[current_row])
             controller.on_save = save
+            controller.parent_data = self.dialog
             controller.exec()
 
     def do_delete_permanency_hearing(self):
@@ -285,6 +293,7 @@ class Removal2020Controller:
 
         controller: PeriodicReviewController = PeriodicReviewController(self.dialog, self.dialog.child_name, data=data)
         controller.on_save = save
+        controller.parent_data = self.dialog
         controller.exec()
 
     def do_edit_periodic_review(self):
@@ -298,6 +307,7 @@ class Removal2020Controller:
                                                                             data=self.dialog.periodic_reviews[
                                                                                 current_row])
             controller.on_save = save
+            controller.parent_data = self.dialog
             controller.exec()
 
     def do_delete_periodic_review(self):

@@ -6,7 +6,7 @@ from pydantic import ValidationError
 from controllers.utilities import show_error_dialog
 from controllers.validators.periodic_review_validator import PeriodicReviewValidator
 from dialogs.periodic_review_dialog import PeriodicReviewDialog
-from model.models import PeriodicReview
+from model.models import PeriodicReview, Removal2020
 
 
 class PeriodicReviewController:
@@ -19,6 +19,7 @@ class PeriodicReviewController:
         self._data = None
         self.dialog = PeriodicReviewDialog(parent)
         self.validator = PeriodicReviewValidator(self.dialog)
+        self.parent_data: Optional[Removal2020] = None
         self.on_save: Optional[Callable] = None
         self.dialog.child_name = child_name
         self.dialog.on_validate = self.do_validate
@@ -50,6 +51,7 @@ class PeriodicReviewController:
         return False
 
     def do_validate(self) -> bool:
+        self.validator.parent_data = self.parent_data
         ok = self.validator.validate()
         if not ok:
             show_error_dialog(self.dialog, messages=self.validator.messages)

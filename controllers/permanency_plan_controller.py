@@ -6,7 +6,7 @@ from pydantic import ValidationError
 from controllers.utilities import show_error_dialog
 from controllers.validators.permanency_plan_validator import PermanencyPlanValidator
 from dialogs.permency_plan_dialog import PermanencyPlanDialog
-from model.models import PermanencyPlan
+from model.models import PermanencyPlan, Removal2020
 
 
 class PermanencyPlanController:
@@ -17,6 +17,7 @@ class PermanencyPlanController:
         self.on_save: Optional[Callable] = None
         self.dialog.child_name = child_name
         self.validator = PermanencyPlanValidator(self.dialog)
+        self.parent_data: Optional[Removal2020] = None
         self.dialog.on_validate = self.do_validate
         self.dialog.on_save = self.do_save
         self.dialog.on_close = self.do_close
@@ -43,6 +44,7 @@ class PermanencyPlanController:
         return False
 
     def do_validate(self) -> bool:
+        self.validator.parent_data = self.parent_data
         tab_ok = self.validator.validate()
         if not tab_ok:
             show_error_dialog(self.dialog, messages=self.validator.messages)

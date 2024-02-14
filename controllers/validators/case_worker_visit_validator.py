@@ -1,12 +1,15 @@
 from datetime import date
+from typing import Optional
 
 from controllers.validators.abstract_validator import AbstractValidator
 from dialogs.case_worker_visit_dialog import CaseVisitDialog
+from model import CaseVisit, Removal2020
 
 
 class CaseWorkerVisitBaseValidator:
 
     def __init__(self, dialog: CaseVisitDialog):
+        self.parent_data: Optional[Removal2020] = None
         self.dialog: CaseVisitDialog = dialog
 
     @staticmethod
@@ -16,21 +19,57 @@ class CaseWorkerVisitBaseValidator:
             year = int(s[0:4])
             month = int(s[4:6])
             day = int(s[6:8])
-            date(year=year, month=month, day=day)
+            d = date(year=year, month=month, day=day)
+            today = date.today()
+            min_d = date(year=today.year - 100, month=today.month, day=today.day)
+            assert d >= min_d
             return True
         except ValueError:
             return False
+        except AssertionError:
+            return False
+
+    @staticmethod
+    def is_future_date(d: int) -> bool:
+        year = d // 10000
+        month = (d - (d // 10000) * 10000) // 100
+        day = d - (d // 100) * 100
+        d = date(year=year, month=month, day=day)
+        return d > date.today()
 
 
 class CaseWorkerVisitValidators(CaseWorkerVisitBaseValidator):
-    pass
+
+    def validate_e151(self):
+        if not self.is_valid_date(self.dialog.e151):
+            raise ValueError("Date of Visit (E151) is invalid.")
+        if self.is_future_date(self.dialog.e151):
+            raise ValueError("Date of Visit (E151) may not be in the future.")
+        if self.dialog.e151 < self.parent_data.e69:
+            raise ValueError("Date of Visit (E151) may not be before the Removal Date (E69).")
+
+    def validate_e152(self):
+        if self.dialog.e151 is not None and self.dialog.e152 is None:
+            raise ValueError(
+                "Caseworker Visit Location (E152) is required when a Caseworker Visit Date (E151) is specified.")
+        if self.dialog.e152 not in (1, 2):
+            raise ValueError("Invalid Caseworker Visit Location (E152).")
 
 
 class CaseWorkerVisitValidator(AbstractValidator):
     def __init__(self, dialog):
         self.dialog = dialog
+        self.parent_data: Optional[Removal2020] = None
         self.validator = CaseWorkerVisitValidators(self.dialog)
         self._messages: list[ValueError] = []
+
+    @property
+    def parent_data(self):
+        return self.validator.parent_data
+
+    @parent_data.setter
+    def parent_data(self, v):
+        self.validator.parent_data = v
 
     def validate_tab(self, tab: int) -> bool:
         return False

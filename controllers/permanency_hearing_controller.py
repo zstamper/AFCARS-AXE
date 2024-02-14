@@ -6,7 +6,7 @@ from pydantic import ValidationError
 from controllers.utilities import show_error_dialog
 from controllers.validators.permanency_hearing_validator import PermanencyHearingValidator
 from dialogs.permanency_hearing_dialog import PermanencyHearingDialog
-from model.models import MyBaseModel, PermanencyHearing
+from model.models import MyBaseModel, PermanencyHearing, Removal2020
 
 
 class PermanencyHearingController:
@@ -16,6 +16,7 @@ class PermanencyHearingController:
         self.on_save: Optional[Callable] = None
         self.dialog = PermanencyHearingDialog(parent)
         self.validator = PermanencyHearingValidator(self.dialog)
+        self.parent_data: Optional[Removal2020] = None
         self.dialog.child_name = child_name
         self.dialog.on_validate = self.do_validate
         self.dialog.on_save = self.do_save
@@ -35,6 +36,7 @@ class PermanencyHearingController:
         self.dialog.exec()
 
     def do_validate(self) -> bool:
+        self.validator.parent_data = self.parent_data
         ok = self.validator.validate()
         if not ok:
             show_error_dialog(self.dialog, messages=self.validator.messages())

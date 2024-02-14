@@ -6,7 +6,7 @@ from pydantic import ValidationError
 from controllers.utilities import show_error_dialog
 from controllers.validators.case_worker_visit_validator import CaseWorkerVisitValidator
 from dialogs.case_worker_visit_dialog import CaseVisitDialog
-from model.models import CaseVisit
+from model.models import CaseVisit, Removal2020
 
 
 class CaseWorkerVisitController:
@@ -15,14 +15,22 @@ class CaseWorkerVisitController:
         self._data = None
         self.on_save: Optional[Callable] = None
         self.dialog = CaseVisitDialog(parent)
-        self.validator = CaseWorkerVisitValidator(self.dialog)
         self.dialog.child_name = child_name
         self.new_data: CaseVisit | None = None
         self.validator = CaseWorkerVisitValidator(self.dialog)
+        self.parent_data: Optional[Removal2020] = None
         self.dialog.on_validate = self.do_validate
         self.dialog.on_save = self.do_save
         self.dialog.on_close = self.do_close
         self.data = data
+
+    @property
+    def parent_data(self):
+        return self.validator.parent_data
+
+    @parent_data.setter
+    def parent_data(self, v):
+        self.validator.parent_data = v
 
     @property
     def data(self) -> CaseVisit:
@@ -37,6 +45,7 @@ class CaseWorkerVisitController:
         self.dialog.exec()
 
     def do_validate(self) -> bool:
+        self.validator.parent_data = self.parent_data
         tab_ok = self.validator.validate()
         if not tab_ok:
             show_error_dialog(self.dialog, messages=self.validator.messages())

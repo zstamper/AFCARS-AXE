@@ -7,6 +7,7 @@ class PermanencyPlanBaseValidator:
 
     def __init__(self, dialog: PermanencyPlanDialog):
         self.dialog = dialog
+        self.parent_data = None
 
     @staticmethod
     def is_valid_date(d: int) -> bool:
@@ -29,7 +30,7 @@ class PermanencyPlanBaseValidator:
     def is_future_date(d: int) -> bool:
         year = d // 10000
         month = (d - (d // 10000) * 10000) // 100
-        day = d - (d//100)*100
+        day = d - (d // 100) * 100
         d = date(year=year, month=month, day=day)
         return d > date.today()
 
@@ -41,6 +42,8 @@ class PermanencyPlanValidators(PermanencyPlanBaseValidator):
             raise ValueError(f"Permanency Plan date (E147) is missing or invalid.")
         if self.is_future_date(self.dialog.e147):
             raise ValueError("Permanency Plan Date (E147) cannot be in the future.")
+        if self.dialog.e147 < self.parent_data.e69:
+            raise ValueError("Permanency Plan Date (E147) cannot be before Removal Date (E69).")
 
     def validate_e148(self):
         if self.dialog.e148 not in [1, 2, 3, 4, 5]:

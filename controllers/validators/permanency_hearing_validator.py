@@ -1,13 +1,16 @@
 from datetime import date
+from typing import Optional
 
 from controllers.validators.abstract_validator import AbstractValidator
 from dialogs.permanency_hearing_dialog import PermanencyHearingDialog
+from model import Removal2020
 
 
 class PermanencyHearingBaseValidator:
 
     def __init__(self, dialog: PermanencyHearingDialog):
         self.dialog: PermanencyHearingDialog = dialog
+        self.parent_data: Optional[Removal2020] = None
 
     @staticmethod
     def is_valid_date(d: int) -> bool:
@@ -16,14 +19,36 @@ class PermanencyHearingBaseValidator:
             year = int(s[0:4])
             month = int(s[4:6])
             day = int(s[6:8])
-            date(year=year, month=month, day=day)
+            d = date(year=year, month=month, day=day)
+            today = date.today()
+            min_d = date(year=today.year - 100, month=today.month, day=today.day)
+            assert d >= min_d
             return True
         except ValueError:
             return False
+        except AssertionError:
+            return False
+
+    @staticmethod
+    def is_future_date(d: int) -> bool:
+        year = d // 10000
+        month = (d - (d // 10000) * 10000) // 100
+        day = d - (d // 100) * 100
+        d = date(year=year, month=month, day=day)
+        return d > date.today()
 
 
 class PermanencyHearingValidators(PermanencyHearingBaseValidator):
-    pass
+
+    def validate_e150(self):
+        if self.dialog.e150 is None:
+            return
+        if not self.is_valid_date(self.dialog.e150):
+            raise ValueError("Permanency Hearing Date (E150) is invalid.")
+        if self.is_future_date(self.dialog.e150):
+            raise ValueError("Permanency Hearing Date (E150) may not be in the future.")
+        if self.dialog.e150 < self.parent_data.e69:
+            raise ValueError("Permanency Hearing Date (E150) may not be before Removal Date (E69).")
 
 
 class PermanencyHearingValidator(AbstractValidator):
@@ -31,6 +56,14 @@ class PermanencyHearingValidator(AbstractValidator):
         self.dialog = dialog
         self.validator = PermanencyHearingValidators(self.dialog)
         self._messages: list[ValueError] = []
+
+    @property
+    def parent_data(self):
+        return self.validator.parent_data
+
+    @parent_data.setter
+    def parent_data(self, v):
+        self.validator.parent_data = v
 
     def validate_tab(self, tab: int) -> bool:
         return False

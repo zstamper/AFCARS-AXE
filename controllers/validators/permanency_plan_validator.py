@@ -9,6 +9,14 @@ class PermanencyPlanValidator(AbstractValidator):
         self.validator = PermanencyPlanValidators(self.dialog)
         self._messages: list[ValueError] = []
 
+    @property
+    def parent_data(self):
+        return self.validator.parent_data
+
+    @parent_data.setter
+    def parent_data(self, v):
+        self.validator.parent_data = v
+
     def validate(self) -> bool:
         results = []
         self._messages = []

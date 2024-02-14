@@ -1,7 +1,9 @@
 import datetime
 from datetime import date
+from typing import Optional
 
 from dialogs.living_arrangement_dialog import LivingArrangementDialog
+from model import Removal2020
 
 
 class LivingArrangementValidators:
@@ -19,15 +21,20 @@ class LivingArrangementValidators:
             return False
 
     def __init__(self, dialog: LivingArrangementDialog):
+        self.parent_data: Optional[Removal2020] = None
         self.dialog: LivingArrangementDialog = dialog
 
     def validate_e112(self):
         if not self.is_valid_date(self.dialog.e112):
             raise ValueError("Invalid removal date (E112).")
+        if self.dialog.e112 < self.parent_data.e69:
+            raise ValueError("Living Arrangement Start Date (E112) may not be earlier than Removal Date (E69)")
 
     def validate_e113(self):
         if self.dialog.e113 not in (0, 1):
             raise ValueError("Foster family home (E113) is required.")
+        if self.dialog.e113 in (None, 0) and self.dialog.e120 in (None, 0):
+            raise ValueError("Living Arrangement Type (E113, E120) is required.")
 
     def validate_e120(self):
         if self.dialog.e113 == 1 and self.dialog.e120 is not None:
@@ -58,25 +65,10 @@ class LivingArrangementValidators:
             raise ValueError(
                 "Marital status of the foster parent (E123) does not apply when child is not placed in foster family home (E113/E120)."
             )
-        if self.dialog.e113 == 1 and self.dialog.e123 not in (1,2,3,4):
+        if self.dialog.e113 == 1 and self.dialog.e123 not in (1, 2, 3, 4):
             raise ValueError(
                 "Marital status of the foster parent(E123) is required when child is placed in foster family home (E113/E120)."
             )
-
-    def validate_e124(self):
-        if self.dialog.e113 == 0 and self.dialog.e124 is not None:
-            raise ValueError(
-                "Child's relationship to foster parent (E124) does not apply when childs if not placed in foster family home (E113/E120)."
-            )
-        if (self.dialog.e117 == 1 or self.dialog.e119 == 1) and self.dialog.e124 != 2:
-            raise ValueError(
-                "Child's relationship (E124) is required and must be 'non-relative' based on living arrangement type (E113, E120).")
-        if self.dialog.e117 == 1 and self.dialog.e124 != 1:
-            raise ValueError(
-                "Child's relationship (E124) should be 'Relative' based on living arrangement type (E113, E120).")
-        if self.dialog.e119 == 1 and self.dialog.e124 != 3:
-            raise ValueError(
-                "Child's relationship (E124) should be 'Kin' based on living arrangement type (E113, E120).")
 
     def validate_e125(self):
         if self.dialog.e113 == 1:
@@ -153,6 +145,14 @@ class LivingArrangementValidator:
         self.dialog = dialog
         self.validator = LivingArrangementValidators(dialog)
         self._messages: list[Exception] = []
+
+    @property
+    def parent_data(self):
+        return self.validator.parent_data
+
+    @parent_data.setter
+    def parent_data(self, v):
+        self.validator.parent_data = v
 
     def validate(self) -> bool:
         results = []
