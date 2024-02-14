@@ -323,11 +323,11 @@ class Removal2020Dialog(BaseDialog):
 
     @property
     def current_tab(self) -> int:
-        return self.tabWidget.currentIndex()
+        return self.ui.tab_widget.currentIndex()
 
     @current_tab.setter
     def current_tab(self, v: int) -> None:
-        self.tabWidget.setCurrentIndex(v)
+        self.ui.tab_widget.setCurrentIndex(v)
 
     @property
     def child_name(self) -> str:
