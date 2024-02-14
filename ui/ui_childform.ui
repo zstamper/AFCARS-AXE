@@ -620,7 +620,7 @@
                    <number>12</number>
                   </property>
                   <item>
-                   <widget class="QRadioButton" name="e7_y">
+                   <widget class="QCheckBox" name="e7_y">
                     <property name="text">
                      <string>Yes</string>
                     </property>
@@ -630,7 +630,7 @@
                    </widget>
                   </item>
                   <item>
-                   <widget class="QRadioButton" name="e7_n">
+                   <widget class="QCheckBox" name="e7_n">
                     <property name="text">
                      <string>No</string>
                     </property>
@@ -674,7 +674,7 @@
                    <number>12</number>
                   </property>
                   <item>
-                   <widget class="QRadioButton" name="e8_y">
+                   <widget class="QCheckBox" name="e8_y">
                     <property name="text">
                      <string>Yes</string>
                     </property>
@@ -684,7 +684,7 @@
                    </widget>
                   </item>
                   <item>
-                   <widget class="QRadioButton" name="e8_n">
+                   <widget class="QCheckBox" name="e8_n">
                     <property name="text">
                      <string>No</string>
                     </property>
@@ -694,7 +694,7 @@
                    </widget>
                   </item>
                   <item>
-                   <widget class="QRadioButton" name="e8_u">
+                   <widget class="QCheckBox" name="e8_u">
                     <property name="text">
                      <string>Unknown</string>
                     </property>
@@ -793,7 +793,7 @@
                    <number>12</number>
                   </property>
                   <item>
-                   <widget class="QRadioButton" name="e10_y">
+                   <widget class="QCheckBox" name="e10_y">
                     <property name="text">
                      <string>Yes</string>
                     </property>
@@ -803,7 +803,7 @@
                    </widget>
                   </item>
                   <item>
-                   <widget class="QRadioButton" name="e10_n">
+                   <widget class="QCheckBox" name="e10_n">
                     <property name="text">
                      <string>No</string>
                     </property>
@@ -813,7 +813,7 @@
                    </widget>
                   </item>
                   <item>
-                   <widget class="QRadioButton" name="e10_u">
+                   <widget class="QCheckBox" name="e10_u">
                     <property name="text">
                      <string>Unknown</string>
                     </property>
@@ -900,7 +900,7 @@
                  <number>12</number>
                 </property>
                 <item>
-                 <widget class="QRadioButton" name="e12_y">
+                 <widget class="QCheckBox" name="e12_y">
                   <property name="text">
                    <string>Yes</string>
                   </property>
@@ -910,7 +910,7 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QRadioButton" name="e12_n">
+                 <widget class="QCheckBox" name="e12_n">
                   <property name="text">
                    <string>No</string>
                   </property>
@@ -987,7 +987,7 @@
               <item row="0" column="1">
                <layout class="QHBoxLayout" name="horizontalLayout_5">
                 <item>
-                 <widget class="QRadioButton" name="e22_y">
+                 <widget class="QCheckBox" name="e22_y">
                   <property name="text">
                    <string>Yes</string>
                   </property>
@@ -997,7 +997,7 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QRadioButton" name="e22_n">
+                 <widget class="QCheckBox" name="e22_n">
                   <property name="text">
                    <string>No</string>
                   </property>
@@ -1812,7 +1812,7 @@
               <item row="1" column="1">
                <layout class="QHBoxLayout" name="horizontalLayout_26">
                 <item>
-                 <widget class="QRadioButton" name="e61_y">
+                 <widget class="QCheckBox" name="e61_y">
                   <property name="text">
                    <string>Yes</string>
                   </property>
@@ -1822,7 +1822,7 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QRadioButton" name="e61_n">
+                 <widget class="QCheckBox" name="e61_n">
                   <property name="text">
                    <string>No</string>
                   </property>
@@ -1832,7 +1832,7 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QRadioButton" name="e61_u">
+                 <widget class="QCheckBox" name="e61_u">
                   <property name="text">
                    <string>Unknown</string>
                   </property>
@@ -1871,7 +1871,7 @@
                  <widget class="QGroupBox" name="groupBox_5">
                   <layout class="QHBoxLayout" name="horizontalLayout_11">
                    <item>
-                    <widget class="QRadioButton" name="e63_na">
+                    <widget class="QCheckBox" name="e63_na">
                      <property name="text">
                       <string>Not Applicable</string>
                      </property>
@@ -1881,7 +1881,7 @@
                     </widget>
                    </item>
                    <item>
-                    <widget class="QRadioButton" name="e63_v">
+                    <widget class="QCheckBox" name="e63_v">
                      <property name="text">
                       <string>Voluntary</string>
                      </property>
@@ -1891,7 +1891,7 @@
                     </widget>
                    </item>
                    <item>
-                    <widget class="QRadioButton" name="e63_i">
+                    <widget class="QCheckBox" name="e63_i">
                      <property name="text">
                       <string>Involuntary</string>
                      </property>
@@ -2067,7 +2067,7 @@
               <item row="1" column="1">
                <layout class="QHBoxLayout" name="horizontalLayout_29">
                 <item>
-                 <widget class="QRadioButton" name="e62_y">
+                 <widget class="QCheckBox" name="e62_y">
                   <property name="text">
                    <string>Yes</string>
                   </property>
@@ -2077,7 +2077,7 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QRadioButton" name="e62_n">
+                 <widget class="QCheckBox" name="e62_n">
                   <property name="text">
                    <string>No</string>
                   </property>
@@ -2087,7 +2087,7 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QRadioButton" name="e62_u">
+                 <widget class="QCheckBox" name="e62_u">
                   <property name="text">
                    <string>Unknown</string>
                   </property>
@@ -2842,7 +2842,7 @@ payment was paid or will be claimed for the child.&lt;/i&gt;</string>
          <item row="0" column="1">
           <layout class="QHBoxLayout" name="horizontalLayout_23">
            <item>
-            <widget class="QRadioButton" name="e106_y">
+            <widget class="QCheckBox" name="e106_y">
              <property name="text">
               <string>Yes</string>
              </property>
@@ -2852,7 +2852,7 @@ payment was paid or will be claimed for the child.&lt;/i&gt;</string>
             </widget>
            </item>
            <item>
-            <widget class="QRadioButton" name="e106_n">
+            <widget class="QCheckBox" name="e106_n">
              <property name="text">
               <string>No</string>
              </property>
@@ -2886,7 +2886,7 @@ payment was paid or will be claimed for the child.&lt;/i&gt;</string>
          <item row="1" column="1">
           <layout class="QHBoxLayout" name="horizontalLayout_40">
            <item>
-            <widget class="QRadioButton" name="e107_y">
+            <widget class="QCheckBox" name="e107_y">
              <property name="text">
               <string>Yes</string>
              </property>
@@ -2896,7 +2896,7 @@ payment was paid or will be claimed for the child.&lt;/i&gt;</string>
             </widget>
            </item>
            <item>
-            <widget class="QRadioButton" name="e107_n">
+            <widget class="QCheckBox" name="e107_n">
              <property name="text">
               <string>No</string>
              </property>
@@ -2974,7 +2974,7 @@ Leave blank if law enforcement was not notified.&lt;/i&gt;</string>
          <item row="3" column="1">
           <layout class="QHBoxLayout" name="horizontalLayout_39">
            <item>
-            <widget class="QRadioButton" name="e109_y">
+            <widget class="QCheckBox" name="e109_y">
              <property name="text">
               <string>Yes</string>
              </property>
@@ -2984,7 +2984,7 @@ Leave blank if law enforcement was not notified.&lt;/i&gt;</string>
             </widget>
            </item>
            <item>
-            <widget class="QRadioButton" name="e109_n">
+            <widget class="QCheckBox" name="e109_n">
              <property name="text">
               <string>No</string>
              </property>
@@ -3018,7 +3018,7 @@ Leave blank if law enforcement was not notified.&lt;/i&gt;</string>
          <item row="4" column="1">
           <layout class="QHBoxLayout" name="horizontalLayout_41">
            <item>
-            <widget class="QRadioButton" name="e110_y">
+            <widget class="QCheckBox" name="e110_y">
              <property name="text">
               <string>Yes</string>
              </property>
@@ -3028,7 +3028,7 @@ Leave blank if law enforcement was not notified.&lt;/i&gt;</string>
             </widget>
            </item>
            <item>
-            <widget class="QRadioButton" name="e110_n">
+            <widget class="QCheckBox" name="e110_n">
              <property name="text">
               <string>No</string>
              </property>
@@ -3451,19 +3451,67 @@ Leave blank if law enforcement was not notified.&lt;/i&gt;</string>
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="e109"/>
-  <buttongroup name="e63"/>
-  <buttongroup name="e61"/>
-  <buttongroup name="e62"/>
-  <buttongroup name="e6"/>
-  <buttongroup name="e8"/>
-  <buttongroup name="e7"/>
+  <buttongroup name="e12">
+   <property name="exclusive">
+    <bool>false</bool>
+   </property>
+  </buttongroup>
+  <buttongroup name="e61">
+   <property name="exclusive">
+    <bool>false</bool>
+   </property>
+  </buttongroup>
+  <buttongroup name="e22">
+   <property name="exclusive">
+    <bool>false</bool>
+   </property>
+  </buttongroup>
+  <buttongroup name="e107">
+   <property name="exclusive">
+    <bool>false</bool>
+   </property>
+  </buttongroup>
+  <buttongroup name="e8">
+   <property name="exclusive">
+    <bool>false</bool>
+   </property>
+  </buttongroup>
+  <buttongroup name="e10">
+   <property name="exclusive">
+    <bool>false</bool>
+   </property>
+  </buttongroup>
+  <buttongroup name="e62">
+   <property name="exclusive">
+    <bool>false</bool>
+   </property>
+  </buttongroup>
+  <buttongroup name="e109">
+   <property name="exclusive">
+    <bool>false</bool>
+   </property>
+  </buttongroup>
+  <buttongroup name="e63">
+   <property name="exclusive">
+    <bool>false</bool>
+   </property>
+  </buttongroup>
   <buttongroup name="funding"/>
-  <buttongroup name="e110"/>
-  <buttongroup name="e10"/>
-  <buttongroup name="e22"/>
-  <buttongroup name="e106"/>
-  <buttongroup name="e12"/>
-  <buttongroup name="e107"/>
+  <buttongroup name="e7">
+   <property name="exclusive">
+    <bool>false</bool>
+   </property>
+  </buttongroup>
+  <buttongroup name="e110">
+   <property name="exclusive">
+    <bool>false</bool>
+   </property>
+  </buttongroup>
+  <buttongroup name="e6"/>
+  <buttongroup name="e106">
+   <property name="exclusive">
+    <bool>false</bool>
+   </property>
+  </buttongroup>
  </buttongroups>
 </ui>

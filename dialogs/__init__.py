@@ -1,5 +1,6 @@
 import sys
 from datetime import datetime
+from functools import partial
 from pathlib import Path
 from typing import Optional, Callable
 
@@ -89,9 +90,16 @@ class BaseMixin:
 
     @staticmethod
     def _init_radio(ui: QWidget, name: str, ids: dict) -> None:
-        elem: QWidget = ui.__getattribute__(name)
+        def if_checked_clear(control, args):
+            nonlocal ui, name
+            if getattr(ui, f"{name}_{control}").isChecked():
+                for child in args:
+                    getattr(ui, f"{name}_{child}").setChecked(False)
+
+        elem: QWidget = getattr(ui, name)
         for k, v in ids.items():
-            elem.setId(ui.__getattribute__(f"{name}_{k}"), v)
+            elem.setId(getattr(ui, f"{name}_{k}"), v)
+            getattr(ui, f"{name}_{k}").clicked.connect(partial(if_checked_clear,  k, ids.keys() - [k]))
 
     @staticmethod
     def _init_radio_mf(ui: QWidget, name: str) -> None:

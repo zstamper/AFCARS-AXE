@@ -330,7 +330,7 @@
             <item row="0" column="1">
              <layout class="QVBoxLayout" name="verticalLayout">
               <item>
-               <widget class="QRadioButton" name="a15_a">
+               <widget class="QCheckBox" name="a15_a">
                 <property name="text">
                  <string>IV-E Adoption Assistance Agreement</string>
                 </property>
@@ -340,7 +340,7 @@
                </widget>
               </item>
               <item>
-               <widget class="QRadioButton" name="a15_g">
+               <widget class="QCheckBox" name="a15_g">
                 <property name="text">
                  <string>IV-E Guardianship Assistance Agreement</string>
                 </property>
@@ -462,7 +462,7 @@ Legalization Date (A17)</string>
             <item row="4" column="1">
              <layout class="QVBoxLayout" name="verticalLayout_2">
               <item>
-               <widget class="QRadioButton" name="a19_1">
+               <widget class="QCheckBox" name="a19_1">
                 <property name="text">
                  <string>Title IV-E agency</string>
                 </property>
@@ -472,7 +472,7 @@ Legalization Date (A17)</string>
                </widget>
               </item>
               <item>
-               <widget class="QRadioButton" name="a19_2">
+               <widget class="QCheckBox" name="a19_2">
                 <property name="text">
                  <string>Private agency</string>
                 </property>
@@ -482,7 +482,7 @@ Legalization Date (A17)</string>
                </widget>
               </item>
               <item>
-               <widget class="QRadioButton" name="a19_3">
+               <widget class="QCheckBox" name="a19_3">
                 <property name="text">
                  <string>Tribe</string>
                 </property>
@@ -558,8 +558,16 @@ Legalization Date (A17)</string>
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="a15"/>
-  <buttongroup name="a19"/>
+  <buttongroup name="a15">
+   <property name="exclusive">
+    <bool>false</bool>
+   </property>
+  </buttongroup>
+  <buttongroup name="a19">
+   <property name="exclusive">
+    <bool>false</bool>
+   </property>
+  </buttongroup>
   <buttongroup name="e6"/>
  </buttongroups>
 </ui>

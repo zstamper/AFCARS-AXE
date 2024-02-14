@@ -94,7 +94,9 @@ class OOHDialog(BaseDialog):
         self._init_radio_ynu(ui, 'e62')
         self._init_radio(ui, 'e63', {'na': 0, 'v': 1, 'i': 2})
         self._init_radio_yn(ui, 'e106')
+        self._init_radio_yn(ui, 'e107')
         self._init_radio_yn(ui, 'e109')
+        self._init_radio_yn(ui, 'e110')
 
         "Set-up business rules implemented at UI level"
         ui.save_button.clicked.connect(self.do_save_clicked)

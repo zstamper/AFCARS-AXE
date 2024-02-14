@@ -1148,7 +1148,7 @@ is Jurisdiction Transfer&lt;/i&gt;</string>
                  <item>
                   <layout class="QHBoxLayout" name="horizontalLayout_6">
                    <item>
-                    <widget class="QRadioButton" name="e172_m">
+                    <widget class="QCheckBox" name="e172_m">
                      <property name="text">
                       <string>Male</string>
                      </property>
@@ -1158,7 +1158,7 @@ is Jurisdiction Transfer&lt;/i&gt;</string>
                     </widget>
                    </item>
                    <item>
-                    <widget class="QRadioButton" name="e172_f">
+                    <widget class="QCheckBox" name="e172_f">
                      <property name="text">
                       <string>Female</string>
                      </property>
@@ -1196,7 +1196,7 @@ is Jurisdiction Transfer&lt;/i&gt;</string>
                  <item>
                   <layout class="QHBoxLayout" name="horizontalLayout_5">
                    <item>
-                    <widget class="QRadioButton" name="e163_y">
+                    <widget class="QCheckBox" name="e163_y">
                      <property name="text">
                       <string>Yes</string>
                      </property>
@@ -1206,7 +1206,7 @@ is Jurisdiction Transfer&lt;/i&gt;</string>
                     </widget>
                    </item>
                    <item>
-                    <widget class="QRadioButton" name="e163_n">
+                    <widget class="QCheckBox" name="e163_n">
                      <property name="text">
                       <string>No</string>
                      </property>
@@ -1216,7 +1216,7 @@ is Jurisdiction Transfer&lt;/i&gt;</string>
                     </widget>
                    </item>
                    <item>
-                    <widget class="QRadioButton" name="e163_u">
+                    <widget class="QCheckBox" name="e163_u">
                      <property name="text">
                       <string>Unknown</string>
                      </property>
@@ -1318,7 +1318,7 @@ is Jurisdiction Transfer&lt;/i&gt;</string>
                  <item>
                   <layout class="QHBoxLayout" name="horizontalLayout_4">
                    <item>
-                    <widget class="QRadioButton" name="e171_y">
+                    <widget class="QCheckBox" name="e171_y">
                      <property name="text">
                       <string>Yes</string>
                      </property>
@@ -1328,7 +1328,7 @@ is Jurisdiction Transfer&lt;/i&gt;</string>
                     </widget>
                    </item>
                    <item>
-                    <widget class="QRadioButton" name="e171_n">
+                    <widget class="QCheckBox" name="e171_n">
                      <property name="text">
                       <string>No</string>
                      </property>
@@ -1338,7 +1338,7 @@ is Jurisdiction Transfer&lt;/i&gt;</string>
                     </widget>
                    </item>
                    <item>
-                    <widget class="QRadioButton" name="e171_u">
+                    <widget class="QCheckBox" name="e171_u">
                      <property name="text">
                       <string>Unknown</string>
                      </property>
@@ -1348,7 +1348,7 @@ is Jurisdiction Transfer&lt;/i&gt;</string>
                     </widget>
                    </item>
                    <item>
-                    <widget class="QRadioButton" name="e171_d">
+                    <widget class="QCheckBox" name="e171_d">
                      <property name="text">
                       <string>Declined</string>
                      </property>
@@ -1429,7 +1429,7 @@ is Jurisdiction Transfer&lt;/i&gt;</string>
                  <item>
                   <layout class="QHBoxLayout" name="horizontalLayout_12">
                    <item>
-                    <widget class="QRadioButton" name="e183_m">
+                    <widget class="QCheckBox" name="e183_m">
                      <property name="text">
                       <string>Male</string>
                      </property>
@@ -1439,7 +1439,7 @@ is Jurisdiction Transfer&lt;/i&gt;</string>
                     </widget>
                    </item>
                    <item>
-                    <widget class="QRadioButton" name="e183_f">
+                    <widget class="QCheckBox" name="e183_f">
                      <property name="text">
                       <string>Female</string>
                      </property>
@@ -1477,7 +1477,7 @@ is Jurisdiction Transfer&lt;/i&gt;</string>
                  <item>
                   <layout class="QHBoxLayout" name="horizontalLayout_14">
                    <item>
-                    <widget class="QRadioButton" name="e174_y">
+                    <widget class="QCheckBox" name="e174_y">
                      <property name="text">
                       <string>Yes</string>
                      </property>
@@ -1487,7 +1487,7 @@ is Jurisdiction Transfer&lt;/i&gt;</string>
                     </widget>
                    </item>
                    <item>
-                    <widget class="QRadioButton" name="e174_n">
+                    <widget class="QCheckBox" name="e174_n">
                      <property name="text">
                       <string>No</string>
                      </property>
@@ -1497,7 +1497,7 @@ is Jurisdiction Transfer&lt;/i&gt;</string>
                     </widget>
                    </item>
                    <item>
-                    <widget class="QRadioButton" name="e174_u">
+                    <widget class="QCheckBox" name="e174_u">
                      <property name="text">
                       <string>Unknown</string>
                      </property>
@@ -1599,7 +1599,7 @@ is Jurisdiction Transfer&lt;/i&gt;</string>
                  <item>
                   <layout class="QHBoxLayout" name="horizontalLayout_10">
                    <item>
-                    <widget class="QRadioButton" name="e182_y">
+                    <widget class="QCheckBox" name="e182_y">
                      <property name="text">
                       <string>Yes</string>
                      </property>
@@ -1609,7 +1609,7 @@ is Jurisdiction Transfer&lt;/i&gt;</string>
                     </widget>
                    </item>
                    <item>
-                    <widget class="QRadioButton" name="e182_n">
+                    <widget class="QCheckBox" name="e182_n">
                      <property name="text">
                       <string>No</string>
                      </property>
@@ -1619,7 +1619,7 @@ is Jurisdiction Transfer&lt;/i&gt;</string>
                     </widget>
                    </item>
                    <item>
-                    <widget class="QRadioButton" name="e182_u">
+                    <widget class="QCheckBox" name="e182_u">
                      <property name="text">
                       <string>Unknown</string>
                      </property>
@@ -1629,7 +1629,7 @@ is Jurisdiction Transfer&lt;/i&gt;</string>
                     </widget>
                    </item>
                    <item>
-                    <widget class="QRadioButton" name="e182_d">
+                    <widget class="QCheckBox" name="e182_d">
                      <property name="text">
                       <string>Declined</string>
                      </property>
@@ -2054,11 +2054,35 @@ is Jurisdiction Transfer&lt;/i&gt;</string>
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="e163"/>
-  <buttongroup name="e182"/>
-  <buttongroup name="e174"/>
-  <buttongroup name="e172"/>
-  <buttongroup name="e171"/>
-  <buttongroup name="e183"/>
+  <buttongroup name="e171">
+   <property name="exclusive">
+    <bool>false</bool>
+   </property>
+  </buttongroup>
+  <buttongroup name="e183">
+   <property name="exclusive">
+    <bool>false</bool>
+   </property>
+  </buttongroup>
+  <buttongroup name="e172">
+   <property name="exclusive">
+    <bool>false</bool>
+   </property>
+  </buttongroup>
+  <buttongroup name="e182">
+   <property name="exclusive">
+    <bool>false</bool>
+   </property>
+  </buttongroup>
+  <buttongroup name="e163">
+   <property name="exclusive">
+    <bool>false</bool>
+   </property>
+  </buttongroup>
+  <buttongroup name="e174">
+   <property name="exclusive">
+    <bool>false</bool>
+   </property>
+  </buttongroup>
  </buttongroups>
 </ui>
