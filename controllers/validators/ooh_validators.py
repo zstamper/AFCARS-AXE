@@ -27,6 +27,15 @@ class OOHBaseValidator:
         except AssertionError:
             return False
 
+    @staticmethod
+    def is_future_date(d: int) -> bool:
+        year = d // 10000
+        month = (d - (d // 10000) * 10000) // 100
+        day = d - (d//100)*100
+        d = date(year=year, month=month, day=day)
+        return d > date.today()
+
+
 
 class DemographicsValidator(OOHBaseValidator):
 
@@ -64,6 +73,8 @@ class DemographicsValidator(OOHBaseValidator):
             raise ValueError("Prior Adoption (E41) is required.")
 
     def validate_e41_e42(self):
+        if not self.is_valid_date(self.dialog.e42) or self.is_future_date(self.dialog.e42):
+            raise ValueError("Invalid date specified for Prior Adoption Date (E42)")
         if self.dialog.e42 is not None and self.dialog.e41 in [None, 0, 7]:
             raise ValueError("Prior Adoption (E41) must be Yes if Prior Adoption Date (E42) is specified.")
         if self.dialog.e42 is None and self.dialog.e41 == 1:
@@ -76,6 +87,8 @@ class DemographicsValidator(OOHBaseValidator):
                 f"Inter-country prior adoption (E43) is required if prior adoption date is specified (E42).")
 
     def validate_e44_e45(self) -> None:
+        if not self.is_valid_date(self.dialog.e45) or self.is_future_date(self.dialog.e45):
+            raise ValueError("Invalid date given for Prior Guardianship Date (E45).")
         if self.dialog.e45 is not None and self.dialog.e44 not in [0, 1]:
             raise ValueError(
                 f"Prior guardianship indication (E44) is required if prior guardianship date is specified (E45).")
