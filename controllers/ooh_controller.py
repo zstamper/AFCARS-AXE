@@ -170,13 +170,14 @@ class OOHController:
             show_error_dialog(self.dialog, messages=self.validator.messages)
 
     def do_add_removal1993(self) -> None:
-        is_new = [True]
+        is_new = True
         data = Removal1993()
 
         def save():
-            if is_new[0]:
-                is_new[0] = False
+            nonlocal is_new, data
+            if is_new:
                 self.dialog.removals1993.append(data)
+                is_new = False
             self.dialog.refresh_removals1993()
             self.do_save()
 
@@ -204,10 +205,14 @@ class OOHController:
             self.dialog.refresh_removals1993()
 
     def do_add_removal2020(self) -> None:
+        is_new = True
         data = Removal2020()
 
         def save():
-            self.dialog.removals2020.append(data)
+            nonlocal is_new, data
+            if is_new:
+                self.dialog.removals2020.append(data)
+                is_new = False
             self.dialog.refresh_removals2020()
             self.do_save()
 
