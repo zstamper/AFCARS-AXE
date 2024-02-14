@@ -283,7 +283,7 @@ class Removal2020Controller:
             self.dialog.refresh_periodic_reviews()
             self.do_save()
 
-        controller: PeriodicReviewController = PeriodicReviewController(self.dialog, self.dialog.child_name)
+        controller: PeriodicReviewController = PeriodicReviewController(self.dialog, self.dialog.child_name, data=data)
         controller.on_save = save
         controller.exec()
 

@@ -52,7 +52,7 @@ class PeriodicReviewController:
     def do_validate(self) -> bool:
         ok = self.validator.validate()
         if not ok:
-            show_error_dialog(self.dialog, messages=self.validator.messages())
+            show_error_dialog(self.dialog, messages=self.validator.messages)
         return ok
 
     def do_save(self) -> None:
