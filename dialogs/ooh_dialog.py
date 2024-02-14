@@ -292,6 +292,18 @@ class OOHDialog(BaseDialog):
             self.ui.e19.setChecked(False)
 
     def _e23_current_index_changed(self, index: int) -> None:
+        if index != 1:
+            self.e24 = None
+            self.e25 = None
+            self.e26 = None
+            self.e27 = None
+            self.e28 = None
+            self.e29 = None
+            self.e30 = None
+            self.e31 = None
+            self.e32 = None
+            self.e33 = None
+            self.e34 = None
         self.ui.e24.setEnabled(index == 1)
         self.ui.e25.setEnabled(index == 1)
         self.ui.e26.setEnabled(index == 1)
