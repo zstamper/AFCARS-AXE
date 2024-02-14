@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1004</width>
-    <height>748</height>
+    <height>751</height>
    </rect>
   </property>
   <property name="font">
@@ -633,7 +633,7 @@
                <item>
                 <widget class="QLabel" name="label_17">
                  <property name="text">
-                  <string>Child Hispanic or Latino Origin? (E134)</string>
+                  <string>Parent is of Hispanic or Latino Origin? (E134)</string>
                  </property>
                 </widget>
                </item>
@@ -672,7 +672,7 @@
                  <item>
                   <widget class="QCheckBox" name="e134_d">
                    <property name="text">
-                    <string>Delicned</string>
+                    <string>Declined</string>
                    </property>
                    <attribute name="buttonGroup">
                     <string notr="true">e134</string>
@@ -958,7 +958,7 @@
                <item>
                 <widget class="QLabel" name="label_22">
                  <property name="text">
-                  <string>Child Hispanic or Latino Origin? (E145)</string>
+                  <string>2nd parent is of Hispanic or Latino Origin? (E145)</string>
                  </property>
                 </widget>
                </item>
@@ -997,7 +997,7 @@
                  <item>
                   <widget class="QCheckBox" name="e145_d">
                    <property name="text">
-                    <string>Delicned</string>
+                    <string>Declined</string>
                    </property>
                    <attribute name="buttonGroup">
                     <string notr="true">e145</string>
