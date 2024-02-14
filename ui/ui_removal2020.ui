@@ -1759,17 +1759,17 @@ is Jurisdiction Transfer&lt;/i&gt;</string>
                   </property>
                   <item>
                    <property name="text">
-                    <string>Within tribal area</string>
+                    <string>Within tribal or state service area</string>
                    </property>
                   </item>
                   <item>
                    <property name="text">
-                    <string>Outside of tribal area</string>
+                    <string>Outside of tribal or state service area</string>
                    </property>
                   </item>
                   <item>
                    <property name="text">
-                    <string>Outside of the country</string>
+                    <string>In another country</string>
                    </property>
                   </item>
                  </widget>
