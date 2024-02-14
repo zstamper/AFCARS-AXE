@@ -129,9 +129,11 @@ class ICWAValidator(OOHBaseValidator):
             raise ValueError("One or more Tribes should be selected (E9) if the child is a Tribe member (E8).")
 
     def validate_e10_e11(self):
-        if self.dialog.e10 == 1 and self.dialog.e11 is None:
-            raise ValueError("Date of determination (E11) is required if ICWA applies (E10).")
-        return True
+        if self.dialog.e10 == 1:
+            if self.dialog.e11 is None:
+                raise ValueError("Date of determination (E11) is required if ICWA applies (E10).")
+            if not self.is_valid_date(self.dialog.e11) or self.is_future_date(self.dialog.e11):
+                raise ValueError("Invalid date provided for Date of Determination (E11).")
 
     def validate_e10_e12(self):
         if self.dialog.e10 == 1 and self.dialog.e12 not in [0, 1]:
