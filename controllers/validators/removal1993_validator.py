@@ -21,16 +21,38 @@ class Removal1993BaseValidator:
         except ValueError:
             return False
 
+    @staticmethod
+    def is_future_date(d: int) -> bool:
+        year = d // 10000
+        month = (d - (d // 10000) * 10000) // 100
+        day = d - (d//100)*100
+        d = date(year=year, month=month, day=day)
+        return d > date.today()
+
+
+
 
 class Removal1993Validators(Removal1993BaseValidator):
 
     def validate_e69(self):
+        try:
+            e69 = self.dialog.e69
+        except ValueError:
+            raise ValueError("Removal Date (E69) is invalid format.")
         if not self.is_valid_date(self.dialog.e69):
             raise ValueError("Invalid date provided for Removal Date (E69).")
+        if self.is_future_date(self.dialog.e69):
+            raise ValueError("Removal Date (E69) cannot be in the future.")
 
     def validate_e153(self):
+        try:
+            e153 = self.dialog.e153
+        except ValueError:
+            raise ValueError("Exit Date (E153) is invalid format.")
         if self.dialog.e153 and not self.is_valid_date(self.dialog.e153):
             raise ValueError("Invalid date provided for Exit Date (E153).")
+        if self.is_future_date(self.dialog.e153):
+            raise ValueError("Exit Date (E153) cannot be in the future.")
 
     def validate_e69_e153(self):
         if self.is_valid_date(self.dialog.e69) and self.is_valid_date(self.dialog.e153):
