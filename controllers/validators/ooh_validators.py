@@ -18,7 +18,7 @@ class OOHBaseValidator:
             day = int(s[6:8])
             d = date(year=year, month=month, day=day)
             today = date.today()
-            min_d = date(year=today.year-100, month=today.month, day=today.day)
+            min_d = date(year=today.year - 100, month=today.month, day=today.day)
             assert d <= date.today()
             assert d >= min_d
             return True
@@ -79,6 +79,14 @@ class DemographicsValidator(OOHBaseValidator):
         if self.dialog.e45 is not None and self.dialog.e44 not in [0, 1]:
             raise ValueError(
                 f"Prior guardianship indication (E44) is required if prior guardianship date is specified (E45).")
+
+    def validate_e56(self) -> None:
+        if self.dialog.e56 is None:
+            raise ValueError("Total number of siblings (E56) is required.")
+
+    def validate_e57(self) -> None:
+        if self.dialog.e57 is None:
+            raise ValueError("Total number of siblings in foster care (E57) is required.")
 
     def validate_e56_e57(self) -> None:
         if self.dialog.e56 is not None and self.dialog.e57 is not None:
