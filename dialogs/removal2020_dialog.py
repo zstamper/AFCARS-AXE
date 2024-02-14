@@ -141,6 +141,8 @@ class Removal2020Dialog(BaseDialog):
 
         self.ui.tab_widget.currentChanged.connect(self.do_tab_changed)
 
+        self.ui.e155.currentIndexChanged.connect(self._e155_current_index_changed)
+
     # ----- Living Arrangements Automation ------------------------------------
 
     def validate_button_clicked(self):
@@ -188,7 +190,8 @@ class Removal2020Dialog(BaseDialog):
             self.ui.living_arrangements_table.insertRow(row)
             self.ui.living_arrangements_table.setItem(row, 0, QTableWidgetItem(str(data.e112)))
             self.ui.living_arrangements_table.setItem(row, 1, QTableWidgetItem(e120_to_str(data.e120)))
-            self.ui.living_arrangements_table.setItem(row, 2, QTableWidgetItem(data.last_updated.strftime("%m/%d/%Y %H:%M") if data.last_updated else ""))
+            self.ui.living_arrangements_table.setItem(row, 2, QTableWidgetItem(
+                data.last_updated.strftime("%m/%d/%Y %H:%M") if data.last_updated else ""))
             row += 1
 
     # ----- Permanency Plan Automation ----------------------------------------
@@ -316,6 +319,9 @@ class Removal2020Dialog(BaseDialog):
     @periodic_reviews_current_row.setter
     def periodic_reviews_current_row(self, v: int) -> None:
         self.ui.periodic_reviews_table.setCurrentRow(v)
+
+    def _e155_current_index_changed(self):
+        self.ui.e156.setEnabled(self.e155 == 8)
 
     # -------------------------------------------------------------------------
     #                       Form Fields As Properties
