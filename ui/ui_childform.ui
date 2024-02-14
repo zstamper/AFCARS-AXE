@@ -1928,7 +1928,7 @@
               <item row="1" column="0">
                <widget class="QLabel" name="e65_label">
                 <property name="text">
-                 <string>Date of modified or terminated &lt;br/&gt;parental rights (E67)&lt;br/&gt;&lt;i&gt;If deceased - use the deceased date&lt;/&gt;</string>
+                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Date of petition for termination&lt;br/&gt;or modification of parental rights (E65)&lt;br/&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;If deceased - use the deceased date&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                 </property>
                 <property name="textFormat">
                  <enum>Qt::RichText</enum>
