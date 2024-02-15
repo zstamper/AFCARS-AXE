@@ -55,6 +55,8 @@ try:
         end
         @enduml
         """
+        app_dir = None
+        bundle_dir = None
         try:
             app = QApplication()
             app.setApplicationName('AXE')
@@ -62,27 +64,27 @@ try:
             app.setDesktopFileName('AXE')
 
             if getattr(sys, 'frozen', False):
-                bundle_dir = sys._MEIPASS
+                bundle_dir = Path(sys._MEIPASS)
+                app_dir = Path(sys.executable).parent
             else:
-                bundle_dir = os.path.dirname(os.path.abspath(__file__))
+                bundle_dir = Path(os.path.dirname(os.path.abspath(__file__)))
+                app_dir = bundle_dir
 
-            pixmap = QPixmap(Path(bundle_dir) / "assets" / "pexels-negative-space-97077.jpg")
+            pixmap = QPixmap(bundle_dir / "assets" / "pexels-negative-space-97077.jpg")
             splash = QSplashScreen(pixmap)
             splash.show()
-            splash.showMessage("Opening database...", color=QColor.fromRgb(255, 255, 255, 255))
+            splash.showMessage(f"Opening database: {app_dir / 'axe.db'}", color=QColor.fromRgb(255, 255, 255, 255))
             QCoreApplication.processEvents()
 
-            with open(Path(bundle_dir) / 'ui' / 'style.qss', 'r') as f:
+            with open(bundle_dir / 'ui' / 'style.qss', 'r') as f:
                 style_sheet = f.read()
             app.setStyleSheet(style_sheet)
 
-            if getattr(sys, 'frozen', False):
-                database_path = Path.home() / 'axe.db'
-            else:
-                database_path = 'axe.db'
+            database_path = app_dir / 'axe.db'
             init_needed = not Path(database_path).exists()
             if init_needed:
-                splash.showMessage("Initializing new database...", color=QColor.fromRgb(255, 255, 255, 255))
+                splash.showMessage(f"Initializing new database: {app_dir / 'axe.db'}",
+                                   color=QColor.fromRgb(255, 255, 255, 255))
                 QCoreApplication.processEvents()
             model.open_database(str(database_path))
 
@@ -96,6 +98,8 @@ try:
             with open(Path.home() / 'stderr.txt', 'w+') as stderr:
                 print(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), file=stderr)
                 traceback.print_exc(file=stderr)
+                print(f"app_dir={app_dir}", file=stderr)
+                print(f"bundle_dir={bundle_dir}", file=stderr)
                 print('-' * 80, file=stderr)
 
 
