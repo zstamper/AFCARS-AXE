@@ -59,7 +59,6 @@ class CaseWorkerVisitValidators(CaseWorkerVisitBaseValidator):
 class CaseWorkerVisitValidator(AbstractValidator):
     def __init__(self, dialog):
         self.dialog = dialog
-        self.parent_data: Optional[Removal2020] = None
         self.validator = CaseWorkerVisitValidators(self.dialog)
         self._messages: list[ValueError] = []
 

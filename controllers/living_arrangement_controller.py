@@ -19,7 +19,8 @@ class LivingArrangementController:
     def __init__(self, parent, child_name: str, data: LivingArrangement):
         self.dialog: LivingArrangementDialog = LivingArrangementDialog(parent)
         self.parent_data: Optional[Removal2020] = None
-        self._data = data
+        self._data = None
+        self.data = data
         self.dialog.child_name = child_name
         self.validator = LivingArrangementValidator(self.dialog)
         self.dialog.on_validate = self.do_validate
