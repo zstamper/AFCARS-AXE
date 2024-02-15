@@ -65,7 +65,10 @@ try:
 
             if getattr(sys, 'frozen', False):
                 bundle_dir = Path(sys._MEIPASS)
-                app_dir = Path(sys.executable).parent
+                if sys.platform.startswith('win32'):
+                    app_dir = Path(sys.executable).parent
+                if sys.platform.startswith('darwin'):
+                    app_dir = Path(sys.executable).parent.parent.parent.parent
             else:
                 bundle_dir = Path(os.path.dirname(os.path.abspath(__file__)))
                 app_dir = bundle_dir

@@ -621,7 +621,7 @@ class MainWindow2Controller:
         return self.window.show()
 
     def load_defaults(self):
-        config = ConfigTable.get_or_none(ConfigTable.id == 1)
+        config = ConfigTable.get_or_none(ConfigTable.id == 1, ConfigTable.report_type==ReportType.OOH)
         if config:
             self.window.epa_code = [k for k, v in EPA_CODES.items() if v == config.epa_code][
                 0] if config.epa_code else None
