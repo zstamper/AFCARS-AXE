@@ -113,7 +113,7 @@ class OOHDialog(BaseDialog):
 
         ui.e6.buttonClicked.connect(self._e6_button_clicked)
         # ui.e7.buttonClicked.connect(self._e7_button_clicked)
-        # ui.e8.buttonClicked.connect(self._e8_button_clicked)
+        ui.e8.buttonClicked.connect(self._e8_button_clicked)
 
         ui.add_tribe_button.clicked.connect(self._on_add_tribe_clicked)
         ui.remove_tribe_button.clicked.connect(self._on_remove_tribe_clicked)
@@ -241,19 +241,18 @@ class OOHDialog(BaseDialog):
 
     def _funding_button_clicked(self, button: QAbstractButton) -> None:
         enabled: bool = button.text() == 'No'
-        for btn in self.ui.e7.buttons():
-            btn.setEnabled(enabled)
-        for btn in self.ui.e8.buttons():
-            btn.setEnabled(enabled)
+        self.ui.icwa_group_box.setEnabled(enabled)
+
+    def _e8_button_clicked(self) -> None:
+        self.set_e8_state()
+
+    def set_e8_state(self):
+        enabled: bool = self.ui.e8_y.isChecked()
+        self.ui.e9_label.setEnabled(enabled)
         self.ui.tribes.setEnabled(enabled)
-        self.ui.epa_tribes.setEnabled(enabled)
         self.ui.add_tribe_button.setEnabled(enabled)
         self.ui.remove_tribe_button.setEnabled(enabled)
-        for btn in self.ui.e10.buttons():
-            btn.setEnabled(enabled)
-        self.ui.e11.setEnabled(enabled)
-        for btn in self.ui.e12.buttons():
-            btn.setEnabled(enabled)
+        self.ui.epa_tribes.setEnabled(enabled)
 
     def _e19_toggled(self, checked: bool) -> None:
         # If E19 is checked, E13, E14, E15, E16, E17, E18, E20 should be unchecked and disabled.
@@ -380,6 +379,7 @@ class OOHDialog(BaseDialog):
     @e8.setter
     def e8(self, v: int) -> None:
         self._set_radio_button(self.ui.e8, v)
+        self.set_e8_state()
 
     @property
     def tribes(self) -> list[RecognizedTribe]:

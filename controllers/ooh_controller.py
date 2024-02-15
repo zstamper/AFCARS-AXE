@@ -205,9 +205,6 @@ class OOHController:
             self.dialog.refresh_removals1993()
 
     def do_add_removal2020(self) -> None:
-        is_new = True
-        data = Removal2020()
-
         def save():
             nonlocal is_new, data
             if is_new:
@@ -216,9 +213,17 @@ class OOHController:
             self.dialog.refresh_removals2020()
             self.do_save()
 
+        is_new = True
+
+        data = Removal2020()
+        # element 104 should be preset to checked if the funding element is checked.
+        # funding element may be checked if E1 is a state agency.
+        data.e104 = self.dialog.funding
+
         controller: Removal2020Controller = Removal2020Controller(self.dialog, child_name=self.dialog.child_name,
                                                                   data=data)
         controller.on_save = save
+        controller.parent_data = self.dialog
         controller.exec()
 
     def do_edit_removal2020(self) -> None:
@@ -231,6 +236,7 @@ class OOHController:
             controller: Removal2020Controller = Removal2020Controller(self.dialog, self.dialog.child_name,
                                                                       self.dialog.removals2020[current_row])
             controller.on_save = save
+            controller.parent_data = self.dialog
             controller.exec()
 
     def do_delete_removal2020(self) -> None:

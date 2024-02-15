@@ -25,6 +25,7 @@ class Removal2020Controller:
         self._data = None
         self.dialog: Removal2020Dialog = Removal2020Dialog(parent)
         self.validator: Removal2020Validator = Removal2020Validator(self.dialog)
+        self.parent_data = None
         self.dialog.child_name = child_name
         self.dialog.on_validate = self.do_validate_clicked
         self.dialog.on_tab_changed = self.do_tab_changed

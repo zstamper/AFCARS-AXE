@@ -2,6 +2,7 @@ import re
 from datetime import datetime, date
 
 from dialogs.ooh_dialog import OOHDialog
+from utils.e1 import is_state
 
 
 class OOHBaseValidator:
@@ -31,10 +32,9 @@ class OOHBaseValidator:
     def is_future_date(d: int) -> bool:
         year = d // 10000
         month = (d - (d // 10000) * 10000) // 100
-        day = d - (d//100)*100
+        day = d - (d // 100) * 100
         d = date(year=year, month=month, day=day)
         return d > date.today()
-
 
 
 class DemographicsValidator(OOHBaseValidator):
@@ -110,35 +110,44 @@ class DemographicsValidator(OOHBaseValidator):
 
 class ICWAValidator(OOHBaseValidator):
 
-    def validate_funding_e7_e8_e10(self):
-        if self.dialog.funding == 0 and self.dialog.e7 not in [0, 1]:
-            raise ValueError(
-                f"'Agency made inquries' (E7) must be Yes or No if the child is being reported for a tribe that received funding."
-            )
-        if self.dialog.funding == 0 and self.dialog.e8 not in [0, 1, 9]:
-            raise ValueError(
-                f"Child's Tribal membership (E8) must be Yes, No, or Unknown if the child is being reported for a tribe that received funding."
-            )
-        if self.dialog.funding == 0 and self.dialog.e10 not in [0, 1, 9]:
-            raise ValueError(
-                "ICWA applicability (E10) must be specified if the child is being reported for a tribe that received funding."
-            )
+    def validate_funding_e7(self):
+        if is_state() and self.dialog.funding == 0:
+            if self.dialog.e7 not in [0, 1]:
+                raise ValueError(
+                    f"'Agency made inquries' (E7) is required."
+                )
+
+    def validate_e8(self):
+        if is_state() and self.dialog.funding == 0:
+            if self.dialog.e8 not in [0, 1, 9]:
+                raise ValueError(
+                    f"Child's Tribal membership (E8) is required."
+                )
+
+    def validate_e10(self):
+        if is_state() and self.dialog.funding == 0:
+            if self.dialog.e10 not in [0, 1, 9]:
+                raise ValueError(
+                    "ICWA applicability (E10) is required."
+                )
 
     def validate_e8_e9(self):
-        if self.dialog.e8 == 1 and (self.dialog.tribes is None or len(self.dialog.tribes) == 0):
-            raise ValueError("One or more Tribes should be selected (E9) if the child is a Tribe member (E8).")
+        if is_state() and self.dialog.funding == 0:
+            if self.dialog.e8 == 1 and (self.dialog.tribes is None or len(self.dialog.tribes) == 0):
+                raise ValueError("One or more Tribes should be selected (E9) if the child is a Tribe member (E8).")
 
     def validate_e10_e11(self):
-        if self.dialog.e10 == 1:
-            if self.dialog.e11 is None:
-                raise ValueError("Date of determination (E11) is required if ICWA applies (E10).")
-            if not self.is_valid_date(self.dialog.e11) or self.is_future_date(self.dialog.e11):
-                raise ValueError("Invalid date provided for Date of Determination (E11).")
+        if is_state() and self.dialog.funding == 0:
+            if self.dialog.e10 == 1:
+                if self.dialog.e11 is None:
+                    raise ValueError("Date of determination (E11) is required if ICWA applies (E10).")
+                if not self.is_valid_date(self.dialog.e11) or self.is_future_date(self.dialog.e11):
+                    raise ValueError("Invalid date provided for Date of Determination (E11).")
 
     def validate_e10_e12(self):
-        if self.dialog.e10 == 1 and self.dialog.e12 not in [0, 1]:
-            raise ValueError("Tribal ICWA notification indication (E12) is required if ICWA applies (E10).")
-        return True
+        if is_state() and self.dialog.funding == 0:
+            if self.dialog.e10 == 1 and self.dialog.e12 not in [0, 1]:
+                raise ValueError("Tribal ICWA notification indication (E12) is required if ICWA applies (E10).")
 
 
 class HealthValidator(OOHBaseValidator):
