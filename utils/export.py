@@ -39,7 +39,8 @@ class AExporter(BaseExporter):
 def export_xml(file_name: Path, e1: str, e2: str, report_type: ReportType, selected_children: list[tuple[BaseChild, Child]]):
     if file_name.exists():
         file_name.unlink()
-    if report_type == ReportType.OOH:
-        OOHExporter(file_name.open("w")).export(e1, e2, selected_children)
-    elif report_type == ReportType.A:
-        AExporter(file_name).export(e1, e2, selected_children)
+    with file_name.open("w") as outf:
+        if report_type == ReportType.OOH:
+            OOHExporter(outf).export(e1, e2, selected_children)
+        elif report_type == ReportType.A:
+            AExporter(outf).export(e1, e2, selected_children)
