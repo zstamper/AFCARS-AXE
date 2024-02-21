@@ -186,7 +186,7 @@ class LivingArrangement(MyBaseModel):
     e119: int | None = Field(default=None)
     e120: int | None = Field(default=None)
     e121: int | None = Field(default=None)
-    e122: int | None = Field(default=None)
+    e122: str | None = Field(default=None)
     e123: int | None = Field(default=None)
     e124: int | None = Field(default=None)
     e125: int | None = Field(default=None)

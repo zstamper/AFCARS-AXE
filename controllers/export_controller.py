@@ -1,3 +1,4 @@
+from copy import deepcopy
 from pathlib import Path
 from typing import Optional
 
@@ -34,12 +35,18 @@ class ExportController:
         return False
 
     def get_child_data(self) -> list[Child]:
-        query = BaseChildTable.select().join(ContextTable).where(BaseChildTable.e1 == self.e1,
-                                                                 ContextTable.e2 == self.e2,
-                                                                 ContextTable.file_type == self.file_type)
+        query = (BaseChildTable
+                 .select()
+                 .join(ContextTable)
+                 .where(BaseChildTable.e1 == self.e1))
         child_data = []
         if self.report_type == ReportType.OOH:
-            child_data = [(row.to_model(), row.contexts[0].data) for row in query if row.contexts[0].data.ooh]
+            # Golly, so this was subtle... The filter for the context table records was originally in the query
+            # above. But it so happens that with PeeWee, when accessing foreign table, you're given an unfiltered
+            # list of records. Therefore, we have to filter them here.
+            child_data = [(row.to_model(), deepcopy(context.data)) for row in query for context in row.contexts if
+                          context.file_type == self.file_type and context.data.ooh]
         elif self.report_type == ReportType.A:
-            child_data = [(row.to_model(), row.contexts[0].data) for row in query if row.contexts[0].data.a]
+            child_data = [(row.to_model(), deepcopy(context.data)) for row in query for context in row.contexts if
+                          context.file_type == self.file_type and context.data.a]
         return child_data

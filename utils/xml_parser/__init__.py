@@ -9,7 +9,10 @@ from model.models import FileType, Child, ARecord, SecondParent, Removal2020, \
 
 def _text_from(element: Element, path: str) -> str | None:
     try:
-        return element.find(path).text
+        value = element.find(path).text
+        if value == "":
+            value = None
+        return value
     except AttributeError:
         return None
 
@@ -186,7 +189,7 @@ def import_ooh_tree(tree: Element, file_type: FileType) -> None:
             second_parents.append(parse_second_parent(parent))
 
         removals_1993 = []
-        for removal in record.find('E69_E186_removals').findall('removals_1993'):
+        for removal in record.find('E69_E186_removals').findall('removal_1993'):
             removals_1993.append(parse_removal_1993(removal))
 
         removals_2020 = []
@@ -250,38 +253,42 @@ def parse_living_arrangement(living_arrangement: Element, e40: Optional[int],
     e119 = _text_from(e114_e146, 'E119_kin_foster_family')
 
     e123_e146 = e114_e146.find('E123_E146_foster_parent_information')
-    e123 = _text_from(e123_e146, 'E123_marital_status_of_foster_parents')
-    e124 = _text_from(e123_e146, 'E124_relationship_to_foster_parents')
+    if not e123_e146:
+        e123 = e124 = e125 = e126 = e127 = e128 = e129 = e130 = e131 = e132 = e133 = e134 = e135 = e136 = e137 = None
+        e138 = e139 = e140 = e141 = e142 = e143 = e144 = e145 = e146 = None
+    else:
+        e123 = _text_from(e123_e146, 'E123_marital_status_of_foster_parents')
+        e124 = _text_from(e123_e146, 'E124_relationship_to_foster_parents')
 
-    e125_e135 = e123_e146.find('E125_E135_first_foster_parent_information')
-    e125 = _text_from(e125_e135, 'E125_foster_parent1_birth_year')
-    e126 = _text_from(e125_e135, 'E126_foster_parent1_tribal_membership')
-    e127 = _text_from(e125_e135, 'E127_foster_parent1_race_american_indian_alaska_native')
-    e128 = _text_from(e125_e135, 'E128_foster_parent1_race_asian')
-    e129 = _text_from(e125_e135, 'E129_foster_parent1_race_black')
-    e130 = _text_from(e125_e135, 'E130_foster_parent1_race_native_hawaiian_pacific_islander')
-    e131 = _text_from(e125_e135, 'E131_foster_parent1_race_white')
-    e132 = _text_from(e125_e135, 'E132_foster_parent1_race_unknown')
-    e133 = _text_from(e125_e135, 'E133_foster_parent1_race_declined')
-    e134 = _text_from(e125_e135, 'E134_foster_parent1_hispanic_latino')
-    e135 = _text_from(e125_e135, 'E135_foster_parent1_sex')
+        e125_e135 = e123_e146.find('E125_E135_first_foster_parent_information')
+        e125 = _text_from(e125_e135, 'E125_foster_parent1_birth_year')
+        e126 = _text_from(e125_e135, 'E126_foster_parent1_tribal_membership')
+        e127 = _text_from(e125_e135, 'E127_foster_parent1_race_american_indian_alaska_native')
+        e128 = _text_from(e125_e135, 'E128_foster_parent1_race_asian')
+        e129 = _text_from(e125_e135, 'E129_foster_parent1_race_black')
+        e130 = _text_from(e125_e135, 'E130_foster_parent1_race_native_hawaiian_pacific_islander')
+        e131 = _text_from(e125_e135, 'E131_foster_parent1_race_white')
+        e132 = _text_from(e125_e135, 'E132_foster_parent1_race_unknown')
+        e133 = _text_from(e125_e135, 'E133_foster_parent1_race_declined')
+        e134 = _text_from(e125_e135, 'E134_foster_parent1_hispanic_latino')
+        e135 = _text_from(e125_e135, 'E135_foster_parent1_sex')
 
-    e136_e146 = e123_e146.find('E136_E146_second_foster_parent_information')
-    e136 = _text_from(e136_e146, 'E136_foster_parent2_birth_year')
-    e137 = _text_from(e136_e146, 'E137_foster_parent2_tribal_membership')
-    e138 = _text_from(e136_e146, 'E138_foster_parent2_race_american_indian_alaska_native')
-    e139 = _text_from(e136_e146, 'E139_foster_parent2_race_asian')
-    e140 = _text_from(e136_e146, 'E140_foster_parent2_race_black')
-    e141 = _text_from(e136_e146, 'E141_foster_parent2_race_native_hawaiian_pacific_islander')
-    e142 = _text_from(e136_e146, 'E142_foster_parent2_race_white')
-    e143 = _text_from(e136_e146, 'E143_foster_parent2_race_unknown')
-    e144 = _text_from(e136_e146, 'E144_foster_parent2_race_declined')
-    e145 = _text_from(e136_e146, 'E145_foster_parent2_hispanic_latino')
-    e146 = _text_from(e136_e146, 'E146_foster_parent2_sex')
+        e136_e146 = e123_e146.find('E136_E146_second_foster_parent_information')
+        e136 = _text_from(e136_e146, 'E136_foster_parent2_birth_year')
+        e137 = _text_from(e136_e146, 'E137_foster_parent2_tribal_membership')
+        e138 = _text_from(e136_e146, 'E138_foster_parent2_race_american_indian_alaska_native')
+        e139 = _text_from(e136_e146, 'E139_foster_parent2_race_asian')
+        e140 = _text_from(e136_e146, 'E140_foster_parent2_race_black')
+        e141 = _text_from(e136_e146, 'E141_foster_parent2_race_native_hawaiian_pacific_islander')
+        e142 = _text_from(e136_e146, 'E142_foster_parent2_race_white')
+        e143 = _text_from(e136_e146, 'E143_foster_parent2_race_unknown')
+        e144 = _text_from(e136_e146, 'E144_foster_parent2_race_declined')
+        e145 = _text_from(e136_e146, 'E145_foster_parent2_hispanic_latino')
+        e146 = _text_from(e136_e146, 'E146_foster_parent2_sex')
 
-    e120 = _text_from(e114_e146, 'E120_other_living_arrangement_type')
-    e121 = _text_from(e114_e146, 'E121_location_of_living_arrangement')
-    e122 = _text_from(e114_e146, 'E122_jurisdiction_or_country')
+    e120 = _text_from(living_arrangement, 'E120_other_living_arrangement_type')
+    e121 = _text_from(living_arrangement, 'E121_location_of_living_arrangement')
+    e122 = _text_from(living_arrangement, 'E122_jurisdiction_or_country')
 
     return LivingArrangement(e40=e40, e58=e58, e112=e112, e113=e113, e114=e114, e115=e115, e116=e116, e117=e117,
                              e118=e118, e119=e119, e120=e120, e121=e121, e122=e122, e123=e123, e124=e124, e125=e125,
