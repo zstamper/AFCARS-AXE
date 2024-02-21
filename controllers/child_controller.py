@@ -192,9 +192,6 @@ class ChildController:
             else:
                 context_rec = ContextTable(base_child=recent_context.base_child, e2=recent_context.e2,
                                            file_type=recent_context.file_type, data=recent_context.data)
-                if self.report_type == ReportType.OOH and context_rec.data.ooh:
-                    context_rec.data.ooh.removals1993 = []
-                    context_rec.data.ooh.removals2020 = []
 
         if self.report_type == ReportType.OOH and not context_rec.data.ooh:
             context_rec.data.ooh = OOHRecord()
