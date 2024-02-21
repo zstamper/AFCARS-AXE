@@ -39,10 +39,12 @@ def parse_file(xml_file: Any) -> Element:
     return tree.getroot()
 
 
-def import_a_tree(tree: Element, file_type: FileType) -> None:
+def import_a_tree(tree: Element, file_type: FileType) -> tuple[list, list]:
     a1 = _text_from(tree, 'A1_title_iv_agency')
     a2 = _int_from(tree, 'A2_report_date')
     records = tree.find('records')
+    imported_ids = []
+    skipped_ids = []
     for record in records.findall('record'):
         a3 = _text_from(record, 'A3_child_record_number')
         a4 = _int_from(record, 'A4_child_date_of_birth')
@@ -64,32 +66,23 @@ def import_a_tree(tree: Element, file_type: FileType) -> None:
         base_child, _ = BaseChildTable.get_or_create(e1=a1, e4=a3)
         context, is_new = ContextTable.get_or_create(base_child=base_child, e2=a2, file_type=file_type)
         a = ARecord(a15=a15, a16=a16, a17=a17, a18=a18, a19=a19)
-        if is_new:
+        if not is_new:
+            skipped_ids.append(a3)
+        else:
+            imported_ids.append(a3)
             child = Child(e5=a4, e6=a5, e13=a6, e14=a7, e15=a8, e16=a9, e17=a10, e18=a11, e19=a12, e20=a13, e21=a14,
                           a=a)
-        else:
-            child = context.data
-            child.e5 = a4
-            child.e6 = a5
-            child.e13 = a6
-            child.e14 = a7
-            child.e15 = a8
-            child.e16 = a9
-            child.e17 = a10
-            child.e18 = a11
-            child.e19 = a12
-            child.e20 = a13
-            child.e21 = a14
-            child.a = a
-        context.data = child
-        context.save()
-        base_child.save()
+            context.data = child
+            context.save()
+            base_child.save()
+        return imported_ids, skipped_ids
 
-
-def import_ooh_tree(tree: Element, file_type: FileType) -> None:
+def import_ooh_tree(tree: Element, file_type: FileType) -> tuple[list,list]:
     e1 = _text_from(tree, 'E1_title_iv_agency')
     e2 = _text_from(tree, 'E2_report_date')
     records = tree.find('records')
+    imported_ids = []
+    skipped_ids = []
     for record in records.findall('record'):
         e4 = _text_from(record, 'E4_child_record_number')
         e5 = _int_from(record, 'E5_date_of_birth')
@@ -200,35 +193,26 @@ def import_ooh_tree(tree: Element, file_type: FileType) -> None:
 
         base_child, _ = BaseChildTable.get_or_create(e1=e1, e4=e4)
         context, is_new = ContextTable.get_or_create(base_child=base_child, e2=e2, file_type=file_type)
-        ooh = OOHRecord(
-            e7=e7, e8=e8, e10=e10, e11=e11, e12=e12, e22=e22, e23=e23, e24=e24, e25=e25, e26=e26, e27=e27, e28=e28,
-            e29=e29, e30=e30, e31=e31, e32=e32, e33=e33, e34=e34, e35=e35, e36=e36, e37=e37, e38=e38, e39=e39,
-            e41=e41, e42=e42, e43=e43, e44=e44, e45=e45, e46=e46, e47=e47, e48=e48, e49=e49, e50=e50, e51=e51, e52=e52,
-            e53=e53, e54=e54, e55=e55, e56=e56, e57=e57, e59=e59, e60=e60, e61=e61, e62=e62, e63=e63, e65=e65, e67=e67,
-            e106=e106, e107=e107, e108=e108, e109=e109, e110=e110, e111=e111, tribes=tribes,
-            second_parents=second_parents, removals1993=removals_1993, removals2020=removals_2020,
-        )
-        if is_new:
+
+        # We only create new records, we don't update them.
+        if not is_new:
+            skipped_ids.append(e4)
+        else:
+            imported_ids.append(e4)
+            ooh = OOHRecord(
+                e7=e7, e8=e8, e10=e10, e11=e11, e12=e12, e22=e22, e23=e23, e24=e24, e25=e25, e26=e26, e27=e27, e28=e28,
+                e29=e29, e30=e30, e31=e31, e32=e32, e33=e33, e34=e34, e35=e35, e36=e36, e37=e37, e38=e38, e39=e39,
+                e41=e41, e42=e42, e43=e43, e44=e44, e45=e45, e46=e46, e47=e47, e48=e48, e49=e49, e50=e50, e51=e51, e52=e52,
+                e53=e53, e54=e54, e55=e55, e56=e56, e57=e57, e59=e59, e60=e60, e61=e61, e62=e62, e63=e63, e65=e65, e67=e67,
+                e106=e106, e107=e107, e108=e108, e109=e109, e110=e110, e111=e111, tribes=tribes,
+                second_parents=second_parents, removals1993=removals_1993, removals2020=removals_2020,
+            )
             child = Child(e5=e5, e6=e6, e13=e13, e14=e14, e15=e15, e16=e16, e17=e17, e18=e18, e19=e19, e20=e20, e21=e21,
                           ooh=ooh)
-        else:
-            child = context.data
-            child.e5 = e5
-            child.e6 = e6
-            child.e13 = e13
-            child.e14 = e14
-            child.e15 = e15
-            child.e16 = e16
-            child.e17 = e17
-            child.e18 = e18
-            child.e19 = e19
-            child.e20 = e20
-            child.e21 = e21
-            child.ooh = ooh
-        context.data = child
-        context.save()
-        base_child.save()
-
+            context.data = child
+            context.save()
+            base_child.save()
+    return imported_ids, skipped_ids
 
 def parse_living_arrangement(living_arrangement: Element, e40: Optional[int],
                              e58: Optional[int]) -> LivingArrangement:

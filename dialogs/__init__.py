@@ -253,3 +253,18 @@ def error_message_dialog(parent: QWidget, errors: list[str]):
         err_box.setTextFormat(Qt.TextFormat.MarkdownText)
         err_box.setWindowTitle("Validation Error")
     err_box.exec()
+
+
+def ok_dialog(parent: QWidget, title: str, message: str):
+    msg_box = QMessageBox(icon=QMessageBox.Icon.Information)
+    msg_box.setText(message)
+    msg_box.setTextFormat(Qt.TextFormat.MarkdownText)
+    msg_box.setWindowTitle(title)
+    msg_box.exec()
+
+def error_dialog(parent: QWidget, title: str, message: str):
+    msg_box = QMessageBox(icon=QMessageBox.Icon.Warning)
+    msg_box.setText(message)
+    msg_box.setTextFormat(Qt.TextFormat.MarkdownText)
+    msg_box.setWindowTitle(title)
+    msg_box.exec()

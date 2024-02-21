@@ -4,6 +4,7 @@ from xml.etree.ElementTree import ParseError
 from PySide6.QtWidgets import QFileDialog, QDialog, QMainWindow
 
 import utils.xml_parser
+from dialogs import ok_dialog, error_dialog
 from dialogs.import_dialog import ImportDialog
 from model.models import FileType, ReportType
 
@@ -27,13 +28,24 @@ class ImportController:
         if not self.dialog.file_name:
             return False
         try:
+            imported = skipped = []
             tree = utils.xml_parser.parse_file(self.dialog.file_name)
             if self.dialog.report_type == ReportType.A:
-                utils.xml_parser.import_a_tree(tree, self.dialog.file_type)
+                imported, skipped = utils.xml_parser.import_a_tree(tree, self.dialog.file_type)
             if self.dialog.report_type == ReportType.OOH:
-                utils.xml_parser.import_ooh_tree(tree, self.dialog.file_type)
+                imported, skipped = utils.xml_parser.import_ooh_tree(tree, self.dialog.file_type)
+            message = f"**Import Complete**\n\n{len(imported)} rows inserted, {len(skipped)} rows skipped."
+            if len(skipped)>0:
+                message += f"\n\nThe following child IDs were skipped due to pre-existing data:\n"
+                message += "".join(f"* {id}\n" for id in skipped[:5])
+                if len(skipped)>5:
+                    message += "\nPlus {len(skipped)-5} additional IDs"
+            title = "Import Finished"
+            ok_dialog(self.dialog, title, message)
             return True
         except ParseError:
+            error_dialog(self.dialog, "Import Error", "There was an error importing the data. Please check\n"
+                                            "that the import file is of the correct format for the selected report type.")
             return False
 
     def do_open_file(self):
