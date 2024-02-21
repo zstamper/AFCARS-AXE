@@ -207,7 +207,7 @@ class LivingArrangementDialog(BaseDialog):
     def e120(self, v: int) -> None:
         if v is None and self._e113 in (0, None):
             self._set_combobox_selection(self.ui.e120, -1)
-        elif v == 0:
+        elif v is None or v == 0:
             self._set_combobox_selection(self.ui.e120, 0)
         else:
             self._set_combobox_selection(self.ui.e120, v)

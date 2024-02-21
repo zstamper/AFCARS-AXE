@@ -34,7 +34,11 @@ class ReportTypeField(Field):
         return None if value is None else value.value
 
     def python_value(self, value):
-        return ReportType(value)
+        try:
+            return ReportType(value)
+        except ValueError:
+            return None
+
 
 
 class FileTypeField(Field):

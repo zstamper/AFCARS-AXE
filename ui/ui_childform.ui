@@ -1423,12 +1423,12 @@
                   </property>
                   <item>
                    <property name="text">
-                    <string>Yes</string>
+                    <string>No</string>
                    </property>
                   </item>
                   <item>
                    <property name="text">
-                    <string>No</string>
+                    <string>Yes</string>
                    </property>
                   </item>
                  </widget>
@@ -1467,12 +1467,12 @@
                   </property>
                   <item>
                    <property name="text">
-                    <string>Yes</string>
+                    <string>No</string>
                    </property>
                   </item>
                   <item>
                    <property name="text">
-                    <string>No</string>
+                    <string>Yes</string>
                    </property>
                   </item>
                  </widget>
@@ -3451,7 +3451,8 @@ Leave blank if law enforcement was not notified.&lt;/i&gt;</string>
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="e12">
+  <buttongroup name="e6"/>
+  <buttongroup name="e107">
    <property name="exclusive">
     <bool>false</bool>
    </property>
@@ -3461,37 +3462,17 @@ Leave blank if law enforcement was not notified.&lt;/i&gt;</string>
     <bool>false</bool>
    </property>
   </buttongroup>
-  <buttongroup name="e22">
-   <property name="exclusive">
-    <bool>false</bool>
-   </property>
-  </buttongroup>
-  <buttongroup name="e107">
-   <property name="exclusive">
-    <bool>false</bool>
-   </property>
-  </buttongroup>
   <buttongroup name="e8">
    <property name="exclusive">
     <bool>false</bool>
    </property>
   </buttongroup>
-  <buttongroup name="e10">
-   <property name="exclusive">
-    <bool>false</bool>
-   </property>
-  </buttongroup>
-  <buttongroup name="e62">
-   <property name="exclusive">
-    <bool>false</bool>
-   </property>
-  </buttongroup>
-  <buttongroup name="e109">
-   <property name="exclusive">
-    <bool>false</bool>
-   </property>
-  </buttongroup>
   <buttongroup name="e63">
+   <property name="exclusive">
+    <bool>false</bool>
+   </property>
+  </buttongroup>
+  <buttongroup name="e12">
    <property name="exclusive">
     <bool>false</bool>
    </property>
@@ -3502,13 +3483,32 @@ Leave blank if law enforcement was not notified.&lt;/i&gt;</string>
     <bool>false</bool>
    </property>
   </buttongroup>
+  <buttongroup name="e109">
+   <property name="exclusive">
+    <bool>false</bool>
+   </property>
+  </buttongroup>
+  <buttongroup name="e62">
+   <property name="exclusive">
+    <bool>false</bool>
+   </property>
+  </buttongroup>
   <buttongroup name="e110">
    <property name="exclusive">
     <bool>false</bool>
    </property>
   </buttongroup>
-  <buttongroup name="e6"/>
   <buttongroup name="e106">
+   <property name="exclusive">
+    <bool>false</bool>
+   </property>
+  </buttongroup>
+  <buttongroup name="e22">
+   <property name="exclusive">
+    <bool>false</bool>
+   </property>
+  </buttongroup>
+  <buttongroup name="e10">
    <property name="exclusive">
     <bool>false</bool>
    </property>

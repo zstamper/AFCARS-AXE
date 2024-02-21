@@ -263,6 +263,8 @@ class OOHDialog(BaseDialog):
         self.ui.e17.setEnabled(not checked)
         self.ui.e18.setEnabled(not checked)
         self.ui.e20.setEnabled(not checked)
+        self.ui.e42.setEnabled(not checked)
+        self.ui.e45.setEnabled(not checked)
         if checked:
             self.ui.e13.setChecked(False)
             self.ui.e14.setChecked(False)
@@ -271,6 +273,8 @@ class OOHDialog(BaseDialog):
             self.ui.e17.setChecked(False)
             self.ui.e18.setChecked(False)
             self.ui.e20.setChecked(False)
+            self.e42 = None
+            self.e45 = None
 
     def _e20_toggled(self, checked: bool) -> None:
         # If E20 is checked, E13, E14, E15, E16, E17, E18, E19 should be unchecked and disabled.
@@ -667,9 +671,9 @@ class OOHDialog(BaseDialog):
     @property
     def e41(self) -> int:
         return \
-            7 if self.e19 == 1 and not self.e42 \
-                else 0 if not self.e42 \
-                else 1
+            7 if self.e19 == 1 and not self.e42 else \
+                0 if not self.e42 else \
+                    1
 
     @e41.setter
     def e41(self, v: int) -> None:

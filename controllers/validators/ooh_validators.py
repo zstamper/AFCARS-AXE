@@ -72,34 +72,20 @@ class DemographicsValidator(OOHBaseValidator):
         if self.dialog.e41 is None:
             raise ValueError("Prior Adoption (E41) is required.")
 
-    def validate_e41_e42(self):
-        if not self.is_valid_date(self.dialog.e42) or self.is_future_date(self.dialog.e42):
-            raise ValueError("Invalid date specified for Prior Adoption Date (E42)")
-        if self.dialog.e42 is not None and self.dialog.e41 in [None, 0, 7]:
-            raise ValueError("Prior Adoption (E41) must be Yes if Prior Adoption Date (E42) is specified.")
-        if self.dialog.e42 is None and self.dialog.e41 == 1:
-            raise ValueError(
-                "Prior Adoption (E41) must be No or Unknown if Prior Adoption Date (E42) is not specified.")
-
     def validate_e42_e43(self) -> None:
         if self.dialog.e42 is not None and self.dialog.e43 not in [0, 1]:
             raise ValueError(
                 f"Inter-country prior adoption (E43) is required if prior adoption date is specified (E42).")
-
-    def validate_e44_e45(self) -> None:
-        if not self.is_valid_date(self.dialog.e45) or self.is_future_date(self.dialog.e45):
-            raise ValueError("Invalid date given for Prior Guardianship Date (E45).")
-        if self.dialog.e45 is not None and self.dialog.e44 not in [0, 1]:
-            raise ValueError(
-                f"Prior guardianship indication (E44) is required if prior guardianship date is specified (E45).")
 
     def validate_e56(self) -> None:
         if self.dialog.e56 is None:
             raise ValueError("Total number of siblings (E56) is required.")
 
     def validate_e57(self) -> None:
-        if self.dialog.e57 is None:
+        if self.dialog.e57 is None and self.dialog.e56 > 0:
             raise ValueError("Total number of siblings in foster care (E57) is required.")
+        if self.dialog.e57 and self.dialog.e56 and self.dialog.e56 > self.dialog.e56:
+            raise ValueError("Siblings in Foster Care (E57) cannot be larger than Total Number of Siblings (E56).")
 
     def validate_e56_e57(self) -> None:
         if self.dialog.e56 is not None and self.dialog.e57 is not None:
