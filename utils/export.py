@@ -55,7 +55,7 @@ class OOHExporter(BaseExporter):
 
 
 class AExporter(BaseExporter):
-    TEMPLATE = 'template_a.xml'
+    TEMPLATE = 'template_assistance.xml'
 
 
 def export_xml(file_name: Path, e1: str, e2: str, report_type: ReportType, selected_children: list[tuple[BaseChild, Child]]):
