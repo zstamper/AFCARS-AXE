@@ -20,7 +20,7 @@ class ChildDialog(BaseDialog):
         self._e1: str = ""
         self._agency_name: str = ""
         self._file_type: str = ""
-        self._report_type: str = ""
+        self._report_type: ReportType = ReportType.OOH
         self._reporting_period: str = ""
         self._reporting_periods: list[ReportingPeriod] = []
         self._child_data: list[BaseChild] = []
@@ -100,7 +100,7 @@ class ChildDialog(BaseDialog):
         return self.ui.reporting_period_filter.currentText()
 
     @property
-    def report_type(self) -> str:
+    def report_type(self) -> ReportType:
         return self._report_type
 
     @report_type.setter
@@ -133,7 +133,7 @@ class ChildDialog(BaseDialog):
         self._update_window_title()
 
     def _update_window_title(self):
-        title = f"{self.agency_name} ({self.e1}) / {self.reporting_period} / {self.report_type}"
+        title = f"{self.agency_name} ({self.e1}) / {self.reporting_period} / {self.report_type.value}"
         self.setWindowTitle(title)
 
     @property
@@ -165,7 +165,15 @@ class ChildDialog(BaseDialog):
             self.ui.child_table.setItem(row, 3, QTableWidgetItem(data.e5.strftime("%m/%d/%Y") if data.e5 else ""))
             self.ui.child_table.setItem(row, 4, QTableWidgetItem(
                 data.date_created.strftime("%m/%d/%Y") if data.date_created else ""))
-            self.ui.child_table.setItem(row, 5, QTableWidgetItem(
-                data.last_removal.strftime("%m/%d/%Y") if data.last_removal else ""))
-            self.ui.child_table.setItem(row, 6,
-                                        QTableWidgetItem(data.last_exit.strftime("%m/%d/%Y") if data.last_exit else ""))
+            if self.report_type == ReportType.OOH:
+                self.ui.child_table.setItem(row, 5, QTableWidgetItem(
+                    data.last_removal.strftime("%m/%d/%Y") if data.last_removal else ""))
+                self.ui.child_table.setItem(row, 6,
+                                            QTableWidgetItem(
+                                                data.last_exit.strftime("%m/%d/%Y") if data.last_exit else ""))
+            else:
+                self.ui.child_table.setItem(row, 5, QTableWidgetItem(
+                    data.last_removal.strftime("%m/%d/%Y") if data.last_adoption else ""))
+                self.ui.child_table.setItem(row, 6,
+                                            QTableWidgetItem(
+                                                data.last_exit.strftime("%m/%d/%Y") if data.last_termination else ""))

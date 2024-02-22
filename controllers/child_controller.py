@@ -9,6 +9,7 @@ from dialogs.child_dialog import ChildDialog
 from dialogs.main_window2_dialog import ReportType
 from model import Context, ContextTable, Child, BaseChildTable
 from model.models import FileType, BaseChild, OOHRecord, ARecord
+from utils import refresh_dates
 
 
 class ChildController:
@@ -34,7 +35,7 @@ class ChildController:
         self.dialog.agency_name = self.agency_name
         self.dialog.agency_code = self.e1
         self.dialog.file_type = self.file_type
-        self.dialog.report_type = self.report_type.value
+        self.dialog.report_type = self.report_type
         self.dialog.reporting_period = self.reporting_period
         self.do_refresh_data()
         self.dialog.exec_()
@@ -79,7 +80,7 @@ class ChildController:
 
             base_child.e5 = datetime.datetime.strptime(str(controller.child.e5),
                                                        "%Y%m%d") if controller.child.e5 else None
-            self.refresh_dates(base_child, controller.child)
+            refresh_dates(base_child, controller.child, self.report_type)
             base_child_rec = BaseChildTable.create(e1=base_child.e1, e4=base_child.e4, e5=controller.child.e5,
                                                    first_name=base_child.first_name, last_name=base_child.last_name,
                                                    date_created=datetime.date.today())
@@ -114,7 +115,7 @@ class ChildController:
     def do_edit_save(self, base_child, controller, context_rec):
         # the child's birthdate needs to bubble up to the base child table so that it can show up
         # in the child listing.
-        self.refresh_dates(base_child, controller.child)
+        refresh_dates(base_child, controller.child, self.report_type)
         base_child.e5 = datetime.datetime.strptime(str(controller.child.e5),
                                                    "%Y%m%d") if controller.child.e5 else None
         BaseChildTable.persist_model(base_child)
@@ -199,63 +200,3 @@ class ChildController:
             context_rec.data.a = ARecord()
 
         return context_rec
-
-    def refresh_dates(self, base_child: BaseChild, child: Child):
-        if self.report_type == ReportType.OOH:
-            dates = []
-            for context in ContextTable.select().where(ContextTable.base_child_id == base_child.id):
-                if hasattr(context.data, 'ooh') and hasattr(context.data.ooh, 'removals1993'):
-                    for removal in context.data.ooh.removals1993:
-                        if removal.e69:
-                            dates.append(datetime.datetime.strptime(str(removal.e69), "%Y%m%d").date())
-                if hasattr(context.data, 'ooh') and hasattr(context.data.ooh, 'removals2020'):
-                    for removal in context.data.ooh.removals2020:
-                        if removal.e69:
-                            dates.append(datetime.datetime.strptime(str(removal.e69), "%Y%m%d").date())
-            if child.ooh and child.ooh.removals1993:
-                for removal in child.ooh.removals1993:
-                    if removal.e69:
-                        dates.append(datetime.datetime.strptime(str(removal.e69), "%Y%m%d").date())
-            if child.ooh and child.ooh.removals2020:
-                for removal in child.ooh.removals2020:
-                    if removal.e69:
-                        dates.append(datetime.datetime.strptime(str(removal.e69), "%Y%m%d").date())
-            base_child.last_removal = max(dates) if dates else None
-            base_child.e5 = child.e5
-
-            dates = []
-            for context in ContextTable.select().where(ContextTable.base_child_id == base_child.id):
-                if hasattr(context.data, 'ooh') and hasattr(context.data.ooh, 'removals1993'):
-                    for removal in context.data.ooh.removals1993:
-                        if removal.e153:
-                            dates.append(datetime.datetime.strptime(str(removal.e69), "%Y%m%d").date())
-                if hasattr(context.data, 'ooh') and hasattr(context.data.ooh, 'removals2020'):
-                    for removal in context.data.ooh.removals2020:
-                        if removal.e153:
-                            dates.append(datetime.datetime.strptime(str(removal.e69), "%Y%m%d").date())
-            if child.ooh and child.ooh.removals1993:
-                for removal in child.ooh.removals1993:
-                    if removal.e153:
-                        dates.append(datetime.datetime.strptime(str(removal.e153), "%Y%m%d").date())
-            if child.ooh and child.ooh.removals2020:
-                for removal in child.ooh.removals2020:
-                    if removal.e153:
-                        dates.append(datetime.datetime.strptime(str(removal.e153), "%Y%m%d").date())
-            base_child.last_exit = max(dates) if dates else None
-
-        if self.report_type == ReportType.A:
-            dates = []
-            if base_child.last_adoption:
-                dates.append(base_child.last_adoption)
-            if child.ooh and child.a:
-                if child.a.a17:
-                    dates.append(datetime.datetime.strptime(str(child.a.a17), "%Y%m%d").date())
-            base_child.last_adoption = max(dates) if dates else None
-
-            dates = []
-            if base_child.last_termination:
-                dates.append(base_child.last_adoption)
-            if child.ooh and child.a:
-                if child.a.a18:
-                    dates.append(datetime.datetime.strptime(str(child.a.a18), "%Y%m%d").date())
-            base_child.last_termination = max(dates) if dates else None

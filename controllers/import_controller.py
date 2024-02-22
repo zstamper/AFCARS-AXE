@@ -35,17 +35,17 @@ class ImportController:
             if self.dialog.report_type == ReportType.OOH:
                 imported, skipped = utils.xml_parser.import_ooh_tree(tree, self.dialog.file_type)
             message = f"**Import Complete**\n\n{len(imported)} rows inserted, {len(skipped)} rows skipped."
-            if len(skipped)>0:
+            if len(skipped) > 0:
                 message += f"\n\nThe following child IDs were skipped due to pre-existing data:\n"
                 message += "".join(f"* {id}\n" for id in skipped[:5])
-                if len(skipped)>5:
+                if len(skipped) > 5:
                     message += "\nPlus {len(skipped)-5} additional IDs"
             title = "Import Finished"
             ok_dialog(self.dialog, title, message)
             return True
         except ParseError:
             error_dialog(self.dialog, "Import Error", "There was an error importing the data. Please check\n"
-                                            "that the import file is of the correct format for the selected report type.")
+                                                      "that the import file is of the correct format for the selected report type.")
             return False
 
     def do_open_file(self):
