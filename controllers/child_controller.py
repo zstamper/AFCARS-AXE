@@ -172,31 +172,21 @@ class ChildController:
             :param base_child: BaseChild - the base child associated with this context
             :param reporting_period: str - the requested reporting period
             :param file_type: FileType - the file type (production or testing)"""
-        try:
-            context_rec = ContextTable.get(ContextTable.base_child == base_child.id,
-                                           ContextTable.e2 == reporting_period,
-                                           ContextTable.file_type == file_type)
-        except DoesNotExist:
+        context_rec, is_new = ContextTable.get_or_create(base_child=base_child.id,
+                                                         e2=reporting_period,
+                                                         file_type=file_type)
+        if is_new:
             recent_context = ContextTable.select().where(ContextTable.base_child == base_child.id,
                                                          ContextTable.e2 < reporting_period,
                                                          ContextTable.file_type == file_type).order_by(
                 ContextTable.e2.desc()).get_or_none()
-
-            if not recent_context:
-                context_rec = ContextTable(e2=self.reporting_period, file_type=self.file_type)
-                if self.report_type == ReportType.OOH:
-                    context_rec.data = Child(first_name=base_child.first_name, last_name=base_child.last_name,
-                                             ooh=OOHRecord())
-                elif self.report_type == ReportType.A:
-                    context_rec.data = Child(first_name=base_child.first_name, last_name=base_child.last_name,
-                                             a=ARecord())
+            if context_rec:
+                context_rec.data = recent_context.data
             else:
-                context_rec = ContextTable(base_child=recent_context.base_child, e2=recent_context.e2,
-                                           file_type=recent_context.file_type, data=recent_context.data)
-
-        if self.report_type == ReportType.OOH and not context_rec.data.ooh:
-            context_rec.data.ooh = OOHRecord()
-        elif self.report_type == ReportType.A and not context_rec.data.a:
-            context_rec.data.a = ARecord()
-
+                child = Child(first_name=base_child.first_name, last_name=base_child.last_name)
+                if self.report_type == ReportType.OOH:
+                    child.ooh = OOHRecord()
+                if self.report_type == ReportType.A:
+                    child.a = ARecord()
+            context_rec.save()
         return context_rec
