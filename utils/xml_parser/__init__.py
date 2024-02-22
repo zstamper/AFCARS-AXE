@@ -215,13 +215,16 @@ def import_ooh_tree(tree: Element, file_type: FileType) -> tuple[list, list]:
             skipped_ids.append(e4)
         else:
             imported_ids.append(e4)
+            e104 = 0
+            if removals_2020 and removals_2020[-1].e104:
+                e104 = 1
             ooh = OOHRecord(
                 e7=e7, e8=e8, e10=e10, e11=e11, e12=e12, e22=e22, e23=e23, e24=e24, e25=e25, e26=e26, e27=e27, e28=e28,
                 e29=e29, e30=e30, e31=e31, e32=e32, e33=e33, e34=e34, e35=e35, e36=e36, e37=e37, e38=e38, e39=e39,
                 e41=e41, e42=e42, e43=e43, e44=e44, e45=e45, e46=e46, e47=e47, e48=e48, e49=e49, e50=e50, e51=e51,
                 e52=e52, e53=e53, e54=e54, e55=e55, e56=e56, e57=e57, e59=e59, e60=e60, e61=e61, e62=e62, e63=e63,
-                e65=e65, e67=e67, e106=e106, e107=e107, e108=e108, e109=e109, e110=e110, e111=e111, tribes=tribes,
-                second_parents=second_parents, removals1993=removals_1993, removals2020=removals_2020
+                e65=e65, e67=e67, e106=e106, e107=e107, e108=e108, e109=e109, e110=e110, e111=e111, funding=e104,
+                tribes=tribes, second_parents=second_parents, removals1993=removals_1993, removals2020=removals_2020
             )
             if is_new:
                 child = Child(e5=e5, e6=e6, e13=e13, e14=e14, e15=e15, e16=e16, e17=e17, e18=e18, e19=e19, e20=e20, e21=e21,
