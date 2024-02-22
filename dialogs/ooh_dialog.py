@@ -7,7 +7,7 @@ from PySide6.QtGui import (QRegularExpressionValidator)
 from PySide6.QtWidgets import (QAbstractButton, QWidget, QListWidgetItem, QTableWidgetItem)
 
 from model import SecondParent, Removal1993, Removal2020, RecognizedTribe, ARecord
-from model.models import Tribe
+from model.models import Tribe, FileType
 from utils import generate_id
 from . import BaseDialog
 
@@ -39,6 +39,7 @@ class OOHDialog(BaseDialog):
         self._removals1993: list[Removal1993] = []
         self._removals2020: list[Removal2020] = []
         self._child_name: str = ""
+        self.file_type: FileType = FileType.PRODUCTION
 
         # Callbacks
         self.on_add_tribe_clicked: Optional[Callable] = None
@@ -214,9 +215,10 @@ class OOHDialog(BaseDialog):
 
     def _e4_text_changed(self, text: str) -> None:
         if self.ui.e4.hasAcceptableInput():
-            enabled = self.ui.e4.text() == ""
-            self.ui.e4.setEnabled(enabled)
-            self.ui.e4_generate.setEnabled(enabled)
+            if self.file_type == FileType.PRODUCTION:
+                enabled = self.ui.e4.text() == ""
+                self.ui.e4.setEnabled(enabled)
+                self.ui.e4_generate.setEnabled(enabled)
             self._refresh_title()
 
     def _e4_generate_clicked(self) -> None:
@@ -224,7 +226,8 @@ class OOHDialog(BaseDialog):
         self.ui.e4.setText(id_value)
 
     def _e6_button_clicked(self, button: QAbstractButton) -> None:
-        self.ui.e38.setEnabled(button.text() == 'Female')
+        if self.file_type == FileType.PRODUCTION:
+            self.ui.e38.setEnabled(button.text() == 'Female')
 
     # def _e7_button_clicked(self, button: QAbstractButton):
     #     self.ui.e7_required.setVisible(self.ui.e7.checkedButton() is None)
@@ -240,84 +243,89 @@ class OOHDialog(BaseDialog):
         ...
 
     def _funding_button_clicked(self, button: QAbstractButton) -> None:
-        enabled: bool = button.text() == 'No'
-        self.ui.icwa_group_box.setEnabled(enabled)
+        if self.file_type == FileType.PRODUCTION:
+            enabled: bool = button.text() == 'No'
+            self.ui.icwa_group_box.setEnabled(enabled)
 
     def _e8_button_clicked(self) -> None:
         self.set_e8_state()
 
     def set_e8_state(self):
-        enabled: bool = self.ui.e8_y.isChecked()
-        self.ui.e9_label.setEnabled(enabled)
-        self.ui.tribes.setEnabled(enabled)
-        self.ui.add_tribe_button.setEnabled(enabled)
-        self.ui.remove_tribe_button.setEnabled(enabled)
-        self.ui.epa_tribes.setEnabled(enabled)
+        if self.file_type == FileType.PRODUCTION:
+            enabled: bool = self.ui.e8_y.isChecked()
+            self.ui.e9_label.setEnabled(enabled)
+            self.ui.tribes.setEnabled(enabled)
+            self.ui.add_tribe_button.setEnabled(enabled)
+            self.ui.remove_tribe_button.setEnabled(enabled)
+            self.ui.epa_tribes.setEnabled(enabled)
 
     def _e19_toggled(self, checked: bool) -> None:
-        # If E19 is checked, E13, E14, E15, E16, E17, E18, E20 should be unchecked and disabled.
-        self.ui.e13.setEnabled(not checked)
-        self.ui.e14.setEnabled(not checked)
-        self.ui.e15.setEnabled(not checked)
-        self.ui.e16.setEnabled(not checked)
-        self.ui.e17.setEnabled(not checked)
-        self.ui.e18.setEnabled(not checked)
-        self.ui.e20.setEnabled(not checked)
-        self.ui.e42.setEnabled(not checked)
-        self.ui.e45.setEnabled(not checked)
-        if checked:
-            self.ui.e13.setChecked(False)
-            self.ui.e14.setChecked(False)
-            self.ui.e15.setChecked(False)
-            self.ui.e16.setChecked(False)
-            self.ui.e17.setChecked(False)
-            self.ui.e18.setChecked(False)
-            self.ui.e20.setChecked(False)
-            self.e42 = None
-            self.e45 = None
+        if self.file_type == FileType.PRODUCTION:
+            # If E19 is checked, E13, E14, E15, E16, E17, E18, E20 should be unchecked and disabled.
+            self.ui.e13.setEnabled(not checked)
+            self.ui.e14.setEnabled(not checked)
+            self.ui.e15.setEnabled(not checked)
+            self.ui.e16.setEnabled(not checked)
+            self.ui.e17.setEnabled(not checked)
+            self.ui.e18.setEnabled(not checked)
+            self.ui.e20.setEnabled(not checked)
+            self.ui.e42.setEnabled(not checked)
+            self.ui.e45.setEnabled(not checked)
+            if checked:
+                self.ui.e13.setChecked(False)
+                self.ui.e14.setChecked(False)
+                self.ui.e15.setChecked(False)
+                self.ui.e16.setChecked(False)
+                self.ui.e17.setChecked(False)
+                self.ui.e18.setChecked(False)
+                self.ui.e20.setChecked(False)
+                self.e42 = None
+                self.e45 = None
 
     def _e20_toggled(self, checked: bool) -> None:
-        # If E20 is checked, E13, E14, E15, E16, E17, E18, E19 should be unchecked and disabled.
-        self.ui.e13.setEnabled(not checked)
-        self.ui.e14.setEnabled(not checked)
-        self.ui.e15.setEnabled(not checked)
-        self.ui.e16.setEnabled(not checked)
-        self.ui.e17.setEnabled(not checked)
-        self.ui.e18.setEnabled(not checked)
-        self.ui.e19.setEnabled(not checked)
-        if checked:
-            self.ui.e13.setChecked(False)
-            self.ui.e14.setChecked(False)
-            self.ui.e15.setChecked(False)
-            self.ui.e16.setChecked(False)
-            self.ui.e17.setChecked(False)
-            self.ui.e18.setChecked(False)
-            self.ui.e19.setChecked(False)
+        if self.file_type == FileType.PRODUCTION:
+            # If E20 is checked, E13, E14, E15, E16, E17, E18, E19 should be unchecked and disabled.
+            self.ui.e13.setEnabled(not checked)
+            self.ui.e14.setEnabled(not checked)
+            self.ui.e15.setEnabled(not checked)
+            self.ui.e16.setEnabled(not checked)
+            self.ui.e17.setEnabled(not checked)
+            self.ui.e18.setEnabled(not checked)
+            self.ui.e19.setEnabled(not checked)
+            if checked:
+                self.ui.e13.setChecked(False)
+                self.ui.e14.setChecked(False)
+                self.ui.e15.setChecked(False)
+                self.ui.e16.setChecked(False)
+                self.ui.e17.setChecked(False)
+                self.ui.e18.setChecked(False)
+                self.ui.e19.setChecked(False)
 
     def _e23_current_index_changed(self, index: int) -> None:
-        if index != 1:
-            self.e24 = None
-            self.e25 = None
-            self.e26 = None
-            self.e27 = None
-            self.e28 = None
-            self.e29 = None
-            self.e30 = None
-            self.e31 = None
-            self.e32 = None
-            self.e33 = None
-            self.e34 = None
-        self.ui.e24.setEnabled(index == 1)
-        self.ui.e25.setEnabled(index == 1)
-        self.ui.e26.setEnabled(index == 1)
-        self.ui.e27.setEnabled(index == 1)
-        self.ui.e28.setEnabled(index == 1)
-        self.ui.e29.setEnabled(index == 1)
-        self.ui.e30.setEnabled(index == 1)
-        self.ui.e31.setEnabled(index == 1)
-        self.ui.e32.setEnabled(index == 1)
-        self.ui.e33.setEnabled(index == 1)
-        self.ui.e34.setEnabled(index == 1)
+        if self.file_type == FileType.PRODUCTION:
+            if index != 1:
+                self.e24 = None
+                self.e25 = None
+                self.e26 = None
+                self.e27 = None
+                self.e28 = None
+                self.e29 = None
+                self.e30 = None
+                self.e31 = None
+                self.e32 = None
+                self.e33 = None
+                self.e34 = None
+            self.ui.e24.setEnabled(index == 1)
+            self.ui.e25.setEnabled(index == 1)
+            self.ui.e26.setEnabled(index == 1)
+            self.ui.e27.setEnabled(index == 1)
+            self.ui.e28.setEnabled(index == 1)
+            self.ui.e29.setEnabled(index == 1)
+            self.ui.e30.setEnabled(index == 1)
+            self.ui.e31.setEnabled(index == 1)
+            self.ui.e32.setEnabled(index == 1)
+            self.ui.e33.setEnabled(index == 1)
+            self.ui.e34.setEnabled(index == 1)
 
     @property
     def child_name(self) -> str:
@@ -367,7 +375,8 @@ class OOHDialog(BaseDialog):
     @e6.setter
     def e6(self, v: int) -> None:
         self._set_radio_button(self.ui.e6, v)
-        self.ui.e38.setEnabled(v == 2)
+        if self.file_type == FileType.PRODUCTION:
+            self.ui.e38.setEnabled(v == 2)
 
     @property
     def e7(self) -> int:

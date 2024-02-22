@@ -6,15 +6,17 @@ from PySide6.QtWidgets import QWidget
 
 from dialogs import BaseDialog
 from model import OOHRecord
+from model.models import FileType
 from utils import generate_id
 
 
 class ADialog(BaseDialog):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__(self, parent, file_type:FileType=FileType.PRODUCTION):
+        super().__init__(parent)
 
         self.ui: QWidget = self.load_ui('ui_adoption_subsidy.ui')
 
+        self.file_type = file_type
         self.ooh: OOHRecord | None = None
         self.on_save: Optional[Callable] = None
         self.on_close: Optional[Callable] = None
@@ -84,10 +86,11 @@ class ADialog(BaseDialog):
             self.setWindowTitle('')
 
     def _e4_text_changed(self, text: str) -> None:
-        if self.ui.e4.hasAcceptableInput():
-            enabled = self.ui.e4.text() == ""
-            self.ui.e4.setEnabled(enabled)
-            self.ui.e4_generate.setEnabled(enabled)
+        if self.file_type == FileType.PRODUCTION:
+            if self.ui.e4.hasAcceptableInput():
+                enabled = self.ui.e4.text() == ""
+                self.ui.e4.setEnabled(enabled)
+                self.ui.e4_generate.setEnabled(enabled)
 
     def _e4_generate_clicked(self) -> None:
         id_value: str = generate_id()

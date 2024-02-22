@@ -12,7 +12,7 @@ from controllers.utilities import show_error_dialog
 from controllers.validators.removal2020_validator import Removal2020Validator
 from dialogs.removal2020_dialog import Removal2020Dialog
 from model.models import MyBaseModel, Removal2020, LivingArrangement, PermanencyPlan, CaseVisit, PermanencyHearing, \
-    PeriodicReview
+    PeriodicReview, FileType
 
 
 class Removal2020Controller:
@@ -21,9 +21,10 @@ class Removal2020Controller:
      and editing model data using the view provided at time of controller instantiation.
      """
 
-    def __init__(self, parent, child_name: str, data: Removal2020):
+    def __init__(self, parent, child_name: str, data: Removal2020, /, file_type: FileType = FileType.PRODUCTION):
         self._data = None
         self.dialog: Removal2020Dialog = Removal2020Dialog(parent)
+        self.file_type = file_type
         self.validator: Removal2020Validator = Removal2020Validator(self.dialog)
         self.parent_data = None
         self.dialog.child_name = child_name
@@ -66,6 +67,14 @@ class Removal2020Controller:
         self.dialog.refresh_permanency_plans()
         self.dialog.refresh_periodic_reviews()
         self.dialog.refresh_permanency_hearings()
+
+    @property
+    def file_type(self) -> FileType:
+        return self.dialog.file_type
+
+    @file_type.setter
+    def file_type(self, v: FileType) -> None:
+        self.dialog.file_type = v
 
     def do_save(self) -> None:
         # gather model fields from the view
@@ -140,7 +149,8 @@ class Removal2020Controller:
             self.dialog.refresh_living_arrangements()
             self.do_save()
 
-        controller = LivingArrangementController(self.dialog, self.dialog.child_name, data)
+        controller = LivingArrangementController(self.dialog, self.dialog.child_name, data, file_type=self.file_type)
+        controller.file_type = self.file_type
         controller.parent_data = self.dialog
         controller.on_save = save
         controller.exec()
@@ -154,8 +164,10 @@ class Removal2020Controller:
         # if the living_arrangement_table has a current row, pass the corresponding obj item to the dialog
         current_row = self.dialog.living_arrangements_current_row
         if current_row >= 0:
-            controller = LivingArrangementController(self.dialog, self.dialog.child_name,
-                                                     data=self.dialog.living_arrangements[current_row])
+            controller = LivingArrangementController(self.dialog,
+                                                     self.dialog.child_name,
+                                                     self.dialog.living_arrangements[current_row],
+                                                     file_type=self.file_type)
             controller.on_save = save
             controller.parent_data = self.dialog
             controller.exec()
@@ -178,7 +190,7 @@ class Removal2020Controller:
             self.dialog.refresh_permanency_plans()
             self.do_save()
 
-        controller = PermanencyPlanController(self.dialog, self.dialog.child_name, data)
+        controller = PermanencyPlanController(self.dialog, self.dialog.child_name, data, file_type=self.file_type)
         controller.on_save = save
         controller.parent_data = self.dialog
         controller.exec()
@@ -192,7 +204,7 @@ class Removal2020Controller:
         current_row = self.dialog.permanency_plan_current_row
         if current_row >= 0:
             controller = PermanencyPlanController(self.dialog, self.dialog.child_name,
-                                                  self.dialog.permanency_plans[current_row])
+                                                  self.dialog.permanency_plans[current_row], file_type=self.file_type)
             controller.on_save = save
             controller.parent_data = self.dialog
             controller.exec()
@@ -215,7 +227,8 @@ class Removal2020Controller:
             self.dialog.refresh_case_worker_visits()
             self.do_save()
 
-        controller: CaseWorkerVisitController = CaseWorkerVisitController(self.dialog, self.dialog.child_name, data)
+        controller: CaseWorkerVisitController = CaseWorkerVisitController(self.dialog, self.dialog.child_name, data,
+                                                                          file_type=self.file_type)
         controller.on_save = save
         controller.parent_data = self.dialog
         controller.exec()
@@ -230,7 +243,8 @@ class Removal2020Controller:
         if current_row >= 0:
             controller: CaseWorkerVisitController = CaseWorkerVisitController(self.dialog, self.dialog.child_name,
                                                                               self.dialog.case_worker_visits[
-                                                                                  current_row])
+                                                                                  current_row],
+                                                                              file_type=self.file_type)
             controller.on_save = save
             controller.parent_data = self.dialog
             controller.exec()
@@ -254,7 +268,7 @@ class Removal2020Controller:
             self.dialog.refresh_permanency_hearings()
             self.do_save()
 
-        controller = PermanencyHearingController(self.dialog, self.dialog.child_name, data)
+        controller = PermanencyHearingController(self.dialog, self.dialog.child_name, data, file_type=self.file_type)
         controller.on_save = save
         controller.parent_data = self.dialog
         controller.exec()
@@ -269,7 +283,8 @@ class Removal2020Controller:
         current_row: int = self.dialog.permanency_hearings_current_row
         if current_row >= 0:
             controller = PermanencyHearingController(self.dialog, self.dialog.child_name,
-                                                     self.dialog.permanency_hearings[current_row])
+                                                     self.dialog.permanency_hearings[current_row],
+                                                     file_type=self.file_type)
             controller.on_save = save
             controller.parent_data = self.dialog
             controller.exec()
@@ -292,7 +307,8 @@ class Removal2020Controller:
             self.dialog.refresh_periodic_reviews()
             self.do_save()
 
-        controller: PeriodicReviewController = PeriodicReviewController(self.dialog, self.dialog.child_name, data=data)
+        controller: PeriodicReviewController = PeriodicReviewController(self.dialog, self.dialog.child_name, data,
+                                                                        file_type=self.file_type)
         controller.on_save = save
         controller.parent_data = self.dialog
         controller.exec()
@@ -305,8 +321,9 @@ class Removal2020Controller:
         current_row: int = self.dialog.periodic_reviews_current_row
         if current_row >= 0:
             controller: PeriodicReviewController = PeriodicReviewController(self.dialog, self.dialog.child_name,
-                                                                            data=self.dialog.periodic_reviews[
-                                                                                current_row])
+                                                                            self.dialog.periodic_reviews[
+                                                                                current_row],
+                                                                            file_type=self.file_type)
             controller.on_save = save
             controller.parent_data = self.dialog
             controller.exec()

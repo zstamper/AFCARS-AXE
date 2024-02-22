@@ -5,7 +5,7 @@ from pydantic import ValidationError
 
 from dialogs import BaseDialog
 from dialogs.a_dialog import ADialog
-from model.models import Child, BaseChild
+from model.models import Child, BaseChild, FileType
 from .utilities import show_error_dialog
 from .validators.a_validator import AValidator
 
@@ -16,8 +16,9 @@ class AController:
      and editing model data using the view provided at time of controller instantiation.
      """
 
-    def __init__(self, parent, e1: str = ""):
+    def __init__(self, parent, e1: str = "",/,file_type:FileType=FileType.PRODUCTION):
         self.dialog = ADialog(parent=parent)
+        self.file_type = file_type
         self.validator = AValidator(self.dialog)
         self._base_child: BaseChild | None = None
         self._child: Child | None = None
@@ -30,8 +31,16 @@ class AController:
         self.context_rec_id: int = 0
         self.base_child_rec_id: int = 0
 
-        # Wire our callbacks into the dialog
-        # self.dialog.on_save = self.do_save
+    @property
+    def file_type(self)->FileType:
+        return self.dialog.file_type
+
+    @file_type.setter
+    def file_type(self, v: FileType)->None:
+        self.dialog.file_type = v
+
+    # Wire our callbacks into the dialog
+    # self.dialog.on_save = self.do_save
 
     def do_close(self) -> bool:
         if self.is_dirty():

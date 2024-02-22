@@ -95,9 +95,9 @@ class ChildController:
 
         controller = None
         if self.report_type == ReportType.OOH:
-            controller = OOHController(parent=self.dialog, e1=self.e1)
+            controller = OOHController(self.dialog, self.e1, file_type=self.file_type)
         elif self.report_type == ReportType.A:
-            controller = AController(parent=self.dialog)
+            controller = AController(self.dialog, file_type=self.file_type)
         if controller:
             controller.base_child = BaseChild(e1=self.e1, e4="")
             context = Context(e2=self.reporting_period, file_type=self.file_type)
@@ -134,9 +134,9 @@ class ChildController:
             return
         controller = None
         if self.report_type == ReportType.OOH:
-            controller = OOHController(parent=self.dialog, e1=self.e1)
+            controller = OOHController(self.dialog, self.e1, file_type=self.file_type)
         elif self.report_type == ReportType.A:
-            controller = AController(parent=self.dialog)
+            controller = AController(self.dialog, file_type=self.file_type)
         if controller:
             context_rec = self._context_for(base_child, self.reporting_period, self.file_type)
 

@@ -9,7 +9,7 @@ from controllers.second_parent_controller import SecondParentController
 from controllers.utilities import show_error_dialog, get_epa_tribes
 from controllers.validators.ooh_validator import OOHValidator
 from dialogs.ooh_dialog import OOHDialog
-from model.models import Removal1993, Removal2020, SecondParent, RecognizedTribe, BaseChild, Child
+from model.models import Removal1993, Removal2020, SecondParent, RecognizedTribe, BaseChild, Child, FileType
 
 
 class OOHController:
@@ -18,8 +18,9 @@ class OOHController:
      and editing model data using the view provided at time of controller instantiation.
      """
 
-    def __init__(self, parent, e1: str = ""):
+    def __init__(self, parent, e1: str = "", /, file_type: FileType = FileType.PRODUCTION):
         self.dialog = OOHDialog(parent)
+        self.file_type = file_type
         # self.new_data: Child | None = None
         self.validator = OOHValidator(self.dialog)
         self.dialog.current_tab = 0
@@ -51,6 +52,14 @@ class OOHController:
         self.dialog.on_remove_tribe_clicked = self.do_remove_tribe
 
         self.dialog.epa_tribes = get_epa_tribes()
+
+    @property
+    def file_type(self) -> FileType:
+        return self.dialog.file_type
+
+    @file_type.setter
+    def file_type(self, v: FileType) -> None:
+        self.dialog.file_type = v
 
     @property
     def child_name(self) -> str:
@@ -92,6 +101,14 @@ class OOHController:
             for key in vars(v.ooh).keys():
                 if hasattr(self.dialog, key):
                     setattr(self.dialog, key, getattr(v.ooh, key))
+
+    @property
+    def file_type(self) -> FileType:
+        return self.dialog.file_type
+
+    @file_type.setter
+    def file_type(self, v: FileType) -> None:
+        self.dialog.file_type = v
 
     @staticmethod
     def confirm_save() -> bool:
@@ -181,7 +198,10 @@ class OOHController:
             self.dialog.refresh_removals1993()
             self.do_save()
 
-        controller: Removal1993Controller = Removal1993Controller(self.dialog, self.dialog.child_name, data=data)
+        controller: Removal1993Controller = Removal1993Controller(self.dialog,
+                                                                  self.dialog.child_name,
+                                                                  data,
+                                                                  file_type=self.file_type)
         controller.on_save = save
         controller.exec()
 
@@ -193,8 +213,9 @@ class OOHController:
 
         current_row = self.dialog.current_removal1993_row()
         if current_row >= 0:
-            controller: Removal1993Controller = Removal1993Controller(self.dialog, child_name=self.dialog.child_name,
-                                                                      data=self.dialog.removals1993[current_row])
+            controller: Removal1993Controller = Removal1993Controller(self.dialog, self.dialog.child_name,
+                                                                      self.dialog.removals1993[current_row],
+                                                                      file_type=self.file_type)
             controller.on_save = save
             controller.exec()
 
@@ -220,8 +241,8 @@ class OOHController:
         # funding element may be checked if E1 is a state agency.
         data.e104 = self.dialog.funding
 
-        controller: Removal2020Controller = Removal2020Controller(self.dialog, child_name=self.dialog.child_name,
-                                                                  data=data)
+        controller: Removal2020Controller = Removal2020Controller(self.dialog, self.dialog.child_name,
+                                                                  data, file_type=self.file_type)
         controller.on_save = save
         controller.parent_data = self.dialog
         controller.exec()
@@ -234,7 +255,8 @@ class OOHController:
         current_row = self.dialog.current_removal2020_row()
         if current_row >= 0:
             controller: Removal2020Controller = Removal2020Controller(self.dialog, self.dialog.child_name,
-                                                                      self.dialog.removals2020[current_row])
+                                                                      self.dialog.removals2020[current_row],
+                                                                      file_type=self.file_type)
             controller.on_save = save
             controller.parent_data = self.dialog
             controller.exec()
@@ -269,6 +291,7 @@ class OOHController:
         controller = SecondParentController(self.dialog, child_name=self.dialog.child_name,
                                             data=SecondParent(number=self._next_parent_number()))
         controller.on_save = save
+        controller.file_type = self.file_type
         controller.exec()
 
     def do_edit_second_parent(self) -> None:
@@ -281,6 +304,7 @@ class OOHController:
             controller = SecondParentController(self.dialog, child_name=self.dialog.child_name,
                                                 data=self.dialog.second_parents[current_row])
             controller.on_save = save
+            controller.file_type = self.file_type
             controller.exec()
 
     def do_delete_second_parent(self) -> None:

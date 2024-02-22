@@ -2,6 +2,7 @@ from typing import Callable, Optional, Any
 
 from PySide6.QtWidgets import QWidget
 
+from model.models import FileType
 from . import BaseDialog
 
 
@@ -15,6 +16,7 @@ class Removal1993Dialog(BaseDialog):
         self.id: int | None = None
         self.ooh_id: int | None = None
         self.ui: QWidget = self.load_ui('ui_removal1993.ui')
+        self.file_type: FileType = FileType.PRODUCTION
         self.on_validate: Optional[Callable] = None
         self.on_save: Optional[Callable] = None
         self.on_close: Optional[Callable] = None

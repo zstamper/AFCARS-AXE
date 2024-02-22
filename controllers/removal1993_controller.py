@@ -7,12 +7,14 @@ from controllers.utilities import show_error_dialog
 from controllers.validators.removal1993_validator import Removal1993Validator
 from dialogs.removal1993_dialog import Removal1993Dialog
 from model import Removal1993
+from model.models import FileType
 
 
 class Removal1993Controller:
 
-    def __init__(self, parent, child_name: str, data: Removal1993):
+    def __init__(self, parent, child_name: str, data: Removal1993, /, file_type: FileType = FileType.PRODUCTION):
         self.dialog = Removal1993Dialog(parent)
+        self.file_type = file_type
         self.child_name = child_name
         self._data = None
         self.data = data
@@ -30,6 +32,14 @@ class Removal1993Controller:
     def data(self, v: Removal1993):
         self._data = v
         self._data.scatter(self.dialog)
+
+    @property
+    def file_type(self) -> FileType:
+        return self.dialog.file_type
+
+    @file_type.setter
+    def file_type(self, v: FileType) -> None:
+        self.dialog.file_type = v
 
     def exec(self):
         self.dialog.child_name = self.child_name

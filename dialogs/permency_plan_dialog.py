@@ -3,6 +3,7 @@ from typing import Optional, Callable
 from PySide6.QtWidgets import QWidget
 
 from dialogs import BaseDialog
+from model.models import FileType
 
 
 class PermanencyPlanDialog(BaseDialog):
@@ -15,6 +16,7 @@ class PermanencyPlanDialog(BaseDialog):
         self._wire_ui()
         self.setLayout(self.ui.layout())
         self.setFixedSize(self.ui.size())
+        self.file_type: FileType = FileType.PRODUCTION
         self.id: int | None = None
         self.removal_id: int | None = None
         self._child_name: str = ""

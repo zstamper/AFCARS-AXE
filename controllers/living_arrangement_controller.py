@@ -7,7 +7,7 @@ from pydantic import ValidationError
 from controllers.utilities import show_error_dialog
 from controllers.validators.living_arrangement_validator import LivingArrangementValidator
 from dialogs.living_arrangement_dialog import LivingArrangementDialog
-from model.models import MyBaseModel, LivingArrangement, Removal2020
+from model.models import MyBaseModel, LivingArrangement, Removal2020, FileType
 
 
 class LivingArrangementController:
@@ -16,8 +16,9 @@ class LivingArrangementController:
      and editing model data using the view provided at time of controller instantiation.
      """
 
-    def __init__(self, parent, child_name: str, data: LivingArrangement):
+    def __init__(self, parent, child_name: str, data: LivingArrangement, /, file_type: FileType = FileType.PRODUCTION):
         self.dialog: LivingArrangementDialog = LivingArrangementDialog(parent)
+        self.file_type: FileType = file_type
         self.parent_data: Optional[Removal2020] = None
         self._data = None
         self.data = data
@@ -36,6 +37,15 @@ class LivingArrangementController:
     def data(self, v: LivingArrangement) -> None:
         self._data = v
         self._data.scatter(self.dialog)
+
+    @property
+    def file_type(self) -> FileType:
+        return self.dialog.file_type
+
+    @file_type.setter
+    def file_type(self, v: FileType) -> None:
+        self.dialog.file_type = v
+
 
     def exec(self):
         self.dialog.exec()

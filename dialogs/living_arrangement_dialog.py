@@ -4,6 +4,7 @@ from typing import Optional, Callable
 from PySide6.QtWidgets import QWidget
 
 from dialogs import BaseDialog
+from model.models import FileType
 
 
 class LivingArrangementDialog(BaseDialog):
@@ -12,6 +13,7 @@ class LivingArrangementDialog(BaseDialog):
         super().__init__(*args, **kwargs)
         self.ui = self.load_ui('ui_living_arrangement.ui')
         self._e113 = None
+        self.file_type: FileType = FileType.PRODUCTION
         self.last_updated: Optional[datetime.datetime] = None
         self._wire_ui()
         self.setLayout(self.ui.layout())
@@ -47,47 +49,52 @@ class LivingArrangementDialog(BaseDialog):
         self.ui.close_button.clicked.connect(self.close_button_clicked)
 
     def _e113_changed(self):
-        self.ui.family_setting_provider_group_box.setEnabled(self.e113 == 1)
+        if self.file_type == FileType.PRODUCTION:
+            self.ui.family_setting_provider_group_box.setEnabled(self.e113 == 1)
 
     def _e121_changed(self):
-        self.ui.e122.setEnabled(self.e121 not in (1, 4))
+        if self.file_type == FileType.PRODUCTION:
+            self.ui.e122.setEnabled(self.e121 not in (1, 4))
 
     def _e123_changed(self):
-        enabled = self.e123 in (1, 2)
-        self.ui.foster_parent_2_group_box.setEnabled(enabled)
+        if self.file_type == FileType.PRODUCTION:
+            enabled = self.e123 in (1, 2)
+            self.ui.foster_parent_2_group_box.setEnabled(enabled)
 
 
     def _e133_changed(self):
-        enabled = self.e133 != 1
-        self.ui.e127.setEnabled(enabled)
-        self.ui.e128.setEnabled(enabled)
-        self.ui.e129.setEnabled(enabled)
-        self.ui.e130.setEnabled(enabled)
-        self.ui.e131.setEnabled(enabled)
-        self.ui.e132.setEnabled(enabled)
-        if self.e133 == 1:
-            self.e127 = 0
-            self.e128 = 0
-            self.e129 = 0
-            self.e130 = 0
-            self.e131 = 0
-            self.e132 = 0
+        if self.file_type == FileType.PRODUCTION:
+            enabled = self.e133 != 1
+            self.ui.e127.setEnabled(enabled)
+            self.ui.e128.setEnabled(enabled)
+            self.ui.e129.setEnabled(enabled)
+            self.ui.e130.setEnabled(enabled)
+            self.ui.e131.setEnabled(enabled)
+            self.ui.e132.setEnabled(enabled)
+            if self.e133 == 1:
+                self.e127 = 0
+                self.e128 = 0
+                self.e129 = 0
+                self.e130 = 0
+                self.e131 = 0
+                self.e132 = 0
 
     def _e144_changed(self):
-        enabled = self.e144 != 1
-        self.ui.e138.setEnabled(enabled)
-        self.ui.e139.setEnabled(enabled)
-        self.ui.e140.setEnabled(enabled)
-        self.ui.e141.setEnabled(enabled)
-        self.ui.e142.setEnabled(enabled)
-        self.ui.e143.setEnabled(enabled)
-        if self.e144 == 1:
-            self.e138 = 0
-            self.e139 = 0
-            self.e140 = 0
-            self.e141 = 0
-            self.e142 = 0
-            self.e143 = 0
+        if self.file_type == FileType.PRODUCTION:
+            enabled = self.e144 != 1
+            self.ui.e138.setEnabled(enabled)
+            self.ui.e139.setEnabled(enabled)
+            self.ui.e140.setEnabled(enabled)
+            self.ui.e141.setEnabled(enabled)
+            self.ui.e142.setEnabled(enabled)
+            self.ui.e143.setEnabled(enabled)
+            if self.e144 == 1:
+                self.e138 = 0
+                self.e139 = 0
+                self.e140 = 0
+                self.e141 = 0
+                self.e142 = 0
+                self.e143 = 0
 
     def validate_button_clicked(self):
         if self.on_validate:
