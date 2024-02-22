@@ -367,6 +367,7 @@ class OOHDialog(BaseDialog):
     @e6.setter
     def e6(self, v: int) -> None:
         self._set_radio_button(self.ui.e6, v)
+        self.ui.e38.setEnabled(v == 2)
 
     @property
     def e7(self) -> int:
