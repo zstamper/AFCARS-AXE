@@ -849,7 +849,7 @@ class Removal2020Dialog(BaseDialog):
 
     @property
     def e175(self) -> int:
-        return 1 if self.ui.e175.isChecked() else 0
+        return None if not self.ui.parent_2_group_box.isEnabled() else 1 if self.ui.e175.isChecked() else 0
 
     @e175.setter
     def e175(self, e175: int) -> None:
@@ -857,7 +857,7 @@ class Removal2020Dialog(BaseDialog):
 
     @property
     def e176(self) -> int:
-        return 1 if self.ui.e176.isChecked() else 0
+        return None if not self.ui.parent_2_group_box.isEnabled() else 1 if self.ui.e176.isChecked() else 0
 
     @e176.setter
     def e176(self, e176: int) -> None:
@@ -865,7 +865,7 @@ class Removal2020Dialog(BaseDialog):
 
     @property
     def e177(self) -> int:
-        return 1 if self.ui.e177.isChecked() else 0
+        return None if not self.ui.parent_2_group_box.isEnabled() else 1 if self.ui.e177.isChecked() else 0
 
     @e177.setter
     def e177(self, e177: int) -> None:
@@ -873,7 +873,7 @@ class Removal2020Dialog(BaseDialog):
 
     @property
     def e178(self) -> int:
-        return 1 if self.ui.e178.isChecked() else 0
+        return None if not self.ui.parent_2_group_box.isEnabled() else 1 if self.ui.e178.isChecked() else 0
 
     @e178.setter
     def e178(self, e178: int) -> None:
@@ -881,7 +881,7 @@ class Removal2020Dialog(BaseDialog):
 
     @property
     def e179(self) -> int:
-        return 1 if self.ui.e179.isChecked() else 0
+        return None if not self.ui.parent_2_group_box.isEnabled() else 1 if self.ui.e179.isChecked() else 0
 
     @e179.setter
     def e179(self, e179: int) -> None:
@@ -889,7 +889,7 @@ class Removal2020Dialog(BaseDialog):
 
     @property
     def e180(self) -> int:
-        return 1 if self.ui.e180.isChecked() else 0
+        return None if not self.ui.parent_2_group_box.isEnabled() else 1 if self.ui.e180.isChecked() else 0
 
     @e180.setter
     def e180(self, e180: int) -> None:
@@ -897,7 +897,7 @@ class Removal2020Dialog(BaseDialog):
 
     @property
     def e181(self) -> int:
-        return 1 if self.ui.e181.isChecked() else 0
+        return None if not self.ui.parent_2_group_box.isEnabled() else 1 if self.ui.e181.isChecked() else 0
 
     @e181.setter
     def e181(self, e181: int) -> None:

@@ -27,6 +27,7 @@ def refresh_dates(base_child: BaseChild, child: Child, report_type: ReportType):
         context = ContextTable.select().where(ContextTable.base_child == base_child.id).order_by(
             ContextTable.e2.desc()).get_or_none()
         if context:
+            base_child.e5 = afcars_to_date(context.data.e5)
             removal = sorted(context.data.ooh.removals2020, key=lambda x: x.e69, reverse=True)
             if removal:
                 base_child.last_removal = afcars_to_date(removal[0].e69)
