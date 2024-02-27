@@ -30,7 +30,8 @@ class LivingArrangementValidators:
         if self.dialog.e57 is not None and self.dialog.e57 == 0 and self.dialog.e58 is not None:
             raise ValueError("Number of siblings placed with this child (E58) must be left empty.")
         if self.dialog.e57 is not None and self.dialog.e58 is not None and self.dialog.e58 > self.dialog.e57:
-            raise ValueError("Number of siblings placed with this child (E58) cannot exceed number of siblings in foster care (E57).")
+            raise ValueError(
+                "Number of siblings placed with this child (E58) cannot exceed number of siblings in foster care (E57).")
 
     def validate_e112(self):
         if not self.is_valid_date(self.dialog.e112):
@@ -61,6 +62,12 @@ class LivingArrangementValidators:
     def validate_e121(self):
         if not self.dialog.e121 in (1, 2, 3, 4):
             raise ValueError("Location (E121) is required.")
+        if self.dialog.e120 in (12, 13) and self.dialog.e121 != 4:
+            raise ValueError(
+                'Location of Living Arrangement (E121) should be Runaway or Whereabouts Unknown when Living Arrangement Type (E113, E120) is Runaway or Whereabouts Unknown.')
+        if self.dialog.e121 == 4 and self.dialog.e120 not in (12, 13):
+            raise ValueError(
+                'Location of Living Arrangement (E121) should be Runaway or Whereabouts Unknown when Living Arrangement Type (E113, E120) is Runaway or Whereabouts Unknown.')
 
     def validate_e122(self):
         if self.dialog.e121 in (2, 3):

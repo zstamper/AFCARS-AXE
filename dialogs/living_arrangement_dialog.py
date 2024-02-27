@@ -53,6 +53,8 @@ class LivingArrangementDialog(BaseDialog):
     def _e113_changed(self):
         if self.file_type == FileType.PRODUCTION:
             self.ui.family_setting_provider_group_box.setEnabled(self.e113 == 1)
+            if self.e120 in (12, 13):  # runaway or whereabouts unknown
+                self.e121 = 4
 
     def _e121_changed(self):
         if self.file_type == FileType.PRODUCTION:
