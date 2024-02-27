@@ -32,6 +32,14 @@ class Removal1993BaseValidator:
         d = date(year=year, month=month, day=day)
         return d > date.today()
 
+    @staticmethod
+    def is_after_1993_date(d: int) -> bool:
+        year = d // 10000
+        month = (d - (d // 10000) * 10000) // 100
+        day = d - (d // 100) * 100
+        d = date(year=year, month=month, day=day)
+        return d > date(year=2022, month=10, day=1)
+
 
 class Removal1993Validators(Removal1993BaseValidator):
 
@@ -46,6 +54,8 @@ class Removal1993Validators(Removal1993BaseValidator):
             raise ValueError("Invalid date provided for Removal Date (E69).")
         if self.is_future_date(self.dialog.e69):
             raise ValueError("Removal Date (E69) cannot be in the future.")
+        if self.is_after_1993_date(self.dialog.e69):
+            raise ValueError("Removal Date (E69) must be on or before 10/1/2022.")
 
     def validate_e153(self):
         try:
@@ -58,6 +68,8 @@ class Removal1993Validators(Removal1993BaseValidator):
             raise ValueError("Invalid date provided for Exit Date (E153).")
         if self.is_future_date(self.dialog.e153):
             raise ValueError("Exit Date (E153) cannot be in the future.")
+        if self.is_after_1993_date(self.dialog.e153):
+            raise ValueError("Exit Date (E153) must be before 10/1/2022.")
 
     def validate_e69_e153(self):
         if self.is_valid_date(self.dialog.e69) and self.is_valid_date(self.dialog.e153):
