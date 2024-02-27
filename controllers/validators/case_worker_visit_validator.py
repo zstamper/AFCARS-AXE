@@ -4,7 +4,7 @@ from typing import Optional
 from controllers.validators.abstract_validator import AbstractValidator
 from dialogs.case_worker_visit_dialog import CaseVisitDialog
 from model import CaseVisit, Removal2020
-from utils.e1 import e2_start_date, e2_end_date
+from utils.e1 import e2_start_date, e2_end_date, afcars_to_date
 
 
 class CaseWorkerVisitBaseValidator:
@@ -14,16 +14,9 @@ class CaseWorkerVisitBaseValidator:
         self.dialog: CaseVisitDialog = dialog
 
     @staticmethod
-    def afcars_to_date(d: int) -> date:
-        year = d // 10000
-        month = (d - (d // 10000) * 10000) // 100
-        day = d - (d // 100) * 100
-        return date(year=year, month=month, day=day)
-
-    @staticmethod
     def is_valid_date(d: int) -> bool:
         try:
-            d = CaseWorkerVisitBaseValidator.afcars_to_date(d)
+            d = afcars_to_date(d)
             today = date.today()
             min_d = date(year=today.year - 100, month=today.month, day=today.day)
             assert d >= min_d
@@ -35,12 +28,12 @@ class CaseWorkerVisitBaseValidator:
 
     @staticmethod
     def is_future_date(d: int) -> bool:
-        d = CaseWorkerVisitBaseValidator.afcars_to_date(d)
+        d = afcars_to_date(d)
         return d > date.today()
 
     @staticmethod
     def is_current_period(d: int) -> bool:
-        d = CaseWorkerVisitBaseValidator.afcars_to_date(d)
+        d = afcars_to_date(d)
         return e2_start_date() <= d <= e2_end_date()
 
 

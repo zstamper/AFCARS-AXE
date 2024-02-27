@@ -1,6 +1,7 @@
 from datetime import date
 
 from dialogs.removal1993_dialog import Removal1993Dialog
+from utils.e1 import afcars_to_date
 from .abstract_validator import AbstractValidator
 
 
@@ -34,10 +35,7 @@ class Removal1993BaseValidator:
 
     @staticmethod
     def is_after_1993_date(d: int) -> bool:
-        year = d // 10000
-        month = (d - (d // 10000) * 10000) // 100
-        day = d - (d // 100) * 100
-        d = date(year=year, month=month, day=day)
+        d = afcars_to_date(d)
         return d >= date(year=2022, month=10, day=1)
 
 
@@ -55,7 +53,7 @@ class Removal1993Validators(Removal1993BaseValidator):
         if self.is_future_date(self.dialog.e69):
             raise ValueError("Removal Date (E69) cannot be in the future.")
         if self.is_after_1993_date(self.dialog.e69):
-            raise ValueError("Removal Date (E69) must be on or before 10/1/2022.")
+            raise ValueError("Removal Date (E69) must be before 10/1/2022.")
 
     def validate_e153(self):
         try:
