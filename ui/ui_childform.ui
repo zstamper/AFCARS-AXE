@@ -1946,7 +1946,10 @@
                 <item>
                  <widget class="QLineEdit" name="e65">
                   <property name="inputMask">
-                   <string>99999999</string>
+                   <string/>
+                  </property>
+                  <property name="maxLength">
+                   <number>8</number>
                   </property>
                   <property name="placeholderText">
                    <string>YYYYMMDD</string>
@@ -1986,7 +1989,10 @@
                 <item>
                  <widget class="QLineEdit" name="e67">
                   <property name="inputMask">
-                   <string>99999999</string>
+                   <string/>
+                  </property>
+                  <property name="maxLength">
+                   <number>8</number>
                   </property>
                   <property name="placeholderText">
                    <string>YYYYMMDD</string>
