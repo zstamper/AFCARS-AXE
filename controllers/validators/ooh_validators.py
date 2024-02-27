@@ -82,9 +82,9 @@ class DemographicsValidator(OOHBaseValidator):
             raise ValueError("Total number of siblings (E56) is required.")
 
     def validate_e57(self) -> None:
-        if self.dialog.e57 is None and self.dialog.e56 > 0:
+        if self.dialog.e57 is None and self.dialog.e56:
             raise ValueError("Total number of siblings in foster care (E57) is required.")
-        if self.dialog.e57 and self.dialog.e56 and self.dialog.e56 > self.dialog.e56:
+        if self.dialog.e57 and self.dialog.e56 and self.dialog.e57 > self.dialog.e56:
             raise ValueError("Siblings in Foster Care (E57) cannot be larger than Total Number of Siblings (E56).")
 
     def validate_e56_e57(self) -> None:
