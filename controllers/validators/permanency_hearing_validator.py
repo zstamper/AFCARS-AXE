@@ -4,6 +4,7 @@ from typing import Optional
 from controllers.validators.abstract_validator import AbstractValidator
 from dialogs.permanency_hearing_dialog import PermanencyHearingDialog
 from model import Removal2020
+from utils.e1 import e2_end_date, afcars_to_date
 
 
 class PermanencyHearingBaseValidator:
@@ -11,6 +12,13 @@ class PermanencyHearingBaseValidator:
     def __init__(self, dialog: PermanencyHearingDialog):
         self.dialog: PermanencyHearingDialog = dialog
         self.parent_data: Optional[Removal2020] = None
+
+    @staticmethod
+    def afcars_to_date(d: int) -> date:
+        year = d // 10000
+        month = (d - (d // 10000) * 10000) // 100
+        day = d - (d // 100) * 100
+        return date(year=year, month=month, day=day)
 
     @staticmethod
     def is_valid_date(d: int) -> bool:
@@ -31,24 +39,21 @@ class PermanencyHearingBaseValidator:
 
     @staticmethod
     def is_future_date(d: int) -> bool:
-        year = d // 10000
-        month = (d - (d // 10000) * 10000) // 100
-        day = d - (d // 100) * 100
-        d = date(year=year, month=month, day=day)
+        d = afcars_to_date(d)
         return d > date.today()
 
 
 class PermanencyHearingValidators(PermanencyHearingBaseValidator):
 
     def validate_e150(self):
-        if self.dialog.e150 is None:
-            return
         if not self.is_valid_date(self.dialog.e150):
             raise ValueError("Permanency Hearing Date (E150) is invalid.")
         if self.is_future_date(self.dialog.e150):
             raise ValueError("Permanency Hearing Date (E150) may not be in the future.")
         if self.dialog.e150 < self.parent_data.e69:
             raise ValueError("Permanency Hearing Date (E150) may not be before Removal Date (E69).")
+        if self.afcars_to_date(self.dialog.e150) > e2_end_date():
+            raise ValueError("Permanency Hearing Date (E150) must be before end of current reporting period (E2).")
 
 
 class PermanencyHearingValidator(AbstractValidator):
@@ -80,4 +85,4 @@ class PermanencyHearingValidator(AbstractValidator):
         return all(results)
 
     def messages(self) -> list:
-        pass
+        return [exc.args[0] for exc in self._messages]

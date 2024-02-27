@@ -4,6 +4,7 @@ from typing import Optional
 _e1: Optional[str] = None
 _e2: Optional[str] = None
 
+
 def E1() -> str:
     global _e1
     return _e1
@@ -13,13 +14,16 @@ def set_E1(v: str) -> None:
     global _e1
     _e1 = v
 
+
 def E2() -> str:
     global _e2
     return _e2
 
+
 def set_E2(v: str) -> None:
     global _e2
     _e2 = v
+
 
 def e2_start_date() -> date:
     year = int(E2()[:4])
@@ -54,3 +58,9 @@ def is_state() -> bool:
 
 def is_tribe() -> bool:
     return False if E1() is None else len(E1()) == 3
+
+def afcars_to_date(d: int) -> date:
+    year = d // 10000
+    month = (d - (d // 10000) * 10000) // 100
+    day = d - (d // 100) * 100
+    return date(year=year, month=month, day=day)

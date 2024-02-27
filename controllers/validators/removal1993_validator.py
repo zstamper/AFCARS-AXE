@@ -38,7 +38,7 @@ class Removal1993BaseValidator:
         month = (d - (d // 10000) * 10000) // 100
         day = d - (d // 100) * 100
         d = date(year=year, month=month, day=day)
-        return d > date(year=2022, month=10, day=1)
+        return d >= date(year=2022, month=10, day=1)
 
 
 class Removal1993Validators(Removal1993BaseValidator):
