@@ -38,9 +38,12 @@ class RemovalValidator(Removal2020BaseValidator):
             raise ValueError(f"Invalid selection for Environment at Removal (E71).")
 
     def validate_e72_e105(self):
-        for field in [f'e{i}' for i in range(72, 106)]:
+        field_names = [f'e{i}' for i in range(72, 106)]
+        for field in field_names:
             if getattr(self.dialog, field) not in (0, 1):
                 raise ValueError(f"Invalid selection for {field.upper()}.")
+        if not any([getattr(self.dialog, field) == 1 for field in field_names]):
+            raise ValueError(f"At least one Family and Child Circumstance must be selected (E72-E105).")
 
     def validate_e72_e73(self):
         if self.dialog.e72 == 1 and self.dialog.e73 == 1:
