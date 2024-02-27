@@ -4,6 +4,7 @@ from typing import Optional
 from controllers.validators.abstract_validator import AbstractValidator
 from dialogs.case_worker_visit_dialog import CaseVisitDialog
 from model import CaseVisit, Removal2020
+from utils.e1 import e2_start_date, e2_end_date
 
 
 class CaseWorkerVisitBaseValidator:
@@ -13,13 +14,16 @@ class CaseWorkerVisitBaseValidator:
         self.dialog: CaseVisitDialog = dialog
 
     @staticmethod
+    def afcars_to_date(d: int) -> date:
+        year = d // 10000
+        month = (d - (d // 10000) * 10000) // 100
+        day = d - (d // 100) * 100
+        return date(year=year, month=month, day=day)
+
+    @staticmethod
     def is_valid_date(d: int) -> bool:
         try:
-            s = str(d)
-            year = int(s[0:4])
-            month = int(s[4:6])
-            day = int(s[6:8])
-            d = date(year=year, month=month, day=day)
+            d = CaseWorkerVisitBaseValidator.afcars_to_date(d)
             today = date.today()
             min_d = date(year=today.year - 100, month=today.month, day=today.day)
             assert d >= min_d
@@ -31,11 +35,13 @@ class CaseWorkerVisitBaseValidator:
 
     @staticmethod
     def is_future_date(d: int) -> bool:
-        year = d // 10000
-        month = (d - (d // 10000) * 10000) // 100
-        day = d - (d // 100) * 100
-        d = date(year=year, month=month, day=day)
+        d = CaseWorkerVisitBaseValidator.afcars_to_date(d)
         return d > date.today()
+
+    @staticmethod
+    def is_current_period(d: int) -> bool:
+        d = CaseWorkerVisitBaseValidator.afcars_to_date(d)
+        return e2_start_date() <= d <= e2_end_date()
 
 
 class CaseWorkerVisitValidators(CaseWorkerVisitBaseValidator):
@@ -47,6 +53,8 @@ class CaseWorkerVisitValidators(CaseWorkerVisitBaseValidator):
             raise ValueError("Date of Visit (E151) may not be in the future.")
         if self.dialog.e151 < self.parent_data.e69:
             raise ValueError("Date of Visit (E151) may not be before the Removal Date (E69).")
+        if self.dialog.e151 and not self.is_current_period(self.dialog.e151):
+            raise ValueError("Date of Visit (E151) must be from current reporting period (E1).")
 
     def validate_e152(self):
         if self.dialog.e151 is not None and self.dialog.e152 is None:
@@ -85,4 +93,4 @@ class CaseWorkerVisitValidator(AbstractValidator):
         return all(results)
 
     def messages(self) -> list:
-        return self._messages
+        return [exc.args[0] for exc in self._messages]

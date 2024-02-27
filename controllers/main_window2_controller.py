@@ -4,7 +4,7 @@ from controllers.import_controller import ImportController
 from dialogs.main_window2_dialog import MainWindow2Dialog
 from model import ConfigTable
 from model.models import FileType, ReportType
-from utils.e1 import set_E1
+from utils.e1 import set_E1, set_E2
 
 FIPS_CODES = {"Alabama": "01", "Alaska": "02", "Arizona": "04", "Arkansas": "05", "California": "06",
               "Colorado": "08", "Connecticut": "09", "Delaware": "10", "District of Columbia": "11",
@@ -672,6 +672,7 @@ class MainWindow2Controller:
             else ""
         controller.e1 = self.e1
         set_E1(self.e1)
+        set_E2(self.window.reporting_period)
         controller.show()
 
     @property
