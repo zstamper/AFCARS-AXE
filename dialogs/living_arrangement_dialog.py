@@ -24,6 +24,8 @@ class LivingArrangementDialog(BaseDialog):
         self.on_validate: Optional[Callable] = None
         self.on_save: Optional[Callable] = None
         self.on_close: Optional[Callable] = None
+        self.e56: int | None = None
+        self.e57: int | None = None
 
     def _wire_ui(self) -> None:
         self.setModal(True)
@@ -60,7 +62,6 @@ class LivingArrangementDialog(BaseDialog):
         if self.file_type == FileType.PRODUCTION:
             enabled = self.e123 in (1, 2)
             self.ui.foster_parent_2_group_box.setEnabled(enabled)
-
 
     def _e133_changed(self):
         if self.file_type == FileType.PRODUCTION:

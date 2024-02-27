@@ -46,6 +46,21 @@ class LivingArrangementController:
     def file_type(self, v: FileType) -> None:
         self.dialog.file_type = v
 
+    @property
+    def e56(self)->int:
+        return self.dialog.e56
+
+    @e56.setter
+    def e56(self, v: int):
+        self.dialog.e56 = v
+
+    @property
+    def e57(self) -> int:
+        return self.dialog.e57
+
+    @e57.setter
+    def e57(self, v: int):
+        self.dialog.e57 = v
 
     def exec(self):
         self.dialog.exec()

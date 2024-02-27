@@ -152,6 +152,8 @@ class Removal2020Controller:
         controller = LivingArrangementController(self.dialog, self.dialog.child_name, data, file_type=self.file_type)
         controller.file_type = self.file_type
         controller.parent_data = self.dialog
+        controller.e56 = self.parent_data.e56
+        controller.e57 = self.parent_data.e57
         controller.on_save = save
         controller.exec()
 
@@ -173,6 +175,8 @@ class Removal2020Controller:
                                                      file_type=self.file_type)
             controller.on_save = save
             controller.parent_data = self.dialog
+            controller.e56 = self.parent_data.e56
+            controller.e57 = self.parent_data.e57
             controller.exec()
 
     def do_delete_living_arrangement(self, *args, **kwargs):

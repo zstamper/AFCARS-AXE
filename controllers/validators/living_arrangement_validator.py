@@ -24,6 +24,14 @@ class LivingArrangementValidators:
         self.parent_data: Optional[Removal2020] = None
         self.dialog: LivingArrangementDialog = dialog
 
+    def validate_e58(self):
+        if self.dialog.e56 is not None and self.dialog.e56 == 0 and self.dialog.e58 is not None:
+            raise ValueError("Number of siblings placed with this child (E58) should be left empty.")
+        if self.dialog.e57 is not None and self.dialog.e57 == 0 and self.dialog.e58 is not None:
+            raise ValueError("Number of siblings placed with this child (E58) must be left empty.")
+        if self.dialog.e57 is not None and self.dialog.e58 is not None and self.dialog.e58 > self.dialog.e57:
+            raise ValueError("Number of siblings placed with this child (E58) cannot exceed number of siblings in foster care (E57).")
+
     def validate_e112(self):
         if not self.is_valid_date(self.dialog.e112):
             raise ValueError("Invalid removal date (E112).")
