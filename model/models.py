@@ -174,6 +174,7 @@ class CaseVisit(MyBaseModel):
 class LivingArrangement(MyBaseModel):
     # id: int | None = Field(default=None)
     # removal_id: int | None
+    last_updated: datetime | None = Field(default=None)
     e40: int | None = Field(default=None)
     e58: int | None = Field(default=None)
     e112: int | None = Field(default=None)
@@ -211,7 +212,6 @@ class LivingArrangement(MyBaseModel):
     e144: int | None = Field(default=None)
     e145: int | None = Field(default=None)
     e146: int | None = Field(default=None)
-    last_updated: datetime | None = Field(default=None)
 
 
 class Removal2020(MyBaseModel):

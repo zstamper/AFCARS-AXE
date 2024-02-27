@@ -101,6 +101,7 @@ class LivingArrangementDialog(BaseDialog):
             self.on_validate()
 
     def save_button_clicked(self):
+        self.last_updated = datetime.datetime.now()
         if self.on_save:
             self.on_save()
 

@@ -156,17 +156,20 @@ class Removal2020Controller:
         controller.exec()
 
     def do_edit_living_arrangement(self, *args, **kwargs):
+        data: LivingArrangement | None = None
 
         def save():
+            nonlocal data
             self.dialog.refresh_living_arrangements()
             self.do_save()
 
         # if the living_arrangement_table has a current row, pass the corresponding obj item to the dialog
         current_row = self.dialog.living_arrangements_current_row
         if current_row >= 0:
+            data = self.dialog.living_arrangements[current_row]
             controller = LivingArrangementController(self.dialog,
                                                      self.dialog.child_name,
-                                                     self.dialog.living_arrangements[current_row],
+                                                     data,
                                                      file_type=self.file_type)
             controller.on_save = save
             controller.parent_data = self.dialog
