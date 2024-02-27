@@ -694,6 +694,7 @@ class Removal2020Dialog(BaseDialog):
     @e155.setter
     def e155(self, e155: int) -> None:
         self._set_combobox_selection(self.ui.e155, e155, -1)
+        self._e155_current_index_changed()
 
     @property
     def e156(self) -> int | None:

@@ -81,7 +81,7 @@ class ExitValidator(Removal2020BaseValidator):
             raise ValueError("Exit reason (E155) must be 'Not Applicable' when no exit date (E153) is provided.")
 
     def validate_e156(self):
-        if self.dialog.e155 != 8 and self.dialog.e156 is not None:
+        if self.dialog.e155 == 8 and self.dialog.e156 is None:
             raise ValueError(
                 "Agency indicator (E156) is required when exit reason (E155) indicates 'Transfer to another Agency'.")
 
