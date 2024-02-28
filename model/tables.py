@@ -64,7 +64,10 @@ class EPACodeField(Field):
 
 
 def child_dict_loads(data: str) -> Child:
-    return Child.model_validate_json(data)
+    try:
+        return Child.model_validate_json(data)
+    except Exception as e:
+        return data
 
 
 def child_dict_dumps(child: Child) -> str:

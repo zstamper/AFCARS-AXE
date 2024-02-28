@@ -155,14 +155,17 @@ class ChildController:
         if QMessageBox.question(self.dialog, "Delete",
                                 "Are you sure you want to delete this record?") == QMessageBox.Yes:
             context_rec = self._context_for(base_child, self.reporting_period, self.file_type)
-            if self.report_type == ReportType.OOH:
-                context_rec.data.ooh = None
-            elif self.report_type == ReportType.A:
-                context_rec.data.a = None
-            if context_rec.data.ooh is None and context_rec.data.a is None:
+            if context_rec.data is None:        # an early bug allowed for invalid data in the database; this allows one to delete it safely.
                 context_rec.delete_instance()
             else:
-                context_rec.save()
+                if self.report_type == ReportType.OOH:
+                    context_rec.data.ooh = None
+                elif self.report_type == ReportType.A:
+                    context_rec.data.a = None
+                if context_rec.data.ooh is None and context_rec.data.a is None:
+                    context_rec.delete_instance()
+                else:
+                    context_rec.save()
             self.do_refresh_data()
 
     def _context_for(self, base_child: BaseChild, reporting_period: str, file_type: FileType) -> ContextTable:
@@ -180,7 +183,7 @@ class ChildController:
                                                          ContextTable.e2 < reporting_period,
                                                          ContextTable.file_type == file_type).order_by(
                 ContextTable.e2.desc()).get_or_none()
-            if context_rec:
+            if recent_context:
                 context_rec.data = recent_context.data
             else:
                 child = Child(first_name=base_child.first_name, last_name=base_child.last_name)
@@ -188,5 +191,6 @@ class ChildController:
                     child.ooh = OOHRecord()
                 if self.report_type == ReportType.A:
                     child.a = ARecord()
+                context_rec.data = child
             context_rec.save()
         return context_rec

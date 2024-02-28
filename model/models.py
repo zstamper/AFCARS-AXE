@@ -187,7 +187,7 @@ class LivingArrangement(MyBaseModel):
     e119: int | None = Field(default=None)
     e120: int | None = Field(default=None)
     e121: int | None = Field(default=None)
-    e122: str | None = Field(default=None)
+    e122: int | str | None = Field(default=None)
     e123: int | None = Field(default=None)
     e124: int | None = Field(default=None)
     e125: int | None = Field(default=None)
@@ -317,6 +317,10 @@ class RecognizedTribe(MyBaseModel):
     e9: int | None = Field(default=None)
 
 
+def second_parents_factory() -> list[SecondParent]:
+    return [SecondParent(number=2)]
+
+
 class OOHRecord(MyBaseModel):
     # ooh_id: int | None = Field(default=None)
     # context_id: int  # = Field(default=None)
@@ -377,7 +381,7 @@ class OOHRecord(MyBaseModel):
     e110: int | None = Field(default=None)
     e111: int | None = Field(default=None)
     tribes: list[RecognizedTribe] = Field(default_factory=list)
-    second_parents: list[SecondParent] = Field(default_factory=list)
+    second_parents: list[SecondParent] = Field(default_factory=second_parents_factory)
     removals1993: list[Removal1993] = Field(default_factory=list)
     removals2020: list[Removal2020] = Field(default_factory=list)
 

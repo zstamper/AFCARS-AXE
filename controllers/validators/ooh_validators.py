@@ -251,19 +251,9 @@ class ParentGuardianValidator(OOHBaseValidator):
             raise ValueError("Mother's TPR (E63) is required.")
         return self
 
-    # def validate_e65(self):
-    #     if self.dialog.e63 in [1, 2] and self.dialog.e65 is None:
-    #         raise ValueError("Date of first parent's TPR petition (E65) is required.")
-    #     if self.dialog.e65 != 66666666 and self.dialog.e65 is not None and not self.is_valid_date(self.dialog.e65):
-    #         raise ValueError("Invalid date entered in (E65).")
-    #     return self
-
-    # def validate_e67(self):
-    #     if self.dialog.e63 in [1, 2] and self.dialog.e67 is None:
-    #         raise ValueError("Date of first parent's TPR (E67) is required.")
-    #     if self.dialog.e67 is not None and not self.is_valid_date(self.dialog.e67):
-    #         raise ValueError("Invalid date entered in (E67).")
-    #     return self
+    def validate_e64(self) -> None:
+        if self.dialog.e64 not in [0, 1, 2]:
+            raise ValueError(f"Second parent's TPR (E64) is required.")
 
 
 class EducationValidator(OOHBaseValidator):

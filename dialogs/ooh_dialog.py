@@ -44,8 +44,10 @@ class OOHDialog(BaseDialog):
         # Callbacks
         self.on_add_tribe_clicked: Optional[Callable] = None
         self.on_remove_tribe_clicked: Optional[Callable] = None
-        self.on_add_second_parent: Optional[Callable] = None
-        self.on_edit_second_parent: Optional[Callable] = None
+        self.on_add_putative_parent: Optional[Callable] = None
+        self.on_edit_putative_parent: Optional[Callable] = None
+        self.on_delete_putative_parent: Optional[Callable] = None
+        self.on_delete_putative_parent: Optional[Callable] = None
         self.on_add_removal1993_clicked: Optional[Callable] = None
         self.on_edit_removal1993_clicked: Optional[Callable] = None
         self.on_delete_removal1993_clicked: Optional[Callable] = None
@@ -94,6 +96,7 @@ class OOHDialog(BaseDialog):
         self._init_radio_ynu(ui, 'e61')
         self._init_radio_ynu(ui, 'e62')
         self._init_radio(ui, 'e63', {'na': 0, 'v': 1, 'i': 2})
+        self._init_radio(ui, 'e64', {'na': 0, 'v': 1, 'i': 2})
         self._init_radio_yn(ui, 'e106')
         self._init_radio_yn(ui, 'e107')
         self._init_radio_yn(ui, 'e109')
@@ -126,6 +129,7 @@ class OOHDialog(BaseDialog):
 
         ui.parent2_add_button.clicked.connect(self._on_add_second_parent)
         ui.parent2_edit_button.clicked.connect(self._on_edit_second_parent)
+        ui.parent2_delete_button.clicked.connect(self._on_delete_second_parent)
         ui.parent2tpr.cellDoubleClicked.connect(self._on_edit_second_parent)
 
         ui.removal_1993_add_button.clicked.connect(self._on_add_removal1993_clicked)
@@ -140,6 +144,10 @@ class OOHDialog(BaseDialog):
         ui.tabWidget.currentChanged.connect(self._on_tab_changed)
         ui.validate_button.clicked.connect(self.do_validate_clicked)
 
+        ui.e64.buttonClicked.connect(self._on_e64_button_clicked)
+        ui.e66.textChanged.connect(self._on_e66_text_changed)
+        ui.e68.textChanged.connect(self._on_e68_text_changed)
+
     # ==================================================================================================================
     #
     #                                                   PROPERTIES
@@ -147,10 +155,13 @@ class OOHDialog(BaseDialog):
     # ==================================================================================================================
 
     def _on_add_second_parent(self) -> Any:
-        return self.on_add_second_parent() if self.on_add_second_parent else None
+        return self.on_add_putative_parent() if self.on_add_putative_parent else None
 
     def _on_edit_second_parent(self) -> Any:
-        return self.on_edit_second_parent() if self.on_edit_second_parent else None
+        return self.on_edit_putative_parent() if self.on_edit_putative_parent else None
+
+    def _on_delete_second_parent(self) -> Any:
+        return self.on_delete_putative_parent() if self.on_delete_putative_parent else None
 
     def _on_add_tribe_clicked(self) -> Any:
         return self.on_add_tribe_clicked() if self.on_add_tribe_clicked else None
@@ -326,6 +337,24 @@ class OOHDialog(BaseDialog):
             self.ui.e32.setEnabled(index == 1)
             self.ui.e33.setEnabled(index == 1)
             self.ui.e34.setEnabled(index == 1)
+
+    def _on_e64_button_clicked(self):
+        try:
+            self._second_parents[0].e64 = self._get_radio_button(self.ui.e64)
+        except IndexError:
+            self._second_parents = [SecondParent(e64=self._get_radio_button(self.ui.e64))]
+
+    def _on_e66_text_changed(self):
+        try:
+            self._second_parents[0].e66 = self._get_int_field(self.ui.e66)
+        except IndexError:
+            self._second_parents = [SecondParent(e66=self._get_int_field(self.ui.e66))]
+
+    def _on_e68_text_changed(self):
+        try:
+            self._second_parents[0].e68 = self._get_int_field(self.ui.e68)
+        except IndexError:
+            self._second_parents = [SecondParent(e68=self._get_int_field(self.ui.e68))]
 
     @property
     def child_name(self) -> str:
@@ -875,6 +904,17 @@ class OOHDialog(BaseDialog):
         self._set_radio_button(self.ui.e63, v)
 
     @property
+    def e64(self) -> int | None:
+        try:
+            self._second_parents[0].e64 = self._get_radio_button(self.ui.e64)
+        except IndexError:
+            return None
+
+    @e64.setter
+    def e64(self, v: int) -> None:
+        self._set_radio_button(self.ui.e64, v)
+
+    @property
     def e65(self) -> int | None:
         return self._get_int_field(self.ui.e65)
 
@@ -883,12 +923,34 @@ class OOHDialog(BaseDialog):
         self._set_int_field(self.ui.e65, v)
 
     @property
+    def e66(self) -> int | None:
+        try:
+            return self._second_parents[0].e66
+        except IndexError:
+            return None
+
+    @e66.setter
+    def e66(self, v: int) -> None:
+        self._set_int_field(self.ui.e66, v)
+
+    @property
     def e67(self) -> int | None:
         return self._get_int_field(self.ui.e67)
 
     @e67.setter
     def e67(self, v: int) -> None:
         self._set_int_field(self.ui.e67, v)
+
+    @property
+    def e68(self) -> int | None:
+        try:
+            return self._second_parents[0].e68
+        except IndexError:
+            return None
+
+    @e68.setter
+    def e68(self, v: int) -> None:
+        self._set_int_field(self.ui.e68, v)
 
     @property
     def e106(self) -> int:
@@ -993,6 +1055,15 @@ class OOHDialog(BaseDialog):
     @second_parents.setter
     def second_parents(self, data: list[SecondParent]) -> None:
         self._second_parents = data
+        if len(data) > 0:
+            self.e64 = data[0].e64
+            self.e66 = data[0].e66
+            self.e68 = data[0].e68
+        else:
+            self.e64 = None
+            self.e66 = None
+            self.e68 = None
+
         self.refresh_second_parents()
 
     def current_second_parents_row(self) -> int:
@@ -1002,13 +1073,17 @@ class OOHDialog(BaseDialog):
         self.ui.parent2tpr.clearContents()
         for _ in range(self.ui.parent2tpr.rowCount()):
             self.ui.parent2tpr.removeRow(0)
+        skip = True
         for row, data in enumerate(self.second_parents):
-            if row >= self.ui.parent2tpr.rowCount():
-                self.ui.parent2tpr.insertRow(row)
-            self.ui.parent2tpr.setItem(row, 0, QTableWidgetItem(str(data.number)))
-            self.ui.parent2tpr.setItem(row, 1, QTableWidgetItem(str(data.e64_as_str())))
-            self.ui.parent2tpr.setItem(row, 2, QTableWidgetItem(str(data.e66)))
-            self.ui.parent2tpr.setItem(row, 3, QTableWidgetItem(str(data.e68)))
+            if skip:  # element 0 is the 2nd parent; 1..end are putative parents
+                skip = False
+                continue
+            if row - 1 >= self.ui.parent2tpr.rowCount():
+                self.ui.parent2tpr.insertRow(row - 1)
+            self.ui.parent2tpr.setItem(row - 1, 0, QTableWidgetItem(str(data.number)))
+            self.ui.parent2tpr.setItem(row - 1, 1, QTableWidgetItem(str(data.e64_as_str())))
+            self.ui.parent2tpr.setItem(row - 1, 2, QTableWidgetItem(str(data.e66)))
+            self.ui.parent2tpr.setItem(row - 1, 3, QTableWidgetItem(str(data.e68)))
             row += 1
         while self.ui.parent2tpr.rowCount() > len(self.second_parents):
             self.ui.parent2tpr.removeRow(self.ui.parent2tpr.rowCount() - 1)

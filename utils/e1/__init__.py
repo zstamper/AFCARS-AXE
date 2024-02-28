@@ -59,7 +59,10 @@ def is_state() -> bool:
 def is_tribe() -> bool:
     return False if E1() is None else len(E1()) == 3
 
-def afcars_to_date(d: int) -> date:
+
+def afcars_to_date(d: int) -> date | None:
+    if d is None:
+        return None
     year = d // 10000
     month = (d - (d // 10000) * 10000) // 100
     day = d - (d // 100) * 100

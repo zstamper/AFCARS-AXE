@@ -45,9 +45,9 @@ class OOHController:
         self.dialog.on_add_removal2020_clicked = self.do_add_removal2020
         self.dialog.on_edit_removal2020_clicked = self.do_edit_removal2020
         self.dialog.on_delete_removal2020_clicked = self.do_delete_removal2020
-        self.dialog.on_add_second_parent = self.do_add_second_parent
-        self.dialog.on_edit_second_parent = self.do_edit_second_parent
-        self.dialog.on_delete_second_parent = self.do_delete_second_parent
+        self.dialog.on_add_putative_parent = self.do_add_putative_parent
+        self.dialog.on_edit_putative_parent = self.do_edit_putative_parent
+        self.dialog.on_delete_putative_parent = self.do_delete_putative_parent
         self.dialog.on_add_tribe_clicked = self.do_add_tribe
         self.dialog.on_remove_tribe_clicked = self.do_remove_tribe
 
@@ -101,14 +101,6 @@ class OOHController:
             for key in vars(v.ooh).keys():
                 if hasattr(self.dialog, key):
                     setattr(self.dialog, key, getattr(v.ooh, key))
-
-    @property
-    def file_type(self) -> FileType:
-        return self.dialog.file_type
-
-    @file_type.setter
-    def file_type(self, v: FileType) -> None:
-        self.dialog.file_type = v
 
     @staticmethod
     def confirm_save() -> bool:
@@ -272,19 +264,18 @@ class OOHController:
     # When a parent is added, it should be assigned the first available parent number >= 2.
 
     def _next_parent_number(self) -> int:
-        number = 2
-        keys = [d.number for d in self.dialog.second_parents]
-        while number in keys:
-            number += 1
-        return number
+        # second_parents[0] is the 2nd parent. second_parents[1:] are the putative parents.
+        return self.dialog.second_parents[-1].number + 1
 
-    def do_add_second_parent(self) -> None:
-        is_new = [True]
+    def do_add_putative_parent(self) -> None:
+        is_new = True
 
         def save():
-            if is_new[0]:
+            nonlocal is_new
+            if is_new:
                 self.dialog.second_parents.append(controller.data)
-                is_new[0] = False
+                is_new = False
+
             self.dialog.refresh_second_parents()
             self.do_save()
 
@@ -294,7 +285,7 @@ class OOHController:
         controller.file_type = self.file_type
         controller.exec()
 
-    def do_edit_second_parent(self) -> None:
+    def do_edit_putative_parent(self) -> None:
         def save():
             self.dialog.refresh_second_parents()
             self.do_save()
@@ -302,12 +293,12 @@ class OOHController:
         current_row = self.dialog.current_second_parents_row()
         if current_row >= 0:
             controller = SecondParentController(self.dialog, child_name=self.dialog.child_name,
-                                                data=self.dialog.second_parents[current_row])
+                                                data=self.dialog.second_parents[current_row + 1])
             controller.on_save = save
             controller.file_type = self.file_type
             controller.exec()
 
-    def do_delete_second_parent(self) -> None:
+    def do_delete_putative_parent(self) -> None:
         current_row = self.dialog.current_second_parents_row()
         if 0 <= current_row < len(self.dialog.second_parents):
             del self.dialog.second_parents[current_row]
