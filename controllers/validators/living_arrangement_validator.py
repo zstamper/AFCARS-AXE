@@ -4,6 +4,7 @@ from typing import Optional
 
 from dialogs.living_arrangement_dialog import LivingArrangementDialog
 from model import Removal2020
+from utils.e1 import is_valid_date, is_future_date
 
 
 class LivingArrangementValidators:
@@ -34,9 +35,11 @@ class LivingArrangementValidators:
                 "Number of siblings placed with this child (E58) cannot exceed number of siblings in foster care (E57).")
 
     def validate_e112(self):
-        if not self.is_valid_date(self.dialog.e112):
+        if not is_valid_date(self.dialog.e112):
             raise ValueError("Invalid removal date (E112).")
-        if self.dialog.e112 < self.parent_data.e69:
+        if is_future_date(self.dialog.e112):
+            raise ValueError("Living Arrangement Start Date (E112) cannot be in the future.")
+        if self.parent_data.e69 and self.dialog.e112 < self.parent_data.e69:
             raise ValueError("Living Arrangement Start Date (E112) may not be earlier than Removal Date (E69)")
 
     def validate_e113(self):
@@ -76,24 +79,24 @@ class LivingArrangementValidators:
                     "Jurisdiction (E122) is required when Living Arrangement (E121) is 'out of state' or 'out of country'.")
 
     def validate_e123(self):
-        if self.dialog.e113 == 0 and self.dialog.e123 is not None:
-            raise ValueError(
-                "Marital status of the foster parent (E123) does not apply when child is not placed in foster family home (E113/E120)."
-            )
         if self.dialog.e113 == 1 and self.dialog.e123 not in (1, 2, 3, 4):
             raise ValueError(
                 "Marital status of the foster parent(E123) is required when child is placed in foster family home (E113/E120)."
             )
 
+    def validate_e124(self):
+        if self.dialog.e113 == 1 and self.dialog.e124 not in (1,2,3):
+            raise ValueError("Foster Parent's Relationship to the Child (E124) is required.")
+
     def validate_e125(self):
         if self.dialog.e113 == 1:
             if not self.dialog.e125:
                 raise ValueError(
-                    "First foster parent's year of birth (E125) is required based on living arrangement type (E113, E120).")
+                    "First foster parent's year of birth (E125) is required.")
             year = datetime.date.today().year
             if not 10 <= year - self.dialog.e125 < 100:
                 raise ValueError(
-                    "Foster parent's year of birth (E125) is out of allowed range (age must be greater than 10 and less than 100).")
+                    "Foster parent's year of birth (E125) must be greater than 10 and less than 100.")
 
     def validate_e126(self):
         if self.dialog.e113 == 1:
@@ -111,23 +114,23 @@ class LivingArrangementValidators:
         if self.dialog.e113 == 1:
             if self.dialog.e134 not in (0, 1, 8, 9):
                 raise ValueError(
-                    "First foster parent's hispanic or latino origin (E135) is required based on living arrangements (E113, E120).")
+                    "First foster parent's hispanic or latino origin (E135) is required.")
 
     def validate_e135(self):
         if self.dialog.e113 == 1:
             if self.dialog.e135 not in (1, 2):
                 raise ValueError(
-                    "First foster parent's sex (E135) is required based on living arrangements (E113, E120).")
+                    "First foster parent's sex (E135) is required.")
 
     def validate_e136(self):
         if self.dialog.e113 == 1 and self.dialog.e123 in (1, 2):
             if not self.dialog.e136:
                 raise ValueError(
-                    "Second foster parent's year of birth (E136) is required based on living arrangement type (E113, E120, E123).")
+                    "Second foster parent's year of birth (E136) is required.")
             year = datetime.date.today().year
-            if not 10 <= year - self.dialog.e125 < 100:
+            if not 10 <= year - self.dialog.e136 < 100:
                 raise ValueError(
-                    "Foster parent's year of birth (E136) is out of allowed range (age must be greater than 10 and less than 100).")
+                    "Second foster parent's year of birth (E136) is out of allowed range (age must be greater than 10 and less than 100).")
 
     def validate_e137(self):
         if self.dialog.e113 == 1 and self.dialog.e123 in (1, 2):

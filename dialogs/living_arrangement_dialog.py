@@ -1,8 +1,6 @@
 import datetime
 from typing import Optional, Callable
 
-from PySide6.QtWidgets import QWidget
-
 from dialogs import BaseDialog
 from model.models import FileType
 
@@ -12,6 +10,7 @@ class LivingArrangementDialog(BaseDialog):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.ui = self.load_ui('ui_living_arrangement.ui')
+        self.child = None
         self._e113 = None
         self.file_type: FileType = FileType.PRODUCTION
         self.last_updated: Optional[datetime.datetime] = None
@@ -55,10 +54,20 @@ class LivingArrangementDialog(BaseDialog):
             self.ui.family_setting_provider_group_box.setEnabled(self.e113 == 1)
             if self.e120 in (12, 13):  # runaway or whereabouts unknown
                 self.e121 = 4
+            if not self.e113:
+                for field in (114, 115, 116, 117, 118, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135,
+                              136, 137, 138, 139, 140, 141, 142, 143, 144, 145):
+                    if hasattr(self, f"e{field}"):
+                        setattr(self, f"e{field}", None)
 
     def _e121_changed(self):
         if self.file_type == FileType.PRODUCTION:
-            self.ui.e122.setEnabled(self.e121 not in (1, 4))
+            enabled = self.e121 not in (1,4)
+            self.ui.e122_label.setEnabled(enabled)
+            self.ui.e122.setEnabled(enabled)
+            if not enabled:
+                self.e122 = None
+
 
     def _e123_changed(self):
         if self.file_type == FileType.PRODUCTION:

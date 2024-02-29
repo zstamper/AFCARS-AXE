@@ -1087,14 +1087,11 @@
                 <item row="0" column="1">
                  <widget class="QComboBox" name="e24">
                   <property name="currentIndex">
-                   <number>-1</number>
-                  </property>
-                  <property name="placeholderText">
-                   <string>Select</string>
+                   <number>0</number>
                   </property>
                   <item>
                    <property name="text">
-                    <string comment="0">Does not apply</string>
+                    <string comment="0"/>
                    </property>
                   </item>
                   <item>
@@ -1119,14 +1116,11 @@
                 <item row="1" column="1">
                  <widget class="QComboBox" name="e25">
                   <property name="currentIndex">
-                   <number>-1</number>
-                  </property>
-                  <property name="placeholderText">
-                   <string>Select</string>
+                   <number>0</number>
                   </property>
                   <item>
                    <property name="text">
-                    <string>Does not apply</string>
+                    <string/>
                    </property>
                   </item>
                   <item>
@@ -1192,12 +1186,12 @@
                 </item>
                 <item row="8" column="1">
                  <widget class="QComboBox" name="e32">
-                  <property name="placeholderText">
-                   <string>Select</string>
+                  <property name="currentIndex">
+                   <number>0</number>
                   </property>
                   <item>
                    <property name="text">
-                    <string>Does not apply</string>
+                    <string/>
                    </property>
                   </item>
                   <item>
@@ -1221,12 +1215,12 @@
                 </item>
                 <item row="9" column="1">
                  <widget class="QComboBox" name="e33">
-                  <property name="placeholderText">
-                   <string>Select</string>
+                  <property name="currentIndex">
+                   <number>0</number>
                   </property>
                   <item>
                    <property name="text">
-                    <string>Does not apply</string>
+                    <string/>
                    </property>
                   </item>
                   <item>
@@ -1250,12 +1244,12 @@
                 </item>
                 <item row="10" column="1">
                  <widget class="QComboBox" name="e34">
-                  <property name="placeholderText">
-                   <string>Select</string>
+                  <property name="currentIndex">
+                   <number>0</number>
                   </property>
                   <item>
                    <property name="text">
-                    <string>Does not apply</string>
+                    <string/>
                    </property>
                   </item>
                   <item>
@@ -1272,12 +1266,12 @@
                 </item>
                 <item row="2" column="1">
                  <widget class="QComboBox" name="e26">
-                  <property name="placeholderText">
-                   <string>Select</string>
+                  <property name="currentIndex">
+                   <number>0</number>
                   </property>
                   <item>
                    <property name="text">
-                    <string>Does not apply</string>
+                    <string/>
                    </property>
                   </item>
                   <item>
@@ -1294,12 +1288,12 @@
                 </item>
                 <item row="3" column="1">
                  <widget class="QComboBox" name="e27">
-                  <property name="placeholderText">
-                   <string>Select</string>
+                  <property name="currentIndex">
+                   <number>0</number>
                   </property>
                   <item>
                    <property name="text">
-                    <string>Does not apply</string>
+                    <string/>
                    </property>
                   </item>
                   <item>
@@ -1316,12 +1310,12 @@
                 </item>
                 <item row="4" column="1">
                  <widget class="QComboBox" name="e28">
-                  <property name="placeholderText">
-                   <string>Select</string>
+                  <property name="currentIndex">
+                   <number>0</number>
                   </property>
                   <item>
                    <property name="text">
-                    <string>Does not apply</string>
+                    <string/>
                    </property>
                   </item>
                   <item>
@@ -1338,12 +1332,12 @@
                 </item>
                 <item row="5" column="1">
                  <widget class="QComboBox" name="e29">
-                  <property name="placeholderText">
-                   <string>Select</string>
+                  <property name="currentIndex">
+                   <number>0</number>
                   </property>
                   <item>
                    <property name="text">
-                    <string>Does not apply</string>
+                    <string/>
                    </property>
                   </item>
                   <item>
@@ -1360,12 +1354,12 @@
                 </item>
                 <item row="6" column="1">
                  <widget class="QComboBox" name="e30">
-                  <property name="placeholderText">
-                   <string>Select</string>
+                  <property name="currentIndex">
+                   <number>0</number>
                   </property>
                   <item>
                    <property name="text">
-                    <string>Does not apply</string>
+                    <string/>
                    </property>
                   </item>
                   <item>
@@ -1382,12 +1376,12 @@
                 </item>
                 <item row="7" column="1">
                  <widget class="QComboBox" name="e31">
-                  <property name="placeholderText">
-                   <string>Select</string>
+                  <property name="currentIndex">
+                   <number>0</number>
                   </property>
                   <item>
                    <property name="text">
-                    <string>Does not apply</string>
+                    <string/>
                    </property>
                   </item>
                   <item>
@@ -2026,7 +2020,7 @@
               <item row="0" column="0">
                <widget class="QLabel" name="e60_label">
                 <property name="text">
-                 <string>Year of Birth (E60)&lt;br/&gt;&lt;i&gt;If abandoned, use 7777&lt;/i&gt;</string>
+                 <string>Year of Birth (E60)&lt;br/&gt;&lt;i&gt;If abandoned, use 7777&lt;br/&gt;if not applicable, use 9999&lt;/i&gt;</string>
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -2064,7 +2058,7 @@
                </layout>
               </item>
               <item row="1" column="0">
-               <widget class="QLabel" name="label_14">
+               <widget class="QLabel" name="e62_label">
                 <property name="text">
                  <string>Tribal Member? (E62)</string>
                 </property>
@@ -2121,7 +2115,7 @@
             </widget>
            </item>
            <item row="1" column="1">
-            <widget class="QGroupBox" name="parent1_tpr_group_box_2">
+            <widget class="QGroupBox" name="parent2_tpr_group_box">
              <property name="title">
               <string>Parent 2 Modified or Terminated Parental Rights</string>
              </property>
@@ -2281,7 +2275,7 @@
           </layout>
          </item>
          <item>
-          <widget class="QGroupBox" name="parent2_tpr_group_box">
+          <widget class="QGroupBox" name="putative_tpr_group_box">
            <property name="title">
             <string>Putative Parent/Guardian Modified or Terminated Parental Rights</string>
            </property>
@@ -3073,7 +3067,7 @@ payment was paid or will be claimed for the child.&lt;/i&gt;</string>
           </layout>
          </item>
          <item row="1" column="0">
-          <widget class="QLabel" name="label_15">
+          <widget class="QLabel" name="e107_label">
            <property name="text">
             <string>Was this reported to law enforcement? (E107)</string>
            </property>
@@ -3205,7 +3199,7 @@ Leave blank if law enforcement was not notified.&lt;/i&gt;</string>
           </layout>
          </item>
          <item row="4" column="0">
-          <widget class="QLabel" name="label_16">
+          <widget class="QLabel" name="e110_label">
            <property name="text">
             <string>Has the current victimization been reported to law enforcement? (E110)</string>
            </property>
@@ -3539,6 +3533,7 @@ Leave blank if law enforcement was not notified.&lt;/i&gt;</string>
   </layout>
  </widget>
  <tabstops>
+  <tabstop>last_name</tabstop>
   <tabstop>first_name</tabstop>
   <tabstop>e4</tabstop>
   <tabstop>e4_generate</tabstop>
@@ -3553,12 +3548,12 @@ Leave blank if law enforcement was not notified.&lt;/i&gt;</string>
   <tabstop>e18</tabstop>
   <tabstop>e19</tabstop>
   <tabstop>e20</tabstop>
+  <tabstop>e21</tabstop>
   <tabstop>e45</tabstop>
   <tabstop>e42</tabstop>
   <tabstop>e43</tabstop>
   <tabstop>e56</tabstop>
   <tabstop>e57</tabstop>
-  <tabstop>last_name</tabstop>
   <tabstop>funding_y</tabstop>
   <tabstop>funding_n</tabstop>
   <tabstop>e7_y</tabstop>
@@ -3637,9 +3632,22 @@ Leave blank if law enforcement was not notified.&lt;/i&gt;</string>
   <tabstop>removal_2020_edit_button</tabstop>
   <tabstop>removal_2020_delete_button</tabstop>
   <tabstop>validate_button</tabstop>
-  <tabstop>e21</tabstop>
   <tabstop>save_button</tabstop>
   <tabstop>close_button</tabstop>
+  <tabstop>parent2tpr</tabstop>
+  <tabstop>parent2_add_button</tabstop>
+  <tabstop>parent2_edit_button</tabstop>
+  <tabstop>e63_na_2</tabstop>
+  <tabstop>e63_v_2</tabstop>
+  <tabstop>e63_i_2</tabstop>
+  <tabstop>e65_2</tabstop>
+  <tabstop>e67_2</tabstop>
+  <tabstop>e64_na</tabstop>
+  <tabstop>e64_v</tabstop>
+  <tabstop>e64_i</tabstop>
+  <tabstop>e66</tabstop>
+  <tabstop>e68</tabstop>
+  <tabstop>parent2_delete_button</tabstop>
  </tabstops>
  <resources/>
  <connections/>

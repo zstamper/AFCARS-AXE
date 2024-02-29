@@ -6,7 +6,7 @@ from pydantic import ValidationError
 from controllers.utilities import show_error_dialog
 from controllers.validators.second_parent_validator import SecondParentValidator
 from dialogs.second_parent_dialog import Parent2Dialog
-from model.models import MyBaseModel, SecondParent
+from model.models import MyBaseModel, SecondParent, Child
 
 
 class SecondParentController:
@@ -34,6 +34,14 @@ class SecondParentController:
     def exec(self):
         self.data.scatter(self.dialog)
         self.dialog.exec()
+
+    @property
+    def child(self) -> Child:
+        return self.dialog.child
+
+    @child.setter
+    def child(self, v: Child) -> None:
+        self.dialog.child = v
 
     @property
     def child_name(self) -> str:

@@ -2,6 +2,7 @@ from datetime import date
 
 from dialogs.removal2020_dialog import Removal2020Dialog
 from utils import afcars_to_date
+from utils.e1 import is_valid_date, is_way_past_date, is_valid_adult_birth_date
 
 
 class Removal2020BaseValidator:
@@ -13,8 +14,9 @@ class Removal2020BaseValidator:
     def is_valid_date(d: int) -> bool:
         try:
             d = afcars_to_date(d)
-            if date(year=date.today().year - 100, month=d.month, day=d.day) <= d <= date.today():
-                return True
+            if d:
+                if date(year=date.today().year - 100, month=d.month, day=d.day) <= d <= date.today():
+                    return True
         except ValueError:
             pass
         return False
@@ -27,8 +29,12 @@ class RemovalValidator(Removal2020BaseValidator):
             raise ValueError("Agency FIPS code (E3) is required and must be 5 digits.")
 
     def validate_e69(self) -> None:
-        if not self.is_valid_date(self.dialog.e69):
+        if not is_valid_date(self.dialog.e69):
             raise ValueError(f"Invalid date specified for Date of Removal (E69).")
+        if self.dialog.e153 and is_valid_date(self.dialog.e153) and self.dialog.e153 < self.dialog.e69:
+            raise ValueError(f"Date of Removal (E69) must be prior to the date of exit (E153).")
+        if is_valid_date(self.dialog.child.e5) and self.dialog.e69 < self.dialog.child.e5:
+            raise ValueError("Date of Removal (E69) must be on or after the child's data of birth (E5).")
 
     def validate_e71(self) -> None:
         if self.dialog.e71 not in (1, 2, 3, 4, 5, 6, 7):
@@ -61,7 +67,7 @@ class ExitValidator(Removal2020BaseValidator):
 
     def validate_e153(self):
         if self.dialog.e153 is not None:
-            if not self.is_valid_date(self.dialog.e153):
+            if not is_valid_date(self.dialog.e153):
                 raise ValueError(f"Invalid date specified for Date of Exit (E153).")
             if self.dialog.e153 <= 20220930:
                 raise ValueError("Date of exit (E153) must be on or after October 1, 2022.")
@@ -95,11 +101,12 @@ class ExitValidator(Removal2020BaseValidator):
                 "At least one Relationship (E158, E159, E160, E161) must be checked when Exit Reason (E155) is Adoption or Guardianship.")
 
     def validate_e162(self):
-        if self.dialog.e155 in (3, 5) and self.dialog.e162 is None:
-            raise ValueError(
-                "Date of Birth for first adoptive parent or guardian (E162) is required when Exit Reason (E155) is Adoption or Guadianship.")
-        if not self.is_valid_date(self.dialog.e162):
-            raise ValueError("Date of Birth for first adoptive parent or guardian (E162) is invalid.")
+        if self.dialog.e155 in (3, 5):
+            if self.dialog.e162 is None:
+                raise ValueError(
+                    "Date of Birth for first adoptive parent or guardian (E162) is required when Exit Reason (E155) is Adoption or Guadianship.")
+            if not is_valid_date(self.dialog.e162):
+                raise ValueError("Date of Birth for first adoptive parent or guardian (E162) is invalid.")
 
     def validate_e163(self):
         if self.dialog.e155 in (3, 5) and self.dialog.e163 not in (0, 1, 9):
@@ -128,24 +135,26 @@ class ExitValidator(Removal2020BaseValidator):
                 'Sex of first adoptive parent or guardian (E172) is required when Exit Reason (E155) is Adoption or Guardianship by a couple.')
 
     def validate_e173(self):
-        if self.dialog.e155 in (3, 5) and self.dialog.e157 in (1, 2) and self.dialog.e173 is None:
+        if self.dialog.e155 in (3, 5) and self.dialog.e172 not in (1, 2) and self.dialog.e173 is None:
             raise ValueError(
-                "Date of Birth for second adoptive parent or guardian (E173) is required when Exit Reason (E155) is Adoption or Guadianship by a couple.")
-        if not self.is_valid_date(self.dialog.e173):
+                "Date of Birth for second adoptive parent or guardian (E173) is required.")
+        if self.dialog.e173 and not is_valid_date(self.dialog.e173):
             raise ValueError(
                 "Date of Birth for second adoptive parent or guardian (E173) is invalid.")
+        if self.dialog.e173 and not is_valid_adult_birth_date(self.dialog.e173):
+            raise ValueError("Age of second adoptive parent or guardian (E173) must be between 10 and 100 years old.")
 
     def validate_e174(self):
         if self.dialog.e155 in (3, 5) and self.dialog.e157 in (1, 2) and self.dialog.e174 not in (0, 1, 9):
             raise ValueError(
-                "Tribal membership of second adoptive parent or guardian (E174) is required when Exit Reason (E155) is Adoption or Guardianship by a couple.")
+                "Tribal membership of second adoptive parent or guardian (E174) is required.")
 
     def validate_e175_e176_e177_e178_e179_e180_e181(self):
         if self.dialog.e155 in (3, 5) and self.dialog.e157 in (1, 2) and not any(
                 [self.dialog.e175, self.dialog.e176, self.dialog.e177, self.dialog.e178, self.dialog.e179,
                  self.dialog.e180, self.dialog.e181]):
             raise ValueError(
-                "Adoptive parent race (E175, E176, E177, E178, E179, E180, E181) is required when Exit Reason (E155) is Adoption or Guardianship by a couple.")
+                "Adoptive parent race (E175, E176, E177, E178, E179, E180, E181) is required.")
         if self.dialog.e155 in (3, 5) and self.dialog.e157 in (1, 2) and self.dialog.e181 and any(
                 [self.dialog.e175, self.dialog.e176, self.dialog.e177, self.dialog.e178, self.dialog.e179,
                  self.dialog.e180]):
@@ -154,12 +163,12 @@ class ExitValidator(Removal2020BaseValidator):
     def validate_e182(self):
         if self.dialog.e155 in (3, 5) and self.dialog.e157 in (1, 2) and self.dialog.e182 not in (0, 1, 8, 9):
             raise ValueError(
-                'Hispanic/Latino ethnicity of first adoptive parent or guardian (E182) is required when Exit Reason (E155) is Adoption or Guardianship by a couple.')
+                'Hispanic/Latino ethnicity of first adoptive parent or guardian (E182) is required.')
 
     def validate_e183(self):
         if self.dialog.e155 in (3, 5) and self.dialog.e157 in (1, 2) and self.dialog.e183 not in (1, 2):
             raise ValueError(
-                'Sex of first adoptive parent or guardian (E183) is required when Exit Reason (E155) is Adoption or Guardianship by a couple.')
+                'Sex of first adoptive parent or guardian (E183) is required.')
 
 
 class PermanencyPlanValidator(Removal2020BaseValidator):

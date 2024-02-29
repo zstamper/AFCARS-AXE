@@ -11,6 +11,7 @@ class CaseVisitDialog(BaseDialog):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.ui: QWidget = self.load_ui('ui_case_visit.ui')
+        self.child = None
         self._wire_ui()
         self.setLayout(self.ui.layout())
         self.setFixedSize(self.ui.size())

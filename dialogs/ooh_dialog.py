@@ -7,8 +7,9 @@ from PySide6.QtGui import (QRegularExpressionValidator)
 from PySide6.QtWidgets import (QAbstractButton, QWidget, QListWidgetItem, QTableWidgetItem)
 
 from model import SecondParent, Removal1993, Removal2020, RecognizedTribe, ARecord
-from model.models import Tribe, FileType
+from model.models import Tribe, FileType, Child
 from utils import generate_id
+from utils.e1 import is_tribe
 from . import BaseDialog
 
 
@@ -33,6 +34,7 @@ class OOHDialog(BaseDialog):
         # Virtual elements:
 
         # back-end stores for our virtual properties
+        self._child = None
         self._epa_tribes: list[Tribe] = []
         self._recognized_tribes: list[RecognizedTribe] = []
         self._second_parents: list[SecondParent] = []
@@ -144,9 +146,22 @@ class OOHDialog(BaseDialog):
         ui.tabWidget.currentChanged.connect(self._on_tab_changed)
         ui.validate_button.clicked.connect(self.do_validate_clicked)
 
+        ui.e60.textChanged.connect(self._on_e60_text_changed)
         ui.e64.buttonClicked.connect(self._on_e64_button_clicked)
         ui.e66.textChanged.connect(self._on_e66_text_changed)
         ui.e68.textChanged.connect(self._on_e68_text_changed)
+
+        ui.e106.buttonClicked.connect(self._on_e106_clicked)
+        ui.e107.buttonClicked.connect(self._on_e107_clicked)
+        ui.e109.buttonClicked.connect(self._on_e109_clicked)
+        ui.e110.buttonClicked.connect(self._on_e110_clicked)
+
+        if self.file_type == FileType.PRODUCTION:
+            if is_tribe():
+                ui.e61_label.setEnabled(False)
+                ui.e62.setEnabled(False)
+                ui.e62_label.setEnabled(False)
+                ui.e62.setEnabled(False)
 
     # ==================================================================================================================
     #
@@ -257,6 +272,14 @@ class OOHDialog(BaseDialog):
         if self.file_type == FileType.PRODUCTION:
             enabled: bool = button.text() == 'No'
             self.ui.icwa_group_box.setEnabled(enabled)
+            if not enabled:
+                self.e7 = None
+                self.e8 = None
+                while len(self.tribes) > 0:
+                    self.tribes.pop()
+                self.e10 = None
+                self.e11 = None
+                self.e12 = None
 
     def _e8_button_clicked(self) -> None:
         self.set_e8_state()
@@ -326,6 +349,18 @@ class OOHDialog(BaseDialog):
                 self.e32 = None
                 self.e33 = None
                 self.e34 = None
+            if index == 1:
+                self.e24 = 0 if self.e24 is None else self.e24
+                self.e25 = 0 if self.e25 is None else self.e25
+                self.e26 = 0 if self.e26 is None else self.e26
+                self.e27 = 0 if self.e27 is None else self.e27
+                self.e28 = 0 if self.e28 is None else self.e28
+                self.e29 = 0 if self.e29 is None else self.e29
+                self.e30 = 0 if self.e30 is None else self.e30
+                self.e31 = 0 if self.e31 is None else self.e31
+                self.e32 = 0 if self.e32 is None else self.e32
+                self.e33 = 0 if self.e33 is None else self.e33
+                self.e34 = 0 if self.e34 is None else self.e34
             self.ui.e24.setEnabled(index == 1)
             self.ui.e25.setEnabled(index == 1)
             self.ui.e26.setEnabled(index == 1)
@@ -337,6 +372,14 @@ class OOHDialog(BaseDialog):
             self.ui.e32.setEnabled(index == 1)
             self.ui.e33.setEnabled(index == 1)
             self.ui.e34.setEnabled(index == 1)
+
+    def _on_e60_text_changed(self):
+        if self.file_type == FileType.PRODUCTION:
+            enabled = self.e60 != 9999
+            self.ui.e62_label.setEnabled(enabled)
+            for button in self.ui.e62.buttons():
+                button.setEnabled(enabled)
+            self.ui.parent2_tpr_group_box.setEnabled(enabled)
 
     def _on_e64_button_clicked(self):
         try:
@@ -355,6 +398,42 @@ class OOHDialog(BaseDialog):
             self._second_parents[0].e68 = self._get_int_field(self.ui.e68)
         except IndexError:
             self._second_parents = [SecondParent(e68=self._get_int_field(self.ui.e68))]
+
+    def _on_e106_clicked(self):
+        if self.file_type == FileType.PRODUCTION:
+            enabled = self.e106 != 0
+            self.e107_label.setEnabled(enabled)
+            self.e107.setEnabled(enabled)
+            self.e108_label.setEnabled(enabled)
+            self.e108.setEnabled(enabled)
+
+    def _on_e107_clicked(self):
+        if self.file_type == FileType.PRODUCTION:
+            enabled = self.e107 != 0
+            self.e108_label.setEnabled(enabled)
+            self.e108.setEnabled(enabled)
+
+    def _on_e109_clicked(self):
+        if self.file_type == FileType.PRODUCTION:
+            enabled = self.e109 != 0
+            self.e110_label.setEnabled(enabled)
+            self.e110.setEnabled(enabled)
+            self.e111_label.setEnabled(enabled)
+            self.e111.setEnabled(enabled)
+
+    def _on_e110_clicked(self):
+        if self.file_type == FileType.PRODUCTION:
+            enabled = self.e110 != 0
+            self.e111_label.setEnabled(enabled)
+            self.e111.setEnabled(enabled)
+
+    @property
+    def child(self) -> Child:
+        return self._child
+
+    @child.setter
+    def child(self, v: Child) -> None:
+        self._child = v
 
     @property
     def child_name(self) -> str:
@@ -906,7 +985,7 @@ class OOHDialog(BaseDialog):
     @property
     def e64(self) -> int | None:
         try:
-            self._second_parents[0].e64 = self._get_radio_button(self.ui.e64)
+            return self._get_radio_button(self.ui.e64)
         except IndexError:
             return None
 
@@ -1055,15 +1134,11 @@ class OOHDialog(BaseDialog):
     @second_parents.setter
     def second_parents(self, data: list[SecondParent]) -> None:
         self._second_parents = data
-        if len(data) > 0:
-            self.e64 = data[0].e64
-            self.e66 = data[0].e66
-            self.e68 = data[0].e68
-        else:
-            self.e64 = None
-            self.e66 = None
-            self.e68 = None
-
+        if len(data) == 0:
+            self._second_parents.append(SecondParent())
+        self.e64 = data[0].e64
+        self.e66 = data[0].e66
+        self.e68 = data[0].e68
         self.refresh_second_parents()
 
     def current_second_parents_row(self) -> int:

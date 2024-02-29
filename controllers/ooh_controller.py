@@ -93,6 +93,7 @@ class OOHController:
 
     @child.setter
     def child(self, v: Child) -> None:
+        self.dialog.child = v
         self._child = v
         for key in vars(v).keys():
             if hasattr(self.dialog, key):
@@ -101,7 +102,6 @@ class OOHController:
             for key in vars(v.ooh).keys():
                 if hasattr(self.dialog, key):
                     setattr(self.dialog, key, getattr(v.ooh, key))
-
     @staticmethod
     def confirm_save() -> bool:
         msgBox = QMessageBox()
@@ -236,6 +236,7 @@ class OOHController:
         controller: Removal2020Controller = Removal2020Controller(self.dialog, self.dialog.child_name,
                                                                   data, file_type=self.file_type)
         controller.on_save = save
+        controller.child = self.child
         controller.parent_data = self.dialog
         controller.exec()
 
@@ -250,6 +251,7 @@ class OOHController:
                                                                       self.dialog.removals2020[current_row],
                                                                       file_type=self.file_type)
             controller.on_save = save
+            controller.child = self.child
             controller.parent_data = self.dialog
             controller.exec()
 
@@ -282,6 +284,7 @@ class OOHController:
         controller = SecondParentController(self.dialog, child_name=self.dialog.child_name,
                                             data=SecondParent(number=self._next_parent_number()))
         controller.on_save = save
+        controller.child = self.child
         controller.file_type = self.file_type
         controller.exec()
 
@@ -295,6 +298,7 @@ class OOHController:
             controller = SecondParentController(self.dialog, child_name=self.dialog.child_name,
                                                 data=self.dialog.second_parents[current_row + 1])
             controller.on_save = save
+            controller.child = self.child
             controller.file_type = self.file_type
             controller.exec()
 

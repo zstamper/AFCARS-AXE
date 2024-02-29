@@ -10,7 +10,7 @@ from .tables import (database, BaseChildTable, ConfigTable, ContextTable, StateT
                      Version)
 from .migrations import *
 
-DATABASE_VERSION: int = 2
+DATABASE_VERSION: int = 3
 
 
 def open_database(database_name: str, testing: bool = False):

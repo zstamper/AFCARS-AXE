@@ -8,6 +8,7 @@ class Parent2Dialog(BaseDialog):
         super().__init__(*args, **kwargs)
 
         self._number: int | None = None
+        self.child = None
         self._child_name: str = ""
         self.on_validate: Optional[Callable] = None
         self.on_save: Optional[Callable] = None

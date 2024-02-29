@@ -6,7 +6,7 @@ from pydantic import ValidationError
 from controllers.utilities import show_error_dialog
 from controllers.validators.case_worker_visit_validator import CaseWorkerVisitValidator
 from dialogs.case_worker_visit_dialog import CaseVisitDialog
-from model.models import CaseVisit, Removal2020, FileType
+from model.models import CaseVisit, Removal2020, FileType, Child
 
 
 class CaseWorkerVisitController:
@@ -26,6 +26,14 @@ class CaseWorkerVisitController:
         self.data = data
 
     @property
+    def child(self) -> Child:
+        return self.dialog.child
+
+    @child.setter
+    def child(self, v: Child) -> None:
+        self.dialog.child = v
+
+    @property
     def parent_data(self):
         return self.validator.parent_data
 
@@ -33,13 +41,12 @@ class CaseWorkerVisitController:
     def parent_data(self, v):
         self.validator.parent_data = v
 
-
     @property
-    def file_type(self)->FileType:
+    def file_type(self) -> FileType:
         return self.dialog.file_type
 
     @file_type.setter
-    def file_type(self, v: FileType)->None:
+    def file_type(self, v: FileType) -> None:
         self.dialog.file_type = v
 
     @property
