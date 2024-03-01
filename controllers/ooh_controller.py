@@ -9,7 +9,7 @@ from controllers.second_parent_controller import SecondParentController
 from controllers.utilities import show_error_dialog, get_epa_tribes
 from controllers.validators.ooh_validator import OOHValidator
 from dialogs.ooh_dialog import OOHDialog
-from model.models import Removal1993, Removal2020, SecondParent, RecognizedTribe, BaseChild, Child, FileType
+from model.models import Removal1993, Removal2020, SecondParent, RecognizedTribe, BaseChild, Child, FileType, OOHRecord
 
 
 class OOHController:
@@ -131,6 +131,8 @@ class OOHController:
             for key in vars(self.child).keys():
                 if hasattr(self.dialog, key):
                     setattr(self.child, key, getattr(self.dialog, key))
+            if not self.child.ooh:
+                self.child.ooh = OOHRecord()
             for key in vars(self.child.ooh).keys():
                 if hasattr(self.dialog, key):
                     setattr(self.child.ooh, key, getattr(self.dialog, key))

@@ -1,7 +1,9 @@
 from datetime import date
 
 from dialogs.a_dialog import ADialog
+from utils.e1 import is_valid_date, e2_end_date, afcars_to_date, is_future_date
 from .abstract_validator import AbstractValidator
+from .common_validators import CommonValidators
 
 
 class ABaseValidator:
@@ -21,8 +23,37 @@ class ABaseValidator:
             return False
 
 
-class AValidators(ABaseValidator):
-    pass
+class AValidators(ABaseValidator, CommonValidators):
+
+    def validate_a15(self):
+        if self.dialog.a15 not in [1, 2]:
+            raise ValueError("Assistance Agreement Type (A15) is required.")
+
+    def validate_a16(self):
+        if self.dialog.a16 is None or self.dialog.a16 < 0 or self.dialog.a16 > 999999:
+            raise ValueError("Adoption or Guardianship Subsidy Amount (A16) is out of range (0-999,999).")
+
+    def validate_a17(self):
+        if not is_valid_date(self.dialog.a17):
+            raise ValueError("Adoption Finalization or Guardianship Legalization Date (A17) is missing.")
+        if is_future_date(self.dialog.a17):
+            raise ValueError("Adoption Finalization or Guardianship Legalization Date (A17) may not be in the future.")
+        if afcars_to_date(self.dialog.a17) > e2_end_date():
+            raise ValueError(
+                "Adoption Finalization or Guardianship Legalization Date (A17) must be on or before reporting period end.")
+
+    def validate_a18(self):
+        if self.dialog.a18 is None:
+            return
+        if not is_valid_date(self.dialog.a18):
+            raise ValueError("Agreement Termination Date (A18) is not valid.")
+        if is_valid_date(self.dialog.a17) and self.dialog.a18 < self.dialog.a17:
+            raise ValueError(
+                "Agreement Termination Date (A18) must be on or after Adoption Finalization or Guardianship Legalization Date (A17).")
+
+    def validate_a19(self):
+        if self.dialog.a19 not in [1, 2, 3]:
+            raise ValueError("Adoption or Guardianship Placing Agency is required.")
 
 
 class AValidator(AbstractValidator):

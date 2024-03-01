@@ -178,7 +178,12 @@ class ChildController:
         context_rec, is_new = ContextTable.get_or_create(base_child=base_child.id,
                                                          e2=reporting_period,
                                                          file_type=file_type)
-        if is_new:
+        if not is_new:
+            if self.report_type == ReportType.OOH and not context_rec.data.ooh:
+                context_rec.data.ooh = OOHRecord()
+            elif self.report_type == ReportType.A and not context_rec.data.a:
+                context_rec.data.a = ARecord()
+        else:
             recent_context = ContextTable.select().where(ContextTable.base_child == base_child.id,
                                                          ContextTable.e2 < reporting_period,
                                                          ContextTable.file_type == file_type).order_by(
@@ -187,10 +192,8 @@ class ChildController:
                 context_rec.data = recent_context.data
             else:
                 child = Child(first_name=base_child.first_name, last_name=base_child.last_name)
-                if self.report_type == ReportType.OOH:
-                    child.ooh = OOHRecord()
-                if self.report_type == ReportType.A:
-                    child.a = ARecord()
+                child.ooh = OOHRecord()
+                child.a = ARecord()
                 context_rec.data = child
             context_rec.save()
         return context_rec

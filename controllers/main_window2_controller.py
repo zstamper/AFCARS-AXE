@@ -1,3 +1,6 @@
+import sys
+import traceback
+
 from controllers.child_controller import ChildController
 from controllers.export_controller import ExportController
 from controllers.import_controller import ImportController
@@ -621,7 +624,7 @@ class MainWindow2Controller:
         return self.window.show()
 
     def load_defaults(self):
-        config = ConfigTable.get_or_none(ConfigTable.id == 1, ConfigTable.report_type==ReportType.OOH)
+        config = ConfigTable.get_or_none(ConfigTable.id == 1)
         if config:
             self.window.epa_code = [k for k, v in EPA_CODES.items() if v == config.epa_code][
                 0] if config.epa_code else None
@@ -673,7 +676,12 @@ class MainWindow2Controller:
         controller.e1 = self.e1
         set_E1(self.e1)
         set_E2(self.window.reporting_period)
-        controller.show()
+        try:
+            controller.show()
+        except Exception as e:
+            print(f"Exception {e.__class__.__name__}({', '.join(e.args)})")
+            traceback.print_exc()
+            raise e
 
     @property
     def e1(self) -> str:
