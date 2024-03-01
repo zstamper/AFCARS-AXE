@@ -1922,7 +1922,7 @@
               <item row="1" column="0">
                <widget class="QLabel" name="e65_label">
                 <property name="text">
-                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Date of petition for termination&lt;br/&gt;or modification of parental rights (E65)&lt;br/&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;If deceased - use the deceased date&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Date of petition for termination&lt;br/&gt;or modification of parental rights (E65)&lt;br/&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;If deceased - use 66666666&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                 </property>
                 <property name="textFormat">
                  <enum>Qt::RichText</enum>
@@ -2181,9 +2181,9 @@
                </layout>
               </item>
               <item row="1" column="0">
-               <widget class="QLabel" name="e65_label_3">
+               <widget class="QLabel" name="e66_label">
                 <property name="text">
-                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Date of modified or terminated &lt;br/&gt;parental rights (E66)&lt;br/&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;If deceased - use 66666666&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Date of petition for termination&lt;br/&gt;or modification ofparental rights (E66)&lt;br/&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;If deceased - use 66666666&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                 </property>
                 <property name="textFormat">
                  <enum>Qt::RichText</enum>
@@ -2227,7 +2227,7 @@
                </layout>
               </item>
               <item row="2" column="0">
-               <widget class="QLabel" name="e67_label_3">
+               <widget class="QLabel" name="e68_label">
                 <property name="text">
                  <string>Date of modified or terminated &lt;br/&gt;parental rights (E68)&lt;br/&gt;&lt;i&gt;If deceased - use the deceased date&lt;/&gt;</string>
                 </property>

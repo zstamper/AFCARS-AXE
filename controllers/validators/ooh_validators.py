@@ -273,7 +273,7 @@ class ParentGuardianValidator(OOHBaseValidator):
         return self
 
     def validate_e64(self) -> None:
-        if self.dialog.e60 not in [7777, 9999] and self.dialog.e64 not in [0, 1, 2]:
+        if self.dialog.e60 not in [None, 7777, 9999] and self.dialog.e64 not in [0, 1, 2]:
             raise ValueError(f"Second parent's TPR (E64) is required.")
 
     def validate_e65(self) -> None:

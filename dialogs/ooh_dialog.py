@@ -148,6 +148,8 @@ class OOHDialog(BaseDialog):
 
         ui.e56.textChanged.connect(self._on_e56_text_changed)
         ui.e60.textChanged.connect(self._on_e60_text_changed)
+        ui.e63.buttonClicked.connect(self._on_e63_button_clicked)
+        ui.e64.buttonClicked.connect(self._on_e64_button_clicked)
         ui.e64.buttonClicked.connect(self._on_e64_button_clicked)
         ui.e66.textChanged.connect(self._on_e66_text_changed)
         ui.e68.textChanged.connect(self._on_e68_text_changed)
@@ -391,6 +393,36 @@ class OOHDialog(BaseDialog):
             for button in self.ui.e62.buttons():
                 button.setEnabled(enabled)
             self.ui.parent2_tpr_group_box.setEnabled(enabled)
+
+    def _on_e63_button_clicked(self):
+        if self.file_type == FileType.PRODUCTION:
+            if self.e63:
+                self.ui.e65.setEnabled(True)
+                self.ui.e65_label.setEnabled(True)
+                self.ui.e67.setEnabled(True)
+                self.ui.e67_label.setEnabled(True)
+            else:
+                self.ui.e65.setEnabled(False)
+                self.ui.e65_label.setEnabled(False)
+                self.ui.e67.setEnabled(False)
+                self.ui.e67_label.setEnabled(False)
+                self.e65 = None
+                self.e67 = None
+
+    def _on_e64_button_clicked(self):
+        if self.file_type == FileType.PRODUCTION:
+            if self.e63:
+                self.ui.e66.setEnabled(True)
+                self.ui.e66_label.setEnabled(True)
+                self.ui.e68.setEnabled(True)
+                self.ui.e68_label.setEnabled(True)
+            else:
+                self.ui.e66.setEnabled(False)
+                self.ui.e66_label.setEnabled(False)
+                self.ui.e68.setEnabled(False)
+                self.ui.e68_label.setEnabled(False)
+                self.e66 = None
+                self.e68 = None
 
     def _on_e64_button_clicked(self):
         try:
@@ -992,6 +1024,7 @@ class OOHDialog(BaseDialog):
     @e63.setter
     def e63(self, v: int) -> None:
         self._set_radio_button(self.ui.e63, v)
+        self._on_e63_button_clicked()
 
     @property
     def e64(self) -> int | None:
@@ -1003,6 +1036,7 @@ class OOHDialog(BaseDialog):
     @e64.setter
     def e64(self, v: int) -> None:
         self._set_radio_button(self.ui.e64, v)
+        self._on_e64_button_clicked()
 
     @property
     def e65(self) -> int | None:
