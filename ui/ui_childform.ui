@@ -3643,11 +3643,6 @@ Leave blank if law enforcement was not notified.&lt;/i&gt;</string>
   <tabstop>validate_button</tabstop>
   <tabstop>save_button</tabstop>
   <tabstop>close_button</tabstop>
-  <tabstop>e63_na_2</tabstop>
-  <tabstop>e63_v_2</tabstop>
-  <tabstop>e63_i_2</tabstop>
-  <tabstop>e65_2</tabstop>
-  <tabstop>e67_2</tabstop>
  </tabstops>
  <resources/>
  <connections/>

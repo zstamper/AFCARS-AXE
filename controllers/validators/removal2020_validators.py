@@ -2,7 +2,7 @@ from datetime import date
 
 from dialogs.removal2020_dialog import Removal2020Dialog
 from utils import afcars_to_date
-from utils.e1 import is_valid_date, is_way_past_date, is_valid_adult_birth_date
+from utils.e1 import is_valid_date, is_way_past_date, is_valid_adult_birth_date, e2_end_date
 
 
 class Removal2020BaseValidator:
@@ -35,6 +35,8 @@ class RemovalValidator(Removal2020BaseValidator):
             raise ValueError(f"Date of Removal (E69) must be prior to the date of exit (E153).")
         if is_valid_date(self.dialog.child.e5) and self.dialog.e69 < self.dialog.child.e5:
             raise ValueError("Date of Removal (E69) must be on or after the child's data of birth (E5).")
+        if afcars_to_date(self.dialog.e69) > e2_end_date():
+            raise ValueError("Date of Removal (E69) must be on or before the reporting period end (E2).")
 
     def validate_e71(self) -> None:
         if self.dialog.e71 not in (1, 2, 3, 4, 5, 6, 7):
