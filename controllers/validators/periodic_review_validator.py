@@ -4,6 +4,7 @@ from typing import Optional
 from controllers.validators.abstract_validator import AbstractValidator
 from dialogs.periodic_review_dialog import PeriodicReviewDialog
 from model import Removal2020
+from utils.e1 import is_valid_date, is_future_date
 
 
 class PeriodicReviewBaseValidator:
@@ -11,38 +12,14 @@ class PeriodicReviewBaseValidator:
     def __init__(self, dialog: PeriodicReviewDialog):
         self.dialog: PeriodicReviewDialog = dialog
         self.parent_data: Optional[Removal2020] = None
-    @staticmethod
-    def is_valid_date(d: int) -> bool:
-        try:
-            s = str(d)
-            year = int(s[0:4])
-            month = int(s[4:6])
-            day = int(s[6:8])
-            d = date(year=year, month=month, day=day)
-            today = date.today()
-            min_d = date(year=today.year - 100, month=today.month, day=today.day)
-            assert d >= min_d
-            return True
-        except ValueError:
-            return False
-        except AssertionError:
-            return False
-
-    @staticmethod
-    def is_future_date(d: int) -> bool:
-        year = d // 10000
-        month = (d - (d // 10000) * 10000) // 100
-        day = d - (d // 100) * 100
-        d = date(year=year, month=month, day=day)
-        return d > date.today()
 
 
 class PeriodicReviewValidators(PeriodicReviewBaseValidator):
 
     def validate_e149(self):
-        if not self.is_valid_date(self.dialog.e149):
+        if not is_valid_date(self.dialog.e149):
             raise ValueError("Invalid date for Periodic Review Date (E149).")
-        if self.is_future_date(self.dialog.e149):
+        if is_future_date(self.dialog.e149):
             raise ValueError("Periodic Review Date (E149) cannot be in the future.")
         if self.dialog.e149 < self.parent_data.e69:
             raise ValueError("Periodic Review Data (E149) cannot be before Removal Date (E69).")
