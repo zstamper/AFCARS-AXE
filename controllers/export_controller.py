@@ -35,18 +35,17 @@ class ExportController:
         return False
 
     def get_child_data(self) -> list[Child]:
-        query = (BaseChildTable
+        query = (ContextTable
                  .select()
-                 .join(ContextTable)
-                 .where(BaseChildTable.e1 == self.e1))
+                 .join(BaseChildTable)
+                 .where(ContextTable.e2 == self.e2, BaseChildTable.e1 == self.e1))
+
         child_data = []
         if self.report_type == ReportType.OOH:
             # Golly, so this was subtle... The filter for the context table records was originally in the query
             # above. But it so happens that with PeeWee, when accessing foreign table, you're given an unfiltered
-            # list of records. Therefore, we have to filter them here.
-            child_data = [(row.to_model(), deepcopy(context.data)) for row in query for context in row.contexts if
-                          context.file_type == self.file_type and context.data.ooh]
+            # list of child records. Therefore, we have to filter them here.
+            child_data = [(row.base_child.to_model(), row.data) for row in query if hasattr(row.data, 'ooh') and row.data.ooh]
         elif self.report_type == ReportType.A:
-            child_data = [(row.to_model(), deepcopy(context.data)) for row in query for context in row.contexts if
-                          context.file_type == self.file_type and context.data.a]
+            child_data = [(row.base_child.to_model(), row.data) for row in query if hasattr(row.data, 'a') and row.data.a]
         return child_data
