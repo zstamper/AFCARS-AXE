@@ -150,7 +150,6 @@ class OOHDialog(BaseDialog):
         ui.e60.textChanged.connect(self._on_e60_text_changed)
         ui.e63.buttonClicked.connect(self._on_e63_button_clicked)
         ui.e64.buttonClicked.connect(self._on_e64_button_clicked)
-        ui.e64.buttonClicked.connect(self._on_e64_button_clicked)
         ui.e66.textChanged.connect(self._on_e66_text_changed)
         ui.e68.textChanged.connect(self._on_e68_text_changed)
 
@@ -410,8 +409,12 @@ class OOHDialog(BaseDialog):
                 self.e67 = None
 
     def _on_e64_button_clicked(self):
+        try:
+            self._second_parents[0].e64 = self._get_radio_button(self.ui.e64)
+        except IndexError:
+            self._second_parents = [SecondParent(e64=self._get_radio_button(self.ui.e64))]
         if self.file_type == FileType.PRODUCTION:
-            if self.e63:
+            if self.e64:
                 self.ui.e66.setEnabled(True)
                 self.ui.e66_label.setEnabled(True)
                 self.ui.e68.setEnabled(True)
@@ -423,12 +426,6 @@ class OOHDialog(BaseDialog):
                 self.ui.e68_label.setEnabled(False)
                 self.e66 = None
                 self.e68 = None
-
-    def _on_e64_button_clicked(self):
-        try:
-            self._second_parents[0].e64 = self._get_radio_button(self.ui.e64)
-        except IndexError:
-            self._second_parents = [SecondParent(e64=self._get_radio_button(self.ui.e64))]
 
     def _on_e66_text_changed(self):
         try:
