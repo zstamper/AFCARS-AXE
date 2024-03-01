@@ -1698,6 +1698,11 @@
                  <string>Not school-age</string>
                 </property>
                </item>
+               <item>
+                <property name="text">
+                 <string>Never attended not based on age</string>
+                </property>
+               </item>
               </widget>
              </item>
             </layout>
@@ -3663,6 +3668,7 @@ Leave blank if law enforcement was not notified.&lt;/i&gt;</string>
     <bool>false</bool>
    </property>
   </buttongroup>
+  <buttongroup name="e64"/>
   <buttongroup name="e63">
    <property name="exclusive">
     <bool>false</bool>
@@ -3709,6 +3715,5 @@ Leave blank if law enforcement was not notified.&lt;/i&gt;</string>
     <bool>false</bool>
    </property>
   </buttongroup>
-  <buttongroup name="e64"/>
  </buttongroups>
 </ui>

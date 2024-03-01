@@ -53,7 +53,7 @@
                 <E34_health_other_condition>{{ ooh.e34|no_null }}</E34_health_other_condition>
             </E24_34_specific_health_conditions>
             <E35_school_enrollment>{{ ooh.e35|no_null }}</E35_school_enrollment>
-            <E36_school_highest_completed>{{ ooh.e36|no_null }}</E36_school_highest_completed>
+            <E36_school_highest_completed>{% if ooh.e36 != 17 %}{{ ooh.e36|no_null }}{% endif %}</E36_school_highest_completed>
             <E37_school_special_education>{{ ooh.e37|no_null }}</E37_school_special_education>
             <E38_pregnant>{{ ooh.e38|no_null }}</E38_pregnant>
             <E39_fathered_or_bore_child>{{ ooh.e39|no_null }}</E39_fathered_or_bore_child>
