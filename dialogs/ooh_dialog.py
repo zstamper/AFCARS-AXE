@@ -441,31 +441,37 @@ class OOHDialog(BaseDialog):
 
     def _on_e106_clicked(self):
         if self.file_type == FileType.PRODUCTION:
-            enabled = self.e106 != 0
-            self.e107_label.setEnabled(enabled)
-            self.e107.setEnabled(enabled)
-            self.e108_label.setEnabled(enabled)
-            self.e108.setEnabled(enabled)
+            enabled = self.e106 not in [None, 0]
+            self.ui.e107_label.setEnabled(enabled)
+            for button in self.ui.e107.buttons():
+                button.setEnabled(enabled)
+                if not enabled:
+                    button.setChecked(False)
+            self.ui.e108_label.setEnabled(enabled)
+            self.ui.e108.setEnabled(enabled)
 
     def _on_e107_clicked(self):
         if self.file_type == FileType.PRODUCTION:
-            enabled = self.e107 != 0
-            self.e108_label.setEnabled(enabled)
-            self.e108.setEnabled(enabled)
+            enabled = self.e107 not in [None, 0]
+            self.ui.e108_label.setEnabled(enabled)
+            self.ui.e108.setEnabled(enabled)
 
     def _on_e109_clicked(self):
         if self.file_type == FileType.PRODUCTION:
-            enabled = self.e109 != 0
-            self.e110_label.setEnabled(enabled)
-            self.e110.setEnabled(enabled)
-            self.e111_label.setEnabled(enabled)
-            self.e111.setEnabled(enabled)
+            enabled = self.e109 not in [None, 0]
+            self.ui.e110_label.setEnabled(enabled)
+            for button in self.ui.e110.buttons():
+                button.setEnabled(enabled)
+                if not enabled:
+                    button.setChecked(False)
+            self.ui.e111_label.setEnabled(enabled)
+            self.ui.e111.setEnabled(enabled)
 
     def _on_e110_clicked(self):
         if self.file_type == FileType.PRODUCTION:
-            enabled = self.e110 != 0
-            self.e111_label.setEnabled(enabled)
-            self.e111.setEnabled(enabled)
+            enabled = self.e110 not in [None, 0]
+            self.ui.e111_label.setEnabled(enabled)
+            self.ui.e111.setEnabled(enabled)
 
     @property
     def child(self) -> Child:
@@ -1080,6 +1086,7 @@ class OOHDialog(BaseDialog):
     @e106.setter
     def e106(self, v: int) -> None:
         self._set_radio_button(self.ui.e106, v)
+        self._on_e106_clicked()
 
     @property
     def e107(self) -> int:
@@ -1088,6 +1095,7 @@ class OOHDialog(BaseDialog):
     @e107.setter
     def e107(self, v: int) -> None:
         self._set_radio_button(self.ui.e107, v)
+        self._on_e107_clicked()
 
     @property
     def e108(self) -> int | None:
@@ -1104,6 +1112,7 @@ class OOHDialog(BaseDialog):
     @e109.setter
     def e109(self, v: int) -> None:
         self._set_radio_button(self.ui.e109, v)
+        self._on_e109_clicked()
 
     @property
     def e110(self) -> int:
@@ -1112,6 +1121,7 @@ class OOHDialog(BaseDialog):
     @e110.setter
     def e110(self, v: int) -> None:
         self._set_radio_button(self.ui.e110, v)
+        self._on_e110_clicked()
 
     @property
     def e111(self) -> int | None:
