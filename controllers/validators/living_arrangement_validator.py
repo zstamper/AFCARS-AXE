@@ -4,7 +4,7 @@ from typing import Optional
 
 from dialogs.living_arrangement_dialog import LivingArrangementDialog
 from model import Removal2020
-from utils.e1 import is_valid_date, is_future_date
+from utils.e1 import is_valid_date, is_future_date, e2_end_date, afcars_to_date
 
 
 class LivingArrangementValidators:
@@ -41,6 +41,8 @@ class LivingArrangementValidators:
             raise ValueError("Living Arrangement Start Date (E112) cannot be in the future.")
         if self.parent_data.e69 and self.dialog.e112 < self.parent_data.e69:
             raise ValueError("Living Arrangement Start Date (E112) may not be earlier than Removal Date (E69)")
+        if afcars_to_date(self.dialog.e112) > e2_end_date():
+            raise ValueError("Living Arrangement Start Date (E112) must be before end of reporting period (E2).")
 
     def validate_e113(self):
         if self.dialog.e113 not in (0, 1):
