@@ -23,7 +23,7 @@ class LivingArrangementDialog(BaseDialog):
         self.on_validate: Optional[Callable] = None
         self.on_save: Optional[Callable] = None
         self.on_close: Optional[Callable] = None
-        self.e56: int | None = None
+        self._e56: int | None = None
         self.e57: int | None = None
 
     def _wire_ui(self) -> None:
@@ -49,6 +49,16 @@ class LivingArrangementDialog(BaseDialog):
         self.ui.save_button.clicked.connect(self.save_button_clicked)
         self.ui.close_button.clicked.connect(self.close_button_clicked)
 
+    def _e56_text_changed(self):
+        if self.file_type == FileType.PRODUCTION:
+            if self.e56 is not None and self.e56 > 0:
+                self.ui.e58.setEnabled(True)
+                self.ui.e58_label.setEnabled(True)
+            else:
+                self.ui.e58.setEnabled(False)
+                self.ui.e58_label.setEnabled(False)
+                self.e58 = None
+
     def _e113_changed(self):
         if self.file_type == FileType.PRODUCTION:
             self.ui.family_setting_provider_group_box.setEnabled(self.e113 == 1)
@@ -62,12 +72,11 @@ class LivingArrangementDialog(BaseDialog):
 
     def _e121_changed(self):
         if self.file_type == FileType.PRODUCTION:
-            enabled = self.e121 not in (1,4)
+            enabled = self.e121 not in (1, 4)
             self.ui.e122_label.setEnabled(enabled)
             self.ui.e122.setEnabled(enabled)
             if not enabled:
                 self.e122 = None
-
 
     def _e123_changed(self):
         if self.file_type == FileType.PRODUCTION:
@@ -120,6 +129,15 @@ class LivingArrangementDialog(BaseDialog):
     def close_button_clicked(self):
         if not self.on_close or self.on_close():
             self.close()
+
+    @property
+    def e56(self) -> int:
+        return self._e56
+
+    @e56.setter
+    def e56(self, v: int):
+        self._e56 = v
+        self._e56_text_changed()
 
     @property
     def child_name(self) -> str:

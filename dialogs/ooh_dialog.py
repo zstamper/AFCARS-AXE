@@ -146,6 +146,7 @@ class OOHDialog(BaseDialog):
         ui.tabWidget.currentChanged.connect(self._on_tab_changed)
         ui.validate_button.clicked.connect(self.do_validate_clicked)
 
+        ui.e56.textChanged.connect(self._on_e56_text_changed)
         ui.e60.textChanged.connect(self._on_e60_text_changed)
         ui.e64.buttonClicked.connect(self._on_e64_button_clicked)
         ui.e66.textChanged.connect(self._on_e66_text_changed)
@@ -372,6 +373,16 @@ class OOHDialog(BaseDialog):
             self.ui.e32.setEnabled(index == 1)
             self.ui.e33.setEnabled(index == 1)
             self.ui.e34.setEnabled(index == 1)
+
+    def _on_e56_text_changed(self):
+        if self.file_type == FileType.PRODUCTION:
+            if self.e56 is not None and self.e56 > 0:
+                self.ui.e57.setEnabled(True)
+                self.ui.e57_label.setEnabled(True)
+            else:
+                self.ui.e57.setEnabled(False)
+                self.ui.e57_label.setEnabled(False)
+                self.e57 = None
 
     def _on_e60_text_changed(self):
         if self.file_type == FileType.PRODUCTION:

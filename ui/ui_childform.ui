@@ -3603,6 +3603,15 @@ Leave blank if law enforcement was not notified.&lt;/i&gt;</string>
   <tabstop>e62_y</tabstop>
   <tabstop>e62_n</tabstop>
   <tabstop>e62_u</tabstop>
+  <tabstop>e64_na</tabstop>
+  <tabstop>e64_i</tabstop>
+  <tabstop>e64_v</tabstop>
+  <tabstop>e66</tabstop>
+  <tabstop>e68</tabstop>
+  <tabstop>parent2tpr</tabstop>
+  <tabstop>parent2_add_button</tabstop>
+  <tabstop>parent2_edit_button</tabstop>
+  <tabstop>parent2_delete_button</tabstop>
   <tabstop>e47</tabstop>
   <tabstop>e48</tabstop>
   <tabstop>e49</tabstop>
@@ -3634,20 +3643,11 @@ Leave blank if law enforcement was not notified.&lt;/i&gt;</string>
   <tabstop>validate_button</tabstop>
   <tabstop>save_button</tabstop>
   <tabstop>close_button</tabstop>
-  <tabstop>parent2tpr</tabstop>
-  <tabstop>parent2_add_button</tabstop>
-  <tabstop>parent2_edit_button</tabstop>
   <tabstop>e63_na_2</tabstop>
   <tabstop>e63_v_2</tabstop>
   <tabstop>e63_i_2</tabstop>
   <tabstop>e65_2</tabstop>
   <tabstop>e67_2</tabstop>
-  <tabstop>e64_na</tabstop>
-  <tabstop>e64_v</tabstop>
-  <tabstop>e64_i</tabstop>
-  <tabstop>e66</tabstop>
-  <tabstop>e68</tabstop>
-  <tabstop>parent2_delete_button</tabstop>
  </tabstops>
  <resources/>
  <connections/>
