@@ -12,7 +12,7 @@ from controllers.utilities import show_error_dialog
 from controllers.validators.removal2020_validator import Removal2020Validator
 from dialogs.removal2020_dialog import Removal2020Dialog
 from model.models import MyBaseModel, Removal2020, LivingArrangement, PermanencyPlan, CaseVisit, PermanencyHearing, \
-    PeriodicReview, FileType
+    PeriodicReview, FileType, Child
 
 
 class Removal2020Controller:
@@ -53,6 +53,14 @@ class Removal2020Controller:
 
     def exec(self):
         self.dialog.exec()
+
+    @property
+    def child(self) -> Child:
+        return self.dialog.child
+
+    @child.setter
+    def child(self, v: Child) -> None:
+        self.dialog.child = v
 
     @property
     def data(self) -> Removal2020:
@@ -150,6 +158,7 @@ class Removal2020Controller:
             self.do_save()
 
         controller = LivingArrangementController(self.dialog, self.dialog.child_name, data, file_type=self.file_type)
+        controller.child = self.child
         controller.file_type = self.file_type
         controller.parent_data = self.dialog
         controller.e56 = self.parent_data.e56
@@ -174,6 +183,7 @@ class Removal2020Controller:
                                                      data,
                                                      file_type=self.file_type)
             controller.on_save = save
+            controller.child = self.child
             controller.parent_data = self.dialog
             controller.e56 = self.parent_data.e56
             controller.e57 = self.parent_data.e57
@@ -198,6 +208,7 @@ class Removal2020Controller:
             self.do_save()
 
         controller = PermanencyPlanController(self.dialog, self.dialog.child_name, data, file_type=self.file_type)
+        controller.child = self.child
         controller.on_save = save
         controller.parent_data = self.dialog
         controller.exec()
@@ -213,6 +224,7 @@ class Removal2020Controller:
             controller = PermanencyPlanController(self.dialog, self.dialog.child_name,
                                                   self.dialog.permanency_plans[current_row], file_type=self.file_type)
             controller.on_save = save
+            controller.child = self.child
             controller.parent_data = self.dialog
             controller.exec()
 
@@ -237,6 +249,7 @@ class Removal2020Controller:
         controller: CaseWorkerVisitController = CaseWorkerVisitController(self.dialog, self.dialog.child_name, data,
                                                                           file_type=self.file_type)
         controller.on_save = save
+        controller.child = self.child
         controller.parent_data = self.dialog
         controller.exec()
 
@@ -253,6 +266,7 @@ class Removal2020Controller:
                                                                                   current_row],
                                                                               file_type=self.file_type)
             controller.on_save = save
+            controller.child = self.child
             controller.parent_data = self.dialog
             controller.exec()
 
@@ -276,6 +290,7 @@ class Removal2020Controller:
             self.do_save()
 
         controller = PermanencyHearingController(self.dialog, self.dialog.child_name, data, file_type=self.file_type)
+        controller.child = self.child
         controller.on_save = save
         controller.parent_data = self.dialog
         controller.exec()
@@ -293,6 +308,7 @@ class Removal2020Controller:
                                                      self.dialog.permanency_hearings[current_row],
                                                      file_type=self.file_type)
             controller.on_save = save
+            controller.child = self.child
             controller.parent_data = self.dialog
             controller.exec()
 
@@ -317,6 +333,7 @@ class Removal2020Controller:
         controller: PeriodicReviewController = PeriodicReviewController(self.dialog, self.dialog.child_name, data,
                                                                         file_type=self.file_type)
         controller.on_save = save
+        controller.child = self.child
         controller.parent_data = self.dialog
         controller.exec()
 
@@ -332,6 +349,7 @@ class Removal2020Controller:
                                                                                 current_row],
                                                                             file_type=self.file_type)
             controller.on_save = save
+            controller.child = self.child
             controller.parent_data = self.dialog
             controller.exec()
 

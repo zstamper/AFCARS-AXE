@@ -16,6 +16,7 @@ class PermanencyPlanDialog(BaseDialog):
         self._wire_ui()
         self.setLayout(self.ui.layout())
         self.setFixedSize(self.ui.size())
+        self.child = None
         self.file_type: FileType = FileType.PRODUCTION
         self.id: int | None = None
         self.removal_id: int | None = None

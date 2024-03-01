@@ -2,7 +2,7 @@ from peewee import IntegerField, DateField
 
 from playhouse.migrate import migrate
 
-from model import ContextTable
+from model import ContextTable, SecondParent
 
 
 def migration_0(migrator) -> None:
@@ -29,3 +29,18 @@ def migration_2(migrator) -> None:
                 parent.number = number
                 number += 1
         context.save()
+
+
+def migration_3(migrator) -> None:
+    from model import ContextTable
+    for context in ContextTable.select():
+        if hasattr(context.data, 'ooh') and hasattr(context.data.ooh, 'second_parents'):
+            if len(context.data.ooh.second_parents) == 0:
+                context.data.ooh.second_parents = [SecondParent(number=2)]
+            else:
+                i = 2
+                for p in context.data.ooh.second_parents:
+                    p.number = i
+                    i += 1
+            context.save()
+

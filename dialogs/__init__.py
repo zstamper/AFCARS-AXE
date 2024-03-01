@@ -235,19 +235,19 @@ def delete_confirmation_dialog(parent: QWidget) -> int:
     return result == QMessageBox.Yes
 
 
-def error_message_dialog(parent: QWidget, errors: list[str]):
+def error_message_dialog(parent: QWidget, errors: list[str], limit: int = 5):
     if sys.platform == 'darwin':
         err_box = QErrorMessage(parent)
-        error_str = "\n\n• ".join(errors[0:5])
-        if len(errors) > 5:
+        error_str = "\n\n• ".join(errors[0:limit])
+        if len(errors) > limit:
             error_str += "\n\n" + f"{len(errors) - 5} additional validation errors."
         err_box.showMessage(error_str)
         err_box.setWindowTitle("Error")
     else:
         errors = [error for error in errors if error]
-        error_str = "\n* ".join(errors[:6])
-        if len(errors) > 6:
-            error_str += "\n\n" + f"{len(errors) - 6} additional validation errors."
+        error_str = "\n* ".join(errors[:limit])
+        if len(errors) > limit+1:
+            error_str += "\n\n" + f"{len(errors) - (limit+1)} additional validation errors."
         err_box = QMessageBox(icon=QMessageBox.Icon.Warning)
         err_box.setText(f"### {error_str}")
         err_box.setTextFormat(Qt.TextFormat.MarkdownText)

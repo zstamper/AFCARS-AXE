@@ -67,3 +67,81 @@ def afcars_to_date(d: int) -> date | None:
     month = (d - (d // 10000) * 10000) // 100
     day = d - (d // 100) * 100
     return date(year=year, month=month, day=day)
+
+
+def is_valid_date(d: int) -> bool:
+    try:
+        d = afcars_to_date(d)
+        assert d is not None
+        return True
+    except ValueError:
+        return False
+    except AssertionError:
+        return False
+
+
+def is_valid_year_month(d: int) -> bool:
+    if d is None:
+        return False
+    try:
+        year = d // 100
+        month = d % 100
+        day = 1
+        d = date(year=year, month=month, day=day)
+        return True
+    except (ValueError, AssertionError):
+        return False
+
+
+def is_future_date(d: int) -> bool:
+    d = afcars_to_date(d)
+    return d and d > date.today()
+
+
+def is_future_year_month(d: int) -> bool:
+    if d is None:
+        return False
+    try:
+        year = d // 100
+        month = d % 100
+        day = 1
+        d = date(year=year, month=month, day=day)
+        return d > date.today()
+    except (ValueError, AssertionError):
+        return False
+
+
+def is_way_past_date(d: int) -> bool:
+    try:
+        d = afcars_to_date(d)
+        t = date.today()
+        past = date(year=t.year - 100, month=t.month, day=t.day)
+        return d and d < past
+    except (ValueError, AssertionError):
+        return False
+
+
+def is_way_past_year_month(d: int) -> bool:
+    if d is None:
+        return False
+    try:
+        year = d // 100
+        month = d % 100
+        day = 1
+        d = date(year=year, month=month, day=day)
+        past = date(year=date.today().year - 100, month=date.today().month, day=date.today().day)
+        return d < past
+    except (ValueError, AssertionError):
+        return False
+
+
+def is_valid_adult_birth_date(d: int) -> bool:
+    try:
+        d = afcars_to_date(d)
+        assert d is not None
+        today = date.today()
+        ten_years_old = date(year=today.year - 10, month=today.month, day=today.day)
+        one_hundred_years_old = date(year=today.year - 100, month=today.month, day=today.day)
+        return one_hundred_years_old <= d <= ten_years_old
+    except (AssertionError):
+        return True

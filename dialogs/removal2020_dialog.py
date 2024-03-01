@@ -2,7 +2,7 @@ from typing import Optional, Callable
 
 from PySide6.QtWidgets import QWidget, QTableWidgetItem
 
-from model.models import FileType
+from model.models import FileType, Child
 from . import BaseDialog
 
 
@@ -59,6 +59,7 @@ class Removal2020Dialog(BaseDialog):
         self.setLayout(self.ui.layout())
         self.setFixedSize(self.ui.size())
         # self.on_accept: Optional[Callable] = None
+        self.child: Child | None = None
         self.living_arrangements = []
         self.permanency_plans = []
         self.periodic_reviews = []
@@ -327,20 +328,19 @@ class Removal2020Dialog(BaseDialog):
     def _e155_current_index_changed(self):
         if self.file_type == FileType.PRODUCTION:
             self.ui.e156.setEnabled(self.e155 == 8)
-            enabled = self.e155 in (3,5)
+            enabled = self.e155 in (3, 5)
             self.ui.adoption_group_box.setEnabled(enabled)
             if not enabled:
-                for n in range(157,186):
+                for n in range(157, 186):
                     setattr(self, f"e{n}", None)
 
     def _update_parent_2_group_box_state(self):
         if self.file_type == FileType.PRODUCTION:
-            enabled = self.e155 in (3,5) and self.e157 in (1,2)
+            enabled = self.e155 in (3, 5) and self.e157 in (1, 2)
             self.ui.parent_2_group_box.setEnabled(enabled)
             if not enabled:
-                for n in range(173,184):
+                for n in range(173, 184):
                     setattr(self, f"e{n}", None)
-
 
     # -------------------------------------------------------------------------
     #                       Form Fields As Properties

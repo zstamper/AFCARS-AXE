@@ -7,7 +7,7 @@ from pydantic import ValidationError
 from controllers.utilities import show_error_dialog
 from controllers.validators.living_arrangement_validator import LivingArrangementValidator
 from dialogs.living_arrangement_dialog import LivingArrangementDialog
-from model.models import MyBaseModel, LivingArrangement, Removal2020, FileType
+from model.models import MyBaseModel, LivingArrangement, Removal2020, FileType, Child
 
 
 class LivingArrangementController:
@@ -28,6 +28,14 @@ class LivingArrangementController:
         self.dialog.on_save = self.do_save
         self.dialog.on_close = self.do_close
         self.on_save: Optional[Callable] = None
+
+    @property
+    def child(self) -> Child:
+        return self.dialog.child
+
+    @child.setter
+    def child(self, v: Child) -> None:
+        self.dialog.child = v
 
     @property
     def data(self) -> LivingArrangement:

@@ -1,17 +1,17 @@
-from typing import Any, Optional, Callable
+from typing import Optional, Callable
 
-from PySide6.QtWidgets import QDialog, QMessageBox
+from PySide6.QtWidgets import QMessageBox
 from pydantic import ValidationError
 
 from controllers.utilities import show_error_dialog
 from controllers.validators.permanency_hearing_validator import PermanencyHearingValidator
 from dialogs.permanency_hearing_dialog import PermanencyHearingDialog
-from model.models import MyBaseModel, PermanencyHearing, Removal2020, FileType
+from model.models import PermanencyHearing, Removal2020, FileType, Child
 
 
 class PermanencyHearingController:
 
-    def __init__(self, parent, child_name: str, data: PermanencyHearing,/,file_type:FileType=FileType.PRODUCTION):
+    def __init__(self, parent, child_name: str, data: PermanencyHearing, /, file_type: FileType = FileType.PRODUCTION):
         self._data = None
         self.on_save: Optional[Callable] = None
         self.dialog = PermanencyHearingDialog(parent)
@@ -23,6 +23,14 @@ class PermanencyHearingController:
         self.dialog.on_save = self.do_save
         self.dialog.on_close = self.do_close
         self.data = data
+
+    @property
+    def child(self) -> Child:
+        return self.dialog.child
+
+    @child.setter
+    def child(self, v: Child) -> None:
+        self.dialog.child = v
 
     @property
     def data(self) -> PermanencyHearing:
@@ -40,7 +48,6 @@ class PermanencyHearingController:
     @file_type.setter
     def file_type(self, v: FileType) -> None:
         self.dialog.file_type = v
-
 
     def exec(self):
         self.dialog.exec()

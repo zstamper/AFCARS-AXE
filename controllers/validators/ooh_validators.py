@@ -2,7 +2,8 @@ import re
 from datetime import datetime, date
 
 from dialogs.ooh_dialog import OOHDialog
-from utils.e1 import is_state
+from utils.e1 import is_state, is_future_date, is_way_past_date, afcars_to_date, is_valid_date, is_valid_year_month, \
+    is_future_year_month, is_way_past_year_month
 
 
 class OOHBaseValidator:
@@ -13,15 +14,10 @@ class OOHBaseValidator:
     @staticmethod
     def is_valid_date(d: int) -> bool:
         try:
-            s = str(d)
-            year = int(s[0:4])
-            month = int(s[4:6])
-            day = int(s[6:8])
-            d = date(year=year, month=month, day=day)
+            d = afcars_to_date(d)
             today = date.today()
             min_d = date(year=today.year - 100, month=today.month, day=today.day)
-            assert d <= date.today()
-            assert d >= min_d
+            assert min_d <= d <= date.today()
             return True
         except ValueError:
             return False
@@ -44,8 +40,12 @@ class DemographicsValidator(OOHBaseValidator):
             raise ValueError("Child ID (E4) is required and must be exactly 12 characters long.")
 
     def validate_e5(self) -> None:
-        if not self.dialog.e5 or not self.is_valid_date(self.dialog.e5):
+        if not is_valid_date(self.dialog.e5):
             raise ValueError("Invalid date of birth (E5)")
+        if is_future_date(self.dialog.e5):
+            raise ValueError("Date of Birth (E5) may not be in the future.")
+        if is_way_past_date(self.dialog.e5):
+            raise ValueError("Date of Birth (E5) is too far in the past.")
 
     def validate_e6(self):
         if self.dialog.e6 not in [1, 2]:
@@ -72,19 +72,37 @@ class DemographicsValidator(OOHBaseValidator):
         if self.dialog.e41 is None:
             raise ValueError("Prior Adoption (E41) is required.")
 
+    def validate_e42(self):
+        if self.dialog.e41 == 1:
+            if not is_valid_year_month(self.dialog.e42):
+                raise ValueError("Invalid year and month for Prior Adoption Date (E42).")
+            if is_future_year_month(self.dialog.e42):
+                raise ValueError("Prior Adoption Date (E42) may not be in the future.")
+            if is_way_past_year_month(self.dialog.e42):
+                raise ValueError("Prior Adoption Date (E42) is too far in the past.")
+
     def validate_e42_e43(self) -> None:
         if self.dialog.e42 is not None and self.dialog.e43 not in [0, 1]:
             raise ValueError(
                 f"Inter-country prior adoption (E43) is required if prior adoption date is specified (E42).")
+
+    def validate_ee45(self) -> None:
+        if self.dialog.e45:
+            if not is_valid_year_month(self.dialog.e45):
+                raise ValueError("Invalid year and month for Prior Guardianship Date (E45).")
+            if is_future_year_month(self.dialog.e45):
+                raise ValueError("Prior Guardianship Date (E45) may not be in the future.")
+            if is_way_past_year_month(self.dialog.e45):
+                raise ValueError("Prior Guardianship Date (E45) is too far in the past.")
 
     def validate_e56(self) -> None:
         if self.dialog.e56 is None:
             raise ValueError("Total number of siblings (E56) is required.")
 
     def validate_e57(self) -> None:
-        if self.dialog.e57 is None and self.dialog.e56:
+        if self.dialog.e57 is None and self.dialog.e56 is not None and self.dialog.e56 > 0:
             raise ValueError("Total number of siblings in foster care (E57) is required.")
-        if self.dialog.e57 and self.dialog.e56 and self.dialog.e57 > self.dialog.e56:
+        if self.dialog.e57 is not None and self.dialog.e56 is not None and self.dialog.e57 > self.dialog.e56:
             raise ValueError("Siblings in Foster Care (E57) cannot be larger than Total Number of Siblings (E56).")
 
     def validate_e56_e57(self) -> None:
@@ -127,8 +145,12 @@ class ICWAValidator(OOHBaseValidator):
             if self.dialog.e10 == 1:
                 if self.dialog.e11 is None:
                     raise ValueError("Date of determination (E11) is required if ICWA applies (E10).")
-                if not self.is_valid_date(self.dialog.e11) or self.is_future_date(self.dialog.e11):
+                if not is_valid_date(self.dialog.e11):
                     raise ValueError("Invalid date provided for Date of Determination (E11).")
+                if is_future_date(self.dialog.e11):
+                    raise ValueError("Date of Determination (E11) may not be a future date.")
+                if is_way_past_date(self.dialog.e11):
+                    raise ValueError("Date of Determination (E11) is too far in the past.")
 
     def validate_e10_e12(self):
         if is_state() and self.dialog.funding == 0:
@@ -158,7 +180,7 @@ class HealthValidator(OOHBaseValidator):
                      self.dialog.e29, self.dialog.e30, self.dialog.e31, self.dialog.e32, self.dialog.e33,
                      self.dialog.e34]]):
                 raise ValueError(
-                    "Responses are required for all health conditions (E24-E34) when the child has a diagnosed condition (E23).")
+                    "At least one health condition/diagnosis (E24-E34) must be selected.")
 
     def validate_e6_e38(self):
         if self.dialog.e6 == 2 and self.dialog.e38 not in [0, 1]:
@@ -178,19 +200,18 @@ class ParentGuardianValidator(OOHBaseValidator):
     def validate_e59(self):
         if self.dialog.e59 is None or not self.E59.match(str(self.dialog.e59)):
             raise ValueError("Invalid birth year for first parent or guardian (E59).")
-        return self
+        if self.dialog.e59 != 7777:
+            if not (date.today().year - 100 < self.dialog.e59 < date.today().year - 10):
+                raise ValueError("First parent or Guardian must be between 10 and 100 years old (E59).")
 
     def validate_e60(self):
         if self.dialog.e60 is None or not self.E60.match(str(self.dialog.e60)):
             raise ValueError("Invalid birth year for second parent or guardian (E60).")
         elif self.dialog.e60 not in [7777, 9999]:
-            current_year: int = datetime.today().year
-            if self.dialog.e60 > current_year - 10 or self.dialog.e60 < current_year - 100:
-                raise ValueError(
-                    f"Second parent birth year (E60) must be in range {current_year - 100}-{current_year - 10}.")
-        return self
+            if not (date.today().year - 100 < self.dialog.e60 < date.today().year - 10):
+                raise ValueError("Age of second parent or guardian must be between 10 and 100 years old (E60).")
 
-    def validate_e61(self):
+    def validate_e61(self) -> None:
         from utils.e1 import is_tribe
         # Rules:
         #   - Data Format: Numeric – Required unless a tribe or 7777 is entered for E59
@@ -209,13 +230,13 @@ class ParentGuardianValidator(OOHBaseValidator):
             return 0
 
         if is_tribe():
-            return self
+            return
         if self.dialog.e59 == 7777:
-            return self
+            return
         if e104():
-            return self
+            return
         if self.dialog.e61 in [0, 1, 9]:
-            return self
+            return
         raise ValueError("Mother's Tribal membership (E61) must be specified.")
 
     def validate_e62(self):
@@ -252,8 +273,56 @@ class ParentGuardianValidator(OOHBaseValidator):
         return self
 
     def validate_e64(self) -> None:
-        if self.dialog.e64 not in [0, 1, 2]:
+        if self.dialog.e60 not in [None, 7777, 9999] and self.dialog.e64 not in [0, 1, 2]:
             raise ValueError(f"Second parent's TPR (E64) is required.")
+
+    def validate_e65(self) -> None:
+        if self.dialog.e65 is not None:
+            if not is_valid_date(self.dialog.e65):
+                raise ValueError("Date of Petition for Termination (E65) contains an invalid date.")
+            if is_future_date(self.dialog.e65):
+                raise ValueError("Date of Petition for Termination (E65) may not be in the future.")
+            if is_way_past_date(self.dialog.e65):
+                raise ValueError("Date of Petition for Termination (E65) is too far in the past.")
+            if self.dialog.e63 == 0:
+                raise ValueError("Date of Petition for Termination (E65) should be blank when E63 is not applicable.")
+
+    def validate_e66(self) -> None:
+        if self.dialog.e60 in [7777, 9999] and not self.dialog.e66:
+            raise ValueError("Date of Petition for Termination (E66) should be left blank.")
+        if self.dialog.e66:
+            if not is_valid_date(self.dialog.e66):
+                raise ValueError("Date of Petition for Termination (E66) contains an invalid date.")
+            if is_future_date(self.dialog.e66):
+                raise ValueError("Date of Petition for Termination (E66) may not be in the future.")
+            if is_way_past_date(self.dialog.e66):
+                raise ValueError("Date of Petition for Termination (E66) is too far in the past.")
+            if self.dialog.e64 == 0:
+                raise ValueError("Date of Petition for Termination (E66) should be blank when E64 is not applicable.")
+
+    def validate_e67(self) -> None:
+        if self.dialog.e67:
+            if not is_valid_date(self.dialog.e67):
+                raise ValueError("Date of Termination (E67) contains an invalid date.")
+            if is_future_date(self.dialog.e67):
+                raise ValueError("Date of Termination (E67) may not be in the future.")
+            if is_way_past_date(self.dialog.e67):
+                raise ValueError("Date of Termination (E67) is too far in the past.")
+            if self.dialog.e63 == 0:
+                raise ValueError("Date of Termination (E67) should be blank when E63 is not applicable.")
+
+    def validate_e68(self) -> None:
+        if self.dialog.e60 in [7777, 9999] and not self.dialog.e66:
+            raise ValueError("Date of Termination (E68) should be left blank.")
+        if self.dialog.e68:
+            if not is_valid_date(self.dialog.e68):
+                raise ValueError("Date of Termination (E68) contains an invalid date.")
+            if is_future_date(self.dialog.e68):
+                raise ValueError("Date of Termination (E68) may not be in the future.")
+            if is_way_past_date(self.dialog.e68):
+                raise ValueError("Date of Termination (E68) is too far in the past.")
+            if self.dialog.e64 == 0:
+                raise ValueError("Date of Termination (E68) should be blank when E64 is not applicable.")
 
 
 class EducationValidator(OOHBaseValidator):
@@ -263,9 +332,8 @@ class EducationValidator(OOHBaseValidator):
         return self
 
     def validate_e36(self):
-        if self.dialog.e35 != 0 and self.dialog.e36 not in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]:
-            raise ValueError(
-                'Highest level of education (E36) is required if the child has ever attended or completed a grade in school not due to age (E35).')
+        if self.dialog.e35 != 0 and self.dialog.e36 not in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]:
+            raise ValueError('Highest level of education (E36) is required.')
         return self
 
     def validate_e37(self):
@@ -286,10 +354,14 @@ class TraffickingValidator(OOHBaseValidator):
                 "Reported to law enforcement (E107) is required if child is victim of sex trafficking (E106).")
         return self
 
-    def validate_e108(self):
-        if self.dialog.e107 == 1 and (self.dialog.e108 is None or not self.is_valid_date(self.dialog.e108)):
-            raise ValueError("Date reported (E108) is required.")
-        return self
+    def validate_e108(self) -> None:
+        if self.dialog.e108:
+            if not is_valid_date(self.dialog.e108):
+                raise ValueError("Invalid Date Reported (E108).")
+            if is_way_past_date(self.dialog.e108):
+                raise ValueError("Date Reported (E108) is too far in the past.")
+            if is_future_date(self.dialog.e108):
+                raise ValueError("Date Reported (E108) cannot be in the future.")
 
     def validate_e109(self):
         if self.dialog.e109 not in [0, 1]:
@@ -299,24 +371,31 @@ class TraffickingValidator(OOHBaseValidator):
     def validate_e110(self):
         if self.dialog.e109 == 1 and self.dialog.e110 not in [0, 1]:
             raise ValueError(
-                "Reported to law enforcement (E110) is required with child is victime of sex trafficking (E109).")
+                "Reported to law enforcement (E110) is required when child is victim of sex trafficking (E109).")
         return self
 
-    def validate_e111(self):
+    def validate_e111(self) -> None:
         def e69() -> int | None:
-            removals = [removal.e69 for removal in (self.dialog.removals2020 if self.dialog.removals2020 else []) + (
-                self.dialog.removals1993 if self.dialog.removals1993 else [])]
-            if removals:
-                return max(removals)
+            removals = sorted(self.dialog.removals2020, key=lambda x: x.e69, reverse=True)
+            if len(removals) > 0:
+                return removals[0].e69
+            removals = sorted(self.dialog.removals1993, key=lambda x: x.e69, reverse=True)
+            if len(removals) > 0:
+                return removals[0].e69
             return None
 
-        if self.dialog.e110 == 1 and (self.dialog.e111 is None or not self.is_valid_date(self.dialog.e111)):
-            raise ValueError("Date report to law enforcement (E111) is required.")
-        e = e69()
-        if self.dialog.e111 is not None and e and self.dialog.e111 < e:
-            raise ValueError(
-                "Date law enforcement was contacted (E111) must be after date of most recent removal (E69).")
-        return self
+        if self.dialog.e110 == 1:
+            if not self.dialog.e111:
+                raise ValueError("Date Reported to Law Enforcement (E111) is required.")
+            if not is_valid_date(self.dialog.e111):
+                raise ValueError("Date Reported to Law Enforcement (E111) is invalid.")
+            if is_way_past_date(self.dialog.e111):
+                raise ValueError("Date Reported to Law Enforcement (E111) is to far in the past.")
+            if is_future_date(self.dialog.e111):
+                raise ValueError("Date Reported to Law Enforcement (E111) cannot be in the future.")
+            if self.dialog.e111 < e69():
+                raise ValueError(
+                    "Date law enforcement was contacted (E111) must be after date of most recent removal (E69).")
 
 
 class FinancialValidator(OOHBaseValidator):

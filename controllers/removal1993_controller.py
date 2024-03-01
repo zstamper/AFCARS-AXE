@@ -7,7 +7,7 @@ from controllers.utilities import show_error_dialog
 from controllers.validators.removal1993_validator import Removal1993Validator
 from dialogs.removal1993_dialog import Removal1993Dialog
 from model import Removal1993
-from model.models import FileType
+from model.models import FileType, Child
 
 
 class Removal1993Controller:
@@ -23,6 +23,14 @@ class Removal1993Controller:
         self.dialog.on_save = self.do_save
         self.dialog.on_close = self.do_close
         self.dialog.on_validate = self.do_validate
+
+    @property
+    def child(self) -> Child:
+        return self.dialog.child
+
+    @child.setter
+    def child(self, v: Child) -> None:
+        self.dialog.child = v
 
     @property
     def data(self) -> Removal1993:

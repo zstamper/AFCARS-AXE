@@ -1,12 +1,12 @@
-from typing import Any, Optional, Callable
+from typing import Optional, Callable
 
-from PySide6.QtWidgets import QDialog, QMessageBox
+from PySide6.QtWidgets import QMessageBox
 from pydantic import ValidationError
 
 from controllers.utilities import show_error_dialog
 from controllers.validators.permanency_plan_validator import PermanencyPlanValidator
 from dialogs.permency_plan_dialog import PermanencyPlanDialog
-from model.models import PermanencyPlan, Removal2020, FileType
+from model.models import PermanencyPlan, Removal2020, FileType, Child
 
 
 class PermanencyPlanController:
@@ -23,6 +23,14 @@ class PermanencyPlanController:
         self.dialog.on_save = self.do_save
         self.dialog.on_close = self.do_close
         self.data = data
+
+    @property
+    def child(self) -> Child:
+        return self.dialog.child
+
+    @child.setter
+    def child(self, v: Child) -> None:
+        self.dialog.child = v
 
     @property
     def data(self) -> PermanencyPlan:
