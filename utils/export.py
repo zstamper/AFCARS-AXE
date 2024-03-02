@@ -2,6 +2,7 @@ from pathlib import Path
 
 from jinja2 import Environment, select_autoescape, FileSystemLoader
 
+import utils
 from model.models import ReportType, BaseChild, Child
 
 
@@ -33,11 +34,15 @@ class BaseExporter:
     @staticmethod
     def e58(ooh):
         e112e58_list = [(la.e112, la.e58) for r in ooh.removals2020 for la in r.living_arrangements]
-        return sorted(e112e58_list, key=lambda x: x[0], reverse=True)[0][1]
+        e58s = sorted(e112e58_list, key=lambda x: x[0], reverse=True)
+        if len(e58s) > 0:
+            return sorted(e112e58_list, key=lambda x: x[0], reverse=True)[0][1]
+        return None
 
     def export(self, e1: str, e2: str, children: list[tuple[BaseChild, Child]]):
+        _, bundle_dir = utils.file_system_directories()
         env = Environment(
-            loader=FileSystemLoader("templates"),
+            loader=FileSystemLoader(bundle_dir / "templates"),
             autoescape=select_autoescape(),
         )
         env.filters['no_null'] = self._no_null

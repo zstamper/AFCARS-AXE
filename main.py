@@ -7,6 +7,7 @@ import traceback
 
 import peewee
 
+import utils
 from controllers.main_window2_controller import MainWindow2Controller
 from model.models import Tribe
 
@@ -63,15 +64,7 @@ try:
             app.setApplicationDisplayName('AXE')
             app.setDesktopFileName('AXE')
 
-            if getattr(sys, 'frozen', False):
-                bundle_dir = Path(sys._MEIPASS)
-                if sys.platform.startswith('win32'):
-                    app_dir = Path(sys.executable).parent
-                if sys.platform.startswith('darwin'):
-                    app_dir = Path(sys.executable).parent.parent.parent.parent
-            else:
-                bundle_dir = Path(os.path.dirname(os.path.abspath(__file__)))
-                app_dir = bundle_dir
+            app_dir, bundle_dir = utils.file_system_directories()
 
             pixmap = QPixmap(bundle_dir / "assets" / "pexels-negative-space-97077.jpg")
             splash = QSplashScreen(pixmap)

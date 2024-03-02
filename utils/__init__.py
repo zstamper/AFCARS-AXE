@@ -1,9 +1,26 @@
 import datetime
+import os
+import sys
+from pathlib import Path
 
 from model import BaseChild, Child, ContextTable
 from model.models import ReportType
 from .e1 import afcars_to_date
 from .id_generator import generate_id
+
+
+def file_system_directories():
+    app_dir = None
+    if getattr(sys, 'frozen', False):
+        bundle_dir = Path(sys._MEIPASS)
+        if sys.platform.startswith('win32'):
+            app_dir = Path(sys.executable).parent
+        if sys.platform.startswith('darwin'):
+            app_dir = Path(sys.executable).parent.parent.parent.parent
+    else:
+        bundle_dir = Path(os.path.dirname(os.path.abspath(__file__))).parent
+        app_dir = bundle_dir
+    return app_dir, bundle_dir
 
 
 def coalesce(v: str | int | float | None, d: int | float) -> int | float:
