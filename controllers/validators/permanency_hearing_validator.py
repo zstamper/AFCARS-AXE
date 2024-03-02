@@ -4,7 +4,7 @@ from typing import Optional
 from controllers.validators.abstract_validator import AbstractValidator
 from dialogs.permanency_hearing_dialog import PermanencyHearingDialog
 from model import Removal2020
-from utils.e1 import e2_end_date, afcars_to_date
+from utils.e1 import e2_end_date, afcars_to_date, is_valid_date, is_future_date
 
 
 class PermanencyHearingBaseValidator:
@@ -13,46 +13,17 @@ class PermanencyHearingBaseValidator:
         self.dialog: PermanencyHearingDialog = dialog
         self.parent_data: Optional[Removal2020] = None
 
-    @staticmethod
-    def afcars_to_date(d: int) -> date:
-        year = d // 10000
-        month = (d - (d // 10000) * 10000) // 100
-        day = d - (d // 100) * 100
-        return date(year=year, month=month, day=day)
-
-    @staticmethod
-    def is_valid_date(d: int) -> bool:
-        try:
-            s = str(d)
-            year = int(s[0:4])
-            month = int(s[4:6])
-            day = int(s[6:8])
-            d = date(year=year, month=month, day=day)
-            today = date.today()
-            min_d = date(year=today.year - 100, month=today.month, day=today.day)
-            assert d >= min_d
-            return True
-        except ValueError:
-            return False
-        except AssertionError:
-            return False
-
-    @staticmethod
-    def is_future_date(d: int) -> bool:
-        d = afcars_to_date(d)
-        return d > date.today()
-
 
 class PermanencyHearingValidators(PermanencyHearingBaseValidator):
 
     def validate_e150(self):
-        if not self.is_valid_date(self.dialog.e150):
+        if not is_valid_date(self.dialog.e150):
             raise ValueError("Permanency Hearing Date (E150) is invalid.")
-        if self.is_future_date(self.dialog.e150):
+        if is_future_date(self.dialog.e150):
             raise ValueError("Permanency Hearing Date (E150) may not be in the future.")
         if self.dialog.e150 < self.parent_data.e69:
             raise ValueError("Permanency Hearing Date (E150) may not be before Removal Date (E69).")
-        if self.afcars_to_date(self.dialog.e150) > e2_end_date():
+        if afcars_to_date(self.dialog.e150) > e2_end_date():
             raise ValueError("Permanency Hearing Date (E150) must be before end of current reporting period (E2).")
 
 
