@@ -1599,6 +1599,11 @@
                  <string>Post-secondary education or training(e.g., trade school)</string>
                 </property>
                </item>
+               <item>
+                <property name="text">
+                 <string>College</string>
+                </property>
+               </item>
               </widget>
              </item>
             </layout>
@@ -3652,19 +3657,7 @@ Leave blank if law enforcement was not notified.&lt;/i&gt;</string>
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="funding"/>
-  <buttongroup name="e64"/>
-  <buttongroup name="e12">
-   <property name="exclusive">
-    <bool>false</bool>
-   </property>
-  </buttongroup>
-  <buttongroup name="e63">
-   <property name="exclusive">
-    <bool>false</bool>
-   </property>
-  </buttongroup>
-  <buttongroup name="e61">
+  <buttongroup name="e107">
    <property name="exclusive">
     <bool>false</bool>
    </property>
@@ -3674,27 +3667,7 @@ Leave blank if law enforcement was not notified.&lt;/i&gt;</string>
     <bool>false</bool>
    </property>
   </buttongroup>
-  <buttongroup name="e110">
-   <property name="exclusive">
-    <bool>false</bool>
-   </property>
-  </buttongroup>
-  <buttongroup name="e8">
-   <property name="exclusive">
-    <bool>false</bool>
-   </property>
-  </buttongroup>
-  <buttongroup name="e109">
-   <property name="exclusive">
-    <bool>false</bool>
-   </property>
-  </buttongroup>
-  <buttongroup name="e106">
-   <property name="exclusive">
-    <bool>false</bool>
-   </property>
-  </buttongroup>
-  <buttongroup name="e107">
+  <buttongroup name="e12">
    <property name="exclusive">
     <bool>false</bool>
    </property>
@@ -3709,11 +3682,43 @@ Leave blank if law enforcement was not notified.&lt;/i&gt;</string>
     <bool>false</bool>
    </property>
   </buttongroup>
-  <buttongroup name="e10">
+  <buttongroup name="e63">
+   <property name="exclusive">
+    <bool>false</bool>
+   </property>
+  </buttongroup>
+  <buttongroup name="e64"/>
+  <buttongroup name="e110">
+   <property name="exclusive">
+    <bool>false</bool>
+   </property>
+  </buttongroup>
+  <buttongroup name="e61">
+   <property name="exclusive">
+    <bool>false</bool>
+   </property>
+  </buttongroup>
+  <buttongroup name="funding"/>
+  <buttongroup name="e109">
    <property name="exclusive">
     <bool>false</bool>
    </property>
   </buttongroup>
   <buttongroup name="e6"/>
+  <buttongroup name="e10">
+   <property name="exclusive">
+    <bool>false</bool>
+   </property>
+  </buttongroup>
+  <buttongroup name="e8">
+   <property name="exclusive">
+    <bool>false</bool>
+   </property>
+  </buttongroup>
+  <buttongroup name="e106">
+   <property name="exclusive">
+    <bool>false</bool>
+   </property>
+  </buttongroup>
  </buttongroups>
 </ui>
