@@ -161,9 +161,11 @@ class OOHDialog(BaseDialog):
         if self.file_type == FileType.PRODUCTION:
             if is_tribe():
                 ui.e61_label.setEnabled(False)
-                ui.e62.setEnabled(False)
+                for button in ui.e61.buttons():
+                     button.setEnabled(False)
                 ui.e62_label.setEnabled(False)
-                ui.e62.setEnabled(False)
+                for button in ui.e62.buttons():
+                    button.setEnabled(False)
 
     # ==================================================================================================================
     #
