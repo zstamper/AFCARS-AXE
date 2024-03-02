@@ -25,7 +25,7 @@ def refresh_dates(base_child: BaseChild, child: Child, report_type: ReportType):
         base_child.last_removal = None
         base_child.last_exit = None
         context = ContextTable.select().where(ContextTable.base_child == base_child.id).order_by(
-            ContextTable.e2.desc()).get_or_none()
+            ContextTable.e2.desc()).first()
         if context:
             base_child.e5 = afcars_to_date(context.data.e5)
             removal = sorted(context.data.ooh.removals2020, key=lambda x: x.e69, reverse=True)
@@ -43,7 +43,13 @@ def refresh_dates(base_child: BaseChild, child: Child, report_type: ReportType):
         base_child.last_adoption = None
         base_child.last_termination = None
         context = ContextTable.select().where(ContextTable.base_child == base_child.id).order_by(
-            ContextTable.e2.desc()).get()
+            ContextTable.e2.desc()).first()
         if context:
-            base_child.last_adoption = afcars_to_date(context.data.a.a17)
-            base_child.last_termination = afcars_to_date(context.data.a.a19)
+            try:
+                base_child.last_adoption = afcars_to_date(getattr(context.data.a, 'a17', None))
+            except ValueError:
+                pass
+            try:
+                base_child.last_termination = afcars_to_date(getattr(context.data.a, 'a18', None))
+            except ValueError:
+                pass

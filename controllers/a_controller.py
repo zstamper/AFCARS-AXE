@@ -5,7 +5,7 @@ from pydantic import ValidationError
 
 from dialogs import BaseDialog
 from dialogs.a_dialog import ADialog
-from model.models import Child, BaseChild, FileType
+from model.models import Child, BaseChild, FileType, ARecord
 from .utilities import show_error_dialog
 from .validators.a_validator import AValidator
 
@@ -65,6 +65,12 @@ class AController:
         return False
 
     def do_save(self) -> bool:
+        if self.serialize():
+            if self.on_save:
+                return self.on_save()
+        return False
+
+    def serialize(self):
         try:
             for key in vars(self.base_child).keys():
                 if key != 'id':
@@ -73,11 +79,11 @@ class AController:
             for key in vars(self.child).keys():
                 if hasattr(self.dialog, key):
                     setattr(self.child, key, getattr(self.dialog, key))
+            if not self.child.a:
+                self.child.a = ARecord()
             for key in vars(self.child.a).keys():
                 if hasattr(self.dialog, key):
                     setattr(self.child.a, key, getattr(self.dialog, key))
-            if self.on_save:
-                self.on_save()
             return True
         except ValidationError as ve:
             show_error_dialog(self.dialog, ve=ve)
