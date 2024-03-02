@@ -256,7 +256,7 @@ class ParentGuardianValidator(OOHBaseValidator):
                 raise ValueError("Date of Petition for Termination (E65) should be blank when E63 is not applicable.")
 
     def validate_e66(self) -> None:
-        if self.dialog.e60 in [7777, 9999] and not self.dialog.e66:
+        if self.dialog.e60 in [7777, 9999] and self.dialog.e66:
             raise ValueError("Date of Petition for Termination (E66) should be left blank.")
         if self.dialog.e66:
             if not is_valid_date(self.dialog.e66):
@@ -280,7 +280,7 @@ class ParentGuardianValidator(OOHBaseValidator):
                 raise ValueError("Date of Termination (E67) should be blank when E63 is not applicable.")
 
     def validate_e68(self) -> None:
-        if self.dialog.e60 in [7777, 9999] and not self.dialog.e66:
+        if self.dialog.e60 in [7777, 9999] and self.dialog.e66:
             raise ValueError("Date of Termination (E68) should be left blank.")
         if self.dialog.e68:
             if not is_valid_date(self.dialog.e68):
