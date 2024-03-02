@@ -245,7 +245,7 @@ class ParentGuardianValidator(OOHBaseValidator):
             raise ValueError(f"Second parent's TPR (E64) is required.")
 
     def validate_e65(self) -> None:
-        if self.dialog.e65 is not None:
+        if self.dialog.e65 is not None and self.dialog.e66 != 66666666:
             if not is_valid_date(self.dialog.e65):
                 raise ValueError("Date of Petition for Termination (E65) contains an invalid date.")
             if is_future_date(self.dialog.e65):
@@ -258,7 +258,7 @@ class ParentGuardianValidator(OOHBaseValidator):
     def validate_e66(self) -> None:
         if self.dialog.e60 in [7777, 9999] and self.dialog.e66:
             raise ValueError("Date of Petition for Termination (E66) should be left blank.")
-        if self.dialog.e66:
+        if self.dialog.e66 and self.dialog.e66 != 66666666:
             if not is_valid_date(self.dialog.e66):
                 raise ValueError("Date of Petition for Termination (E66) contains an invalid date.")
             if is_future_date(self.dialog.e66):
