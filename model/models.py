@@ -7,6 +7,8 @@ from pydantic import BaseModel, field_validator, model_validator, Field
 from pydantic_core.core_schema import FieldValidationInfo
 
 
+
+
 class _Patterns:
     E59 = re.compile(r'7777|(19|20)[0-9]{2}')
     E60 = re.compile(r'7777|9999|(19|20)[0-9]{2}')
@@ -22,6 +24,28 @@ class ReportType(Enum):
 class FileType(Enum):
     PRODUCTION = 0
     TEST = 1
+
+
+class ChildName(BaseModel):
+    e4: str = Field(default="")
+    last_name: str = Field(default="")
+    first_name: str = Field(default="")
+    e5: str | date | datetime | int | None = Field(default=None)
+
+    def __str__(self):
+        from utils import afcars_to_date
+        result = f"{self.last_name}{', ' if self.last_name and self.first_name else ''}{self.first_name}"
+        result += f"{' | ' if result and self.e4 else ''}"
+        result += self.e4
+        if result:
+            result += ' | '
+        if type(self.e5) is str:
+            result += self.e5
+        elif type(self.e5) is date or type(self.e5) is datetime:
+            result += self.e5.strftime("%m/%d/%Y")
+        elif type(self.e5) is int:
+            result += afcars_to_date(self.e5).strftime("%m/%d/%Y")
+        return result
 
 
 ReportingPeriod = str
@@ -70,7 +94,9 @@ class MyBaseModel(BaseModel):
         d = {}
         for fld in cls.model_fields:
             try:
-                if hasattr(obj, fld) and isinstance(getattr(obj, fld), list) or isinstance(getattr(obj, fld), cls.model_fields[fld].annotation):
+                if hasattr(obj, fld) and isinstance(getattr(obj, fld), list) or isinstance(getattr(obj, fld),
+                                                                                           cls.model_fields[
+                                                                                               fld].annotation):
                     d[fld] = getattr(obj, fld)
             except TypeError as te:
                 print(f"crib error: {te}, {te.args}, {fld}, {cls.model_fields[fld].annotation}")

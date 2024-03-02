@@ -2,7 +2,7 @@ from typing import Optional, Callable
 
 from PySide6.QtWidgets import QWidget, QTableWidgetItem
 
-from model.models import FileType, Child
+from model.models import FileType, Child, ChildName
 from . import BaseDialog
 
 
@@ -67,7 +67,7 @@ class Removal2020Dialog(BaseDialog):
         self.case_worker_visits = []
         self.id: int | None = None
         self.ooh_id: int | None = None
-        self._child_name: str = ""
+        self._child_name: ChildName = ChildName()
         self.file_type: FileType = FileType.PRODUCTION
         self.on_tab_changed: Optional[Callable] = None
         self.on_validate: Optional[Callable] = None
@@ -355,17 +355,13 @@ class Removal2020Dialog(BaseDialog):
         self.ui.tab_widget.setCurrentIndex(v)
 
     @property
-    def child_name(self) -> str:
+    def child_name(self) -> ChildName:
         return self._child_name
 
     @child_name.setter
-    def child_name(self, v: str) -> None:
+    def child_name(self, v: ChildName) -> None:
         self._child_name = v
-        # print(f"removal2020: child_name={v}")
-        if v:
-            self.setWindowTitle(f"2020 Removal : {v}")
-        else:
-            self.setWindowTitle("")
+        self.setWindowTitle(f"2020 Removal: {str(self._child_name)}")
 
     @property
     def e3(self) -> str | None:

@@ -7,12 +7,12 @@ from controllers.utilities import show_error_dialog
 from controllers.validators.removal1993_validator import Removal1993Validator
 from dialogs.removal1993_dialog import Removal1993Dialog
 from model import Removal1993
-from model.models import FileType, Child
+from model.models import FileType, Child, ChildName
 
 
 class Removal1993Controller:
 
-    def __init__(self, parent, child_name: str, data: Removal1993, /, file_type: FileType = FileType.PRODUCTION):
+    def __init__(self, parent, child_name: ChildName, data: Removal1993, /, file_type: FileType = FileType.PRODUCTION):
         self.dialog = Removal1993Dialog(parent)
         self.file_type = file_type
         self.child_name = child_name

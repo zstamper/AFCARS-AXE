@@ -6,12 +6,12 @@ from pydantic import ValidationError
 from controllers.utilities import show_error_dialog
 from controllers.validators.case_worker_visit_validator import CaseWorkerVisitValidator
 from dialogs.case_worker_visit_dialog import CaseVisitDialog
-from model.models import CaseVisit, Removal2020, FileType, Child
+from model.models import CaseVisit, Removal2020, FileType, Child, ChildName
 
 
 class CaseWorkerVisitController:
 
-    def __init__(self, parent, child_name: str, data: CaseVisit, /, file_type: FileType = FileType.PRODUCTION):
+    def __init__(self, parent, child_name: ChildName, data: CaseVisit, /, file_type: FileType = FileType.PRODUCTION):
         self._data = None
         self.on_save: Optional[Callable] = None
         self.dialog = CaseVisitDialog(parent)

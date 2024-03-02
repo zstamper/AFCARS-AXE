@@ -3,7 +3,7 @@ from typing import Optional, Callable
 from PySide6.QtWidgets import QWidget
 
 from dialogs import BaseDialog
-from model.models import FileType
+from model.models import FileType, ChildName
 
 
 class PermanencyPlanDialog(BaseDialog):
@@ -20,7 +20,7 @@ class PermanencyPlanDialog(BaseDialog):
         self.file_type: FileType = FileType.PRODUCTION
         self.id: int | None = None
         self.removal_id: int | None = None
-        self._child_name: str = ""
+        self._child_name: ChildName = ChildName()
         self.on_validate: Optional[Callable] = None
         self.on_save: Optional[Callable] = None
         self.on_close: Optional[Callable] = None
@@ -49,16 +49,13 @@ class PermanencyPlanDialog(BaseDialog):
         self.child_name = ""
 
     @property
-    def child_name(self) -> str:
+    def child_name(self) -> ChildName:
         return self._child_name
 
     @child_name.setter
-    def child_name(self, v: str) -> None:
+    def child_name(self, v: ChildName) -> None:
         self._child_name = v
-        if v:
-            self.setWindowTitle(f"Permanency Plan : {v}")
-        else:
-            self.setWindowTitle("")
+        self.setWindowTitle(f"Permanency Plan: {str(self._child_name)}")
 
     @property
     def e147(self) -> int | None:

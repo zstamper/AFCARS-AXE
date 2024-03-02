@@ -7,7 +7,7 @@ from PySide6.QtGui import (QRegularExpressionValidator)
 from PySide6.QtWidgets import (QAbstractButton, QWidget, QListWidgetItem, QTableWidgetItem)
 
 from model import SecondParent, Removal1993, Removal2020, RecognizedTribe, ARecord
-from model.models import Tribe, FileType, Child
+from model.models import Tribe, FileType, Child, ChildName
 from utils import generate_id
 from utils.e1 import is_tribe
 from . import BaseDialog
@@ -40,7 +40,7 @@ class OOHDialog(BaseDialog):
         self._second_parents: list[SecondParent] = []
         self._removals1993: list[Removal1993] = []
         self._removals2020: list[Removal2020] = []
-        self._child_name: str = ""
+        self._child_name: ChildName = ChildName()
         self.file_type: FileType = FileType.PRODUCTION
 
         # Callbacks
@@ -116,6 +116,7 @@ class OOHDialog(BaseDialog):
         ui.e4.textChanged.connect(self._e4_text_changed)
         ui.e4.setValidator(QRegularExpressionValidator(QRegularExpression(r'[0-9a-zA-Z]{12}')))
         ui.e4_generate.clicked.connect(self._e4_generate_clicked)
+        ui.e5.textChanged.connect(self._e5_text_changed)
 
         ui.e6.buttonClicked.connect(self._e6_button_clicked)
         # ui.e7.buttonClicked.connect(self._e7_button_clicked)
@@ -162,7 +163,7 @@ class OOHDialog(BaseDialog):
             if is_tribe():
                 ui.e61_label.setEnabled(False)
                 for button in ui.e61.buttons():
-                     button.setEnabled(False)
+                    button.setEnabled(False)
                 ui.e62_label.setEnabled(False)
                 for button in ui.e62.buttons():
                     button.setEnabled(False)
@@ -235,13 +236,15 @@ class OOHDialog(BaseDialog):
         self.ui.tabWidget.setCurrentIndex(new_tab)
 
     def _last_name_text_changed(self, text: str) -> None:
-        self.child_name = f"{self.last_name if self.last_name else ''}{', ' if self.last_name and self.first_name else ''}{self.first_name if self.first_name else ''}"
+        self.child_name.last_name = self.last_name
+        self._refresh_title()
 
     def _first_name_text_changed(self, text: str) -> None:
-        self.child_name = f"{self.last_name if self.last_name else ''}{', ' if self.last_name and self.first_name else ''}{self.first_name if self.first_name else ''}"
+        self.child_name.first_name = self.first_name
+        self._refresh_title()
 
     def _refresh_title(self) -> None:
-        self.setWindowTitle(f"{self.child_name}{' : ' if self.e4 else ''}{self.e4 if self.e4 else ''}")
+        self.setWindowTitle(f"Out of Home: {str(self._child_name)}")
 
     def _e4_text_changed(self, text: str) -> None:
         if self.ui.e4.hasAcceptableInput():
@@ -249,11 +252,16 @@ class OOHDialog(BaseDialog):
                 enabled = self.ui.e4.text() == ""
                 self.ui.e4.setEnabled(enabled)
                 self.ui.e4_generate.setEnabled(enabled)
+            self.child_name.e4 = self.e4
             self._refresh_title()
 
     def _e4_generate_clicked(self) -> None:
         id_value: str = generate_id()
         self.ui.e4.setText(id_value)
+
+    def _e5_text_changed(self) -> None:
+        self.child_name.e5 = self.e5
+        self._refresh_title()
 
     def _e6_button_clicked(self, button: QAbstractButton) -> None:
         if self.file_type == FileType.PRODUCTION:
@@ -484,11 +492,11 @@ class OOHDialog(BaseDialog):
         self._child = v
 
     @property
-    def child_name(self) -> str:
+    def child_name(self) -> ChildName:
         return self._child_name
 
     @child_name.setter
-    def child_name(self, v: str) -> None:
+    def child_name(self, v: ChildName) -> None:
         self._child_name = v
         self._refresh_title()
 

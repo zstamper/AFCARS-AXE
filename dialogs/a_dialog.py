@@ -6,7 +6,7 @@ from PySide6.QtWidgets import QWidget
 
 from dialogs import BaseDialog
 from model import OOHRecord
-from model.models import FileType
+from model.models import FileType, ChildName
 from utils import generate_id
 
 
@@ -22,7 +22,7 @@ class ADialog(BaseDialog):
         self.on_close: Optional[Callable] = None
         self.on_validate: Optional[Callable] = None
 
-        self._child_name: str = ""
+        self._child_name: ChildName = ChildName()
 
         self._wire_ui()
         self.setLayout(self.ui.layout())
@@ -74,16 +74,13 @@ class ADialog(BaseDialog):
     # =========================================================================
 
     @property
-    def child_name(self) -> str:
+    def child_name(self) -> ChildName:
         return self._child_name
 
     @child_name.setter
-    def child_name(self, v: str) -> None:
+    def child_name(self, v: ChildName) -> None:
         self._child_name = v
-        if v:
-            self.setWindowTitle(f"{v}{' : ' if self.e4 else ''}{self.e4}")
-        else:
-            self.setWindowTitle('')
+        self.setWindowTitle(f"Adoption/Guardianship Assistance: {str(self._child_name)}")
 
     def _e4_text_changed(self, text: str) -> None:
         if self.file_type == FileType.PRODUCTION:

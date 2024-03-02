@@ -12,7 +12,7 @@ from controllers.utilities import show_error_dialog
 from controllers.validators.removal2020_validator import Removal2020Validator
 from dialogs.removal2020_dialog import Removal2020Dialog
 from model.models import MyBaseModel, Removal2020, LivingArrangement, PermanencyPlan, CaseVisit, PermanencyHearing, \
-    PeriodicReview, FileType, Child
+    PeriodicReview, FileType, Child, ChildName
 
 
 class Removal2020Controller:
@@ -21,7 +21,7 @@ class Removal2020Controller:
      and editing model data using the view provided at time of controller instantiation.
      """
 
-    def __init__(self, parent, child_name: str, data: Removal2020, /, file_type: FileType = FileType.PRODUCTION):
+    def __init__(self, parent, child_name: ChildName, data: Removal2020, /, file_type: FileType = FileType.PRODUCTION):
         self._data = None
         self.dialog: Removal2020Dialog = Removal2020Dialog(parent)
         self.file_type = file_type

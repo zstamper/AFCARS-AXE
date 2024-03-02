@@ -3,14 +3,14 @@ from typing import Optional, Callable
 from PySide6.QtWidgets import QWidget
 
 from dialogs import BaseDialog
-from model.models import FileType
+from model.models import FileType, ChildName
 
 
 class PermanencyHearingDialog(BaseDialog):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self._child_name: str = ""
+        self._child_name: ChildName = ChildName()
         self.child = None
         self.file_type: FileType = FileType.PRODUCTION
         self.on_validate: Optional[Callable] = None
@@ -35,16 +35,13 @@ class PermanencyHearingDialog(BaseDialog):
         self.child_name = ""
 
     @property
-    def child_name(self) -> str:
+    def child_name(self) -> ChildName:
         return self._child_name
 
     @child_name.setter
-    def child_name(self, v: str):
+    def child_name(self, v: ChildName) -> None:
         self._child_name = v
-        if v:
-            self.setWindowTitle(f"Permanency Hearing : {v}")
-        else:
-            self.setWindowTitle("")
+        self.setWindowTitle(f"Permanency Hearing: {str(self._child_name)}")
 
     @property
     def e150(self) -> int | None:

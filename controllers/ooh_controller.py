@@ -9,7 +9,8 @@ from controllers.second_parent_controller import SecondParentController
 from controllers.utilities import show_error_dialog, get_epa_tribes
 from controllers.validators.ooh_validator import OOHValidator
 from dialogs.ooh_dialog import OOHDialog
-from model.models import Removal1993, Removal2020, SecondParent, RecognizedTribe, BaseChild, Child, FileType, OOHRecord
+from model.models import Removal1993, Removal2020, SecondParent, RecognizedTribe, BaseChild, Child, FileType, OOHRecord, \
+    ChildName
 
 
 class OOHController:
@@ -62,11 +63,11 @@ class OOHController:
         self.dialog.file_type = v
 
     @property
-    def child_name(self) -> str:
+    def child_name(self) -> ChildName:
         return self.dialog.child_name
 
     @child_name.setter
-    def child_name(self, v: str) -> None:
+    def child_name(self, v: ChildName) -> None:
         self.dialog.child_name = v
 
     @property

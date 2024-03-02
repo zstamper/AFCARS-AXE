@@ -2,7 +2,7 @@ from typing import Callable, Optional, Any
 
 from PySide6.QtWidgets import QWidget
 
-from model.models import FileType, Child
+from model.models import FileType, Child, ChildName
 from . import BaseDialog
 
 
@@ -13,7 +13,7 @@ class Removal1993Dialog(BaseDialog):
 
         self.__ooh = None
         self._child = None
-        self._child_name: str = ""
+        self._child_name: ChildName = ChildName()
         self.id: int | None = None
         self.ooh_id: int | None = None
         self.ui: QWidget = self.load_ui('ui_removal1993.ui')
@@ -59,16 +59,13 @@ class Removal1993Dialog(BaseDialog):
         self.__ooh = ooh
 
     @property
-    def child_name(self) -> str:
+    def child_name(self) -> ChildName:
         return self._child_name
 
     @child_name.setter
-    def child_name(self, v: str):
+    def child_name(self, v: ChildName) -> None:
         self._child_name = v
-        if v:
-            self.setWindowTitle(f"1993 Removal : {v}")
-        else:
-            self.setWindowTitle("")
+        self.setWindowTitle(f"1993 Removal: {str(self._child_name)}")
 
     @property
     def e69(self) -> int | None:

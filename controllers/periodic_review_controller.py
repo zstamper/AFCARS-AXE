@@ -6,7 +6,7 @@ from pydantic import ValidationError
 from controllers.utilities import show_error_dialog
 from controllers.validators.periodic_review_validator import PeriodicReviewValidator
 from dialogs.periodic_review_dialog import PeriodicReviewDialog
-from model.models import PeriodicReview, Removal2020, FileType, Child
+from model.models import PeriodicReview, Removal2020, FileType, Child, ChildName
 
 
 class PeriodicReviewController:
@@ -15,7 +15,7 @@ class PeriodicReviewController:
      and editing model data using the view provided at time of controller instantiation.
      """
 
-    def __init__(self, parent, child_name: str, data: PeriodicReview, /, file_type: FileType = FileType.PRODUCTION):
+    def __init__(self, parent, child_name: ChildName, data: PeriodicReview, /, file_type: FileType = FileType.PRODUCTION):
         self._data = None
         self.dialog = PeriodicReviewDialog(parent)
         self.file_type = file_type

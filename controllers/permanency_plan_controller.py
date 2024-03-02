@@ -6,12 +6,12 @@ from pydantic import ValidationError
 from controllers.utilities import show_error_dialog
 from controllers.validators.permanency_plan_validator import PermanencyPlanValidator
 from dialogs.permency_plan_dialog import PermanencyPlanDialog
-from model.models import PermanencyPlan, Removal2020, FileType, Child
+from model.models import PermanencyPlan, Removal2020, FileType, Child, ChildName
 
 
 class PermanencyPlanController:
 
-    def __init__(self, parent, child_name: str, data: PermanencyPlan, /, file_type: FileType = FileType.PRODUCTION):
+    def __init__(self, parent, child_name: ChildName, data: PermanencyPlan, /, file_type: FileType = FileType.PRODUCTION):
         self._data = None
         self.dialog = PermanencyPlanDialog(parent)
         self.file_type = file_type

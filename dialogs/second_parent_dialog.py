@@ -1,6 +1,7 @@
 from typing import Optional, Callable
 
 from dialogs import BaseDialog
+from model.models import ChildName
 
 
 class Parent2Dialog(BaseDialog):
@@ -9,7 +10,7 @@ class Parent2Dialog(BaseDialog):
 
         self._number: int | None = None
         self.child = None
-        self._child_name: str = ""
+        self._child_name: ChildName = ChildName()
         self.on_validate: Optional[Callable] = None
         self.on_save: Optional[Callable] = None
         self.on_close: Optional[Callable] = None
@@ -47,16 +48,13 @@ class Parent2Dialog(BaseDialog):
             self.close()
 
     @property
-    def child_name(self) -> str:
+    def child_name(self) -> ChildName:
         return self._child_name
 
     @child_name.setter
-    def child_name(self, v: str) -> None:
+    def child_name(self, v: ChildName) -> None:
         self._child_name = v
-        if v:
-            self.setWindowTitle(f"Putative Parent/Guardian for {self.child_name}")
-        else:
-            self.setWindowTitle("")
+        self.setWindowTitle(f"Putative Parent: {str(self._child_name)}")
 
     @property
     def number(self) -> int:
@@ -65,8 +63,6 @@ class Parent2Dialog(BaseDialog):
     @number.setter
     def number(self, v: int) -> None:
         self._number = v
-        self.ui.parent2_tpr_group_box.setTitle(
-            f"{'Second' if v == 2 else 'Putative'} Parent/Guardian Modified or Terminated Parental Rights")
 
     @property
     def e64(self) -> int:

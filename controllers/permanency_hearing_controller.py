@@ -6,12 +6,12 @@ from pydantic import ValidationError
 from controllers.utilities import show_error_dialog
 from controllers.validators.permanency_hearing_validator import PermanencyHearingValidator
 from dialogs.permanency_hearing_dialog import PermanencyHearingDialog
-from model.models import PermanencyHearing, Removal2020, FileType, Child
+from model.models import PermanencyHearing, Removal2020, FileType, Child, ChildName
 
 
 class PermanencyHearingController:
 
-    def __init__(self, parent, child_name: str, data: PermanencyHearing, /, file_type: FileType = FileType.PRODUCTION):
+    def __init__(self, parent, child_name: ChildName, data: PermanencyHearing, /, file_type: FileType = FileType.PRODUCTION):
         self._data = None
         self.on_save: Optional[Callable] = None
         self.dialog = PermanencyHearingDialog(parent)
