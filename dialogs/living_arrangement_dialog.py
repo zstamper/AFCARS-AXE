@@ -82,6 +82,18 @@ class LivingArrangementDialog(BaseDialog):
         if self.file_type == FileType.PRODUCTION:
             enabled = self.e123 in (1, 2)
             self.ui.foster_parent_2_group_box.setEnabled(enabled)
+            if not enabled:
+                self.e136 = None
+                self.e137 = None
+                self.e138 = None
+                self.e139 = None
+                self.e130 = None
+                self.e131 = None
+                self.e132 = None
+                self.e133 = None
+                self.e134 = None
+                self.e135 = None
+                self.e146 = None
 
     def _e133_changed(self):
         if self.file_type == FileType.PRODUCTION:
