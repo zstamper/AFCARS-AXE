@@ -413,10 +413,11 @@ class OOHDialog(BaseDialog):
     def _on_e60_text_changed(self):
         if self.file_type == FileType.PRODUCTION:
             enabled = self.e60 != 9999
-            self.ui.e62_label.setEnabled(enabled)
-            for button in self.ui.e62.buttons():
-                button.setEnabled(enabled)
-            self.ui.parent2_tpr_group_box.setEnabled(enabled)
+            if not is_tribe():
+                self.ui.e62_label.setEnabled(enabled)
+                for button in self.ui.e62.buttons():
+                    button.setEnabled(enabled)
+                self.ui.parent2_tpr_group_box.setEnabled(enabled)
 
     def _on_e63_button_clicked(self):
         if self.file_type == FileType.PRODUCTION:
