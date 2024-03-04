@@ -328,6 +328,8 @@ class Removal2020Dialog(BaseDialog):
     def _e155_current_index_changed(self):
         if self.file_type == FileType.PRODUCTION:
             self.ui.e156.setEnabled(self.e155 == 8)
+            if self.e155 != 8:
+                self.e156 = None
             enabled = self.e155 in (3, 5)
             self.ui.adoption_group_box.setEnabled(enabled)
             if not enabled:
