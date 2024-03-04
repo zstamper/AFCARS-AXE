@@ -24,7 +24,7 @@ class LivingArrangementDialog(BaseDialog):
         self.on_save: Optional[Callable] = None
         self.on_close: Optional[Callable] = None
         self._e56: int | None = None
-        self.e57: int | None = None
+        self._e57: int | None = None
 
     def _wire_ui(self) -> None:
         self.setModal(True)
@@ -49,14 +49,12 @@ class LivingArrangementDialog(BaseDialog):
         self.ui.save_button.clicked.connect(self.save_button_clicked)
         self.ui.close_button.clicked.connect(self.close_button_clicked)
 
-    def _e56_text_changed(self):
+    def _e56_e57_text_changed(self):
         if self.file_type == FileType.PRODUCTION:
-            if self.e56 is not None and self.e56 > 0:
-                self.ui.e58.setEnabled(True)
-                self.ui.e58_label.setEnabled(True)
-            else:
-                self.ui.e58.setEnabled(False)
-                self.ui.e58_label.setEnabled(False)
+            enabled = bool(self.e56) and bool(self.e57)
+            self.ui.e58.setEnabled(enabled)
+            self.ui.e58_label.setEnabled(enabled)
+            if not enabled:
                 self.e58 = None
 
     def _e113_changed(self):
@@ -149,7 +147,16 @@ class LivingArrangementDialog(BaseDialog):
     @e56.setter
     def e56(self, v: int):
         self._e56 = v
-        self._e56_text_changed()
+        self._e56_e57_text_changed()
+
+    @property
+    def e57(self) -> int:
+        return self._e57
+
+    @e57.setter
+    def e57(self, v: int) -> None:
+        self._e57 = v
+        self._e56_e57_text_changed()
 
     @property
     def child_name(self) -> ChildName:
