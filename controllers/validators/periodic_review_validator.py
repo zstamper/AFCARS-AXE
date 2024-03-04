@@ -1,3 +1,4 @@
+import re
 from datetime import date
 from typing import Optional
 
@@ -17,8 +18,12 @@ class PeriodicReviewBaseValidator:
 class PeriodicReviewValidators(PeriodicReviewBaseValidator):
 
     def validate_e149(self):
+        if not self.dialog.ui.e149.text():
+            raise ValueError("Periodic Review Date (E149) is required.")
+        if not re.match(r"\d+", self.dialog.ui.e149.text()):
+            raise ValueError("Periodic Review Date (E149) is invalid.")
         if not is_valid_date(self.dialog.e149):
-            raise ValueError("Invalid date for Periodic Review Date (E149).")
+            raise ValueError("Periodic Review Date (E149) is invalid.")
         if is_future_date(self.dialog.e149):
             raise ValueError("Periodic Review Date (E149) cannot be in the future.")
         if self.dialog.e149 < self.parent_data.e69:

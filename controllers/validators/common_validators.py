@@ -1,3 +1,5 @@
+import re
+
 from utils.e1 import is_valid_date, is_future_date, is_way_past_date
 
 
@@ -8,8 +10,10 @@ class CommonValidators:
             raise ValueError("Child ID (E4) is required and must be exactly 12 characters long.")
 
     def validate_e5(self) -> None:
+        if not re.match(r"\d+", self.dialog.ui.e5.text()):
+            raise ValueError("Date of Birth (E5) is invalid.")
         if not is_valid_date(self.dialog.e5):
-            raise ValueError("Invalid date of birth (E5)")
+            raise ValueError("Date of Birth (E5) is invalid.")
         if is_future_date(self.dialog.e5):
             raise ValueError("Date of Birth (E5) may not be in the future.")
         if is_way_past_date(self.dialog.e5):

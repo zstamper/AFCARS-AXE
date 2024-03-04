@@ -1,4 +1,5 @@
 import datetime
+import re
 from datetime import date
 from typing import Optional
 
@@ -33,10 +34,16 @@ class LivingArrangementValidators:
         if self.dialog.e57 is not None and self.dialog.e58 is not None and self.dialog.e58 > self.dialog.e57:
             raise ValueError(
                 "Number of siblings placed with this child (E58) cannot exceed number of siblings in foster care (E57).")
+        if bool(self.dialog.e56) and bool(self.dialog.e57) and not bool(re.match(r"\d+", self.dialog.ui.e58.text())):
+            raise ValueError("Number of siblings placed with this child (E58) is invalid.")
 
     def validate_e112(self):
+        if not self.dialog.ui.e112.text():
+            raise ValueError("Living Arrangement Start date (E112) is required.")
+        if not re.match(r"\d+", self.dialog.ui.e112.text()):
+            raise ValueError("Living Arrangement Start Date (E112) is invalid.")
         if not is_valid_date(self.dialog.e112):
-            raise ValueError("Invalid removal date (E112).")
+            raise ValueError("Living Arrangement Start Date (E112) is invalid.")
         if is_future_date(self.dialog.e112):
             raise ValueError("Living Arrangement Start Date (E112) cannot be in the future.")
         if self.parent_data.e69 and self.dialog.e112 < self.parent_data.e69:
@@ -54,7 +61,7 @@ class LivingArrangementValidators:
         if self.dialog.e113 == 1 and self.dialog.e120 is not None:
             print(f"e120=({type(self.dialog.e120)}) {self.dialog.e120}")
             if self.dialog.e120 not in (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14):
-                raise ValueError("Invalid selection for Living arrangement type (E120).")
+                raise ValueError("Living arrangement (E120) is invalid.")
 
     def validate_e114_e118(self):
         fields = [self.dialog.e114, self.dialog.e115, self.dialog.e116, self.dialog.e117, self.dialog.e118,
@@ -92,9 +99,11 @@ class LivingArrangementValidators:
 
     def validate_e125(self):
         if self.dialog.e113 == 1:
-            if not self.dialog.e125:
+            if not self.dialog.ui.e125.text():
                 raise ValueError(
                     "First foster parent's year of birth (E125) is required.")
+            if not re.match(r"\d+", self.dialog.ui.e125.text()):
+                raise ValueError("First Foster Parent's Year of Birth (E125) is invalid.")
             year = datetime.date.today().year
             if not 10 <= year - self.dialog.e125 < 100:
                 raise ValueError(
@@ -126,9 +135,11 @@ class LivingArrangementValidators:
 
     def validate_e136(self):
         if self.dialog.e113 == 1 and self.dialog.e123 in (1, 2):
-            if not self.dialog.e136:
+            if not self.dialog.ui.e136.text():
                 raise ValueError(
                     "Second foster parent's year of birth (E136) is required.")
+            if not re.match(r"\d+", self.dialog.ui.e136.text()):
+                raise ValueError("Second Foster Parent's Year of Birth (E136) is invalid.")
             year = datetime.date.today().year
             if not 10 <= year - self.dialog.e136 < 100:
                 raise ValueError(

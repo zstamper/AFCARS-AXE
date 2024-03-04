@@ -121,6 +121,7 @@ class OOHDialog(BaseDialog):
         ui.e6.buttonClicked.connect(self._e6_button_clicked)
         # ui.e7.buttonClicked.connect(self._e7_button_clicked)
         ui.e8.buttonClicked.connect(self._e8_button_clicked)
+        ui.e10.buttonClicked.connect(self._e10_button_clicked)
 
         ui.add_tribe_button.clicked.connect(self._on_add_tribe_clicked)
         ui.remove_tribe_button.clicked.connect(self._on_remove_tribe_clicked)
@@ -304,6 +305,20 @@ class OOHDialog(BaseDialog):
             self.ui.add_tribe_button.setEnabled(enabled)
             self.ui.remove_tribe_button.setEnabled(enabled)
             self.ui.epa_tribes.setEnabled(enabled)
+
+    def _e10_button_clicked(self) -> None:
+        self.set_e10_state()
+
+    def set_e10_state(self) -> None:
+        enabled: bool = self.ui.e10_y.isChecked()
+        self.ui.e11.setEnabled(enabled)
+        self.ui.e11_label.setEnabled(enabled)
+        for button in self.ui.e12.buttons():
+            button.setEnabled(enabled)
+        self.ui.e12_label.setEnabled(enabled)
+        if not enabled:
+            self.e11 = None
+            self.e12 = None
 
     def _e19_toggled(self, checked: bool) -> None:
         if self.file_type == FileType.PRODUCTION:
@@ -609,6 +624,7 @@ class OOHDialog(BaseDialog):
     @e10.setter
     def e10(self, v: int) -> None:
         self._set_radio_button(self.ui.e10, v)
+        self.set_e10_state()
 
     @property
     def e11(self) -> int | None:

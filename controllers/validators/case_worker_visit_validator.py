@@ -1,3 +1,4 @@
+import re
 from datetime import date
 from typing import Optional
 
@@ -50,6 +51,10 @@ class CaseWorkerVisitBaseValidator:
 class CaseWorkerVisitValidators(CaseWorkerVisitBaseValidator):
 
     def validate_e151(self):
+        if not self.dialog.ui.e151.text():
+            raise ValueError("Date of Visit (E151) is required.")
+        if not re.match(r"\d+", self.dialog.ui.e151.text()):
+            raise ValueError("Date of Visit (E151) is invalid.")
         if not self.is_valid_date(self.dialog.e151):
             raise ValueError("Date of Visit (E151) is invalid.")
         if self.is_future_date(self.dialog.e151):
@@ -66,7 +71,7 @@ class CaseWorkerVisitValidators(CaseWorkerVisitBaseValidator):
             raise ValueError(
                 "Caseworker Visit Location (E152) is required when a Caseworker Visit Date (E151) is specified.")
         if self.dialog.e152 not in (1, 2):
-            raise ValueError("Invalid Caseworker Visit Location (E152).")
+            raise ValueError("Caseworker Visit Location (E152) is invalid.")
 
 
 class CaseWorkerVisitValidator(AbstractValidator):

@@ -1,3 +1,4 @@
+import re
 from datetime import date
 from typing import Optional
 
@@ -17,6 +18,10 @@ class PermanencyHearingBaseValidator:
 class PermanencyHearingValidators(PermanencyHearingBaseValidator):
 
     def validate_e150(self):
+        if not self.dialog.ui.e150.text():
+            raise ValueError("Permanency Hearing Date (E150) is required.")
+        if not re.match(r"\d+", self.dialog.ui.e150.text()):
+            raise ValueError("Permanency Hearing Date (E150) is invalid.")
         if not is_valid_date(self.dialog.e150):
             raise ValueError("Permanency Hearing Date (E150) is invalid.")
         if is_future_date(self.dialog.e150):

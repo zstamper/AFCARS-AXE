@@ -1,3 +1,4 @@
+import re
 from datetime import date
 
 from dialogs.removal2020_dialog import Removal2020Dialog
@@ -25,12 +26,18 @@ class Removal2020BaseValidator:
 class RemovalValidator(Removal2020BaseValidator):
 
     def validate_e3(self):
+        if bool(self.dialog.ui.e3.text()) and not re.match(r"\d{5}", self.dialog.ui.e3.text()):
+            raise ValueError("Agency FIPS code(E3) is invalid.")
         if self.dialog.e3 is None or len(self.dialog.e3) != 5:
             raise ValueError("Agency FIPS code (E3) is required and must be 5 digits.")
 
     def validate_e69(self) -> None:
+        if not self.dialog.ui.e69.text():
+            raise ValueError(f"Date of Removal (E69) is required.")
+        if not re.match(r"\d+", self.dialog.ui.e69.text()):
+            raise ValueError(f"Date of Removal (E69) is invalid.")
         if not is_valid_date(self.dialog.e69):
-            raise ValueError(f"Invalid date specified for Date of Removal (E69).")
+            raise ValueError(f"Date of Removal (E69) is invalid.")
         if self.dialog.e153 and is_valid_date(self.dialog.e153) and self.dialog.e153 < self.dialog.e69:
             raise ValueError(f"Date of Removal (E69) must be prior to the date of exit (E153).")
         if is_valid_date(self.dialog.child.e5) and self.dialog.e69 < self.dialog.child.e5:
@@ -40,13 +47,13 @@ class RemovalValidator(Removal2020BaseValidator):
 
     def validate_e71(self) -> None:
         if self.dialog.e71 not in (1, 2, 3, 4, 5, 6, 7):
-            raise ValueError(f"Invalid selection for Environment at Removal (E71).")
+            raise ValueError(f"Environment at Removal (E71) is invalid.")
 
     def validate_e72_e105(self):
         field_names = [f'e{i}' for i in range(72, 106)]
         for field in field_names:
             if getattr(self.dialog, field) not in (0, 1):
-                raise ValueError(f"Invalid selection for {field.upper()}.")
+                raise ValueError(f"{field.upper()} is invalid.")
         if not any([getattr(self.dialog, field) == 1 for field in field_names]):
             raise ValueError(f"At least one Family and Child Circumstance must be selected (E72-E105).")
 
@@ -68,9 +75,11 @@ class ExitValidator(Removal2020BaseValidator):
                 raise ValueError(f"Date of Removal (e69) must be prior to the Date of Exit (e153) for the same removal")
 
     def validate_e153(self):
-        if self.dialog.e153 is not None:
+        if self.dialog.ui.e153.text():
+            if not re.match(r"\d+", self.dialog.ui.e153.text()):
+                raise ValueError(f"Date of Exit (E153) is invalid.")
             if not is_valid_date(self.dialog.e153):
-                raise ValueError(f"Invalid date specified for Date of Exit (E153).")
+                raise ValueError(f"Date of Exit (E153) is invalid.")
             if self.dialog.e153 <= 20220930:
                 raise ValueError("Date of exit (E153) must be on or after October 1, 2022.")
             if self.dialog.e69 is None or self.dialog.e153 <= self.dialog.e69:
@@ -81,7 +90,7 @@ class ExitValidator(Removal2020BaseValidator):
 
     def validate_e155(self):
         if self.dialog.e155 not in (1, 2, 3, 4, 5, 6, 7, 8, 9):
-            raise ValueError(f"Invalid selection for Exit Reason (E155).")
+            raise ValueError(f"Exit Reason (E155) is invalid.")
         if self.dialog.e153 is None and self.dialog.e155 != 9:
             raise ValueError("Exit reason (E155) must be 'Not Applicable' when no exit date (E153) is provided.")
 
@@ -104,9 +113,11 @@ class ExitValidator(Removal2020BaseValidator):
 
     def validate_e162(self):
         if self.dialog.e155 in (3, 5):
-            if self.dialog.e162 is None:
+            if not self.dialog.ui.e162.text():
                 raise ValueError(
-                    "Date of Birth for first adoptive parent or guardian (E162) is required when Exit Reason (E155) is Adoption or Guadianship.")
+                    "Date of Birth for first adoptive parent or guardian (E162) is required.")
+            if not re.match(r"\d+", self.dialog.ui.e162.text()):
+                raise ValueError("Date of Birth for first adoptive parent or guardian (E162) is invalid.")
             if not is_valid_date(self.dialog.e162):
                 raise ValueError("Date of Birth for first adoptive parent or guardian (E162) is invalid.")
 
@@ -137,12 +148,13 @@ class ExitValidator(Removal2020BaseValidator):
                 'Sex of first adoptive parent or guardian (E172) is required when Exit Reason (E155) is Adoption or Guardianship by a couple.')
 
     def validate_e173(self):
-        if self.dialog.e155 in (3, 5) and self.dialog.e172 not in (1, 2) and self.dialog.e173 is None:
+        if self.dialog.e155 in (3, 5) and self.dialog.e172 not in (1, 2) and not self.dialog.ui.e173.text():
             raise ValueError(
                 "Date of Birth for second adoptive parent or guardian (E173) is required.")
+        if not re.match(r"\d+", self.dialog.ui.e173.text()):
+            raise ValueError("Date of Birth for second adoptive parent or guardian (E173) is invalid.")
         if self.dialog.e173 and not is_valid_date(self.dialog.e173):
-            raise ValueError(
-                "Date of Birth for second adoptive parent or guardian (E173) is invalid.")
+            raise ValueError("Date of Birth for second adoptive parent or guardian (E173) is invalid.")
         if self.dialog.e173 and not is_valid_adult_birth_date(self.dialog.e173):
             raise ValueError("Age of second adoptive parent or guardian (E173) must be between 10 and 100 years old.")
 

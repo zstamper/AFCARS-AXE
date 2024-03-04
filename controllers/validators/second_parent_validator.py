@@ -34,7 +34,7 @@ class SecondParentValidators(SecondParentBaseValidator):
         if self.dialog.e64 > 0 and self.dialog.e66 is None:
             raise ValueError("Petition Date (E66) is required when Termination/Modification (E64) applies.")
         if not self.is_valid_date(self.dialog.e66):
-            raise ValueError("Invalid Petition Date (E66).")
+            raise ValueError("Petition Date (E66) is invalid.")
 
     def validate_e68(self):
         if self.dialog.e68 is not None and not self.is_valid_date(self.dialog.e68):
