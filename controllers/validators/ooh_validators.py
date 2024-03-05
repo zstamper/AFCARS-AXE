@@ -260,7 +260,7 @@ class ParentGuardianValidator(OOHBaseValidator):
             raise ValueError(f"Second parent's TPR (E64) is required.")
 
     def validate_e65(self) -> None:
-        if bool(self.dialog.ui.e65.text()) and self.dialog.e66 != 66666666:
+        if bool(self.dialog.ui.e65.text()) and self.dialog.e65 != 66666666:
             if not re.match(r"\d+", self.dialog.ui.e65.text()):
                 raise ValueError("Date of Petition for Termination (E65) is invalid.")
             if not is_valid_date(self.dialog.e65):
