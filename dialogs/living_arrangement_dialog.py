@@ -85,12 +85,12 @@ class LivingArrangementDialog(BaseDialog):
                 self.e137 = None
                 self.e138 = None
                 self.e139 = None
-                self.e130 = None
-                self.e131 = None
-                self.e132 = None
-                self.e133 = None
-                self.e134 = None
-                self.e135 = None
+                self.e140 = None
+                self.e141 = None
+                self.e142 = None
+                self.e143 = None
+                self.e144 = None
+                self.e155 = None
                 self.e146 = None
 
     def _e133_changed(self):
