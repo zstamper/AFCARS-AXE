@@ -68,7 +68,7 @@ class LivingArrangementDialog(BaseDialog):
             if self.e120 in (12, 13):  # runaway or whereabouts unknown
                 self.e121 = 4
             if not self.e113:
-                for field in (114, 115, 116, 117, 118, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135,
+                for field in (114, 115, 116, 117, 118, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135,
                               136, 137, 138, 139, 140, 141, 142, 143, 144, 145):
                     if hasattr(self, f"e{field}"):
                         setattr(self, f"e{field}", None)
