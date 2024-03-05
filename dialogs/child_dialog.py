@@ -173,7 +173,7 @@ class ChildDialog(BaseDialog):
                                                 data.last_exit.strftime("%m/%d/%Y") if data.last_exit else ""))
             else:
                 self.ui.child_table.setItem(row, 5, QTableWidgetItem(
-                    data.last_removal.strftime("%m/%d/%Y") if data.last_adoption else ""))
+                    data.last_adoption.strftime("%m/%d/%Y") if data.last_adoption else ""))
                 self.ui.child_table.setItem(row, 6,
                                             QTableWidgetItem(
                                                 data.last_termination.strftime("%m/%d/%Y") if data.last_termination else ""))
