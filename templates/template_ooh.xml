@@ -230,7 +230,7 @@
                     </E151_E152_case_worker_visits>
                     <E153_exit_date>{{ removal2020.e153|no_null }}</E153_exit_date>
                     <E154_exit_transaction_date>{{ removal2020.e154|no_null }}</E154_exit_transaction_date>
-                    <E155_exit_reason>{{ removal2020.e155|no_null }}</E155_exit_reason>
+                    <E155_exit_reason>{% if removal2020.e154 %}{{ removal2020.e155|no_null }}{% else %}9{% endif %}</E155_exit_reason>
                     <E156_transfer_to_another_agency>{{ removal2020.e156|no_null }}</E156_transfer_to_another_agency>
                     <E157_E186_adoptive_parents_information>
                         {%- if removal2020.e162 %}

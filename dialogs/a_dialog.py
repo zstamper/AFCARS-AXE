@@ -95,6 +95,8 @@ class ADialog(BaseDialog):
 
     # =========================================================================
 
+    # FIXME the form field interactions for the common fields need to be lifted from the OOH form
+
     @property
     def last_name(self) -> str:
         return self.ui.last_name.text()

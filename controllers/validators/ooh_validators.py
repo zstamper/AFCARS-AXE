@@ -42,7 +42,7 @@ class DemographicsValidator(OOHBaseValidator, CommonValidators):
 
     def validate_e42(self):
         if bool(self.dialog.ui.e42.text()) and not re.match(r'\d+', self.dialog.ui.e42.text()):
-                raise ValueError("Prior Adoption Date (E42) is invalid.")
+            raise ValueError("Prior Adoption Date (E42) is invalid.")
         if self.dialog.e41 == 1:
             if not is_valid_year_month(self.dialog.e42):
                 raise ValueError("Prior Adoption Date (E42) is invalid.")
@@ -72,7 +72,6 @@ class DemographicsValidator(OOHBaseValidator, CommonValidators):
             raise ValueError("Total number of siblings (E56) is required.")
         if not re.match(r'\d+', self.dialog.ui.e56.text()):
             raise ValueError("Total Number of Siblings (E56) is invalid.")
-
 
     def validate_e57(self) -> None:
         if self.dialog.e57 is None and self.dialog.e56 is not None and self.dialog.e56 > 0:
@@ -327,7 +326,8 @@ class EducationValidator(OOHBaseValidator):
         return self
 
     def validate_e36(self):
-        if self.dialog.e35 != 0 and self.dialog.e36 not in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]:
+        if self.dialog.e35 != 0 and self.dialog.e36 not in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
+                                                            17]:
             raise ValueError('Highest level of education (E36) is required.')
         return self
 

@@ -88,6 +88,20 @@ class ExitValidator(Removal2020BaseValidator):
             if self.dialog.e153 > today:
                 raise ValueError("Date of exit (E153) may not be a future date.")
 
+    def validate_e154(self):
+        if self.dialog.ui.e154.text():
+            if not re.match(r"\d+", self.dialog.ui.e154.text()):
+                raise ValueError(f"Exit Transaction Date (E154) is invalid.")
+            if not is_valid_date(self.dialog.e154):
+                raise ValueError(f"Exit Transaction Date (E154) is invalid.")
+            if self.dialog.e154 <= 20220930:
+                raise ValueError("Exit Transaction Date (E154) must be on or after October 1, 2022.")
+            if self.dialog.e69 is None or self.dialog.e153 <= self.dialog.e69:
+                raise ValueError("Exit Transaction Date (E154) must be after date of removal (E69).")
+            today = int(date.today().strftime('%Y%m%d'))
+            if self.dialog.e154 > today:
+                raise ValueError("Exit Transaction Date (E154) may not be a future date.")
+
     def validate_e155(self):
         if self.dialog.e155 not in (1, 2, 3, 4, 5, 6, 7, 8, 9):
             raise ValueError(f"Exit Reason (E155) is invalid.")
@@ -148,15 +162,15 @@ class ExitValidator(Removal2020BaseValidator):
                 'Sex of first adoptive parent or guardian (E172) is required when Exit Reason (E155) is Adoption or Guardianship by a couple.')
 
     def validate_e173(self):
-        if self.dialog.e155 in (3, 5) and self.dialog.e172 not in (1, 2) and not self.dialog.ui.e173.text():
-            raise ValueError(
-                "Date of Birth for second adoptive parent or guardian (E173) is required.")
-        if not re.match(r"\d+", self.dialog.ui.e173.text()):
-            raise ValueError("Date of Birth for second adoptive parent or guardian (E173) is invalid.")
-        if self.dialog.e173 and not is_valid_date(self.dialog.e173):
-            raise ValueError("Date of Birth for second adoptive parent or guardian (E173) is invalid.")
-        if self.dialog.e173 and not is_valid_adult_birth_date(self.dialog.e173):
-            raise ValueError("Age of second adoptive parent or guardian (E173) must be between 10 and 100 years old.")
+        if self.dialog.e155 in (3, 5) and self.dialog.e157 not in (1, 2):
+            if not self.dialog.ui.e173.text():
+                raise ValueError("Date of Birth for second adoptive parent or guardian (E173) is required.")
+            if not re.match(r"\d+", self.dialog.ui.e173.text()):
+                raise ValueError("Date of Birth for second adoptive parent or guardian (E173) is invalid.")
+            if self.dialog.e173 and not is_valid_date(self.dialog.e173):
+                raise ValueError("Date of Birth for second adoptive parent or guardian (E173) is invalid.")
+            if self.dialog.e173 and not is_valid_adult_birth_date(self.dialog.e173):
+                raise ValueError("Age of second adoptive parent or guardian (E173) must be between 10 and 100 years old.")
 
     def validate_e174(self):
         if self.dialog.e155 in (3, 5) and self.dialog.e157 in (1, 2) and self.dialog.e174 not in (0, 1, 9):
