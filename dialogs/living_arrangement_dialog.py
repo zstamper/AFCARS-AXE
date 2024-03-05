@@ -27,6 +27,10 @@ class LivingArrangementDialog(BaseDialog):
         self._e56: int | None = None
         self._e57: int | None = None
 
+    def exec(self):
+        self._e56_e57_text_changed()
+        super().exec()
+
     def _wire_ui(self) -> None:
         self.setModal(True)
         ui = self.ui
@@ -165,7 +169,6 @@ class LivingArrangementDialog(BaseDialog):
     @e56.setter
     def e56(self, v: int):
         self._e56 = v
-        self._e56_e57_text_changed()
 
     @property
     def e57(self) -> int:
@@ -174,7 +177,6 @@ class LivingArrangementDialog(BaseDialog):
     @e57.setter
     def e57(self, v: int) -> None:
         self._e57 = v
-        self._e56_e57_text_changed()
 
     @property
     def child_name(self) -> ChildName:
@@ -298,12 +300,12 @@ class LivingArrangementDialog(BaseDialog):
         self._e121_changed()
 
     @property
-    def e122(self) -> int:
-        return self._get_int_field(self.ui.e122)
+    def e122(self) -> str:
+        return self._get_text_field(self.ui.e122)
 
     @e122.setter
-    def e122(self, v: int) -> None:
-        self._set_int_field(self.ui.e122, v)
+    def e122(self, v: str) -> None:
+        self._set_text_field(self.ui.e122, v)
 
     @property
     def e123(self) -> int:
