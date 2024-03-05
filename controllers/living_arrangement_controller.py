@@ -16,7 +16,8 @@ class LivingArrangementController:
      and editing model data using the view provided at time of controller instantiation.
      """
 
-    def __init__(self, parent, child_name: ChildName, data: LivingArrangement, /, file_type: FileType = FileType.PRODUCTION):
+    def __init__(self, parent, child_name: ChildName, data: LivingArrangement, /,
+                 file_type: FileType = FileType.PRODUCTION):
         self.dialog: LivingArrangementDialog = LivingArrangementDialog(parent)
         self.file_type: FileType = file_type
         self.parent_data: Optional[Removal2020] = None
@@ -55,7 +56,7 @@ class LivingArrangementController:
         self.dialog.file_type = v
 
     @property
-    def e56(self)->int:
+    def e56(self) -> int:
         return self.dialog.e56
 
     @e56.setter
@@ -69,6 +70,14 @@ class LivingArrangementController:
     @e57.setter
     def e57(self, v: int):
         self.dialog.e57 = v
+
+    @property
+    def e39(self) -> int:
+        return self.dialog.e39
+
+    @e39.setter
+    def e39(self, v: int) -> None:
+        self.dialog.e39 = v
 
     def exec(self):
         self.dialog.exec()

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1004</width>
-    <height>751</height>
+    <width>1006</width>
+    <height>785</height>
    </rect>
   </property>
   <property name="font">
@@ -330,7 +330,7 @@
           <item>
            <layout class="QVBoxLayout" name="verticalLayout_6">
             <item>
-             <widget class="QLabel" name="label_7">
+             <widget class="QLabel" name="e40_label">
               <property name="text">
                <string>Is this youth placed with their child? (E40)</string>
               </property>
@@ -1281,26 +1281,6 @@
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="e40">
-   <property name="exclusive">
-    <bool>false</bool>
-   </property>
-  </buttongroup>
-  <buttongroup name="e134">
-   <property name="exclusive">
-    <bool>false</bool>
-   </property>
-  </buttongroup>
-  <buttongroup name="e135">
-   <property name="exclusive">
-    <bool>false</bool>
-   </property>
-  </buttongroup>
-  <buttongroup name="e146">
-   <property name="exclusive">
-    <bool>false</bool>
-   </property>
-  </buttongroup>
   <buttongroup name="e126">
    <property name="exclusive">
     <bool>false</bool>
@@ -1312,6 +1292,26 @@
    </property>
   </buttongroup>
   <buttongroup name="e137">
+   <property name="exclusive">
+    <bool>false</bool>
+   </property>
+  </buttongroup>
+  <buttongroup name="e40">
+   <property name="exclusive">
+    <bool>false</bool>
+   </property>
+  </buttongroup>
+  <buttongroup name="e134">
+   <property name="exclusive">
+    <bool>false</bool>
+   </property>
+  </buttongroup>
+  <buttongroup name="e146">
+   <property name="exclusive">
+    <bool>false</bool>
+   </property>
+  </buttongroup>
+  <buttongroup name="e135">
    <property name="exclusive">
     <bool>false</bool>
    </property>

@@ -12,6 +12,7 @@ class LivingArrangementDialog(BaseDialog):
         self.ui = self.load_ui('ui_living_arrangement.ui')
         self.child = None
         self._e113 = None
+        self._e39 = None
         self.file_type: FileType = FileType.PRODUCTION
         self.last_updated: Optional[datetime.datetime] = None
         self._wire_ui()
@@ -141,6 +142,23 @@ class LivingArrangementDialog(BaseDialog):
             self.close()
 
     @property
+    def e39(self) -> int:
+        return self._e39
+
+    @e39.setter
+    def e39(self, v: int) -> None:
+        self._e39 = v
+        if v == 0:
+            self.e40 = 9
+            for button in self.ui.e40.buttons():
+                button.setEnabled(False)
+            self.ui.e40_label.setEnabled(False)
+        else:
+            for button in self.ui.e40.buttons():
+                button.setEnabled(True)
+            self.ui.e40_label.setEnabled(True)
+
+    @property
     def e56(self) -> int:
         return self._e56
 
@@ -173,6 +191,9 @@ class LivingArrangementDialog(BaseDialog):
 
     @e40.setter
     def e40(self, v: int) -> None:
+        self.ui.e40_n.setChecked(False)
+        self.ui.e40_y.setChecked(False)
+        self.ui.e40_na.setChecked(False)
         self._set_radio_button(self.ui.e40, v)
 
     @property

@@ -161,6 +161,7 @@ class Removal2020Controller:
         controller.child = self.child
         controller.file_type = self.file_type
         controller.parent_data = self.dialog
+        controller.e39 = self.parent_data.e39
         controller.e56 = self.parent_data.e56
         controller.e57 = self.parent_data.e57
         controller.on_save = save
@@ -185,6 +186,7 @@ class Removal2020Controller:
             controller.on_save = save
             controller.child = self.child
             controller.parent_data = self.dialog
+            controller.e39 = self.parent_data.e39
             controller.e56 = self.parent_data.e56
             controller.e57 = self.parent_data.e57
             controller.exec()
