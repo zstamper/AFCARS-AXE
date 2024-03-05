@@ -4,7 +4,7 @@ from datetime import datetime, date
 from controllers.validators.common_validators import CommonValidators
 from dialogs.ooh_dialog import OOHDialog
 from utils.e1 import is_state, is_future_date, is_way_past_date, afcars_to_date, is_valid_date, is_valid_year_month, \
-    is_future_year_month, is_way_past_year_month
+    is_future_year_month, is_way_past_year_month, e2_end_date
 
 
 class OOHBaseValidator:
@@ -264,7 +264,7 @@ class ParentGuardianValidator(OOHBaseValidator):
             if not re.match(r"\d+", self.dialog.ui.e65.text()):
                 raise ValueError("Date of Petition for Termination (E65) is invalid.")
             if not is_valid_date(self.dialog.e65):
-                raise ValueError("Date of Petition for Termination (E65) contains an invalid date.")
+                raise ValueError("Date of Petition for Termination (E65) is invalid.")
             if is_future_date(self.dialog.e65):
                 raise ValueError("Date of Petition for Termination (E65) may not be in the future.")
             if is_way_past_date(self.dialog.e65):
@@ -279,13 +279,15 @@ class ParentGuardianValidator(OOHBaseValidator):
             if not re.match(r"\d+", self.dialog.ui.e66.text()):
                 raise ValueError("Date of Petition for Termination (E66) is invalid.")
             if not is_valid_date(self.dialog.e66):
-                raise ValueError("Date of Petition for Termination (E66) contains an invalid date.")
+                raise ValueError("Date of Petition for Termination (E66) is invalid.")
             if is_future_date(self.dialog.e66):
                 raise ValueError("Date of Petition for Termination (E66) may not be in the future.")
             if is_way_past_date(self.dialog.e66):
                 raise ValueError("Date of Petition for Termination (E66) is too far in the past.")
-            if self.dialog.e64 == 0:
-                raise ValueError("Date of Petition for Termination (E66) should be blank when E64 is not applicable.")
+            # if self.dialog.e64 == 0:
+            #     raise ValueError("Date of Petition for Termination (E66) should be blank when E64 is not applicable.")
+            if afcars_to_date(self.dialog.e66) > e2_end_date():
+                raise ValueError("Date of Petition for Termination (E66) can't be after current period.")
 
     def validate_e67(self) -> None:
         if self.dialog.ui.e67.text():
@@ -312,8 +314,10 @@ class ParentGuardianValidator(OOHBaseValidator):
                 raise ValueError("Date of Termination (E68) may not be in the future.")
             if is_way_past_date(self.dialog.e68):
                 raise ValueError("Date of Termination (E68) is too far in the past.")
-            if self.dialog.e64 == 0:
-                raise ValueError("Date of Termination (E68) should be blank when E64 is not applicable.")
+            # if self.dialog.e64 == 0:
+            #     raise ValueError("Date of Termination (E68) should be blank when E64 is not applicable.")
+            if afcars_to_date(self.dialog.e68) > e2_end_date():
+                raise ValueError("Date of Termination (E68) can't be after current period.")
 
 
 class EducationValidator(OOHBaseValidator):

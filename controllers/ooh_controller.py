@@ -288,6 +288,7 @@ class OOHController:
                                             data=SecondParent(number=self._next_parent_number()))
         controller.on_save = save
         controller.child = self.child
+        controller.e60 = self.dialog.e60
         controller.file_type = self.file_type
         controller.exec()
 
@@ -302,6 +303,7 @@ class OOHController:
                                                 data=self.dialog.second_parents[current_row + 1])
             controller.on_save = save
             controller.child = self.child
+            controller.e60 = self.dialog.e60
             controller.file_type = self.file_type
             controller.exec()
 

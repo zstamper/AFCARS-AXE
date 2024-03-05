@@ -1236,8 +1236,8 @@ class OOHDialog(BaseDialog):
                 self.ui.parent2tpr.insertRow(row - 1)
             self.ui.parent2tpr.setItem(row - 1, 0, QTableWidgetItem(str(data.number)))
             self.ui.parent2tpr.setItem(row - 1, 1, QTableWidgetItem(str(data.e64_as_str())))
-            self.ui.parent2tpr.setItem(row - 1, 2, QTableWidgetItem(str(data.e66)))
-            self.ui.parent2tpr.setItem(row - 1, 3, QTableWidgetItem(str(data.e68)))
+            self.ui.parent2tpr.setItem(row - 1, 2, QTableWidgetItem(str(data.e66) if data.e66 else ''))
+            self.ui.parent2tpr.setItem(row - 1, 3, QTableWidgetItem(str(data.e68) if data.e68 else ''))
             row += 1
         while self.ui.parent2tpr.rowCount() > len(self.second_parents):
             self.ui.parent2tpr.removeRow(self.ui.parent2tpr.rowCount() - 1)

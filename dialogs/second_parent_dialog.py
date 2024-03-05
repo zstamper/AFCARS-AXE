@@ -10,6 +10,7 @@ class Parent2Dialog(BaseDialog):
 
         self._number: int | None = None
         self.child = None
+        self.e60 = None
         self._child_name: ChildName = ChildName()
         self.on_validate: Optional[Callable] = None
         self.on_save: Optional[Callable] = None
@@ -30,6 +31,7 @@ class Parent2Dialog(BaseDialog):
         self.ui.save_button.clicked.connect(self.save_button_clicked)
         self.ui.close_button.clicked.connect(self.close_button_clicked)
         self.ui.validate_button.clicked.connect(self.validate_button_clicked)
+        self.ui.e64.buttonClicked.connect(self._e64_button_clicked)
 
     def clear(self, exclude: list[str] = None):
         super().clear()
@@ -46,6 +48,16 @@ class Parent2Dialog(BaseDialog):
     def close_button_clicked(self):
         if not self.on_close or self.on_close():
             self.close()
+
+    def _e64_button_clicked(self):
+        enabled = self.e64 in [1,2]
+        self.ui.e66.setEnabled(enabled)
+        self.ui.e66_label.setEnabled(enabled)
+        self.ui.e68.setEnabled(enabled)
+        self.ui.e68_label.setEnabled(enabled)
+        if not enabled:
+            self.e66 = None
+            self.e68 = None
 
     @property
     def child_name(self) -> ChildName:

@@ -28,7 +28,7 @@ class SecondParentController:
         self.validator = SecondParentValidator(self.dialog)
         self.dialog.on_save = self.do_save
         self.dialog.on_close = self.do_close
-        self.dialog.on_validate_clicked = self.do_validate
+        self.dialog.on_validate = self.do_validate
         self.on_save: Optional[Callable] = None
 
     def exec(self):
@@ -60,6 +60,14 @@ class SecondParentController:
     def data(self, v: SecondParent) -> None:
         self._data = v
         v.scatter(self.dialog)
+
+    @property
+    def e60(self) -> int:
+        return self.dialog.e60
+
+    @e60.setter
+    def e60(self, v: int) -> None:
+        self.dialog.e60 = v
 
     def do_save(self) -> None:
         # gather model fields from the view
