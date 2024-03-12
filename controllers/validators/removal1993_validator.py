@@ -53,6 +53,9 @@ class Removal1993Validators(Removal1993BaseValidator):
             raise ValueError("Removal Date (E69) cannot be in the future.")
         if self.is_after_1993_date(self.dialog.e69):
             raise ValueError("Removal Date (E69) must be before 10/1/2022.")
+        if is_valid_date(self.dialog.child.e5) and self.dialog.e69 < self.dialog.child.e5:
+            raise ValueError("Date of Removal (E69) must be on or after the child's data of birth (E5).")
+
 
     def validate_e153(self):
         if not self.dialog.ui.e153.text():

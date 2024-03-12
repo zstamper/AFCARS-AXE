@@ -200,6 +200,7 @@ class OOHController:
                                                                   data,
                                                                   file_type=self.file_type)
         controller.on_save = save
+        controller.child = self.child
         controller.exec()
 
     def do_edit_removal1993(self) -> None:
@@ -214,6 +215,7 @@ class OOHController:
                                                                       self.dialog.removals1993[current_row],
                                                                       file_type=self.file_type)
             controller.on_save = save
+            controller.child = self.child
             controller.exec()
 
     def do_delete_removal1993(self) -> None:
