@@ -256,17 +256,12 @@
               </property>
               <item>
                <property name="text">
-                <string>Yes</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
                 <string>No</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>Unknown</string>
+                <string>Yes</string>
                </property>
               </item>
               <item>
@@ -277,6 +272,11 @@
               <item>
                <property name="text">
                 <string>Declined</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Unknown</string>
                </property>
               </item>
              </widget>
@@ -558,16 +558,16 @@ Legalization Date (A17)</string>
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="a15">
-   <property name="exclusive">
-    <bool>false</bool>
-   </property>
-  </buttongroup>
+  <buttongroup name="e6"/>
   <buttongroup name="a19">
    <property name="exclusive">
     <bool>false</bool>
    </property>
   </buttongroup>
-  <buttongroup name="e6"/>
+  <buttongroup name="a15">
+   <property name="exclusive">
+    <bool>false</bool>
+   </property>
+  </buttongroup>
  </buttongroups>
 </ui>
