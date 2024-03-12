@@ -36,7 +36,14 @@
           </widget>
          </item>
          <item>
-          <widget class="QComboBox" name="reporting_period_filter"/>
+          <widget class="QComboBox" name="reporting_period_filter">
+           <property name="minimumSize">
+            <size>
+             <width>140</width>
+             <height>0</height>
+            </size>
+           </property>
+          </widget>
          </item>
         </layout>
        </item>
