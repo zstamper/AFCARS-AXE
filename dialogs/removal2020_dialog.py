@@ -88,8 +88,13 @@ class Removal2020Dialog(BaseDialog):
         self.on_add_periodic_review: Optional[Callable] = None
         self.on_edit_periodic_review: Optional[Callable] = None
         self.on_delete_periodic_review: Optional[Callable] = None
+        self.settled: bool = False
 
     # ------------------------------------------------------------------------
+
+    def settle(self):
+        self.settled = True
+        self._e155_current_index_changed()
 
     def clear(self, exclude: list[str] = None) -> None:
         super().clear()
@@ -326,7 +331,7 @@ class Removal2020Dialog(BaseDialog):
         self.ui.periodic_reviews_table.setCurrentRow(v)
 
     def _e155_current_index_changed(self):
-        if self.file_type == FileType.PRODUCTION:
+        if self.file_type == FileType.PRODUCTION and self.settled:
             self.ui.e156.setEnabled(self.e155 == 8)
             if self.e155 != 8:
                 self.e156 = None

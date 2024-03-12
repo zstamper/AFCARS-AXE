@@ -103,6 +103,7 @@ class OOHController:
             for key in vars(v.ooh).keys():
                 if hasattr(self.dialog, key):
                     setattr(self.dialog, key, getattr(v.ooh, key))
+
     @staticmethod
     def confirm_save() -> bool:
         msgBox = QMessageBox()
@@ -157,6 +158,7 @@ class OOHController:
 
     def exec(self):
         self.dialog.enable_icwa(not self.is_tribe())
+        self.dialog.settle()
         self.dialog.exec()
 
     def clear(self):

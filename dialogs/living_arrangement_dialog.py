@@ -26,6 +26,16 @@ class LivingArrangementDialog(BaseDialog):
         self.on_close: Optional[Callable] = None
         self._e56: int | None = None
         self._e57: int | None = None
+        self.settled: bool = False
+
+    def settle(self):
+        self.settled = True
+        self._e56_e57_text_changed()
+        self._e113_changed()
+        self._e121_changed()
+        self._e123_changed()
+        self._e133_changed()
+        self._e144_changed()
 
     def exec(self):
         self._e56_e57_text_changed()
@@ -55,7 +65,7 @@ class LivingArrangementDialog(BaseDialog):
         self.ui.close_button.clicked.connect(self.close_button_clicked)
 
     def _e56_e57_text_changed(self):
-        if self.file_type == FileType.PRODUCTION:
+        if self.file_type == FileType.PRODUCTION and self.settled:
             enabled = bool(self.e56) and bool(self.e57)
             self.ui.e58.setEnabled(enabled)
             self.ui.e58_label.setEnabled(enabled)
@@ -63,7 +73,7 @@ class LivingArrangementDialog(BaseDialog):
                 self.e58 = None
 
     def _e113_changed(self):
-        if self.file_type == FileType.PRODUCTION:
+        if self.file_type == FileType.PRODUCTION and self.settled:
             self.ui.family_setting_provider_group_box.setEnabled(self.e113 == 1)
             if self.e120 in (12, 13):  # runaway or whereabouts unknown
                 self.e121 = 4
@@ -74,7 +84,7 @@ class LivingArrangementDialog(BaseDialog):
                         setattr(self, f"e{field}", None)
 
     def _e121_changed(self):
-        if self.file_type == FileType.PRODUCTION:
+        if self.file_type == FileType.PRODUCTION and self.settled:
             enabled = self.e121 not in (1, 4)
             self.ui.e122_label.setEnabled(enabled)
             self.ui.e122.setEnabled(enabled)
@@ -82,7 +92,7 @@ class LivingArrangementDialog(BaseDialog):
                 self.e122 = None
 
     def _e123_changed(self):
-        if self.file_type == FileType.PRODUCTION:
+        if self.file_type == FileType.PRODUCTION and self.settled:
             enabled = self.e123 in (1, 2)
             self.ui.foster_parent_2_group_box.setEnabled(enabled)
             if not enabled:
@@ -99,7 +109,7 @@ class LivingArrangementDialog(BaseDialog):
                 self.e146 = None
 
     def _e133_changed(self):
-        if self.file_type == FileType.PRODUCTION:
+        if self.file_type == FileType.PRODUCTION and self.settled:
             enabled = self.e133 != 1
             self.ui.e127.setEnabled(enabled)
             self.ui.e128.setEnabled(enabled)
@@ -116,7 +126,7 @@ class LivingArrangementDialog(BaseDialog):
                 self.e132 = 0
 
     def _e144_changed(self):
-        if self.file_type == FileType.PRODUCTION:
+        if self.file_type == FileType.PRODUCTION and self.settled:
             enabled = self.e144 != 1
             self.ui.e138.setEnabled(enabled)
             self.ui.e139.setEnabled(enabled)

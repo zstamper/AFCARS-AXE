@@ -70,6 +70,7 @@ class Removal2020Controller:
     def data(self, v: Removal2020) -> None:
         self._data = v
         self._data.scatter(self.dialog)
+        self.dialog.settle()
         self.dialog.refresh_case_worker_visits()
         self.dialog.refresh_living_arrangements()
         self.dialog.refresh_permanency_plans()

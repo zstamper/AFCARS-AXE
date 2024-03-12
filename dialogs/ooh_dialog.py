@@ -65,6 +65,28 @@ class OOHDialog(BaseDialog):
         self.setLayout(self.ui.layout())
         self.setFixedSize(self.ui.size())
 
+        self.settled: bool = False
+
+    def settle(self):
+        self.settled = True
+        self._funding_button_clicked(self.ui.funding.checkedButton())
+        self._e4_text_changed(self.e4)
+        self._e6_button_clicked(self.ui.e6.checkedButton())
+        self.set_e8_state()
+        self.set_e10_state()
+        self._e19_toggled(self.e19 == 1)
+        self._e20_toggled(self.e20 == 1)
+        self._e23_current_index_changed(self.e23)
+        self._on_e56_text_changed()
+        self._on_e60_text_changed()
+        self._on_e63_button_clicked()
+        self._on_e64_button_clicked()
+        self._on_e66_text_changed()
+        self._on_e68_text_changed()
+        self._on_e109_clicked()
+        self._on_e106_clicked()
+        self._on_e110_clicked()
+
     def clear(self, exclude: list[str] = None) -> None:
         super().clear(exclude=['epa_tribes', ])
         self.setWindowTitle("")
@@ -249,7 +271,7 @@ class OOHDialog(BaseDialog):
 
     def _e4_text_changed(self, text: str) -> None:
         if self.ui.e4.hasAcceptableInput():
-            if self.file_type == FileType.PRODUCTION:
+            if self.file_type == FileType.PRODUCTION and self.settled:
                 enabled = self.ui.e4.text() == ""
                 self.ui.e4.setEnabled(enabled)
                 self.ui.e4_generate.setEnabled(enabled)
@@ -265,7 +287,7 @@ class OOHDialog(BaseDialog):
         self._refresh_title()
 
     def _e6_button_clicked(self, button: QAbstractButton) -> None:
-        if self.file_type == FileType.PRODUCTION:
+        if self.file_type == FileType.PRODUCTION and self.settled and button is not None:
             self.ui.e38.setEnabled(button.text() == 'Female')
 
     # def _e7_button_clicked(self, button: QAbstractButton):
@@ -282,7 +304,7 @@ class OOHDialog(BaseDialog):
         ...
 
     def _funding_button_clicked(self, button: QAbstractButton) -> None:
-        if self.file_type == FileType.PRODUCTION:
+        if self.file_type == FileType.PRODUCTION and self.settled and button is not None:
             enabled: bool = button.text() == 'No'
             self.ui.icwa_group_box.setEnabled(enabled)
             if not enabled:
@@ -298,7 +320,7 @@ class OOHDialog(BaseDialog):
         self.set_e8_state()
 
     def set_e8_state(self):
-        if self.file_type == FileType.PRODUCTION:
+        if self.file_type == FileType.PRODUCTION and self.settled:
             enabled: bool = self.ui.e8_y.isChecked()
             self.ui.e9_label.setEnabled(enabled)
             self.ui.tribes.setEnabled(enabled)
@@ -310,18 +332,19 @@ class OOHDialog(BaseDialog):
         self.set_e10_state()
 
     def set_e10_state(self) -> None:
-        enabled: bool = self.ui.e10_y.isChecked()
-        self.ui.e11.setEnabled(enabled)
-        self.ui.e11_label.setEnabled(enabled)
-        for button in self.ui.e12.buttons():
-            button.setEnabled(enabled)
-        self.ui.e12_label.setEnabled(enabled)
-        if not enabled:
-            self.e11 = None
-            self.e12 = None
+        if self.file_type == FileType.PRODUCTION and self.settled:
+            enabled: bool = self.ui.e10_y.isChecked()
+            self.ui.e11.setEnabled(enabled)
+            self.ui.e11_label.setEnabled(enabled)
+            for button in self.ui.e12.buttons():
+                button.setEnabled(enabled)
+            self.ui.e12_label.setEnabled(enabled)
+            if not enabled:
+                self.e11 = None
+                self.e12 = None
 
     def _e19_toggled(self, checked: bool) -> None:
-        if self.file_type == FileType.PRODUCTION:
+        if self.file_type == FileType.PRODUCTION and self.settled:
             # If E19 is checked, E13, E14, E15, E16, E17, E18, E20 should be unchecked and disabled.
             self.ui.e13.setEnabled(not checked)
             self.ui.e14.setEnabled(not checked)
@@ -344,7 +367,7 @@ class OOHDialog(BaseDialog):
                 self.e45 = None
 
     def _e20_toggled(self, checked: bool) -> None:
-        if self.file_type == FileType.PRODUCTION:
+        if self.file_type == FileType.PRODUCTION and self.settled:
             # If E20 is checked, E13, E14, E15, E16, E17, E18, E19 should be unchecked and disabled.
             self.ui.e13.setEnabled(not checked)
             self.ui.e14.setEnabled(not checked)
@@ -363,7 +386,7 @@ class OOHDialog(BaseDialog):
                 self.ui.e19.setChecked(False)
 
     def _e23_current_index_changed(self, index: int) -> None:
-        if self.file_type == FileType.PRODUCTION:
+        if self.file_type == FileType.PRODUCTION and self.settled:
             if index != 1:
                 self.e24 = None
                 self.e25 = None
@@ -401,7 +424,7 @@ class OOHDialog(BaseDialog):
             self.ui.e34.setEnabled(index == 1)
 
     def _on_e56_text_changed(self):
-        if self.file_type == FileType.PRODUCTION:
+        if self.file_type == FileType.PRODUCTION and self.settled:
             if self.e56 is not None and self.e56 > 0:
                 self.ui.e57.setEnabled(True)
                 self.ui.e57_label.setEnabled(True)
@@ -411,7 +434,7 @@ class OOHDialog(BaseDialog):
                 self.e57 = None
 
     def _on_e60_text_changed(self):
-        if self.file_type == FileType.PRODUCTION:
+        if self.file_type == FileType.PRODUCTION and self.settled:
             enabled = self.e60 != 9999
             if not is_tribe():
                 self.ui.e62_label.setEnabled(enabled)
@@ -420,7 +443,7 @@ class OOHDialog(BaseDialog):
                 self.ui.parent2_tpr_group_box.setEnabled(enabled)
 
     def _on_e63_button_clicked(self):
-        if self.file_type == FileType.PRODUCTION:
+        if self.file_type == FileType.PRODUCTION and self.settled:
             if self.e63:
                 self.ui.e65.setEnabled(True)
                 self.ui.e65_label.setEnabled(True)
@@ -439,7 +462,7 @@ class OOHDialog(BaseDialog):
             self._second_parents[0].e64 = self._get_radio_button(self.ui.e64)
         except IndexError:
             self._second_parents = [SecondParent(e64=self._get_radio_button(self.ui.e64))]
-        if self.file_type == FileType.PRODUCTION:
+        if self.file_type == FileType.PRODUCTION and self.settled:
             if self.e64:
                 self.ui.e66.setEnabled(True)
                 self.ui.e66_label.setEnabled(True)
@@ -466,7 +489,7 @@ class OOHDialog(BaseDialog):
             self._second_parents = [SecondParent(e68=self._get_int_field(self.ui.e68))]
 
     def _on_e106_clicked(self):
-        if self.file_type == FileType.PRODUCTION:
+        if self.file_type == FileType.PRODUCTION and self.settled:
             enabled = self.e106 not in [None, 0]
             self.ui.e107_label.setEnabled(enabled)
             for button in self.ui.e107.buttons():
@@ -477,13 +500,13 @@ class OOHDialog(BaseDialog):
             self.ui.e108.setEnabled(enabled)
 
     def _on_e107_clicked(self):
-        if self.file_type == FileType.PRODUCTION:
+        if self.file_type == FileType.PRODUCTION and self.settled:
             enabled = self.e107 not in [None, 0]
             self.ui.e108_label.setEnabled(enabled)
             self.ui.e108.setEnabled(enabled)
 
     def _on_e109_clicked(self):
-        if self.file_type == FileType.PRODUCTION:
+        if self.file_type == FileType.PRODUCTION and self.settled:
             enabled = self.e109 not in [None, 0]
             self.ui.e110_label.setEnabled(enabled)
             for button in self.ui.e110.buttons():
@@ -494,7 +517,7 @@ class OOHDialog(BaseDialog):
             self.ui.e111.setEnabled(enabled)
 
     def _on_e110_clicked(self):
-        if self.file_type == FileType.PRODUCTION:
+        if self.file_type == FileType.PRODUCTION and self.settled:
             enabled = self.e110 not in [None, 0]
             self.ui.e111_label.setEnabled(enabled)
             self.ui.e111.setEnabled(enabled)
