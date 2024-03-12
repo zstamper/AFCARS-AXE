@@ -17,8 +17,8 @@
                 <E8_tribal_membership>{{ ooh.e8|no_null }}</E8_tribal_membership>
                 {%- if ooh.tribes %}
                 <E9_recognized_tribes>
-                    {%- for e9 in ooh.tribes %}
-                    <E9_recognized_tribe>{{ e9 }}</E9_recognized_tribe>
+                    {%- for recognized_tribe in ooh.tribes %}
+                    <E9_recognized_tribe>{{ recognized_tribe.e9 }}</E9_recognized_tribe>
                     {%- endfor %}
                 </E9_recognized_tribes>
                 {%- else %}
