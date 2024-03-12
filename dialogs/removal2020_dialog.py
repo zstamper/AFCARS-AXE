@@ -95,6 +95,7 @@ class Removal2020Dialog(BaseDialog):
     def settle(self):
         self.settled = True
         self._e155_current_index_changed()
+        self._update_parent_2_group_box_state()
 
     def clear(self, exclude: list[str] = None) -> None:
         super().clear()
@@ -342,7 +343,7 @@ class Removal2020Dialog(BaseDialog):
                     setattr(self, f"e{n}", None)
 
     def _update_parent_2_group_box_state(self):
-        if self.file_type == FileType.PRODUCTION:
+        if self.file_type == FileType.PRODUCTION and self.settled:
             enabled = self.e155 in (3, 5) and self.e157 in (1, 2)
             self.ui.parent_2_group_box.setEnabled(enabled)
             if not enabled:
@@ -375,16 +376,16 @@ class Removal2020Dialog(BaseDialog):
         return self._get_text_field(self.ui.e3)
 
     @e3.setter
-    def e3(self, e3: int) -> None:
-        self._set_text_field(self.ui.e3, e3)
+    def e3(self, v: int) -> None:
+        self._set_text_field(self.ui.e3, v)
 
     @property
     def e69(self) -> int | None:
         return self._get_int_field(self.ui.e69)
 
     @e69.setter
-    def e69(self, e69: int) -> None:
-        self._set_int_field(self.ui.e69, e69)
+    def e69(self, v: int) -> None:
+        self._set_int_field(self.ui.e69, v)
 
     @property
     def e70(self) -> int | None:
@@ -399,304 +400,304 @@ class Removal2020Dialog(BaseDialog):
         return self._get_combobox_selection(self.ui.e71, 1)
 
     @e71.setter
-    def e71(self, e71) -> None:
-        self._set_combobox_selection(self.ui.e71, e71, -1)
+    def e71(self, v) -> None:
+        self._set_combobox_selection(self.ui.e71, v, -1)
 
     @property
     def e72(self) -> int:
         return 1 if self.ui.e72.isChecked() else 0
 
     @e72.setter
-    def e72(self, e72: int) -> None:
-        self.ui.e72.setChecked(e72 == 1)
+    def e72(self, v: int) -> None:
+        self.ui.e72.setChecked(v == 1)
 
     @property
     def e73(self) -> int:
         return 1 if self.ui.e73.isChecked() else 0
 
     @e73.setter
-    def e73(self, e73: int) -> None:
-        self.ui.e73.setChecked(e73 == 1)
+    def e73(self, v: int) -> None:
+        self.ui.e73.setChecked(v == 1)
 
     @property
     def e74(self) -> int:
         return 1 if self.ui.e74.isChecked() else 0
 
     @e74.setter
-    def e74(self, e74: int) -> None:
-        self.ui.e74.setChecked(e74 == 1)
+    def e74(self, v: int) -> None:
+        self.ui.e74.setChecked(v == 1)
 
     @property
     def e75(self) -> int:
         return 1 if self.ui.e75.isChecked() else 0
 
     @e75.setter
-    def e75(self, e75: int) -> None:
-        self.ui.e75.setChecked(e75 == 1)
+    def e75(self, v: int) -> None:
+        self.ui.e75.setChecked(v == 1)
 
     @property
     def e76(self) -> int:
         return 1 if self.ui.e76.isChecked() else 0
 
     @e76.setter
-    def e76(self, e76: int) -> None:
-        self.ui.e76.setChecked(e76 == 1)
+    def e76(self, v: int) -> None:
+        self.ui.e76.setChecked(v == 1)
 
     @property
     def e77(self) -> int:
         return 1 if self.ui.e77.isChecked() else 0
 
     @e77.setter
-    def e77(self, e77: int) -> None:
-        self.ui.e77.setChecked(e77 == 1)
+    def e77(self, v: int) -> None:
+        self.ui.e77.setChecked(v == 1)
 
     @property
     def e78(self) -> int:
         return 1 if self.ui.e78.isChecked() else 0
 
     @e78.setter
-    def e78(self, e78: int) -> None:
-        self.ui.e78.setChecked(e78 == 1)
+    def e78(self, v: int) -> None:
+        self.ui.e78.setChecked(v == 1)
 
     @property
     def e79(self) -> int:
         return 1 if self.ui.e79.isChecked() else 0
 
     @e79.setter
-    def e79(self, e79: int) -> None:
-        self.ui.e79.setChecked(e79 == 1)
+    def e79(self, v: int) -> None:
+        self.ui.e79.setChecked(v == 1)
 
     @property
     def e80(self) -> int:
         return 1 if self.ui.e80.isChecked() else 0
 
     @e80.setter
-    def e80(self, e80: int) -> None:
-        self.ui.e80.setChecked(e80 == 1)
+    def e80(self, v: int) -> None:
+        self.ui.e80.setChecked(v == 1)
 
     @property
     def e81(self) -> int:
         return 1 if self.ui.e81.isChecked() else 0
 
     @e81.setter
-    def e81(self, e81: int) -> None:
-        self.ui.e81.setChecked(e81 == 1)
+    def e81(self, v: int) -> None:
+        self.ui.e81.setChecked(v == 1)
 
     @property
     def e82(self) -> int:
         return 1 if self.ui.e82.isChecked() else 0
 
     @e82.setter
-    def e82(self, e82: int) -> None:
-        self.ui.e82.setChecked(e82 == 1)
+    def e82(self, v: int) -> None:
+        self.ui.e82.setChecked(v == 1)
 
     @property
     def e83(self) -> int:
         return 1 if self.ui.e83.isChecked() else 0
 
     @e83.setter
-    def e83(self, e83: int) -> None:
-        self.ui.e83.setChecked(e83 == 1)
+    def e83(self, v: int) -> None:
+        self.ui.e83.setChecked(v == 1)
 
     @property
     def e84(self) -> int:
         return 1 if self.ui.e84.isChecked() else 0
 
     @e84.setter
-    def e84(self, e84: int) -> None:
-        self.ui.e84.setChecked(e84 == 1)
+    def e84(self, v: int) -> None:
+        self.ui.e84.setChecked(v == 1)
 
     @property
     def e85(self) -> int:
         return 1 if self.ui.e85.isChecked() else 0
 
     @e85.setter
-    def e85(self, e85: int) -> None:
-        self.ui.e85.setChecked(e85 == 1)
+    def e85(self, v: int) -> None:
+        self.ui.e85.setChecked(v == 1)
 
     @property
     def e86(self) -> int:
         return 1 if self.ui.e86.isChecked() else 0
 
     @e86.setter
-    def e86(self, e86: int) -> None:
-        self.ui.e86.setChecked(e86 == 1)
+    def e86(self, v: int) -> None:
+        self.ui.e86.setChecked(v == 1)
 
     @property
     def e87(self) -> int:
         return 1 if self.ui.e87.isChecked() else 0
 
     @e87.setter
-    def e87(self, e87: int) -> None:
-        self.ui.e87.setChecked(e87 == 1)
+    def e87(self, v: int) -> None:
+        self.ui.e87.setChecked(v == 1)
 
     @property
     def e88(self) -> int:
         return 1 if self.ui.e88.isChecked() else 0
 
     @e88.setter
-    def e88(self, e88: int) -> None:
-        self.ui.e88.setChecked(e88 == 1)
+    def e88(self, v: int) -> None:
+        self.ui.e88.setChecked(v == 1)
 
     @property
     def e89(self) -> int:
         return 1 if self.ui.e89.isChecked() else 0
 
     @e89.setter
-    def e89(self, e89: int) -> None:
-        self.ui.e89.setChecked(e89 == 1)
+    def e89(self, v: int) -> None:
+        self.ui.e89.setChecked(v == 1)
 
     @property
     def e90(self) -> int:
         return 1 if self.ui.e90.isChecked() else 0
 
     @e90.setter
-    def e90(self, e90: int) -> None:
-        self.ui.e90.setChecked(e90 == 1)
+    def e90(self, v: int) -> None:
+        self.ui.e90.setChecked(v == 1)
 
     @property
     def e91(self) -> int:
         return 1 if self.ui.e91.isChecked() else 0
 
     @e91.setter
-    def e91(self, e91: int) -> None:
-        self.ui.e91.setChecked(e91 == 1)
+    def e91(self, v: int) -> None:
+        self.ui.e91.setChecked(v == 1)
 
     @property
     def e92(self) -> int:
         return 1 if self.ui.e92.isChecked() else 0
 
     @e92.setter
-    def e92(self, e92: int) -> None:
-        self.ui.e92.setChecked(e92 == 1)
+    def e92(self, v: int) -> None:
+        self.ui.e92.setChecked(v == 1)
 
     @property
     def e93(self) -> int:
         return 1 if self.ui.e93.isChecked() else 0
 
     @e93.setter
-    def e93(self, e93: int) -> None:
-        self.ui.e93.setChecked(e93 == 1)
+    def e93(self, v: int) -> None:
+        self.ui.e93.setChecked(v == 1)
 
     @property
     def e94(self) -> int:
         return 1 if self.ui.e94.isChecked() else 0
 
     @e94.setter
-    def e94(self, e94: int) -> None:
-        self.ui.e94.setChecked(e94 == 1)
+    def e94(self, v: int) -> None:
+        self.ui.e94.setChecked(v == 1)
 
     @property
     def e95(self) -> int:
         return 1 if self.ui.e95.isChecked() else 0
 
     @e95.setter
-    def e95(self, e95: int) -> None:
-        self.ui.e95.setChecked(e95 == 1)
+    def e95(self, v: int) -> None:
+        self.ui.e95.setChecked(v == 1)
 
     @property
     def e96(self) -> int:
         return 1 if self.ui.e96.isChecked() else 0
 
     @e96.setter
-    def e96(self, e96: int) -> None:
-        self.ui.e96.setChecked(e96 == 1)
+    def e96(self, v: int) -> None:
+        self.ui.e96.setChecked(v == 1)
 
     @property
     def e97(self) -> int:
         return 1 if self.ui.e97.isChecked() else 0
 
     @e97.setter
-    def e97(self, e97: int) -> None:
-        self.ui.e97.setChecked(e97 == 1)
+    def e97(self, v: int) -> None:
+        self.ui.e97.setChecked(v == 1)
 
     @property
     def e98(self) -> int:
         return 1 if self.ui.e98.isChecked() else 0
 
     @e98.setter
-    def e98(self, e98: int) -> None:
-        self.ui.e98.setChecked(e98 == 1)
+    def e98(self, v: int) -> None:
+        self.ui.e98.setChecked(v == 1)
 
     @property
     def e99(self) -> int:
         return 1 if self.ui.e99.isChecked() else 0
 
     @e99.setter
-    def e99(self, e99: int) -> None:
-        self.ui.e99.setChecked(e99 == 1)
+    def e99(self, v: int) -> None:
+        self.ui.e99.setChecked(v == 1)
 
     @property
     def e100(self) -> int:
         return 1 if self.ui.e100.isChecked() else 0
 
     @e100.setter
-    def e100(self, e100: int) -> None:
-        self.ui.e100.setChecked(e100 == 1)
+    def e100(self, v: int) -> None:
+        self.ui.e100.setChecked(v == 1)
 
     @property
     def e101(self) -> int:
         return 1 if self.ui.e101.isChecked() else 0
 
     @e101.setter
-    def e101(self, e101: int) -> None:
-        self.ui.e101.setChecked(e101 == 1)
+    def e101(self, v: int) -> None:
+        self.ui.e101.setChecked(v == 1)
 
     @property
     def e102(self) -> int:
         return 1 if self.ui.e102.isChecked() else 0
 
     @e102.setter
-    def e102(self, e102: int) -> None:
-        self.ui.e102.setChecked(e102 == 1)
+    def e102(self, v: int) -> None:
+        self.ui.e102.setChecked(v == 1)
 
     @property
     def e103(self) -> int:
         return 1 if self.ui.e103.isChecked() else 0
 
     @e103.setter
-    def e103(self, e103: int) -> None:
-        self.ui.e103.setChecked(e103 == 1)
+    def e103(self, v: int) -> None:
+        self.ui.e103.setChecked(v == 1)
 
     @property
     def e104(self) -> int:
         return 1 if self.ui.e104.isChecked() else 0
 
     @e104.setter
-    def e104(self, e104: int) -> None:
-        self.ui.e104.setChecked(e104 == 1)
+    def e104(self, v: int) -> None:
+        self.ui.e104.setChecked(v == 1)
 
     @property
     def e105(self) -> int:
         return 1 if self.ui.e105.isChecked() else 0
 
     @e105.setter
-    def e105(self, e105: int) -> None:
-        self.ui.e105.setChecked(e105 == 1)
+    def e105(self, v: int) -> None:
+        self.ui.e105.setChecked(v == 1)
 
     @property
     def e153(self) -> int | None:
         return self._get_int_field(self.ui.e153)
 
     @e153.setter
-    def e153(self, e153: int) -> None:
-        self._set_int_field(self.ui.e153, e153)
+    def e153(self, v: int) -> None:
+        self._set_int_field(self.ui.e153, v)
 
     @property
     def e154(self) -> int | None:
         return self._get_int_field(self.ui.e154)
 
     @e154.setter
-    def e154(self, e154: int) -> None:
-        self._set_int_field(self.ui.e154, e154)
+    def e154(self, v: int) -> None:
+        self._set_int_field(self.ui.e154, v)
 
     @property
     def e155(self) -> int | None:
         return self._get_combobox_selection(self.ui.e155, 1)
 
     @e155.setter
-    def e155(self, e155: int) -> None:
-        self._set_combobox_selection(self.ui.e155, e155, -1)
+    def e155(self, v: int) -> None:
+        self._set_combobox_selection(self.ui.e155, v, -1)
         self._e155_current_index_changed()
 
     @property
@@ -704,245 +705,245 @@ class Removal2020Dialog(BaseDialog):
         return self._get_combobox_selection(self.ui.e156, 1)
 
     @e156.setter
-    def e156(self, e156: int) -> None:
-        self._set_combobox_selection(self.ui.e156, e156, -1)
+    def e156(self, v: int) -> None:
+        self._set_combobox_selection(self.ui.e156, v, -1)
 
     @property
     def e157(self) -> int | None:
         return self._get_combobox_selection(self.ui.e157, 1)
 
     @e157.setter
-    def e157(self, e157: int) -> None:
-        self._set_combobox_selection(self.ui.e157, e157, -1)
+    def e157(self, v: int) -> None:
+        self._set_combobox_selection(self.ui.e157, v, -1)
 
     @property
     def e158(self) -> int:
         return 1 if self.ui.e158.isChecked() else 0
 
     @e158.setter
-    def e158(self, e158: int) -> None:
-        self.ui.e158.setChecked(e158 == 1)
+    def e158(self, v: int) -> None:
+        self.ui.e158.setChecked(v == 1)
 
     @property
     def e159(self) -> int:
         return 1 if self.ui.e159.isChecked() else 0
 
     @e159.setter
-    def e159(self, e159: int) -> None:
-        self.ui.e159.setChecked(e159 == 1)
+    def e159(self, v: int) -> None:
+        self.ui.e159.setChecked(v == 1)
 
     @property
     def e160(self) -> int:
         return 1 if self.ui.e160.isChecked() else 0
 
     @e160.setter
-    def e160(self, e160: int) -> None:
-        self.ui.e160.setChecked(e160 == 1)
+    def e160(self, v: int) -> None:
+        self.ui.e160.setChecked(v == 1)
 
     @property
     def e161(self) -> int:
         return 1 if self.ui.e161.isChecked() else 0
 
     @e161.setter
-    def e161(self, e161: int) -> None:
-        self.ui.e161.setChecked(e161 == 1)
+    def e161(self, v: int) -> None:
+        self.ui.e161.setChecked(v == 1)
 
     @property
     def e162(self) -> int | None:
         return self._get_int_field(self.ui.e162)
 
     @e162.setter
-    def e162(self, e162: int) -> None:
-        self._set_int_field(self.ui.e162, e162)
+    def e162(self, v: int) -> None:
+        self._set_int_field(self.ui.e162, v)
 
     @property
     def e163(self) -> int:
         return self._get_radio_button(self.ui.e163)
 
     @e163.setter
-    def e163(self, e163: int) -> None:
-        self._set_radio_button(self.ui.e163, e163)
+    def e163(self, v: int) -> None:
+        self._set_radio_button(self.ui.e163, v)
 
     @property
     def e164(self) -> int:
         return 1 if self.ui.e164.isChecked() else 0
 
     @e164.setter
-    def e164(self, e164: int) -> None:
-        self.ui.e164.setChecked(e164 == 1)
+    def e164(self, v: int) -> None:
+        self.ui.e164.setChecked(v == 1)
 
     @property
     def e165(self) -> int:
         return 1 if self.ui.e165.isChecked() else 0
 
     @e165.setter
-    def e165(self, e165: int) -> None:
-        self.ui.e165.setChecked(e165 == 1)
+    def e165(self, v: int) -> None:
+        self.ui.e165.setChecked(v == 1)
 
     @property
     def e166(self) -> int:
         return 1 if self.ui.e166.isChecked() else 0
 
     @e166.setter
-    def e166(self, e166: int) -> None:
-        self.ui.e166.setChecked(e166 == 1)
+    def e166(self, v: int) -> None:
+        self.ui.e166.setChecked(v == 1)
 
     @property
     def e167(self) -> int:
         return 1 if self.ui.e167.isChecked() else 0
 
     @e167.setter
-    def e167(self, e167: int) -> None:
-        self.ui.e167.setChecked(e167 == 1)
+    def e167(self, v: int) -> None:
+        self.ui.e167.setChecked(v == 1)
 
     @property
     def e168(self) -> int:
         return 1 if self.ui.e168.isChecked() else 0
 
     @e168.setter
-    def e168(self, e168: int) -> None:
-        self.ui.e168.setChecked(e168 == 1)
+    def e168(self, v: int) -> None:
+        self.ui.e168.setChecked(v == 1)
 
     @property
     def e169(self) -> int:
         return 1 if self.ui.e169.isChecked() else 0
 
     @e169.setter
-    def e169(self, e169: int) -> None:
-        self.ui.e169.setChecked(e169 == 1)
+    def e169(self, v: int) -> None:
+        self.ui.e169.setChecked(v == 1)
 
     @property
     def e170(self) -> int:
         return 1 if self.ui.e170.isChecked() else 0
 
     @e170.setter
-    def e170(self, e170: int) -> None:
-        self.ui.e170.setChecked(e170 == 1)
+    def e170(self, v: int) -> None:
+        self.ui.e170.setChecked(v == 1)
 
     @property
     def e171(self) -> int:
         return self._get_radio_button(self.ui.e171)
 
     @e171.setter
-    def e171(self, e171: int) -> None:
-        self._set_radio_button(self.ui.e171, e171)
+    def e171(self, v: int) -> None:
+        self._set_radio_button(self.ui.e171, v)
 
     @property
     def e172(self) -> None:
         return self._get_radio_button(self.ui.e172)
 
     @e172.setter
-    def e172(self, e172: int) -> None:
-        self._set_radio_button(self.ui.e172, e172)
+    def e172(self, v: int) -> None:
+        self._set_radio_button(self.ui.e172, v)
 
     @property
     def e173(self) -> int | None:
         return self._get_int_field(self.ui.e173)
 
     @e173.setter
-    def e173(self, e173: int) -> None:
-        self._set_int_field(self.ui.e173, e173)
+    def e173(self, v: int) -> None:
+        self._set_int_field(self.ui.e173, v)
 
     @property
     def e174(self) -> int:
         return self._get_radio_button(self.ui.e174)
 
     @e174.setter
-    def e174(self, e174) -> None:
-        self._set_radio_button(self.ui.e174, e174)
+    def e174(self, v: int) -> None:
+        self._set_radio_button(self.ui.e174, v)
 
     @property
     def e175(self) -> int:
         return None if not self.ui.parent_2_group_box.isEnabled() else 1 if self.ui.e175.isChecked() else 0
 
     @e175.setter
-    def e175(self, e175: int) -> None:
-        self.ui.e175.setChecked(e175 == 1)
+    def e175(self, v: int) -> None:
+        self.ui.e175.setChecked(v == 1)
 
     @property
     def e176(self) -> int:
         return None if not self.ui.parent_2_group_box.isEnabled() else 1 if self.ui.e176.isChecked() else 0
 
     @e176.setter
-    def e176(self, e176: int) -> None:
-        self.ui.e176.setChecked(e176 == 1)
+    def e176(self, v: int) -> None:
+        self.ui.e176.setChecked(v == 1)
 
     @property
     def e177(self) -> int:
         return None if not self.ui.parent_2_group_box.isEnabled() else 1 if self.ui.e177.isChecked() else 0
 
     @e177.setter
-    def e177(self, e177: int) -> None:
-        self.ui.e177.setChecked(e177 == 1)
+    def e177(self, v: int) -> None:
+        self.ui.e177.setChecked(v == 1)
 
     @property
     def e178(self) -> int:
         return None if not self.ui.parent_2_group_box.isEnabled() else 1 if self.ui.e178.isChecked() else 0
 
     @e178.setter
-    def e178(self, e178: int) -> None:
-        self.ui.e178.setChecked(e178 == 1)
+    def e178(self, v: int) -> None:
+        self.ui.e178.setChecked(v == 1)
 
     @property
     def e179(self) -> int:
         return None if not self.ui.parent_2_group_box.isEnabled() else 1 if self.ui.e179.isChecked() else 0
 
     @e179.setter
-    def e179(self, e179: int) -> None:
-        self.ui.e179.setChecked(e179 == 1)
+    def e179(self, v: int) -> None:
+        self.ui.e179.setChecked(v == 1)
 
     @property
     def e180(self) -> int:
         return None if not self.ui.parent_2_group_box.isEnabled() else 1 if self.ui.e180.isChecked() else 0
 
     @e180.setter
-    def e180(self, e180: int) -> None:
-        self.ui.e180.setChecked(e180 == 1)
+    def e180(self, v: int) -> None:
+        self.ui.e180.setChecked(v == 1)
 
     @property
     def e181(self) -> int:
         return None if not self.ui.parent_2_group_box.isEnabled() else 1 if self.ui.e181.isChecked() else 0
 
     @e181.setter
-    def e181(self, e181: int) -> None:
-        self.ui.e181.setChecked(e181 == 1)
+    def e181(self, v: int) -> None:
+        self.ui.e181.setChecked(v == 1)
 
     @property
     def e182(self) -> int:
         return self._get_radio_button(self.ui.e182)
 
     @e182.setter
-    def e182(self, e182: int) -> None:
-        self._set_radio_button(self.ui.e182, e182)
+    def e182(self, v: int) -> None:
+        self._set_radio_button(self.ui.e182, v)
 
     @property
     def e183(self) -> int:
         return self._get_radio_button(self.ui.e183)
 
     @e183.setter
-    def e183(self, e183: int) -> None:
-        self._set_radio_button(self.ui.e183, e183)
+    def e183(self, v: int) -> None:
+        self._set_radio_button(self.ui.e183, v)
 
     @property
     def e184(self) -> int | None:
         return self._get_combobox_selection(self.ui.e184, 1)
 
     @e184.setter
-    def e184(self, e184: int) -> None:
-        self._set_combobox_selection(self.ui.e184, e184, -1)
+    def e184(self, v: int) -> None:
+        self._set_combobox_selection(self.ui.e184, v, -1)
 
     @property
     def e185(self) -> int | None:
         return self._get_combobox_selection(self.ui.e185)
 
     @e185.setter
-    def e185(self, e185: int) -> None:
-        self._set_combobox_selection(self.ui.e185, e185)
+    def e185(self, v: int) -> None:
+        self._set_combobox_selection(self.ui.e185, v)
 
     @property
     def e186(self) -> int | None:
         return self._get_int_field(self.ui.e186)
 
     @e186.setter
-    def e186(self, e186: int) -> None:
-        self._set_int_field(self.ui.e186, e186)
+    def e186(self, v: int) -> None:
+        self._set_int_field(self.ui.e186, v)
