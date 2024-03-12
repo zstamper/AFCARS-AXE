@@ -26,6 +26,10 @@ class LivingArrangementValidators:
         self.parent_data: Optional[Removal2020] = None
         self.dialog: LivingArrangementDialog = dialog
 
+    def validate_e40(self):
+        if self.dialog.e40 not in [0, 1, 9]:
+            raise ValueError("Child and his/her Child(ren) Placed together (E40) is required.")
+
     def validate_e58(self):
         if self.dialog.e56 is not None and self.dialog.e56 == 0 and self.dialog.e58 is not None:
             raise ValueError("Number of siblings placed with this child (E58) should be left empty.")
@@ -94,7 +98,7 @@ class LivingArrangementValidators:
             )
 
     def validate_e124(self):
-        if self.dialog.e113 == 1 and self.dialog.e124 not in (1,2,3):
+        if self.dialog.e113 == 1 and self.dialog.e124 not in (1, 2, 3):
             raise ValueError("Foster Parent's Relationship to the Child (E124) is required.")
 
     def validate_e125(self):
