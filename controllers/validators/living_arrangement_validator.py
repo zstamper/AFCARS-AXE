@@ -125,7 +125,7 @@ class LivingArrangementValidators:
         if self.dialog.e113 == 1:
             if self.dialog.e134 not in (0, 1, 8, 9):
                 raise ValueError(
-                    "First foster parent's hispanic or latino origin (E135) is required.")
+                    "First foster parent's hispanic or latino origin (E134) is required.")
 
     def validate_e135(self):
         if self.dialog.e113 == 1:
