@@ -69,6 +69,7 @@ class ChildController:
     def do_add(self):
 
         def save():
+            nonlocal controller, context
             # the child's birthdate needs to bubble up to the base child table so that it can show up
             # in the child listing. Don't forget, e5 in the child model is an int, while in the base_child
             # table it's a date.
@@ -112,7 +113,7 @@ class ChildController:
             controller.on_save = save
             controller.exec()
 
-    def do_edit_save(self, base_child, controller, context_rec):
+    def do_edit_save(self, base_child: BaseChild, controller: OOHController | AController, context_rec: ContextTable):
         # the child's birthdate needs to bubble up to the base child table so that it can show up
         # in the child listing.
         refresh_dates(base_child, controller.child, self.report_type)
@@ -139,7 +140,10 @@ class ChildController:
             controller = AController(self.dialog, file_type=self.file_type)
         if controller:
             context_rec = self._context_for(base_child, self.reporting_period, self.file_type)
-
+            if self.report_type == ReportType.OOH and not context_rec.data.ooh:
+                context_rec.data.ooh = OOHRecord()
+            if self.report_type == ReportType.A and not context_rec.data.a:
+                context_rec.data.a = ARecord()
             controller.clear()
             controller.base_child_rec_id = base_child.id
             controller.context_rec_id = context_rec.id
