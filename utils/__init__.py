@@ -45,15 +45,33 @@ def refresh_dates(base_child: BaseChild, child: Child, report_type: ReportType):
             ContextTable.e2.desc()).first()
         if context:
             base_child.e5 = afcars_to_date(context.data.e5)
-            removal = sorted(context.data.ooh.removals2020, key=lambda x: x.e69, reverse=True)
-            if removal:
-                base_child.last_removal = afcars_to_date(removal[0].e69)
-                base_child.last_exit = afcars_to_date(removal[0].e153)
+            if hasattr(context.data.ooh, 'removals2020'):
+                removal = sorted(context.data.ooh.removals2020, key=lambda x: x.e69, reverse=True)
             else:
-                removal = sorted(context.data.ooh.removals1993, key=lambda x: x.e69, reverse=True)
-                if removal:
+                removal = sorted(child.ooh.removals2020, key=lambda x: x.e69, reverse=True)
+            if removal:
+                try:
                     base_child.last_removal = afcars_to_date(removal[0].e69)
+                except ValueError:
+                    pass
+                try:
                     base_child.last_exit = afcars_to_date(removal[0].e153)
+                except ValueError:
+                    pass
+            else:
+                if hasattr(context.data.ooh, 'removals1993'):
+                    removal = sorted(context.data.ooh.removals1993, key=lambda x: x.e69, reverse=True)
+                else:
+                    removal = sorted(child.ooh.removals1993, key=lambda x: x.e69, reverse=True)
+                if removal:
+                    try:
+                        base_child.last_removal = afcars_to_date(removal[0].e69)
+                    except ValueError:
+                        pass
+                    try:
+                        base_child.last_exit = afcars_to_date(removal[0].e153)
+                    except ValueError:
+                        pass
 
     if report_type == ReportType.A:
         base_child.e5 = datetime.datetime.strptime(str(child.e5), "%Y%m%d").date()
