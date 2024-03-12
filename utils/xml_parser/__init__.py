@@ -87,7 +87,7 @@ def import_a_tree(tree: Element, file_type: FileType) -> tuple[list, list]:
             context.save()
             refresh_dates(base_child=base_child, child=context.data, report_type=ReportType.A)
             base_child.save()
-        return imported_ids, skipped_ids
+    return imported_ids, skipped_ids
 
 
 def import_ooh_tree(tree: Element, file_type: FileType) -> tuple[list, list]:

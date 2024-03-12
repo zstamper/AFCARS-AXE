@@ -74,7 +74,10 @@ def refresh_dates(base_child: BaseChild, child: Child, report_type: ReportType):
                         pass
 
     if report_type == ReportType.A:
-        base_child.e5 = datetime.datetime.strptime(str(child.e5), "%Y%m%d").date()
+        try:
+            base_child.e5 = datetime.datetime.strptime(str(child.e5), "%Y%m%d").date()
+        except ValueError:
+            base_child.e5 = None
         base_child.last_adoption = None
         base_child.last_termination = None
         context = ContextTable.select().where(ContextTable.base_child == base_child.id).order_by(
