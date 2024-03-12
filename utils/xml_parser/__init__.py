@@ -4,7 +4,8 @@ from xml.etree.ElementTree import Element
 
 from model import ContextTable, BaseChildTable
 from model.models import FileType, Child, ARecord, SecondParent, Removal2020, \
-    Removal1993, LivingArrangement, PermanencyPlan, PeriodicReview, PermanencyHearing, CaseVisit, OOHRecord, ReportType
+    Removal1993, LivingArrangement, PermanencyPlan, PeriodicReview, PermanencyHearing, CaseVisit, OOHRecord, ReportType, \
+    RecognizedTribe
 from utils import refresh_dates
 
 
@@ -108,7 +109,7 @@ def import_ooh_tree(tree: Element, file_type: FileType) -> tuple[list, list]:
         tribes = []
         e9_recognized_tribes = e7_e12.find('E9_recognized_tribes')
         for tribe in e9_recognized_tribes.findall('E9_recognized_tribe'):
-            tribes.append(tribe.text)
+            tribes.append(RecognizedTribe(e9=int(tribe.text)))
         e10 = _int_from(e7_e12, 'E10_icwa')
         e11 = _int_from(e7_e12, 'E11_icwa_date')
         e12 = _int_from(e7_e12, 'E12_icwa_notification')
