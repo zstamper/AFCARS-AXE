@@ -7,6 +7,7 @@ from model.models import FileType, Child, ARecord, SecondParent, Removal2020, \
     Removal1993, LivingArrangement, PermanencyPlan, PeriodicReview, PermanencyHearing, CaseVisit, OOHRecord, ReportType, \
     RecognizedTribe
 from utils import refresh_dates
+from utils.e1 import is_valid_date
 
 
 def _text_from(element: Element, path: str) -> str | None:
@@ -25,6 +26,18 @@ def _int_from(element: Element, path: str) -> int | None:
         if value == "":
             value = None
         return int(value)
+    except (AttributeError, ValueError, TypeError):
+        return None
+
+
+def _date_from(element: Element, path: str) -> int | None:
+    try:
+        value = element.find(path).text
+        if value == "":
+            value = None
+        if is_valid_date(int(value)):
+            return int(value)
+        return None
     except (AttributeError, ValueError, TypeError):
         return None
 
@@ -51,7 +64,7 @@ def import_a_tree(tree: Element, file_type: FileType) -> tuple[list, list]:
     skipped_ids = []
     for record in records.findall('record'):
         a3 = _text_from(record, 'A3_child_record_number')
-        a4 = _int_from(record, 'A4_child_date_of_birth')
+        a4 = _date_from(record, 'A4_child_date_of_birth')
         a5 = _int_from(record, 'A5_child_sex')
         a6 = _int_from(record, 'A6_child_race_american_indian_alaska_native')
         a7 = _int_from(record, 'A7_child_race_asian')
@@ -64,8 +77,8 @@ def import_a_tree(tree: Element, file_type: FileType) -> tuple[list, list]:
         a14 = _int_from(record, 'A14_child_hispanic_latino')
         a15 = _int_from(record, 'A15_assistance_agreement_type')
         a16 = _int_from(record, 'A16_adoption_subsidy_amount')
-        a17 = _int_from(record, 'A17_adoption_finalization_date')
-        a18 = _int_from(record, 'A18_agreement_termination_date')
+        a17 = _date_from(record, 'A17_adoption_finalization_date')
+        a18 = _date_from(record, 'A18_agreement_termination_date')
         a19 = _int_from(record, 'A19_adoption_placing_agency')
         base_child, _ = BaseChildTable.get_or_create(e1=a1, e4=a3)
         context, is_new = ContextTable.get_or_create(base_child=base_child, e2=a2, file_type=file_type)
@@ -100,7 +113,7 @@ def import_ooh_tree(tree: Element, file_type: FileType) -> tuple[list, list]:
     skipped_ids = []
     for record in records.findall('record'):
         e4 = _text_from(record, 'E4_child_record_number')
-        e5 = _int_from(record, 'E5_date_of_birth')
+        e5 = _date_from(record, 'E5_date_of_birth')
         e6 = _int_from(record, 'E6_sex')
 
         e7_e12 = record.find('E7_E12_tribal_information')
@@ -109,9 +122,12 @@ def import_ooh_tree(tree: Element, file_type: FileType) -> tuple[list, list]:
         tribes = []
         e9_recognized_tribes = e7_e12.find('E9_recognized_tribes')
         for tribe in e9_recognized_tribes.findall('E9_recognized_tribe'):
-            tribes.append(RecognizedTribe(e9=int(tribe.text)))
+            try:
+                tribes.append(RecognizedTribe(e9=int(tribe.text)))
+            except ValueError:
+                pass
         e10 = _int_from(e7_e12, 'E10_icwa')
-        e11 = _int_from(e7_e12, 'E11_icwa_date')
+        e11 = _date_from(e7_e12, 'E11_icwa_date')
         e12 = _int_from(e7_e12, 'E12_icwa_notification')
 
         e13 = _int_from(record, 'E13_child_race_american_indian_alaska_native')
@@ -148,11 +164,11 @@ def import_ooh_tree(tree: Element, file_type: FileType) -> tuple[list, list]:
         e41 = _int_from(record, 'E41_prior_adoption')
 
         e42_e43 = record.find('E42_E43_prior_adoption_information')
-        e42 = _int_from(e42_e43, 'E42_prior_adoption_date')
+        e42 = _date_from(e42_e43, 'E42_prior_adoption_date')
         e43 = _int_from(e42_e43, 'E43_prior_adoption_intercountry')
 
         e44 = _int_from(record, 'E44_prior_guardianship')
-        e45 = _int_from(record, 'E45_prior_guardianship_date')
+        e45 = _date_from(record, 'E45_prior_guardianship_date')
         e46 = _int_from(record, 'E46_support_assistance')
 
         e47_e54 = record.find('E47_E54_type_financial_assistance')
@@ -180,12 +196,14 @@ def import_ooh_tree(tree: Element, file_type: FileType) -> tuple[list, list]:
         e63_e68 = record.find('E63_E68_termination_of_parental_rights')
         tpr_first_parent = e63_e68.find('tpr_first_parent')
         e63 = _int_from(tpr_first_parent, 'E63_tpr_parent1')
-        e65 = _int_from(tpr_first_parent, 'E65_tpr_petition_date_parent1')
-        e67 = _int_from(tpr_first_parent, 'E67_tpr_date_parent1')
+        e65 = _date_from(tpr_first_parent, 'E65_tpr_petition_date_parent1')
+        e67 = _date_from(tpr_first_parent, 'E67_tpr_date_parent1')
 
         second_parents = []
+        parent_num = 2
         for parent in record.find('E63_E68_termination_of_parental_rights').findall('tpr_second_parent'):
-            second_parents.append(parse_second_parent(parent))
+            second_parents.append(parse_second_parent(parent, parent_num))
+            parent_num += 1
 
         removals_1993 = []
         for removal in record.find('E69_E186_removals').findall('removal_1993'):
@@ -199,12 +217,12 @@ def import_ooh_tree(tree: Element, file_type: FileType) -> tuple[list, list]:
 
         e107_e108 = record.find('E107_E108_prior_victim_sex_trafficking_reporting')
         e107 = _int_from(e107_e108, 'E107_prior_victim_sex_trafficking_reported')
-        e108 = _int_from(e107_e108, 'E108_prior_victim_sex_trafficking_reported_date')
+        e108 = _date_from(e107_e108, 'E108_prior_victim_sex_trafficking_reported_date')
         e109 = _int_from(record, 'E109_victim_sex_trafficking')
 
         e110_e111 = record.find('E110_E111_victim_sex_trafficking_reporting')
         e110 = _int_from(e110_e111, 'E110_victim_sex_trafficking_reported')
-        e111 = _int_from(e110_e111, 'E111_victim_sex_trafficking_reported_date')
+        e111 = _date_from(e110_e111, 'E111_victim_sex_trafficking_reported_date')
 
         base_child, _ = BaseChildTable.get_or_create(e1=e1, e4=e4)
         context, is_new = ContextTable.get_or_create(base_child=base_child, e2=e2, file_type=file_type)
@@ -228,7 +246,8 @@ def import_ooh_tree(tree: Element, file_type: FileType) -> tuple[list, list]:
                 tribes=tribes, second_parents=second_parents, removals1993=removals_1993, removals2020=removals_2020
             )
             if is_new:
-                child = Child(e5=e5, e6=e6, e13=e13, e14=e14, e15=e15, e16=e16, e17=e17, e18=e18, e19=e19, e20=e20, e21=e21,
+                child = Child(e5=e5, e6=e6, e13=e13, e14=e14, e15=e15, e16=e16, e17=e17, e18=e18, e19=e19, e20=e20,
+                              e21=e21,
                               ooh=ooh)
                 context.data = child
             else:
@@ -241,7 +260,7 @@ def import_ooh_tree(tree: Element, file_type: FileType) -> tuple[list, list]:
 
 def parse_living_arrangement(living_arrangement: Element, e40: Optional[int],
                              e58: Optional[int]) -> LivingArrangement:
-    e112 = _int_from(living_arrangement, 'E112_date_living_arrangement')
+    e112 = _date_from(living_arrangement, 'E112_date_living_arrangement')
     e113 = _int_from(living_arrangement, 'E113_foster_family_home')
 
     e114_e146 = living_arrangement.find('E114_E146_foster_family_home_type')
@@ -297,23 +316,23 @@ def parse_living_arrangement(living_arrangement: Element, e40: Optional[int],
                              e142=e142, e143=e143, e144=e144, e145=e145, e146=e146)
 
 
-def parse_second_parent(parent: Element) -> SecondParent:
+def parse_second_parent(parent: Element, parent_num: int) -> SecondParent:
     e64 = _int_from(parent, 'E64_tpr_parent2')
-    e66 = _int_from(parent, 'E66_tpr_petition_date_parent2')
-    e68 = _int_from(parent, 'E68_tpr_date_parent2')
-    return SecondParent(e64=e64, e66=e66, e68=e68)
+    e66 = _date_from(parent, 'E66_tpr_petition_date_parent2')
+    e68 = _date_from(parent, 'E68_tpr_date_parent2')
+    return SecondParent(number=parent_num, e64=e64, e66=e66, e68=e68)
 
 
 def parse_removal_1993(removal: Element) -> Removal1993:
-    e69 = _int_from(removal, 'E69_removal_date')
-    e153 = _int_from(removal, 'E153_exit_date')
+    e69 = _date_from(removal, 'E69_removal_date')
+    e153 = _date_from(removal, 'E153_exit_date')
     e155 = _int_from(removal, 'E155_exit_reason')
     return Removal1993(e69=e69, e153=e153, e155=e155)
 
 
 def parse_removal_2020(removal: Element, e40: Optional[int], e58: Optional[int]) -> Removal2020:
-    e69 = _int_from(removal, 'E69_removal_date')
-    e70 = _int_from(removal, 'E70_removal_transaction_date')
+    e69 = _date_from(removal, 'E69_removal_date')
+    e70 = _date_from(removal, 'E70_removal_transaction_date')
     e71 = _int_from(removal, 'E71_removal_environment')
     e3 = _text_from(removal, 'E3_local_agency')
     e72 = _int_from(removal, 'E72_runaway')
@@ -371,8 +390,8 @@ def parse_removal_2020(removal: Element, e40: Optional[int], e58: Optional[int])
     for case_worker_visit in removal.find('E151_E152_case_worker_visits').findall('case_worker_visit'):
         case_worker_visits.append(parse_case_worker_visit(case_worker_visit))
 
-    e153 = _int_from(removal, 'E153_exit_date')
-    e154 = _int_from(removal, 'E154_exit_transaction_date')
+    e153 = _date_from(removal, 'E153_exit_date')
+    e154 = _date_from(removal, 'E154_exit_transaction_date')
     e155 = _int_from(removal, 'E155_exit_reason')
     e156 = _int_from(removal, 'E156_transfer_to_another_agency')
 
@@ -385,7 +404,7 @@ def parse_removal_2020(removal: Element, e40: Optional[int], e58: Optional[int])
 
     e162_e172 = e157_e186.find('E162_E172_first_adoptive_parent_information')
     try:
-        e162 = _int_from(e162_e172, 'E162_adoptive_parent1_birth_date')
+        e162 = _date_from(e162_e172, 'E162_adoptive_parent1_birth_date')
         e163 = _int_from(e162_e172, 'E163_adoptive_parent1_tribal_membership')
         e164 = _int_from(e162_e172, 'E164_adoptive_parent1_race_american_indian_alaska_native')
         e165 = _int_from(e162_e172, 'E165_adoptive_parent1_race_asian')
@@ -401,7 +420,7 @@ def parse_removal_2020(removal: Element, e40: Optional[int], e58: Optional[int])
 
     e173_e183 = e157_e186.find('E173_E183_second_adoptive_parent_information')
     try:
-        e173 = _int_from(e173_e183, 'E173_adoptive_parent2_birth_date')
+        e173 = _date_from(e173_e183, 'E173_adoptive_parent2_birth_date')
         e174 = _int_from(e173_e183, 'E174_adoptive_parent2_tribal_membership')
         e175 = _int_from(e173_e183, 'E175_adoptive_parent2_race_american_indian_alaska_native')
         e176 = _int_from(e173_e183, 'E176_adoptive_parent2_race_asian')
@@ -435,20 +454,26 @@ def parse_removal_2020(removal: Element, e40: Optional[int], e58: Optional[int])
 
 
 def parse_permanency_plan(permanency_plan: Element) -> PermanencyPlan:
-    e147 = _int_from(permanency_plan, 'E147_permanency_plan_date')
+    e147 = _date_from(permanency_plan, 'E147_permanency_plan_date')
     e148 = _int_from(permanency_plan, 'E148_permanency_plan_type')
     return PermanencyPlan(e147=e147, e148=e148)
 
 
 def parse_periodic_review(periodic_review: Element) -> PeriodicReview:
-    return PeriodicReview(e149=periodic_review.text)
+    try:
+        return PeriodicReview(e149=int(periodic_review.text))
+    except ValueError:
+        return PeriodicReview()
 
 
 def parse_permanency_hearing(permanency_hearing: Element) -> PermanencyHearing:
-    return PermanencyHearing(e150=permanency_hearing.text)
+    try:
+        return PermanencyHearing(e150=permanency_hearing.text)
+    except ValueError:
+        return PermanencyHearing()
 
 
 def parse_case_worker_visit(case_worker_visit: Element) -> CaseVisit:
-    e151 = _int_from(case_worker_visit, 'E151_case_worker_visit_date')
+    e151 = _date_from(case_worker_visit, 'E151_case_worker_visit_date')
     e152 = _int_from(case_worker_visit, 'E152_case_worker_visit_location')
     return CaseVisit(e151=e151, e152=e152)

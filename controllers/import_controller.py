@@ -50,7 +50,7 @@ class ImportController:
 
     def do_open_file(self):
         home_dir = str(Path.home())
-        file_name, _ = QFileDialog.getOpenFileName(self.dialog, caption="Save to...", dir=home_dir,
+        file_name, _ = QFileDialog.getOpenFileName(self.dialog, caption="Import from...", dir=home_dir,
                                                    filter="XML Files (*.xml);;All Files (*.*)")
         if file_name:
             self.dialog.file_name = file_name

@@ -93,7 +93,7 @@
                     <E67_tpr_date_parent1>{{ ooh.e67|no_null }}</E67_tpr_date_parent1>
                 </tpr_first_parent>
                 {%- for tpr_second_parent in ooh.second_parents %}
-                {%- if tpr_second_parent.e64 >= 0 %}
+                {%- if tpr_second_parent.e64 in [0,1,2] %}
                 <tpr_second_parent>
                     <E64_tpr_parent2>{{ tpr_second_parent.e64|no_null }}</E64_tpr_parent2>
                     <E66_tpr_petition_date_parent2>{{ tpr_second_parent.e66|no_null }}</E66_tpr_petition_date_parent2>

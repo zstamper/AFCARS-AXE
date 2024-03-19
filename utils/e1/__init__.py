@@ -66,7 +66,10 @@ def afcars_to_date(d: int) -> date | None:
     year = d // 10000
     month = (d - (d // 10000) * 10000) // 100
     day = d - (d // 100) * 100
-    return date(year=year, month=month, day=day)
+    try:
+        return date(year=year, month=month, day=day)
+    except ValueError:
+        return None
 
 
 def is_valid_date(d: int) -> bool:

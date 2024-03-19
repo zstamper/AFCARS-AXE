@@ -5,7 +5,7 @@ from pydantic import ValidationError
 
 from dialogs import BaseDialog
 from dialogs.a_dialog import ADialog
-from model.models import Child, BaseChild, FileType, ARecord
+from model.models import Child, BaseChild, FileType, ARecord, ChildName
 from .utilities import show_error_dialog
 from .validators.a_validator import AValidator
 
@@ -38,6 +38,15 @@ class AController:
     @file_type.setter
     def file_type(self, v: FileType)->None:
         self.dialog.file_type = v
+
+    @property
+    def child_name(self) -> ChildName:
+        return self.dialog.child_name
+
+    @child_name.setter
+    def child_name(self, v: ChildName) -> None:
+        self.dialog.child_name = v
+
 
     # Wire our callbacks into the dialog
     # self.dialog.on_save = self.do_save
