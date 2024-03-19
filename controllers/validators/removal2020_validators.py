@@ -128,12 +128,13 @@ class ExitValidator(Removal2020BaseValidator):
             if delta.days > 30:
                 raise ValueError("Exit Transaction Date (E154) must be within 30 days of exit date (E153).")
 
-
     def validate_e155(self):
         if self.dialog.e155 not in (1, 2, 3, 4, 5, 6, 7, 8, 9):
             raise ValueError(f"Exit Reason (E155) is invalid.")
-        if self.dialog.e153 is None and self.dialog.e155 != 9:
-            raise ValueError("Exit reason (E155) must be 'Not Applicable' when no exit date (E153) is provided.")
+
+    def validate_e153_e155(self):
+        if self.dialog.e153 and self.dialog.e155 and self.dialog.e155 == 9:
+            raise ValueError("Exit Reason (E155) may not be 'Not Applicable'.")
 
     def validate_e156(self):
         if self.dialog.e155 == 8 and self.dialog.e156 is None:
@@ -226,12 +227,16 @@ class ExitValidator(Removal2020BaseValidator):
             raise ValueError(
                 'Sex of first adoptive parent or guardian (E183) is required.')
 
+    def validate_e184_e155(self):
+        if self.dialog.e155 in [3, 5] and not self.dialog.e184:
+            raise ValueError("Jurisdiction of the Adoption or Guardianship (E184) is required.")
+
     def validate_e185(self):
         if self.dialog.e155 in [3, 5] and self.dialog.e185 is None:
             raise ValueError("Adoption or Guardianship Type (E185) is required.")
 
     def validate_e186(self):
-        if self.dialog.e155 in [3,5]:
+        if self.dialog.e155 in [3, 5]:
             if not re.match(r"\d+", self.dialog.ui.e186.text()):
                 raise ValueError("Number of Siblings in the Guardian or Adoption Home (E186) is missing or invalid.")
 

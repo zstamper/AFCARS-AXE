@@ -57,6 +57,10 @@ class Removal1993Validators(Removal1993BaseValidator):
         if self.dialog.e155 not in (1, 2, 3, 4, 5, 6, 8):
             raise ValueError("Exit Reason (E155) is required.")
 
+    def validate_e153_e155(self):
+        if self.dialog.e153 and self.dialog.e155 and self.dialog.e155 == 9:
+            raise ValueError("Exit Reason (E155) may not be 'Not Applicable'.")
+
 
 class Removal1993Validator(AbstractValidator):
     def __init__(self, dialog: Removal1993Dialog):
