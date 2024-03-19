@@ -46,7 +46,6 @@ class LivingArrangementController:
     def data(self, v: LivingArrangement) -> None:
         self._data = v
         self._data.scatter(self.dialog)
-        self.dialog.settle()
 
     @property
     def file_type(self) -> FileType:
@@ -81,6 +80,7 @@ class LivingArrangementController:
         self.dialog.e39 = v
 
     def exec(self):
+        self.dialog.settle()
         self.dialog.exec()
 
     def do_validate(self) -> bool:

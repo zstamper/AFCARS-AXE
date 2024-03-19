@@ -38,7 +38,6 @@ class LivingArrangementDialog(BaseDialog):
         self._e144_changed()
 
     def exec(self):
-        self._e56_e57_text_changed()
         super().exec()
 
     def _wire_ui(self) -> None:
