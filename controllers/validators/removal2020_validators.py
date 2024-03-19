@@ -162,7 +162,7 @@ class ExitValidator(Removal2020BaseValidator):
                 'Sex of first adoptive parent or guardian (E172) is required when Exit Reason (E155) is Adoption or Guardianship by a couple.')
 
     def validate_e173(self):
-        if self.dialog.e155 in (3, 5) and self.dialog.e157 not in (1, 2):
+        if self.dialog.e155 in (3, 5) and self.dialog.e157 in (1, 2):
             if not self.dialog.ui.e173.text():
                 raise ValueError("Date of Birth for second adoptive parent or guardian (E173) is required.")
             if not re.match(r"\d+", self.dialog.ui.e173.text()):
