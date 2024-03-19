@@ -2,6 +2,7 @@ import datetime
 import os
 import sys
 from pathlib import Path
+from typing import Any
 
 from model import BaseChild, Child, ContextTable
 from model.models import ReportType
@@ -23,18 +24,25 @@ def file_system_directories():
     return app_dir, bundle_dir
 
 
-def coalesce(v: str | int | float | None, d: int | float) -> int | float:
-    if isinstance(v, (int, float)):
-        return v
-    if isinstance(v, str):
-        try:
-            return int(v)
-        except ValueError:
-            try:
-                return float(v)
-            except ValueError:
-                return d
-    return d
+def coalesce(*args, default: Any = None) -> Any:
+    for x in args:
+        if x is not None:
+            return x
+    return default
+
+
+# def coalesce(v: str | int | float | None, d: int | float) -> int | float:
+#     if isinstance(v, (int, float)):
+#         return v
+#     if isinstance(v, str):
+#         try:
+#             return int(v)
+#         except ValueError:
+#             try:
+#                 return float(v)
+#             except ValueError:
+#                 return d
+#     return d
 
 
 def refresh_dates(base_child: BaseChild, child: Child, report_type: ReportType):
@@ -84,10 +92,10 @@ def refresh_dates(base_child: BaseChild, child: Child, report_type: ReportType):
             ContextTable.e2.desc()).first()
         if context:
             try:
-                base_child.last_adoption = afcars_to_date(getattr(context.data.a, 'a17', None))
+                base_child.last_adoption = afcars_to_date(coalesce(getattr(context.data.a, 'a17', None), child.a.a17))
             except ValueError:
                 pass
             try:
-                base_child.last_termination = afcars_to_date(getattr(context.data.a, 'a18', None))
+                base_child.last_termination = afcars_to_date(coalesce(getattr(context.data.a, 'a18', None), child.a.a18))
             except ValueError:
                 pass
