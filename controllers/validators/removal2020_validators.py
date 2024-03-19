@@ -230,6 +230,11 @@ class ExitValidator(Removal2020BaseValidator):
         if self.dialog.e155 in [3, 5] and self.dialog.e185 is None:
             raise ValueError("Adoption or Guardianship Type (E185) is required.")
 
+    def validate_e186(self):
+        if self.dialog.e155 in [3,5]:
+            if not re.match(r"\d+", self.dialog.ui.e186.text()):
+                raise ValueError("Number of Siblings in the Guardian or Adoption Home (E186) is missing or invalid.")
+
 
 class PermanencyPlanValidator(Removal2020BaseValidator):
 
