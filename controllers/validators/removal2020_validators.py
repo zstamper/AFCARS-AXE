@@ -45,6 +45,25 @@ class RemovalValidator(Removal2020BaseValidator):
         if afcars_to_date(self.dialog.e69) > e2_end_date():
             raise ValueError("Date of Removal (E69) must be on or before the reporting period end (E2).")
 
+    def validate_e70(self) -> None:
+        if not self.dialog.ui.e70.text():
+            raise ValueError(f"Removal Transaction Date (E70) is required.")
+        if not re.match(r"\d+", self.dialog.ui.e70.text()):
+            raise ValueError(f"Removal Transaction Date (E70) is invalid.")
+        if not is_valid_date(self.dialog.e70):
+            raise ValueError(f"Removal Transaction Date (E70) is invalid.")
+        if self.dialog.e69 and is_valid_date(self.dialog.e69):
+            removal_date = afcars_to_date(self.dialog.e69)
+            tx_date = afcars_to_date(self.dialog.e70)
+            delta = tx_date - removal_date
+            if delta.days > 30:
+                raise ValueError("Removal Transaction Date (E70) must be within 30 days of removal date (E69).")
+        if self.dialog.e69 and is_valid_date(self.dialog.e69):
+            if self.dialog.e69 > self.dialog.e70:
+                raise ValueError("Removal Transaction Date (E70) must be on or after removal date (E69).")
+        if is_valid_date(self.dialog.child.e5) and self.dialog.e70 < self.dialog.child.e5:
+            raise ValueError("Removal Transaction Date (E70) must be on or after the child's data of birth (E5).")
+
     def validate_e71(self) -> None:
         if self.dialog.e71 not in (1, 2, 3, 4, 5, 6, 7):
             raise ValueError(f"Environment at Removal (E71) is invalid.")

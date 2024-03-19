@@ -389,11 +389,11 @@ class Removal2020Dialog(BaseDialog):
 
     @property
     def e70(self) -> int | None:
-        return self.e69
+        return self._get_int_field(self.ui.e70)
 
     @e70.setter
-    def e70(self, v: int | None) -> None:
-        pass
+    def e70(self, v: int) -> None:
+        self._set_int_field(self.ui.e70, v)
 
     @property
     def e71(self) -> int | None:

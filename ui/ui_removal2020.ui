@@ -40,83 +40,6 @@
          <property name="verticalSpacing">
           <number>6</number>
          </property>
-         <item row="0" column="0">
-          <widget class="QLabel" name="label">
-           <property name="maximumSize">
-            <size>
-             <width>16777215</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>Date of Removal (E69)</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1">
-          <widget class="QLabel" name="label_2">
-           <property name="text">
-            <string>Local Agency Code (State and&lt;br/&gt;County FIPS Code) (E3)</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="2">
-          <widget class="QLabel" name="label_3">
-           <property name="text">
-            <string>Environment at Removal (E71)</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="0">
-          <widget class="QLineEdit" name="e69">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>16777215</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="inputMask">
-            <string/>
-           </property>
-           <property name="maxLength">
-            <number>8</number>
-           </property>
-           <property name="placeholderText">
-            <string>YYYYMMDD</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="1">
-          <widget class="QLineEdit" name="e3">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="inputMask">
-            <string/>
-           </property>
-           <property name="maxLength">
-            <number>5</number>
-           </property>
-          </widget>
-         </item>
          <item row="1" column="2">
           <widget class="QComboBox" name="e71">
            <property name="sizePolicy">
@@ -166,6 +89,106 @@
              <string>Other</string>
             </property>
            </item>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QLabel" name="e3_label">
+           <property name="text">
+            <string>Local Agency Code (State and&lt;br/&gt;County FIPS Code) (E3)</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="0">
+          <widget class="QLabel" name="e69_label">
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>Date of Removal (E69)</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLineEdit" name="e69">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="inputMask">
+            <string/>
+           </property>
+           <property name="maxLength">
+            <number>8</number>
+           </property>
+           <property name="placeholderText">
+            <string>YYYYMMDD</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="2">
+          <widget class="QLabel" name="e71_label">
+           <property name="text">
+            <string>Environment at Removal (E71)</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QLineEdit" name="e3">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="inputMask">
+            <string/>
+           </property>
+           <property name="maxLength">
+            <number>5</number>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="e70_label">
+           <property name="text">
+            <string>Removal Transaction Date (E70)</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="0">
+          <widget class="QLineEdit" name="e70">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="maxLength">
+            <number>8</number>
+           </property>
+           <property name="placeholderText">
+            <string>YYYYMMDD</string>
+           </property>
           </widget>
          </item>
         </layout>
@@ -1949,6 +1972,7 @@ is Jurisdiction Transfer&lt;/i&gt;</string>
  <tabstops>
   <tabstop>tab_widget</tabstop>
   <tabstop>e69</tabstop>
+  <tabstop>e70</tabstop>
   <tabstop>e3</tabstop>
   <tabstop>e71</tabstop>
   <tabstop>e72</tabstop>
@@ -2050,26 +2074,25 @@ is Jurisdiction Transfer&lt;/i&gt;</string>
   <tabstop>e161</tabstop>
   <tabstop>e159</tabstop>
   <tabstop>e185</tabstop>
+  <tabstop>living_arrangement_edit_button</tabstop>
+  <tabstop>validate_button</tabstop>
+  <tabstop>save_button</tabstop>
+  <tabstop>close_button</tabstop>
  </tabstops>
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="e182">
-   <property name="exclusive">
-    <bool>false</bool>
-   </property>
-  </buttongroup>
-  <buttongroup name="e183">
-   <property name="exclusive">
-    <bool>false</bool>
-   </property>
-  </buttongroup>
   <buttongroup name="e171">
    <property name="exclusive">
     <bool>false</bool>
    </property>
   </buttongroup>
-  <buttongroup name="e174">
+  <buttongroup name="e182">
+   <property name="exclusive">
+    <bool>false</bool>
+   </property>
+  </buttongroup>
+  <buttongroup name="e172">
    <property name="exclusive">
     <bool>false</bool>
    </property>
@@ -2079,7 +2102,12 @@ is Jurisdiction Transfer&lt;/i&gt;</string>
     <bool>false</bool>
    </property>
   </buttongroup>
-  <buttongroup name="e172">
+  <buttongroup name="e183">
+   <property name="exclusive">
+    <bool>false</bool>
+   </property>
+  </buttongroup>
+  <buttongroup name="e174">
    <property name="exclusive">
     <bool>false</bool>
    </property>
