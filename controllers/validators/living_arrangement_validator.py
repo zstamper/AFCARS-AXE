@@ -111,7 +111,7 @@ class LivingArrangementValidators:
             year = datetime.date.today().year
             if not 10 <= year - self.dialog.e125 < 100:
                 raise ValueError(
-                    "Foster parent's year of birth (E125) must be greater than 10 and less than 100.")
+                    "Foster parent's year of birth (E125) is outside of allowed range (age must be greater than 10 and less than 100).")
 
     def validate_e126(self):
         if self.dialog.e113 == 1:
@@ -147,7 +147,7 @@ class LivingArrangementValidators:
             year = datetime.date.today().year
             if not 10 <= year - self.dialog.e136 < 100:
                 raise ValueError(
-                    "Second foster parent's year of birth (E136) is out of allowed range (age must be greater than 10 and less than 100).")
+                    "Second foster parent's year of birth (E136) is outside of allowed range (age must be greater than 10 and less than 100).")
 
     def validate_e137(self):
         if self.dialog.e113 == 1 and self.dialog.e123 in (1, 2):
