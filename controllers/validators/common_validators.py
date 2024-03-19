@@ -1,6 +1,6 @@
 import re
 
-from utils.e1 import is_valid_date, is_future_date, is_way_past_date
+from utils.e1 import is_valid_date, is_future_date, is_way_past_date, afcars_to_date, e2_end_date
 
 
 class CommonValidators:
@@ -18,6 +18,8 @@ class CommonValidators:
             raise ValueError("Date of Birth (E5) may not be in the future.")
         if is_way_past_date(self.dialog.e5):
             raise ValueError("Date of Birth (E5) is too far in the past.")
+        if afcars_to_date(self.dialog.e5) > e2_end_date():
+            raise ValueError("Date of Birth (E5) must be on or before end of reporting period (E2).")
 
     def validate_e6(self):
         if self.dialog.e6 not in [1, 2]:
