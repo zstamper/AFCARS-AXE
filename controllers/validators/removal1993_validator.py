@@ -2,7 +2,7 @@ import re
 from datetime import date
 
 from dialogs.removal1993_dialog import Removal1993Dialog
-from utils.e1 import afcars_to_date, is_valid_date, is_future_date
+from utils.e1 import afcars_to_date, is_valid_date, is_future_date, is_way_past_date
 from .abstract_validator import AbstractValidator
 
 
@@ -11,28 +11,6 @@ class Removal1993BaseValidator:
     def __init__(self, dialog: Removal1993Dialog):
         self.dialog = dialog
         self.parent_data = None
-
-    @staticmethod
-    def is_valid_date(d: int) -> bool:
-        try:
-            s = str(d)
-            year = int(s[0:4])
-            month = int(s[4:6])
-            day = int(s[6:8])
-            date(year=year, month=month, day=day)
-            return True
-        except ValueError:
-            return False
-
-    @staticmethod
-    def is_future_date(d: int) -> bool:
-        if d is None:
-            return False
-        year = d // 10000
-        month = (d - (d // 10000) * 10000) // 100
-        day = d - (d // 100) * 100
-        d = date(year=year, month=month, day=day)
-        return d > date.today()
 
     @staticmethod
     def is_after_1993_date(d: int) -> bool:
@@ -56,27 +34,28 @@ class Removal1993Validators(Removal1993BaseValidator):
         if is_valid_date(self.dialog.child.e5) and self.dialog.e69 < self.dialog.child.e5:
             raise ValueError("Date of Removal (E69) must be on or after the child's data of birth (E5).")
 
-
     def validate_e153(self):
         if not self.dialog.ui.e153.text():
             raise ValueError("Exit Date (E153) is required.")
         if not re.match(r"\d+", self.dialog.ui.e153.text()):
             raise ValueError("Exit Date (E153) is invalid.")
-        if not self.is_valid_date(self.dialog.e153):
+        if not is_valid_date(self.dialog.e153):
             raise ValueError("Exit Date (E153) is invalid.")
-        if self.is_future_date(self.dialog.e153):
+        if is_future_date(self.dialog.e153):
             raise ValueError("Exit Date (E153) cannot be in the future.")
         if self.is_after_1993_date(self.dialog.e153):
             raise ValueError("Exit Date (E153) must be before 10/1/2022.")
+        if is_way_past_date(self.dialog.e153):
+            raise ValueError("Exit Date (E153) is too far in the past.")
 
     def validate_e69_e153(self):
-        if self.is_valid_date(self.dialog.e69) and self.is_valid_date(self.dialog.e153):
+        if is_valid_date(self.dialog.e69) and is_valid_date(self.dialog.e153):
             if self.dialog.e69 >= self.dialog.e153:
                 raise ValueError("Removal Date (E69) must be prior to Exit Date (E153).")
 
     def validate_e155(self):
         if self.dialog.e155 not in (1, 2, 3, 4, 5, 6, 8):
-            raise ValueError("Exit Reason (E155) is invalid.")
+            raise ValueError("Exit Reason (E155) is required.")
 
 
 class Removal1993Validator(AbstractValidator):
