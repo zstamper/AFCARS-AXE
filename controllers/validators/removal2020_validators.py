@@ -1,5 +1,5 @@
 import re
-from datetime import date
+from datetime import date, datetime
 
 from dialogs.removal2020_dialog import Removal2020Dialog
 from utils import afcars_to_date
@@ -108,18 +108,26 @@ class ExitValidator(Removal2020BaseValidator):
                 raise ValueError("Date of exit (E153) may not be a future date.")
 
     def validate_e154(self):
-        if self.dialog.ui.e154.text():
-            if not re.match(r"\d+", self.dialog.ui.e154.text()):
-                raise ValueError(f"Exit Transaction Date (E154) is invalid.")
-            if not is_valid_date(self.dialog.e154):
-                raise ValueError(f"Exit Transaction Date (E154) is invalid.")
-            if self.dialog.e154 <= 20220930:
-                raise ValueError("Exit Transaction Date (E154) must be on or after October 1, 2022.")
-            if self.dialog.e69 is None or self.dialog.e154 <= self.dialog.e69:
-                raise ValueError("Exit Transaction Date (E154) must be after date of removal (E69).")
-            today = int(date.today().strftime('%Y%m%d'))
-            if self.dialog.e154 > today:
-                raise ValueError("Exit Transaction Date (E154) may not be a future date.")
+        if not re.match(r"\d+", self.dialog.ui.e154.text()):
+            raise ValueError(f"Exit Transaction Date (E154) is invalid.")
+        if not is_valid_date(self.dialog.e154):
+            raise ValueError(f"Exit Transaction Date (E154) is invalid.")
+        if self.dialog.e154 <= 20220930:
+            raise ValueError("Exit Transaction Date (E154) must be on or after October 1, 2022.")
+        today = date.today()
+        if afcars_to_date(self.dialog.e154) > today:
+            raise ValueError("Exit Transaction Date (E154) may not be a future date.")
+        if is_valid_date(self.dialog.e69) and self.dialog.e69 >= self.dialog.e154:
+            raise ValueError("Exit Transaction Date (E154) must be after date of removal (E69).")
+        if is_valid_date(self.dialog.e153) and self.dialog.e153 > self.dialog.e154:
+            raise ValueError("Exit Transaction Date (E154) must be after date of exit (E153).")
+        if is_valid_date(self.dialog.e153):
+            exit_date = afcars_to_date(self.dialog.e153)
+            tx_date = afcars_to_date(self.dialog.e154)
+            delta = tx_date - exit_date
+            if delta.days > 30:
+                raise ValueError("Exit Transaction Date (E154) must be within 30 days of exit date (E153).")
+
 
     def validate_e155(self):
         if self.dialog.e155 not in (1, 2, 3, 4, 5, 6, 7, 8, 9):
@@ -189,7 +197,8 @@ class ExitValidator(Removal2020BaseValidator):
             if self.dialog.e173 and not is_valid_date(self.dialog.e173):
                 raise ValueError("Date of Birth for second adoptive parent or guardian (E173) is invalid.")
             if self.dialog.e173 and not is_valid_adult_birth_date(self.dialog.e173):
-                raise ValueError("Age of second adoptive parent or guardian (E173) must be between 10 and 100 years old.")
+                raise ValueError(
+                    "Age of second adoptive parent or guardian (E173) must be between 10 and 100 years old.")
 
     def validate_e174(self):
         if self.dialog.e155 in (3, 5) and self.dialog.e157 in (1, 2) and self.dialog.e174 not in (0, 1, 9):
