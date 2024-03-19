@@ -326,8 +326,7 @@ class EducationValidator(OOHBaseValidator):
         return self
 
     def validate_e36(self):
-        if self.dialog.e35 != 0 and self.dialog.e36 not in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
-                                                            17]:
+        if self.dialog.e36 not in [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17]:
             raise ValueError('Highest level of education (E36) is required.')
         return self
 
