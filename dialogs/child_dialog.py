@@ -111,7 +111,7 @@ class ChildDialog(BaseDialog):
             self.ui.child_table.horizontalHeaderItem(5).setText("Last Removal")
             self.ui.child_table.horizontalHeaderItem(6).setText("Last Exit")
         if v == ReportType.A:
-            self.ui.child_table.horizontalHeaderItem(5).setText("Last Adoption")
+            self.ui.child_table.horizontalHeaderItem(5).setText("Last Finalization")
             self.ui.child_table.horizontalHeaderItem(6).setText("Last Termination")
 
     @property
