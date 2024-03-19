@@ -89,7 +89,7 @@ class RemovalValidator(Removal2020BaseValidator):
 class ExitValidator(Removal2020BaseValidator):
 
     def validate_e69_e153(self) -> None:
-        if self.dialog.e69 is not None and self.dialog.e153 is not None:
+        if is_valid_date(self.dialog.e69) and is_valid_date(self.dialog.e153):
             if self.dialog.e69 >= self.dialog.e153:
                 raise ValueError(f"Date of Removal (e69) must be prior to the Date of Exit (e153) for the same removal")
 
@@ -115,7 +115,7 @@ class ExitValidator(Removal2020BaseValidator):
                 raise ValueError(f"Exit Transaction Date (E154) is invalid.")
             if self.dialog.e154 <= 20220930:
                 raise ValueError("Exit Transaction Date (E154) must be on or after October 1, 2022.")
-            if self.dialog.e69 is None or self.dialog.e153 <= self.dialog.e69:
+            if self.dialog.e69 is None or self.dialog.e154 <= self.dialog.e69:
                 raise ValueError("Exit Transaction Date (E154) must be after date of removal (E69).")
             today = int(date.today().strftime('%Y%m%d'))
             if self.dialog.e154 > today:
