@@ -84,7 +84,7 @@ class DemographicsValidator(OOHBaseValidator, CommonValidators):
             raise ValueError("Siblings in Foster Care (E57) cannot be larger than Total Number of Siblings (E56).")
 
 
-class ICWAValidator(OOHBaseValidator):
+class ICWAValidator(OOHBaseValidator, CommonValidators):
 
     def validate_funding_e7(self):
         if is_state() and self.dialog.funding == 0:
@@ -132,7 +132,7 @@ class ICWAValidator(OOHBaseValidator):
                 raise ValueError("Tribal ICWA notification indication (E12) is required.")
 
 
-class HealthValidator(OOHBaseValidator):
+class HealthValidator(OOHBaseValidator, CommonValidators):
     def validate_e22(self):
         if self.dialog.e22 not in [0, 1]:
             raise ValueError("Health Assessment (E22) must be Yes or No.")
@@ -165,7 +165,7 @@ class HealthValidator(OOHBaseValidator):
             raise ValueError("Element E39 is required.")
 
 
-class ParentGuardianValidator(OOHBaseValidator):
+class ParentGuardianValidator(OOHBaseValidator, CommonValidators):
     E59 = re.compile(r'7777|(19|20)[0-9]{2}')
     E60 = re.compile(r'7777|9999|(19|20)[0-9]{2}')
     E66 = re.compile(
@@ -315,14 +315,14 @@ class ParentGuardianValidator(OOHBaseValidator):
                 raise ValueError("Date of Termination (E68) can't be after current period.")
 
 
-class EducationValidator(OOHBaseValidator):
+class EducationValidator(OOHBaseValidator, CommonValidators):
     def validate_e35(self):
         if self.dialog.e35 not in [0, 1, 2, 3, 4, 5]:
             raise ValueError('School enrollment (E35) is required.')
         return self
 
     def validate_e36(self):
-        if self.dialog.e36 not in [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17]:
+        if self.dialog.e36 not in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]:
             raise ValueError('Highest level of education (E36) is required.')
         return self
 
@@ -332,7 +332,7 @@ class EducationValidator(OOHBaseValidator):
         return self
 
 
-class TraffickingValidator(OOHBaseValidator):
+class TraffickingValidator(OOHBaseValidator, CommonValidators):
     def validate_e106(self):
         if self.dialog.e106 not in [0, 1]:
             raise ValueError("Prior victim of sex trafficking before foster care (E106) is required.")
@@ -392,12 +392,12 @@ class TraffickingValidator(OOHBaseValidator):
                     "Date law enforcement was contacted (E111) must be after date of most recent removal (E69).")
 
 
-class FinancialValidator(OOHBaseValidator):
+class FinancialValidator(OOHBaseValidator, CommonValidators):
 
     def validate_e55(self):
         if self.dialog.e55 not in [0, 1]:
             raise ValueError("Foster Care Maintenance Payment (E55) is required.")
 
 
-class RemovalValidator(OOHBaseValidator):
+class RemovalValidator(OOHBaseValidator, CommonValidators):
     pass
