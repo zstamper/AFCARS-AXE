@@ -76,16 +76,12 @@ class DemographicsValidator(OOHBaseValidator, CommonValidators):
     def validate_e57(self) -> None:
         if self.dialog.e57 is None and self.dialog.e56 is not None and self.dialog.e56 > 0:
             raise ValueError("Total number of siblings in foster care (E57) is required.")
-        if self.dialog.e57 is not None and self.dialog.e56 is not None and self.dialog.e57 > self.dialog.e56:
-            raise ValueError("Siblings in Foster Care (E57) cannot be larger than Total Number of Siblings (E56).")
         if bool(self.dialog.e56) and not bool(re.match(r'\d+', self.dialog.ui.e57.text())):
             raise ValueError("Siblings in Foster Care (E57) is invalid.")
 
     def validate_e56_e57(self) -> None:
-        if self.dialog.e56 is not None and self.dialog.e57 is not None:
-            if self.dialog.e57 > self.dialog.e56:
-                raise ValueError(
-                    f"Total number of siblings in foster car (E57) may not be more than total number of siblings (E56).")
+        if self.dialog.e57 is not None and self.dialog.e56 is not None and self.dialog.e57 > self.dialog.e56:
+            raise ValueError("Siblings in Foster Care (E57) cannot be larger than Total Number of Siblings (E56).")
 
 
 class ICWAValidator(OOHBaseValidator):
