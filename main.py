@@ -4,12 +4,15 @@
 """PySide6 port of the widgets/gallery example from Qt v5.15"""
 import datetime
 import traceback
+from threading import Event, Timer
 
 import peewee
 
 import utils
 from controllers.main_window2_controller import MainWindow2Controller
 from model.models import Tribe
+
+SPLASH_DELAY = 5.0
 
 try:
     import os
@@ -58,6 +61,8 @@ try:
         """
         app_dir = None
         bundle_dir = None
+        e = Event()
+        t = Timer(SPLASH_DELAY, e.set)
         try:
             app = QApplication()
             app.setApplicationName('AXE')
@@ -69,6 +74,7 @@ try:
             pixmap = QPixmap(bundle_dir / "assets" / "pexels-negative-space-97077.jpg")
             splash = QSplashScreen(pixmap)
             splash.show()
+            t.start()
             splash.showMessage(f"Opening database: {app_dir / 'axe.db'}", color=QColor.fromRgb(255, 255, 255, 255))
             QCoreApplication.processEvents()
 
@@ -86,6 +92,7 @@ try:
 
             main_window = MainWindow2Controller()
             main_window.show()
+            e.wait(timeout=SPLASH_DELAY)
             splash.finish(main_window.window)
             sys.exit(app.exec())
 

@@ -39,7 +39,7 @@ class ImportController:
                 message += f"\n\nThe following child IDs were skipped due to pre-existing data:\n"
                 message += "".join(f"* {id}\n" for id in skipped[:5])
                 if len(skipped) > 5:
-                    message += "\nPlus {len(skipped)-5} additional IDs"
+                    message += f"\nPlus {len(skipped)-5} additional IDs"
             title = "Import Finished"
             ok_dialog(self.dialog, title, message)
             return True
