@@ -1,7 +1,3 @@
-# Copyright (C) 2022 The Qt Company Ltd.
-# SPDX-License-Identifier: LicenseRef-Qt-Commercial OR BSD-3-Clause
-
-"""PySide6 port of the widgets/gallery example from Qt v5.15"""
 import datetime
 import traceback
 from threading import Event, Timer
@@ -20,7 +16,7 @@ try:
     from pathlib import Path
 
     from PySide6.QtCore import QFile, QCoreApplication
-    from PySide6.QtGui import QAction, QPixmap, QColor
+    from PySide6.QtGui import QAction, QPixmap, QColor, QIcon
     from PySide6.QtUiTools import QUiLoader
     from PySide6.QtWidgets import QApplication, QMainWindow, QFileDialog, QToolButton, QPushButton, QTableWidgetItem, \
         QTableWidget, QSplashScreen
@@ -63,13 +59,16 @@ try:
         bundle_dir = None
         e = Event()
         t = Timer(SPLASH_DELAY, e.set)
+        app_dir, bundle_dir = utils.file_system_directories()
         try:
             app = QApplication()
             app.setApplicationName('AXE')
             app.setApplicationDisplayName('AXE')
             app.setDesktopFileName('AXE')
-
-            app_dir, bundle_dir = utils.file_system_directories()
+            if sys.platform.startswith('win32'):
+                app.setWindowIcon(QIcon(QPixmap(str(bundle_dir / "assets" / "favocon.ico"))))
+            else:
+                app.setWindowIcon(QIcon(QPixmap(str(bundle_dir / "assets" / "app_icon.icns"))))
 
             pixmap = QPixmap(bundle_dir / "assets" / "pexels-negative-space-97077.jpg")
             splash = QSplashScreen(pixmap)
@@ -90,9 +89,10 @@ try:
                 QCoreApplication.processEvents()
             model.open_database(str(database_path))
 
+            e.wait(timeout=SPLASH_DELAY)
+
             main_window = MainWindow2Controller()
             main_window.show()
-            e.wait(timeout=SPLASH_DELAY)
             splash.finish(main_window.window)
             sys.exit(app.exec())
 
