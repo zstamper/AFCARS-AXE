@@ -66,9 +66,9 @@ try:
             app.setApplicationDisplayName('AXE')
             app.setDesktopFileName('AXE')
             if sys.platform.startswith('win32'):
-                app.setWindowIcon(QIcon(QPixmap(str(bundle_dir / "assets" / "favocon.ico"))))
+                app.setWindowIcon(QPixmap(str(bundle_dir / "assets" / "favocon.ico")))
             else:
-                app.setWindowIcon(QIcon(QPixmap(str(bundle_dir / "assets" / "app_icon.icns"))))
+                app.setWindowIcon(QPixmap(str(bundle_dir / "assets" / "app_icon.icns")))
 
             pixmap = QPixmap(bundle_dir / "assets" / "pexels-negative-space-97077.jpg")
             splash = QSplashScreen(pixmap)
