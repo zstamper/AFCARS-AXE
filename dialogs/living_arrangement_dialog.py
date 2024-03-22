@@ -81,6 +81,9 @@ class LivingArrangementDialog(BaseDialog):
                               136, 137, 138, 139, 140, 141, 142, 143, 144, 145):
                     if hasattr(self, f"e{field}"):
                         setattr(self, f"e{field}", None)
+            self._e123_changed()
+            self._e133_changed()
+            self._e144_changed()
 
     def _e121_changed(self):
         if self.file_type == FileType.PRODUCTION and self.settled:

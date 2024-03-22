@@ -73,9 +73,9 @@ try:
             pixmap = QPixmap(bundle_dir / "assets" / "pexels-negative-space-97077.jpg")
             splash = QSplashScreen(pixmap)
             splash.show()
-            t.start()
             splash.showMessage(f"Opening database: {app_dir / 'axe.db'}", color=QColor.fromRgb(255, 255, 255, 255))
             QCoreApplication.processEvents()
+            t.start()
 
             with open(bundle_dir / 'ui' / 'style.qss', 'r') as f:
                 style_sheet = f.read()
@@ -89,11 +89,11 @@ try:
                 QCoreApplication.processEvents()
             model.open_database(str(database_path))
 
-            e.wait(timeout=SPLASH_DELAY)
 
             main_window = MainWindow2Controller()
             main_window.show()
             splash.finish(main_window.window)
+            e.wait(timeout=SPLASH_DELAY)
             sys.exit(app.exec())
 
         except Exception as e:
