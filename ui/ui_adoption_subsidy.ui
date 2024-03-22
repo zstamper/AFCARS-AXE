@@ -555,16 +555,45 @@ Legalization Date (A17)</string>
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>last_name</tabstop>
+  <tabstop>first_name</tabstop>
+  <tabstop>e4</tabstop>
+  <tabstop>e4_generate</tabstop>
+  <tabstop>e5</tabstop>
+  <tabstop>e6_m</tabstop>
+  <tabstop>e6_f</tabstop>
+  <tabstop>e13</tabstop>
+  <tabstop>e14</tabstop>
+  <tabstop>e15</tabstop>
+  <tabstop>e16</tabstop>
+  <tabstop>e17</tabstop>
+  <tabstop>e18</tabstop>
+  <tabstop>e19</tabstop>
+  <tabstop>e20</tabstop>
+  <tabstop>e21</tabstop>
+  <tabstop>a15_a</tabstop>
+  <tabstop>a15_g</tabstop>
+  <tabstop>a16</tabstop>
+  <tabstop>a17</tabstop>
+  <tabstop>a18</tabstop>
+  <tabstop>a19_1</tabstop>
+  <tabstop>a19_2</tabstop>
+  <tabstop>a19_3</tabstop>
+  <tabstop>validate_button</tabstop>
+  <tabstop>save_button</tabstop>
+  <tabstop>close_button</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
  <buttongroups>
   <buttongroup name="e6"/>
-  <buttongroup name="a19">
+  <buttongroup name="a15">
    <property name="exclusive">
     <bool>false</bool>
    </property>
   </buttongroup>
-  <buttongroup name="a15">
+  <buttongroup name="a19">
    <property name="exclusive">
     <bool>false</bool>
    </property>
