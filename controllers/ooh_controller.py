@@ -157,8 +157,8 @@ class OOHController:
         return True
 
     def exec(self):
-        self.dialog.enable_icwa(not self.is_tribe())
         self.dialog.settle()
+        self.dialog.enable_icwa(not self.is_tribe())
         self.dialog.exec()
 
     def clear(self):
