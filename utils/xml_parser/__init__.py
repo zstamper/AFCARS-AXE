@@ -157,6 +157,7 @@ def import_ooh_tree(tree: Element, file_type: FileType) -> tuple[list, list]:
 
         e35 = _int_from(record, 'E35_school_enrollment')
         e36 = _int_from(record, 'E36_school_highest_completed')
+        e36 = 17 if e36 is None else e36
         e37 = _int_from(record, 'E37_school_special_education')
         e38 = _int_from(record, 'E38_pregnant')
         e39 = _int_from(record, 'E39_fathered_or_bore_child')
