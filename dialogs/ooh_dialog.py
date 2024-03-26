@@ -315,6 +315,7 @@ class OOHDialog(BaseDialog):
                 self.e10 = None
                 self.e11 = None
                 self.e12 = None
+                self.refresh_tribes()
 
     def _e8_button_clicked(self) -> None:
         self.set_e8_state()

@@ -197,12 +197,12 @@
      <x>0</x>
      <y>0</y>
      <width>532</width>
-     <height>20</height>
+     <height>24</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_file">
     <property name="title">
-     <string>FIle</string>
+     <string>File</string>
     </property>
     <addaction name="actionExport"/>
     <addaction name="actionImport"/>
@@ -231,7 +231,7 @@
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="actionButtons"/>
   <buttongroup name="file_type"/>
+  <buttongroup name="actionButtons"/>
  </buttongroups>
 </ui>

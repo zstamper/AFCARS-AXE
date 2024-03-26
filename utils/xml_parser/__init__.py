@@ -157,8 +157,9 @@ def import_ooh_tree(tree: Element, file_type: FileType) -> tuple[list, list]:
 
         e35 = _int_from(record, 'E35_school_enrollment')
         e36 = _int_from(record, 'E36_school_highest_completed')
-        e36 = 17 if e36 is None else e36
         e37 = _int_from(record, 'E37_school_special_education')
+        # if all three are null, leave it as null, else it's probably 'Not attended not based on age'
+        e36 = 17 if e36 is None and e35 is not None and e37 is not None else e36
         e38 = _int_from(record, 'E38_pregnant')
         e39 = _int_from(record, 'E39_fathered_or_bore_child')
         e40 = _int_from(record, 'E40_child_and_children_together')
@@ -205,6 +206,11 @@ def import_ooh_tree(tree: Element, file_type: FileType) -> tuple[list, list]:
         for parent in record.find('E63_E68_termination_of_parental_rights').findall('tpr_second_parent'):
             second_parents.append(parse_second_parent(parent, parent_num))
             parent_num += 1
+
+        # # if second parent exists, there has to be a tpr, but we'll mark it as N/A
+        # checking with program team as to whether this should be enabled or not.
+        # if e60 not in [None, 7777, 9999] and len(second_parents) == 0:
+        #     second_parents.append(SecondParent(number=parent_num, e64=0))
 
         removals_1993 = []
         for removal in record.find('E69_E186_removals').findall('removal_1993'):
