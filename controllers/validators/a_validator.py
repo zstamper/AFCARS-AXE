@@ -49,6 +49,10 @@ class AValidators(ABaseValidator, CommonValidators):
         if self.dialog.a18 < self.dialog.a17:
             raise ValueError(
                 "Agreement Termination Date (A18) can't be before Adoption Finalization or Guardianship Legalization Date (A17).")
+        if is_way_past_date(self.dialog.a17):
+            raise ValueError("Agreement Termination Date (A18) is too far in the past.")
+        if is_future_date(self.dialog.e18):
+            raise ValueError('Agreement Termination Date (A18) cannot be in the future.')
 
     def validate_a19(self):
         if self.dialog.a19 not in [1, 2, 3]:
