@@ -2082,12 +2082,7 @@ is Jurisdiction Transfer&lt;/i&gt;</string>
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="e171">
-   <property name="exclusive">
-    <bool>false</bool>
-   </property>
-  </buttongroup>
-  <buttongroup name="e182">
+  <buttongroup name="e174">
    <property name="exclusive">
     <bool>false</bool>
    </property>
@@ -2097,17 +2092,22 @@ is Jurisdiction Transfer&lt;/i&gt;</string>
     <bool>false</bool>
    </property>
   </buttongroup>
+  <buttongroup name="e171">
+   <property name="exclusive">
+    <bool>false</bool>
+   </property>
+  </buttongroup>
   <buttongroup name="e163">
    <property name="exclusive">
     <bool>false</bool>
    </property>
   </buttongroup>
-  <buttongroup name="e183">
+  <buttongroup name="e182">
    <property name="exclusive">
     <bool>false</bool>
    </property>
   </buttongroup>
-  <buttongroup name="e174">
+  <buttongroup name="e183">
    <property name="exclusive">
     <bool>false</bool>
    </property>

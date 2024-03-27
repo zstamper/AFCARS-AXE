@@ -25,6 +25,23 @@ class ExportDialog(BaseDialog):
 
         ui.form_action.accepted.connect(self.accept)
         ui.form_action.rejected.connect(self.reject)
+        ui.select_button.clicked.connect(self.select_button_clicked)
+        ui.child_table.itemChanged.connect(self.refresh_select_button_label)
+
+    def select_button_clicked(self) -> None:
+        checked = not any(
+            [self.ui.child_table.item(row, 0).checkState() == Qt.Checked for row in range(self.ui.child_table.rowCount())])
+        for row in range(self.ui.child_table.rowCount()):
+            self.ui.child_table.item(row, 0).setCheckState(Qt.Checked if checked else Qt.Unchecked)
+        self.refresh_select_button_label()
+
+    def refresh_select_button_label(self) -> None:
+        if any(
+                [self.ui.child_table.item(row, 0).checkState() == Qt.Checked for row in
+                 range(self.ui.child_table.rowCount())]):
+            self.ui.select_button.setText("Clear Selections")
+        else:
+            self.ui.select_button.setText("Select All")
 
     @property
     def report_type(self) -> ReportType:
@@ -77,6 +94,7 @@ class ExportDialog(BaseDialog):
                     child[0].last_adoption.strftime("%m/%d/%Y") if child[0].last_adoption else ""))
                 self.ui.child_table.setItem(row, 5, QTableWidgetItem(
                     child[0].last_termination.strftime("%m/%d/%Y") if child[0].last_termination else ""))
+        self.refresh_select_button_label()
 
     @property
     def selected_children(self) -> list[tuple[BaseChild, Child]]:
