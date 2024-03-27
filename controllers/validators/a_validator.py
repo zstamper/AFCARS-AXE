@@ -36,6 +36,8 @@ class AValidators(ABaseValidator, CommonValidators):
         if afcars_to_date(self.dialog.a17) > e2_end_date():
             raise ValueError(
                 "Adoption Finalization or Guardianship Legalization Date (A17) can't be after reporting period end.")
+        if is_way_past_date(self.dialog.a17):
+            raise ValueError("Adoption Finalization or Guardianship Legalization Date (A17) is too far in the past.")
 
     def validate_a18(self):
         if not bool(self.dialog.ui.a18.text()):
