@@ -211,7 +211,7 @@ class ExitValidator(Removal2020BaseValidator):
                 [self.dialog.e175, self.dialog.e176, self.dialog.e177, self.dialog.e178, self.dialog.e179,
                  self.dialog.e180, self.dialog.e181]):
             raise ValueError(
-                "Adoptive parent race (E175, E176, E177, E178, E179, E180, E181) is required.")
+                "Second adoptive parent race (E175, E176, E177, E178, E179, E180, E181) is required.")
         if self.dialog.e155 in (3, 5) and self.dialog.e157 in (1, 2) and self.dialog.e181 and any(
                 [self.dialog.e175, self.dialog.e176, self.dialog.e177, self.dialog.e178, self.dialog.e179,
                  self.dialog.e180]):
