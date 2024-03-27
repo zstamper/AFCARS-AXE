@@ -339,7 +339,7 @@ class Removal2020Dialog(BaseDialog):
             enabled = self.e155 in (3, 5)
             self.ui.adoption_group_box.setEnabled(enabled)
             if not enabled:
-                for n in range(157, 186):
+                for n in range(157, 187):
                     setattr(self, f"e{n}", None)
 
     def _update_parent_2_group_box_state(self):
