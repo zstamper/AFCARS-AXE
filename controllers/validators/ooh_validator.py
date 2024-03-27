@@ -1,10 +1,13 @@
 from dialogs.ooh_dialog import OOHDialog
+from model.models import ReportType
 from .abstract_validator import AbstractValidator
 from .ooh_validators import DemographicsValidator, ICWAValidator, HealthValidator, EducationValidator, \
     ParentGuardianValidator, FinancialValidator, TraffickingValidator, RemovalValidator
 
 
 class OOHValidator(AbstractValidator):
+    report_type = ReportType.OOH
+
     def __init__(self, dialog: OOHDialog):
         self.dialog = dialog
         self.validators = {

@@ -2,7 +2,8 @@ import re
 from datetime import date
 
 from dialogs.a_dialog import ADialog
-from utils.e1 import is_valid_date, e2_end_date, afcars_to_date, is_future_date
+from model.models import ReportType
+from utils.e1 import is_valid_date, e2_end_date, afcars_to_date, is_future_date, is_way_past_date
 from .abstract_validator import AbstractValidator
 from .common_validators import CommonValidators
 
@@ -11,20 +12,9 @@ class ABaseValidator:
     def __init__(self, dialog: ADialog):
         self.dialog = dialog
 
-    @staticmethod
-    def is_valid_date(d: int) -> bool:
-        try:
-            s = str(d)
-            year = int(s[0:4])
-            month = int(s[4:6])
-            day = int(s[6:8])
-            date(year=year, month=month, day=day)
-            return True
-        except ValueError:
-            return False
-
 
 class AValidators(ABaseValidator, CommonValidators):
+    report_type = ReportType.A
 
     def validate_a15(self):
         if self.dialog.a15 not in [1, 2]:
@@ -54,7 +44,7 @@ class AValidators(ABaseValidator, CommonValidators):
             raise ValueError("Agreement Termination Date (A18) is not valid.")
         if not is_valid_date(self.dialog.a18):
             raise ValueError("Agreement Termination Date (A18) is not valid.")
-        if is_valid_date(self.dialog.a17) and self.dialog.a18 < self.dialog.a17:
+        if self.dialog.a18 < self.dialog.a17:
             raise ValueError(
                 "Agreement Termination Date (A18) can't be before Adoption Finalization or Guardianship Legalization Date (A17).")
 
@@ -64,6 +54,7 @@ class AValidators(ABaseValidator, CommonValidators):
 
 
 class AValidator(AbstractValidator):
+
     def __init__(self, dialog: ADialog):
         self.dialog = dialog
         self.validator = AValidators(self.dialog)

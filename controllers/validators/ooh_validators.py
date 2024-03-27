@@ -3,6 +3,7 @@ from datetime import datetime, date
 
 from controllers.validators.common_validators import CommonValidators
 from dialogs.ooh_dialog import OOHDialog
+from model.models import ReportType
 from utils.e1 import is_state, is_future_date, is_way_past_date, afcars_to_date, is_valid_date, is_valid_year_month, \
     is_future_year_month, is_way_past_year_month, e2_end_date
 
@@ -35,6 +36,7 @@ class OOHBaseValidator:
 
 
 class DemographicsValidator(OOHBaseValidator, CommonValidators):
+    report_type = ReportType.OOH
 
     def validate_e41(self):
         if self.dialog.e41 is None:
@@ -85,6 +87,7 @@ class DemographicsValidator(OOHBaseValidator, CommonValidators):
 
 
 class ICWAValidator(OOHBaseValidator, CommonValidators):
+    report_type = ReportType.OOH
 
     def validate_funding_e7(self):
         if is_state() and self.dialog.funding == 0:
@@ -133,6 +136,8 @@ class ICWAValidator(OOHBaseValidator, CommonValidators):
 
 
 class HealthValidator(OOHBaseValidator, CommonValidators):
+    report_type = ReportType.OOH
+
     def validate_e22(self):
         if self.dialog.e22 not in [0, 1]:
             raise ValueError("Health Assessment (E22) must be Yes or No.")
@@ -166,6 +171,7 @@ class HealthValidator(OOHBaseValidator, CommonValidators):
 
 
 class ParentGuardianValidator(OOHBaseValidator, CommonValidators):
+    report_type = ReportType.OOH
     E59 = re.compile(r'7777|(19|20)[0-9]{2}')
     E60 = re.compile(r'7777|9999|(19|20)[0-9]{2}')
     E66 = re.compile(
@@ -316,6 +322,8 @@ class ParentGuardianValidator(OOHBaseValidator, CommonValidators):
 
 
 class EducationValidator(OOHBaseValidator, CommonValidators):
+    report_type = ReportType.OOH
+
     def validate_e35(self):
         if self.dialog.e35 not in [0, 1, 2, 3, 4, 5]:
             raise ValueError('School enrollment (E35) is required.')
@@ -333,6 +341,8 @@ class EducationValidator(OOHBaseValidator, CommonValidators):
 
 
 class TraffickingValidator(OOHBaseValidator, CommonValidators):
+    report_type = ReportType.OOH
+
     def validate_e106(self):
         if self.dialog.e106 not in [0, 1]:
             raise ValueError("Prior victim of sex trafficking before foster care (E106) is required.")
@@ -393,6 +403,7 @@ class TraffickingValidator(OOHBaseValidator, CommonValidators):
 
 
 class FinancialValidator(OOHBaseValidator, CommonValidators):
+    report_type = ReportType.OOH
 
     def validate_e55(self):
         if self.dialog.e55 not in [0, 1]:
@@ -400,4 +411,4 @@ class FinancialValidator(OOHBaseValidator, CommonValidators):
 
 
 class RemovalValidator(OOHBaseValidator, CommonValidators):
-    pass
+    report_type = ReportType.OOH
