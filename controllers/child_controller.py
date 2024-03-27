@@ -84,7 +84,10 @@ class ChildController:
             refresh_dates(base_child, controller.child, self.report_type)
             base_child_rec = BaseChildTable.create(e1=base_child.e1, e4=base_child.e4, e5=controller.child.e5,
                                                    first_name=base_child.first_name, last_name=base_child.last_name,
-                                                   date_created=datetime.date.today())
+                                                   date_created=datetime.date.today(), last_exit=base_child.last_exit,
+                                                   last_removal=base_child.last_removal,
+                                                   last_adoption=base_child.last_adoption,
+                                                   last_termination=base_child.last_termination)
             controller.base_child_rec_id = base_child_rec.id
             base_child.id = base_child_rec.id
             context.data = controller.child

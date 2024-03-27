@@ -6,7 +6,7 @@ from typing import Any
 
 from model import BaseChild, Child, ContextTable
 from model.models import ReportType
-from .e1 import afcars_to_date
+from .e1 import afcars_to_date, E2
 from .id_generator import generate_id
 
 
@@ -51,12 +51,26 @@ def refresh_dates(base_child: BaseChild, child: Child, report_type: ReportType):
         base_child.last_exit = None
         context = ContextTable.select().where(ContextTable.base_child == base_child.id).order_by(
             ContextTable.e2.desc()).first()
-        if context:
-            base_child.e5 = afcars_to_date(context.data.e5)
-            if hasattr(context.data.ooh, 'removals2020'):
-                removal = sorted(context.data.ooh.removals2020, key=lambda x: x.e69, reverse=True)
-            else:
-                removal = sorted(child.ooh.removals2020, key=lambda x: x.e69, reverse=True)
+        if context and context.e2 != E2():
+            data = context.data
+        else:
+            data = child
+        base_child.e5 = afcars_to_date(data.e5)
+        removal = None
+        if hasattr(data.ooh, 'removals2020'):
+            removal = sorted(data.ooh.removals2020, key=lambda x: x.e69, reverse=True)
+        if removal:
+            try:
+                base_child.last_removal = afcars_to_date(removal[0].e69)
+            except ValueError:
+                pass
+            try:
+                base_child.last_exit = afcars_to_date(removal[0].e153)
+            except ValueError:
+                pass
+        else:
+            if hasattr(context.data.ooh, 'removals1993'):
+                removal = sorted(data.ooh.removals1993, key=lambda x: x.e69, reverse=True)
             if removal:
                 try:
                     base_child.last_removal = afcars_to_date(removal[0].e69)
@@ -66,20 +80,6 @@ def refresh_dates(base_child: BaseChild, child: Child, report_type: ReportType):
                     base_child.last_exit = afcars_to_date(removal[0].e153)
                 except ValueError:
                     pass
-            else:
-                if hasattr(context.data.ooh, 'removals1993'):
-                    removal = sorted(context.data.ooh.removals1993, key=lambda x: x.e69, reverse=True)
-                else:
-                    removal = sorted(child.ooh.removals1993, key=lambda x: x.e69, reverse=True)
-                if removal:
-                    try:
-                        base_child.last_removal = afcars_to_date(removal[0].e69)
-                    except ValueError:
-                        pass
-                    try:
-                        base_child.last_exit = afcars_to_date(removal[0].e153)
-                    except ValueError:
-                        pass
 
     if report_type == ReportType.A:
         try:
@@ -90,12 +90,15 @@ def refresh_dates(base_child: BaseChild, child: Child, report_type: ReportType):
         base_child.last_termination = None
         context = ContextTable.select().where(ContextTable.base_child == base_child.id).order_by(
             ContextTable.e2.desc()).first()
-        if context:
-            try:
-                base_child.last_adoption = afcars_to_date(coalesce(getattr(context.data.a, 'a17', None), child.a.a17))
-            except ValueError:
-                pass
-            try:
-                base_child.last_termination = afcars_to_date(coalesce(getattr(context.data.a, 'a18', None), child.a.a18))
-            except ValueError:
-                pass
+        if context and context.e2 != E2():
+            data = context.data
+        else:
+            data = child
+        try:
+            base_child.last_adoption = afcars_to_date(data.a.a17)
+        except ValueError:
+            pass
+        try:
+            base_child.last_termination = afcars_to_date(data.a.a18)
+        except ValueError:
+            pass
