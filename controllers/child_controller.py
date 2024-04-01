@@ -171,6 +171,9 @@ class ChildController:
                     context_rec.data.a = None
                 if context_rec.data.ooh is None and context_rec.data.a is None:
                     context_rec.delete_instance()
+                    # if there's no data at all any more for the child, delete the base record too
+                    if ContextTable.select().where(ContextTable.base_child == base_child.id).count() == 0:
+                        BaseChildTable.delete_by_id(base_child.id)
                 else:
                     context_rec.save()
             self.do_refresh_data()
@@ -199,8 +202,8 @@ class ChildController:
                 context_rec.data = recent_context.data
             else:
                 child = Child(first_name=base_child.first_name, last_name=base_child.last_name)
-                child.ooh = OOHRecord()
-                child.a = ARecord()
+                # child.ooh = OOHRecord()
+                # child.a = ARecord()
                 context_rec.data = child
             context_rec.save()
         return context_rec
