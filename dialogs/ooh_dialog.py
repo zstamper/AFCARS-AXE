@@ -310,8 +310,7 @@ class OOHDialog(BaseDialog):
             if not enabled:
                 self.e7 = None
                 self.e8 = None
-                while len(self.tribes) > 0:
-                    self.tribes.pop()
+                self.tribes.clear()
                 self.e10 = None
                 self.e11 = None
                 self.e12 = None
@@ -328,6 +327,9 @@ class OOHDialog(BaseDialog):
             self.ui.add_tribe_button.setEnabled(enabled)
             self.ui.remove_tribe_button.setEnabled(enabled)
             self.ui.epa_tribes.setEnabled(enabled)
+            if not enabled:
+                self.tribes.clear()
+                self.refresh_tribes()
 
     def _e10_button_clicked(self) -> None:
         self.set_e10_state()
