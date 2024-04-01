@@ -208,9 +208,8 @@ def import_ooh_tree(tree: Element, file_type: FileType) -> tuple[list, list]:
             parent_num += 1
 
         # # if second parent exists, there has to be a tpr, but we'll mark it as N/A
-        # checking with program team as to whether this should be enabled or not.
-        # if e60 not in [None, 7777, 9999] and len(second_parents) == 0:
-        #     second_parents.append(SecondParent(number=parent_num, e64=0))
+        if e60 not in [None, 7777, 9999] and len(second_parents) == 0:
+            second_parents.append(SecondParent(number=parent_num, e64=0))
 
         removals_1993 = []
         for removal in record.find('E69_E186_removals').findall('removal_1993'):
