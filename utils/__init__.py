@@ -31,20 +31,6 @@ def coalesce(*args, default: Any = None) -> Any:
     return default
 
 
-# def coalesce(v: str | int | float | None, d: int | float) -> int | float:
-#     if isinstance(v, (int, float)):
-#         return v
-#     if isinstance(v, str):
-#         try:
-#             return int(v)
-#         except ValueError:
-#             try:
-#                 return float(v)
-#             except ValueError:
-#                 return d
-#     return d
-
-
 def refresh_dates(base_child: BaseChild, child: Child, report_type: ReportType):
     if report_type == ReportType.OOH:
         base_child.last_removal = None
@@ -69,7 +55,7 @@ def refresh_dates(base_child: BaseChild, child: Child, report_type: ReportType):
             except ValueError:
                 pass
         else:
-            if hasattr(context.data.ooh, 'removals1993'):
+            if hasattr(data.ooh, 'removals1993'):
                 removal = sorted(data.ooh.removals1993, key=lambda x: x.e69, reverse=True)
             if removal:
                 try:

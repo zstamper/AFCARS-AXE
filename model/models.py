@@ -44,7 +44,8 @@ class ChildName(BaseModel):
         elif type(self.e5) is date or type(self.e5) is datetime:
             result += self.e5.strftime("%m/%d/%Y")
         elif type(self.e5) is int:
-            result += afcars_to_date(self.e5).strftime("%m/%d/%Y")
+            d = afcars_to_date(self.e5)
+            result += d.strftime("%m/%d/%Y") if d is not None else ''
         return result
 
 

@@ -82,7 +82,7 @@ class ChildController:
             base_child.e5 = datetime.datetime.strptime(str(controller.child.e5),
                                                        "%Y%m%d") if controller.child.e5 else None
             refresh_dates(base_child, controller.child, self.report_type)
-            base_child_rec = BaseChildTable.create(e1=base_child.e1, e4=base_child.e4, e5=controller.child.e5,
+            base_child_rec = BaseChildTable.create(e1=base_child.e1, e4=base_child.e4, e5=base_child.e5,
                                                    first_name=base_child.first_name, last_name=base_child.last_name,
                                                    date_created=datetime.date.today(), last_exit=base_child.last_exit,
                                                    last_removal=base_child.last_removal,
