@@ -91,9 +91,9 @@ try:
 
 
             main_window = MainWindow2Controller()
+            e.wait(timeout=SPLASH_DELAY)
             main_window.show()
             splash.finish(main_window.window)
-            e.wait(timeout=SPLASH_DELAY)
             sys.exit(app.exec())
 
         except Exception as e:
