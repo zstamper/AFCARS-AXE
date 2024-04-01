@@ -553,7 +553,7 @@
          <item>
           <widget class="QLabel" name="icwa_label">
            <property name="text">
-            <string>For State Agency: Are you reporting this child for a tribe that received funding?</string>
+            <string>For State Agency: Are you reporting this child for a tribe that receives IV-E foster care maintenance payments?</string>
            </property>
           </widget>
          </item>
@@ -1905,7 +1905,7 @@
                     </widget>
                    </item>
                    <item>
-                    <widget class="QLabel" name="label">
+                    <widget class="QLabel" name="e63_label">
                      <property name="text">
                       <string>(E63)</string>
                      </property>
