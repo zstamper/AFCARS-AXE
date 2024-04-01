@@ -499,12 +499,16 @@ class OOHDialog(BaseDialog):
                     button.setChecked(False)
             self.ui.e108_label.setEnabled(enabled)
             self.ui.e108.setEnabled(enabled)
+            if not enabled:
+                self.e108 = None
 
     def _on_e107_clicked(self):
         if self.file_type == FileType.PRODUCTION and self.settled:
             enabled = self.e107 not in [None, 0]
             self.ui.e108_label.setEnabled(enabled)
             self.ui.e108.setEnabled(enabled)
+            if not enabled:
+                self.e108 = None
 
     def _on_e109_clicked(self):
         if self.file_type == FileType.PRODUCTION and self.settled:
@@ -516,12 +520,16 @@ class OOHDialog(BaseDialog):
                     button.setChecked(False)
             self.ui.e111_label.setEnabled(enabled)
             self.ui.e111.setEnabled(enabled)
+            if not enabled:
+                self.e111 = None
 
     def _on_e110_clicked(self):
         if self.file_type == FileType.PRODUCTION and self.settled:
             enabled = self.e110 not in [None, 0]
             self.ui.e111_label.setEnabled(enabled)
             self.ui.e111.setEnabled(enabled)
+            if not enabled:
+                self.e111 = None
 
     @property
     def child(self) -> Child:
