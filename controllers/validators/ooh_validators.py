@@ -397,7 +397,8 @@ class TraffickingValidator(OOHBaseValidator, CommonValidators):
                 raise ValueError("Date Reported to Law Enforcement (E111) is to far in the past.")
             if is_future_date(self.dialog.e111):
                 raise ValueError("Date Reported to Law Enforcement (E111) cannot be in the future.")
-            if self.dialog.e111 < e69():
+            _e69 = e69()
+            if _e69 is not None and self.dialog.e111 < _e69:
                 raise ValueError(
                     "Date law enforcement was contacted (E111) must be after date of most recent removal (E69).")
 
