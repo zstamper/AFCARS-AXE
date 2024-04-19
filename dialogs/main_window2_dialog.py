@@ -23,6 +23,7 @@ class MainWindow2Dialog(QMainWindow, BaseMixin):
         self.on_export: Optional[Callable] = None
         self.on_import: Optional[Callable] = None
         self.on_close: Optional[Callable] = None
+        self.on_about: Optional[Callable] = None
         self.report_types = [e.value for e in ReportType]
 
     def _wire_ui(self):
@@ -34,6 +35,7 @@ class MainWindow2Dialog(QMainWindow, BaseMixin):
         self.ui.actionQuit.triggered.connect(self._on_close_button_clicked)
         self.ui.actionExport.triggered.connect(self._on_export_button_clicked)
         self.ui.actionImport.triggered.connect(self._on_import_button_clicked)
+        self.ui.actionAbout.triggered.connect(self._on_about_button_clicked)
         self.ui.fips_code.currentIndexChanged.connect(self._on_fips_code_changed)
         self.ui.epa_code.currentIndexChanged.connect(self._on_epa_code_changed)
         self.ui.report_type.currentIndexChanged.connect(self._update_go_button_enabled)
@@ -77,6 +79,10 @@ class MainWindow2Dialog(QMainWindow, BaseMixin):
     def _on_import_button_clicked(self):
         if self.on_import:
             self.on_import()
+
+    def _on_about_button_clicked(self):
+        if self.on_about:
+            self.on_about()
 
     @property
     def fips_codes(self) -> list:

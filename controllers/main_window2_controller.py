@@ -1,6 +1,7 @@
 import sys
 import traceback
 
+from controllers.about_controller import AboutController
 from controllers.child_controller import ChildController
 from controllers.export_controller import ExportController
 from controllers.import_controller import ImportController
@@ -618,6 +619,7 @@ class MainWindow2Controller:
         self.window.on_close = self.save_defaults
         self.window.on_export = self.do_export
         self.window.on_import = self.do_import
+        self.window.on_about = self.do_about
 
     def show(self):
         self.load_defaults()
@@ -700,3 +702,7 @@ class MainWindow2Controller:
     def do_import(self):
         controller: ImportController = ImportController(self.window)
         controller.show()
+
+    def do_about(self):
+        controller = AboutController(self.window)
+        controller.exec()
