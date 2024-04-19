@@ -444,34 +444,37 @@
                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                 </property>
                </widget>
-               <widget class="QComboBox" name="e43">
+               <widget class="QWidget" name="">
                 <property name="geometry">
                  <rect>
-                  <x>279</x>
-                  <y>111</y>
-                  <width>91</width>
-                  <height>32</height>
+                  <x>280</x>
+                  <y>120</y>
+                  <width>90</width>
+                  <height>19</height>
                  </rect>
                 </property>
-                <property name="currentIndex">
-                 <number>-1</number>
-                </property>
-                <property name="placeholderText">
-                 <string>Select</string>
-                </property>
-                <property name="frame">
-                 <bool>true</bool>
-                </property>
-                <item>
-                 <property name="text">
-                  <string>No</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>Yes</string>
-                 </property>
-                </item>
+                <layout class="QHBoxLayout" name="horizontalLayout_45">
+                 <item>
+                  <widget class="QCheckBox" name="e43_y">
+                   <property name="text">
+                    <string>Yes</string>
+                   </property>
+                   <attribute name="buttonGroup">
+                    <string notr="true">e43</string>
+                   </attribute>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QCheckBox" name="e43_n">
+                   <property name="text">
+                    <string>No</string>
+                   </property>
+                   <attribute name="buttonGroup">
+                    <string notr="true">e43</string>
+                   </attribute>
+                  </widget>
+                 </item>
+                </layout>
                </widget>
               </widget>
              </item>
@@ -3561,7 +3564,6 @@ Leave blank if law enforcement was not notified.&lt;/i&gt;</string>
   <tabstop>e21</tabstop>
   <tabstop>e45</tabstop>
   <tabstop>e42</tabstop>
-  <tabstop>e43</tabstop>
   <tabstop>e56</tabstop>
   <tabstop>e57</tabstop>
   <tabstop>funding_y</tabstop>
@@ -3657,17 +3659,13 @@ Leave blank if law enforcement was not notified.&lt;/i&gt;</string>
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="e110">
+  <buttongroup name="e107">
    <property name="exclusive">
     <bool>false</bool>
    </property>
   </buttongroup>
-  <buttongroup name="e63">
-   <property name="exclusive">
-    <bool>false</bool>
-   </property>
-  </buttongroup>
-  <buttongroup name="e62">
+  <buttongroup name="funding"/>
+  <buttongroup name="e12">
    <property name="exclusive">
     <bool>false</bool>
    </property>
@@ -3677,12 +3675,27 @@ Leave blank if law enforcement was not notified.&lt;/i&gt;</string>
     <bool>false</bool>
    </property>
   </buttongroup>
+  <buttongroup name="e62">
+   <property name="exclusive">
+    <bool>false</bool>
+   </property>
+  </buttongroup>
+  <buttongroup name="e110">
+   <property name="exclusive">
+    <bool>false</bool>
+   </property>
+  </buttongroup>
+  <buttongroup name="e8">
+   <property name="exclusive">
+    <bool>false</bool>
+   </property>
+  </buttongroup>
   <buttongroup name="e10">
    <property name="exclusive">
     <bool>false</bool>
    </property>
   </buttongroup>
-  <buttongroup name="e109">
+  <buttongroup name="e106">
    <property name="exclusive">
     <bool>false</bool>
    </property>
@@ -3692,34 +3705,28 @@ Leave blank if law enforcement was not notified.&lt;/i&gt;</string>
     <bool>false</bool>
    </property>
   </buttongroup>
-  <buttongroup name="e6"/>
-  <buttongroup name="e8">
-   <property name="exclusive">
-    <bool>false</bool>
-   </property>
-  </buttongroup>
-  <buttongroup name="e12">
-   <property name="exclusive">
-    <bool>false</bool>
-   </property>
-  </buttongroup>
-  <buttongroup name="e22">
-   <property name="exclusive">
-    <bool>false</bool>
-   </property>
-  </buttongroup>
   <buttongroup name="e7">
    <property name="exclusive">
     <bool>false</bool>
    </property>
   </buttongroup>
-  <buttongroup name="funding"/>
-  <buttongroup name="e106">
+  <buttongroup name="e6"/>
+  <buttongroup name="e22">
    <property name="exclusive">
     <bool>false</bool>
    </property>
   </buttongroup>
-  <buttongroup name="e107">
+  <buttongroup name="e63">
+   <property name="exclusive">
+    <bool>false</bool>
+   </property>
+  </buttongroup>
+  <buttongroup name="e109">
+   <property name="exclusive">
+    <bool>false</bool>
+   </property>
+  </buttongroup>
+  <buttongroup name="e43">
    <property name="exclusive">
     <bool>false</bool>
    </property>

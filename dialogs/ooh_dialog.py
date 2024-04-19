@@ -117,6 +117,7 @@ class OOHDialog(BaseDialog):
         self._init_radio_ynu(ui, 'e10')
         self._init_radio_yn(ui, 'e12')
         self._init_radio_yn(ui, 'e22')
+        self._init_radio_yn(ui, 'e43')
         self._init_radio_ynu(ui, 'e61')
         self._init_radio_ynu(ui, 'e62')
         self._init_radio(ui, 'e63', {'na': 0, 'v': 1, 'i': 2})
@@ -170,6 +171,7 @@ class OOHDialog(BaseDialog):
         ui.tabWidget.currentChanged.connect(self._on_tab_changed)
         ui.validate_button.clicked.connect(self.do_validate_clicked)
 
+        ui.e42.textChanged.connect(self._on_e42_text_changed)
         ui.e56.textChanged.connect(self._on_e56_text_changed)
         ui.e60.textChanged.connect(self._on_e60_text_changed)
         ui.e63.buttonClicked.connect(self._on_e63_button_clicked)
@@ -425,6 +427,10 @@ class OOHDialog(BaseDialog):
             self.ui.e32.setEnabled(index == 1)
             self.ui.e33.setEnabled(index == 1)
             self.ui.e34.setEnabled(index == 1)
+
+    def _on_e42_text_changed(self):
+        for button in self.ui.e43.buttons():
+            button.setEnabled(bool(self.e42))
 
     def _on_e56_text_changed(self):
         if self.file_type == FileType.PRODUCTION and self.settled:
@@ -913,15 +919,16 @@ class OOHDialog(BaseDialog):
     @e42.setter
     def e42(self, v: int) -> None:
         self._set_int_field(self.ui.e42, v)
+        for button in self.ui.e43.buttons():
+            button.setEnabled(bool(v))
 
     @property
     def e43(self) -> int | None:
-        # FIXME: e43 is currently a combobox
-        return self._get_combobox_selection(self.ui.e43)
+        return self._get_radio_button(self.ui.e43)
 
     @e43.setter
     def e43(self, v: int) -> None:
-        self._set_combobox_selection(self.ui.e43, v)
+        self._set_radio_button(self.ui.e43, v)
 
     @property
     def e44(self) -> int:
