@@ -16,8 +16,6 @@
 from peewee import DateField
 from playhouse.migrate import migrate
 
-from model import SecondParent
-
 
 def migration_0(migrator) -> None:
     """Inject the initial database version indicator as a bootstrap for future migrations."""
@@ -46,7 +44,7 @@ def migration_2(migrator) -> None:
 
 
 def migration_3(migrator) -> None:
-    from model import ContextTable
+    from model import ContextTable, SecondParent
     for context in ContextTable.select():
         if hasattr(context.data, 'ooh') and hasattr(context.data.ooh, 'second_parents'):
             if len(context.data.ooh.second_parents) == 0:

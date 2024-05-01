@@ -50,21 +50,3 @@ class CommonValidators:
     def validate_e6(self):
         if self.dialog.e6 not in [1, 2]:
             raise ValueError(f"Child's gender is required ({self.f('E6')}).")
-
-    def validate_e13_e14_e15_e16_e17_e18_e19_e20(self) -> None:
-        if all([e != 1 for e in
-                [self.dialog.e13, self.dialog.e14, self.dialog.e15, self.dialog.e16, self.dialog.e17, self.dialog.e18,
-                 self.dialog.e19, self.dialog.e20]]):
-            raise ValueError(f"At least one race must be selected ({self.f('E13')}-{self.f('E20')}).")
-        if any([e == 1 for e in [self.dialog.e19, self.dialog.e20]]) and any(
-                e == 1 for e in
-                [self.dialog.e13, self.dialog.e14, self.dialog.e15, self.dialog.e16, self.dialog.e17, self.dialog.e18]):
-            raise ValueError(
-                f"No additional races may be selected ({self.f('E13')}-{self.f('E18')}) if child is abandoned ({self.f('E19')}) or race is declined ({self.f('E20')}).")
-        if self.dialog.e19 == 1 and self.dialog.e20 == 1:
-            raise ValueError(
-                f"Race may be either Abandoned ({self.f('E19')}) or Declined ({self.f('E20')}), but not both.")
-
-    def validate_e21(self) -> None:
-        if self.dialog.e21 is None:
-            raise ValueError(f"Child's hispanic origin ({self.f('E21')}) is required.")
