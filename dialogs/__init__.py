@@ -1,3 +1,18 @@
+# Copyright 2024 by ICF International, Inc.
+#
+# This file is part of AXE, the AFCARS XML Editor.
+#
+# AXE is free software: you can redistribute it and/or modify it under the terms
+# of the GNU Lesser General Public License as published by the Free Software Foundation,
+# either version 3 of the License, or (at your option) any later version.
+#
+# AXE is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# AXE. If not, see <https://www.gnu.org/licenses/>.
+
 import sys
 from datetime import datetime
 from functools import partial
@@ -99,7 +114,7 @@ class BaseMixin:
         elem: QWidget = getattr(ui, name)
         for k, v in ids.items():
             elem.setId(getattr(ui, f"{name}_{k}"), v)
-            getattr(ui, f"{name}_{k}").clicked.connect(partial(if_checked_clear,  k, ids.keys() - [k]))
+            getattr(ui, f"{name}_{k}").clicked.connect(partial(if_checked_clear, k, ids.keys() - [k]))
 
     @staticmethod
     def _init_radio_mf(ui: QWidget, name: str) -> None:
@@ -246,8 +261,8 @@ def error_message_dialog(parent: QWidget, errors: list[str], limit: int = 5):
     else:
         errors = [error for error in errors if error]
         error_str = "\n* ".join(errors[:limit])
-        if len(errors) > limit+1:
-            error_str += "\n\n" + f"{len(errors) - (limit+1)} additional validation errors."
+        if len(errors) > limit + 1:
+            error_str += "\n\n" + f"{len(errors) - (limit + 1)} additional validation errors."
         err_box = QMessageBox(icon=QMessageBox.Icon.Warning)
         err_box.setText(f"### {error_str}")
         err_box.setTextFormat(Qt.TextFormat.MarkdownText)
@@ -261,6 +276,7 @@ def ok_dialog(parent: QWidget, title: str, message: str):
     msg_box.setTextFormat(Qt.TextFormat.MarkdownText)
     msg_box.setWindowTitle(title)
     msg_box.exec()
+
 
 def error_dialog(parent: QWidget, title: str, message: str):
     msg_box = QMessageBox(icon=QMessageBox.Icon.Warning)

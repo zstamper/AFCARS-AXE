@@ -1,6 +1,21 @@
-from typing import Any, Optional, Callable
+# Copyright 2024 by ICF International, Inc.
+#
+# This file is part of AXE, the AFCARS XML Editor.
+#
+# AXE is free software: you can redistribute it and/or modify it under the terms
+# of the GNU Lesser General Public License as published by the Free Software Foundation,
+# either version 3 of the License, or (at your option) any later version.
+#
+# AXE is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# AXE. If not, see <https://www.gnu.org/licenses/>.
 
-from PySide6.QtWidgets import QDialog, QMessageBox
+from typing import Optional, Callable
+
+from PySide6.QtWidgets import QMessageBox
 from pydantic import ValidationError
 
 from controllers.case_worker_visit_controller import CaseWorkerVisitController
@@ -11,7 +26,7 @@ from controllers.permanency_plan_controller import PermanencyPlanController
 from controllers.utilities import show_error_dialog
 from controllers.validators.removal2020_validator import Removal2020Validator
 from dialogs.removal2020_dialog import Removal2020Dialog
-from model.models import MyBaseModel, Removal2020, LivingArrangement, PermanencyPlan, CaseVisit, PermanencyHearing, \
+from model.models import Removal2020, LivingArrangement, PermanencyPlan, CaseVisit, PermanencyHearing, \
     PeriodicReview, FileType, Child, ChildName
 
 

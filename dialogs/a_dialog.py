@@ -1,3 +1,18 @@
+# Copyright 2024 by ICF International, Inc.
+#
+# This file is part of AXE, the AFCARS XML Editor.
+#
+# AXE is free software: you can redistribute it and/or modify it under the terms
+# of the GNU Lesser General Public License as published by the Free Software Foundation,
+# either version 3 of the License, or (at your option) any later version.
+#
+# AXE is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# AXE. If not, see <https://www.gnu.org/licenses/>.
+
 from typing import Optional, Callable
 
 from PySide6.QtCore import QRegularExpression
@@ -11,7 +26,7 @@ from utils import generate_id
 
 
 class ADialog(BaseDialog):
-    def __init__(self, parent, file_type:FileType=FileType.PRODUCTION):
+    def __init__(self, parent, file_type: FileType = FileType.PRODUCTION):
         super().__init__(parent)
 
         self.ui: QWidget = self.load_ui('ui_adoption_subsidy.ui')
@@ -94,7 +109,6 @@ class ADialog(BaseDialog):
         self.ui.e4.setText(id_value)
 
     # =========================================================================
-
 
     @property
     def last_name(self) -> str:

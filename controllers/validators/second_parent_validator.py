@@ -1,3 +1,18 @@
+# Copyright 2024 by ICF International, Inc.
+#
+# This file is part of AXE, the AFCARS XML Editor.
+#
+# AXE is free software: you can redistribute it and/or modify it under the terms
+# of the GNU Lesser General Public License as published by the Free Software Foundation,
+# either version 3 of the License, or (at your option) any later version.
+#
+# AXE is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# AXE. If not, see <https://www.gnu.org/licenses/>.
+
 import re
 from datetime import date
 
@@ -31,7 +46,7 @@ class SecondParentValidators(SecondParentBaseValidator):
             raise ValueError("Termination/Modification of parental rights (E64) is required.")
 
     def validate_e66(self):
-        if self.dialog.e64 in [1,2] and not bool(self.dialog.ui.e66.text()):
+        if self.dialog.e64 in [1, 2] and not bool(self.dialog.ui.e66.text()):
             raise ValueError("Date of Petition for Termination (E66) is required.")
         if bool(self.dialog.ui.e66.text()) and self.dialog.e66 != 66666666:
             if not re.match(r"\d+", self.dialog.ui.e66.text()):

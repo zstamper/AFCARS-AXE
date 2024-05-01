@@ -1,3 +1,18 @@
+# Copyright 2024 by ICF International, Inc.
+#
+# This file is part of AXE, the AFCARS XML Editor.
+#
+# AXE is free software: you can redistribute it and/or modify it under the terms
+# of the GNU Lesser General Public License as published by the Free Software Foundation,
+# either version 3 of the License, or (at your option) any later version.
+#
+# AXE is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# AXE. If not, see <https://www.gnu.org/licenses/>.
+
 from typing import Optional
 
 from PySide6.QtCore import Qt
@@ -30,7 +45,8 @@ class ExportDialog(BaseDialog):
 
     def select_button_clicked(self) -> None:
         checked = not any(
-            [self.ui.child_table.item(row, 0).checkState() == Qt.Checked for row in range(self.ui.child_table.rowCount())])
+            [self.ui.child_table.item(row, 0).checkState() == Qt.Checked for row in
+             range(self.ui.child_table.rowCount())])
         for row in range(self.ui.child_table.rowCount()):
             self.ui.child_table.item(row, 0).setCheckState(Qt.Checked if checked else Qt.Unchecked)
         self.refresh_select_button_label()

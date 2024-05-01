@@ -1,14 +1,29 @@
+# Copyright 2024 by ICF International, Inc.
+#
+# This file is part of AXE, the AFCARS XML Editor.
+#
+# AXE is free software: you can redistribute it and/or modify it under the terms
+# of the GNU Lesser General Public License as published by the Free Software Foundation,
+# either version 3 of the License, or (at your option) any later version.
+#
+# AXE is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# AXE. If not, see <https://www.gnu.org/licenses/>.
+
 from pathlib import Path
 from sqlite3 import OperationalError
 
 from playhouse.migrate import SqliteMigrator
 
+from .migrations import *
 from .models import (BaseChild, Context, Child, OOHRecord, RecognizedTribe, SecondParent, Removal1993, Removal2020,
                      LivingArrangement, PermanencyPlan, PeriodicReview, PermanencyHearing, CaseVisit,
                      ARecord, Export)
 from .tables import (database, BaseChildTable, ConfigTable, ContextTable, StateTable, TribeTable, TribeStateTable,
                      Version)
-from .migrations import *
 
 DATABASE_VERSION: int = 3
 
@@ -54,7 +69,7 @@ def apply_migrations(connection) -> None:
         current_version += 1
         while current_version <= DATABASE_VERSION:
             _do_migration(current_version)
-            cursor.execute('UPDATE version SET database_version=? WHERE id=1', (current_version, ))
+            cursor.execute('UPDATE version SET database_version=? WHERE id=1', (current_version,))
             current_version += 1
 
 

@@ -1,3 +1,18 @@
+# Copyright 2024 by ICF International, Inc.
+#
+# This file is part of AXE, the AFCARS XML Editor.
+#
+# AXE is free software: you can redistribute it and/or modify it under the terms
+# of the GNU Lesser General Public License as published by the Free Software Foundation,
+# either version 3 of the License, or (at your option) any later version.
+#
+# AXE is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# AXE. If not, see <https://www.gnu.org/licenses/>.
+
 from typing import Callable, Optional
 
 from PySide6.QtWidgets import QTableWidgetItem, QWidget
@@ -176,4 +191,5 @@ class ChildDialog(BaseDialog):
                     data.last_adoption.strftime("%m/%d/%Y") if data.last_adoption else ""))
                 self.ui.child_table.setItem(row, 6,
                                             QTableWidgetItem(
-                                                data.last_termination.strftime("%m/%d/%Y") if data.last_termination else ""))
+                                                data.last_termination.strftime(
+                                                    "%m/%d/%Y") if data.last_termination else ""))

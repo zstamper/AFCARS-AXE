@@ -1,11 +1,23 @@
-import traceback
-from copy import deepcopy
+# Copyright 2024 by ICF International, Inc.
+#
+# This file is part of AXE, the AFCARS XML Editor.
+#
+# AXE is free software: you can redistribute it and/or modify it under the terms
+# of the GNU Lesser General Public License as published by the Free Software Foundation,
+# either version 3 of the License, or (at your option) any later version.
+#
+# AXE is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# AXE. If not, see <https://www.gnu.org/licenses/>.
+
 from pathlib import Path
 from typing import Optional
 
-from PySide6.QtWidgets import QDialog, QMainWindow, QFileDialog, QMessageBox
+from PySide6.QtWidgets import QDialog, QMainWindow, QFileDialog
 
-import utils
 from dialogs.export_dialog import ExportDialog
 from model import BaseChildTable, ContextTable
 from model.models import ReportType, ReportingPeriod, FileType, Child
@@ -47,7 +59,9 @@ class ExportController:
             # Golly, so this was subtle... The filter for the context table records was originally in the query
             # above. But it so happens that with PeeWee, when accessing foreign table, you're given an unfiltered
             # list of child records. Therefore, we have to filter them here.
-            child_data = [(row.base_child.to_model(), row.data) for row in query if hasattr(row.data, 'ooh') and row.data.ooh]
+            child_data = [(row.base_child.to_model(), row.data) for row in query if
+                          hasattr(row.data, 'ooh') and row.data.ooh]
         elif self.report_type == ReportType.A:
-            child_data = [(row.base_child.to_model(), row.data) for row in query if hasattr(row.data, 'a') and row.data.a]
+            child_data = [(row.base_child.to_model(), row.data) for row in query if
+                          hasattr(row.data, 'a') and row.data.a]
         return child_data
