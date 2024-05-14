@@ -247,8 +247,8 @@
                     <E154_exit_transaction_date>{{ removal2020.e154|no_null }}</E154_exit_transaction_date>
                     <E155_exit_reason>{% if removal2020.e154 %}{{ removal2020.e155|no_null }}{% else %}9{% endif %}</E155_exit_reason>
                     <E156_transfer_to_another_agency>{{ removal2020.e156|no_null }}</E156_transfer_to_another_agency>
+                    {%- if removal2020.e162 %}
                     <E157_E186_adoptive_parents_information>
-                        {%- if removal2020.e162 %}
                         <E157_marital_status_of_adoptive_parents>{{ removal2020.e157|no_null }}</E157_marital_status_of_adoptive_parents>
                         <E158_relationship_to_adoptive_parents_relative>{{ removal2020.e158|no_null }}</E158_relationship_to_adoptive_parents_relative>
                         <E159_relationship_to_adoptive_parents_kin>{{ removal2020.e159|no_null }}</E159_relationship_to_adoptive_parents_kin>
@@ -285,8 +285,8 @@
                         <E184_inter_intrajurisdictional_adoption>{{ removal2020.e184|no_null }}</E184_inter_intrajurisdictional_adoption>
                         <E185_assistance_agreement_type>{{ removal2020.e185|no_null }}</E185_assistance_agreement_type>
                         <E186_siblings_in_adoptive_home>{{ removal2020.e186|no_null }}</E186_siblings_in_adoptive_home>
-                        {%- endif %}
                     </E157_E186_adoptive_parents_information>
+                    {%- endif %}
                 </removal_2020>
                 {%- endfor %}
                 {%- for removal_1993 in ooh.removals1993 %}

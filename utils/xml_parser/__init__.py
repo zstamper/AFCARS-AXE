@@ -417,42 +417,47 @@ def parse_removal_2020(removal: Element, e40: Optional[int], e58: Optional[int])
     e156 = _int_from(removal, 'E156_transfer_to_another_agency')
 
     e157_e186 = removal.find('E157_E186_adoptive_parents_information')
-    e157 = _int_from(e157_e186, 'E157_marital_status_of_adoptive_parents')
-    e158 = _int_from(e157_e186, 'E158_relationship_to_adoptive_parents_relative')
-    e159 = _int_from(e157_e186, 'E159_relationship_to_adoptive_parents_kin')
-    e160 = _int_from(e157_e186, 'E160_relationship_to_adoptive_parents_non_relative')
-    e161 = _int_from(e157_e186, 'E161_relationship_to_adoptive_parents_foster_parent')
-
-    e162_e172 = e157_e186.find('E162_E172_first_adoptive_parent_information')
     try:
-        e162 = _date_from(e162_e172, 'E162_adoptive_parent1_birth_date')
-        e163 = _int_from(e162_e172, 'E163_adoptive_parent1_tribal_membership')
-        e164 = _int_from(e162_e172, 'E164_adoptive_parent1_race_american_indian_alaska_native')
-        e165 = _int_from(e162_e172, 'E165_adoptive_parent1_race_asian')
-        e166 = _int_from(e162_e172, 'E166_adoptive_parent1_race_black')
-        e167 = _int_from(e162_e172, 'E167_adoptive_parent1_race_native_hawaiian_pacific_islander')
-        e168 = _int_from(e162_e172, 'E168_adoptive_parent1_race_white')
-        e169 = _int_from(e162_e172, 'E169_adoptive_parent1_race_unknown')
-        e170 = _int_from(e162_e172, 'E170_adoptive_parent1_race_declined')
-        e171 = _int_from(e162_e172, 'E171_adoptive_parent1_hispanic_latino')
-        e172 = _int_from(e162_e172, 'E172_adoptive_parent1_sex')
+        e157 = _int_from(e157_e186, 'E157_marital_status_of_adoptive_parents')
+        e158 = _int_from(e157_e186, 'E158_relationship_to_adoptive_parents_relative')
+        e159 = _int_from(e157_e186, 'E159_relationship_to_adoptive_parents_kin')
+        e160 = _int_from(e157_e186, 'E160_relationship_to_adoptive_parents_non_relative')
+        e161 = _int_from(e157_e186, 'E161_relationship_to_adoptive_parents_foster_parent')
+
+        e162_e172 = e157_e186.find('E162_E172_first_adoptive_parent_information')
+        try:
+            e162 = _date_from(e162_e172, 'E162_adoptive_parent1_birth_date')
+            e163 = _int_from(e162_e172, 'E163_adoptive_parent1_tribal_membership')
+            e164 = _int_from(e162_e172, 'E164_adoptive_parent1_race_american_indian_alaska_native')
+            e165 = _int_from(e162_e172, 'E165_adoptive_parent1_race_asian')
+            e166 = _int_from(e162_e172, 'E166_adoptive_parent1_race_black')
+            e167 = _int_from(e162_e172, 'E167_adoptive_parent1_race_native_hawaiian_pacific_islander')
+            e168 = _int_from(e162_e172, 'E168_adoptive_parent1_race_white')
+            e169 = _int_from(e162_e172, 'E169_adoptive_parent1_race_unknown')
+            e170 = _int_from(e162_e172, 'E170_adoptive_parent1_race_declined')
+            e171 = _int_from(e162_e172, 'E171_adoptive_parent1_hispanic_latino')
+            e172 = _int_from(e162_e172, 'E172_adoptive_parent1_sex')
+        except AttributeError:
+            e162 = e163 = e164 = e165 = e166 = e167 = e168 = e169 = e170 = e171 = e172 = None
+
+        e173_e183 = e157_e186.find('E173_E183_second_adoptive_parent_information')
+        try:
+            e173 = _date_from(e173_e183, 'E173_adoptive_parent2_birth_date')
+            e174 = _int_from(e173_e183, 'E174_adoptive_parent2_tribal_membership')
+            e175 = _int_from(e173_e183, 'E175_adoptive_parent2_race_american_indian_alaska_native')
+            e176 = _int_from(e173_e183, 'E176_adoptive_parent2_race_asian')
+            e177 = _int_from(e173_e183, 'E177_adoptive_parent2_race_black')
+            e178 = _int_from(e173_e183, 'E178_adoptive_parent2_race_native_hawaiian_pacific_islander')
+            e179 = _int_from(e173_e183, 'E179_adoptive_parent2_race_white')
+            e180 = _int_from(e173_e183, 'E180_adoptive_parent2_race_unknown')
+            e181 = _int_from(e173_e183, 'E181_adoptive_parent2_race_declined')
+            e182 = _int_from(e173_e183, 'E182_adoptive_parent2_hispanic_latino')
+            e183 = _int_from(e173_e183, 'E183_adoptive_parent2_sex')
+        except AttributeError:
+            e173 = e174 = e175 = e176 = e177 = e178 = e179 = e180 = e181 = e182 = e183 = None
     except AttributeError:
+        e157 = e158 = e159 = e160 = e161 = None
         e162 = e163 = e164 = e165 = e166 = e167 = e168 = e169 = e170 = e171 = e172 = None
-
-    e173_e183 = e157_e186.find('E173_E183_second_adoptive_parent_information')
-    try:
-        e173 = _date_from(e173_e183, 'E173_adoptive_parent2_birth_date')
-        e174 = _int_from(e173_e183, 'E174_adoptive_parent2_tribal_membership')
-        e175 = _int_from(e173_e183, 'E175_adoptive_parent2_race_american_indian_alaska_native')
-        e176 = _int_from(e173_e183, 'E176_adoptive_parent2_race_asian')
-        e177 = _int_from(e173_e183, 'E177_adoptive_parent2_race_black')
-        e178 = _int_from(e173_e183, 'E178_adoptive_parent2_race_native_hawaiian_pacific_islander')
-        e179 = _int_from(e173_e183, 'E179_adoptive_parent2_race_white')
-        e180 = _int_from(e173_e183, 'E180_adoptive_parent2_race_unknown')
-        e181 = _int_from(e173_e183, 'E181_adoptive_parent2_race_declined')
-        e182 = _int_from(e173_e183, 'E182_adoptive_parent2_hispanic_latino')
-        e183 = _int_from(e173_e183, 'E183_adoptive_parent2_sex')
-    except AttributeError:
         e173 = e174 = e175 = e176 = e177 = e178 = e179 = e180 = e181 = e182 = e183 = None
 
     e184 = _int_from(e157_e186, 'E184_inter_intrajurisdictional_adoption')
