@@ -170,25 +170,25 @@
                                 <E117_relative_foster_family>{% if living_arrangement.e113 %}{{ living_arrangement.e117|no_null }}{% endif %}</E117_relative_foster_family>
                                 <E118_pre_adopt_home>{% if living_arrangement.e113 %}{{ living_arrangement.e118|no_null }}{% endif %}</E118_pre_adopt_home>
                                 <E119_kin_foster_family>{% if living_arrangement.e113 %}{{ living_arrangement.e119|no_null }}{% endif %}</E119_kin_foster_family>
-                                {%- if living_arrangement.e123 %}
+                                {%- if living_arrangement.e113 %}
                                 <E123_E146_foster_parent_information>
-                                    <E123_marital_status_of_foster_parents>{% if living_arrangement.e113 %}{{ living_arrangement.e123|no_null }}{% endif %}</E123_marital_status_of_foster_parents>
-                                    <E124_relationship_to_foster_parents>{% if living_arrangement.e113 %}{{ living_arrangement.e124|no_null }}{% endif %}</E124_relationship_to_foster_parents>
+                                    <E123_marital_status_of_foster_parents>{{ living_arrangement.e123|no_null }}</E123_marital_status_of_foster_parents>
+                                    <E124_relationship_to_foster_parents>{{ living_arrangement.e124|no_null }}</E124_relationship_to_foster_parents>
                                     <E125_E135_first_foster_parent_information>
-                                        <E125_foster_parent1_birth_year>{% if living_arrangement.e113 %}{{ living_arrangement.e125|no_null }}{% endif %}</E125_foster_parent1_birth_year>
-                                        <E126_foster_parent1_tribal_membership>{% if living_arrangement.e113 %}{{ living_arrangement.e126|no_null }}{% endif %}</E126_foster_parent1_tribal_membership>
-                                        <E127_foster_parent1_race_american_indian_alaska_native>{% if living_arrangement.e113 %}{{ living_arrangement.e127|no_null }}{% endif %}</E127_foster_parent1_race_american_indian_alaska_native>
-                                        <E128_foster_parent1_race_asian>{% if living_arrangement.e113 %}{{ living_arrangement.e128|no_null }}{% endif %}</E128_foster_parent1_race_asian>
-                                        <E129_foster_parent1_race_black>{% if living_arrangement.e113 %}{{ living_arrangement.e129|no_null }}{% endif %}</E129_foster_parent1_race_black>
-                                        <E130_foster_parent1_race_native_hawaiian_pacific_islander>{% if living_arrangement.e113 %}{{ living_arrangement.e130|no_null }}{% endif %}</E130_foster_parent1_race_native_hawaiian_pacific_islander>
-                                        <E131_foster_parent1_race_white>{% if living_arrangement.e113 %}{{ living_arrangement.e131|no_null }}{% endif %}</E131_foster_parent1_race_white>
-                                        <E132_foster_parent1_race_unknown>{% if living_arrangement.e113 %}{{ living_arrangement.e132|no_null }}{% endif %}</E132_foster_parent1_race_unknown>
-                                        <E133_foster_parent1_race_declined>{% if living_arrangement.e113 %}{{ living_arrangement.e133|no_null }}{% endif %}</E133_foster_parent1_race_declined>
-                                        <E134_foster_parent1_hispanic_latino>{% if living_arrangement.e113 %}{{ living_arrangement.e134|no_null }}{% endif %}</E134_foster_parent1_hispanic_latino>
-                                        <E135_foster_parent1_sex>{% if living_arrangement.e113 %}{{ living_arrangement.e135|no_null }}{% endif %}</E135_foster_parent1_sex>
+                                        <E125_foster_parent1_birth_year>{{ living_arrangement.e125|no_null }}</E125_foster_parent1_birth_year>
+                                        <E126_foster_parent1_tribal_membership>{{ living_arrangement.e126|no_null }}</E126_foster_parent1_tribal_membership>
+                                        <E127_foster_parent1_race_american_indian_alaska_native>{{ living_arrangement.e127|no_null }}</E127_foster_parent1_race_american_indian_alaska_native>
+                                        <E128_foster_parent1_race_asian>{{ living_arrangement.e128|no_null }}</E128_foster_parent1_race_asian>
+                                        <E129_foster_parent1_race_black>{{ living_arrangement.e129|no_null }}</E129_foster_parent1_race_black>
+                                        <E130_foster_parent1_race_native_hawaiian_pacific_islander>{{ living_arrangement.e130|no_null }}</E130_foster_parent1_race_native_hawaiian_pacific_islander>
+                                        <E131_foster_parent1_race_white>{{ living_arrangement.e131|no_null }}</E131_foster_parent1_race_white>
+                                        <E132_foster_parent1_race_unknown>{{ living_arrangement.e132|no_null }}</E132_foster_parent1_race_unknown>
+                                        <E133_foster_parent1_race_declined>{{ living_arrangement.e133|no_null }}</E133_foster_parent1_race_declined>
+                                        <E134_foster_parent1_hispanic_latino>{{ living_arrangement.e134|no_null }}</E134_foster_parent1_hispanic_latino>
+                                        <E135_foster_parent1_sex>{{ living_arrangement.e135|no_null }}</E135_foster_parent1_sex>
                                     </E125_E135_first_foster_parent_information>
                                     <E136_E146_second_foster_parent_information>
-                                        {%- if living_arrangement.e136 %}
+                                        {%- if living_arrangement.e123 == 1 or living_arrangement.e123 == 2 %}
                                         <E136_foster_parent2_birth_year>{{ living_arrangement.e136|no_null }}</E136_foster_parent2_birth_year>
                                         <E137_foster_parent2_tribal_membership>{{ living_arrangement.e137|no_null }}</E137_foster_parent2_tribal_membership>
                                         <E138_foster_parent2_race_american_indian_alaska_native>{{ living_arrangement.e138|no_null }}</E138_foster_parent2_race_american_indian_alaska_native>
@@ -247,7 +247,7 @@
                     <E154_exit_transaction_date>{{ removal2020.e154|no_null }}</E154_exit_transaction_date>
                     <E155_exit_reason>{% if removal2020.e154 %}{{ removal2020.e155|no_null }}{% else %}9{% endif %}</E155_exit_reason>
                     <E156_transfer_to_another_agency>{{ removal2020.e156|no_null }}</E156_transfer_to_another_agency>
-                    {%- if removal2020.e162 %}
+                    {%- if removal2020.e155 == 3 or removal2020.e155 == 5 %}
                     <E157_E186_adoptive_parents_information>
                         <E157_marital_status_of_adoptive_parents>{{ removal2020.e157|no_null }}</E157_marital_status_of_adoptive_parents>
                         <E158_relationship_to_adoptive_parents_relative>{{ removal2020.e158|no_null }}</E158_relationship_to_adoptive_parents_relative>
@@ -267,8 +267,8 @@
                             <E171_adoptive_parent1_hispanic_latino>{{ removal2020.e171|no_null }}</E171_adoptive_parent1_hispanic_latino>
                             <E172_adoptive_parent1_sex>{{ removal2020.e172|no_null }}</E172_adoptive_parent1_sex>
                         </E162_E172_first_adoptive_parent_information>
+                        {%- if removal2020.e157 == 1 or removal2020.e157 == 2 %}
                         <E173_E183_second_adoptive_parent_information>
-                            {%- if removal2020.e173 %}
                             <E173_adoptive_parent2_birth_date>{{ removal2020.e173|no_null }}</E173_adoptive_parent2_birth_date>
                             <E174_adoptive_parent2_tribal_membership>{{ removal2020.e174|no_null }}</E174_adoptive_parent2_tribal_membership>
                             <E175_adoptive_parent2_race_american_indian_alaska_native>{{ removal2020.e175|no_null }}</E175_adoptive_parent2_race_american_indian_alaska_native>
@@ -280,12 +280,16 @@
                             <E181_adoptive_parent2_race_declined>{{ removal2020.e181|no_null }}</E181_adoptive_parent2_race_declined>
                             <E182_adoptive_parent2_hispanic_latino>{{ removal2020.e182|no_null }}</E182_adoptive_parent2_hispanic_latino>
                             <E183_adoptive_parent2_sex>{{ removal2020.e183|no_null }}</E183_adoptive_parent2_sex>
-                            {%- endif %}
                         </E173_E183_second_adoptive_parent_information>
+                        {%- else %}
+                        <E173_E183_second_adoptive_parent_information/>
+                        {%- endif %}
                         <E184_inter_intrajurisdictional_adoption>{{ removal2020.e184|no_null }}</E184_inter_intrajurisdictional_adoption>
                         <E185_assistance_agreement_type>{{ removal2020.e185|no_null }}</E185_assistance_agreement_type>
                         <E186_siblings_in_adoptive_home>{{ removal2020.e186|no_null }}</E186_siblings_in_adoptive_home>
                     </E157_E186_adoptive_parents_information>
+                    {%- else %}
+                    <E157_E186_adoptive_parents_information/>
                     {%- endif %}
                 </removal_2020>
                 {%- endfor %}
