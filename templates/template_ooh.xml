@@ -1,4 +1,4 @@
-{# Copyright 2024 by ICF International, Inc.
+{#- Copyright 2024 by ICF International, Inc.
 #
 # This file is part of AXE, the AFCARS XML Editor.
 #
@@ -12,7 +12,7 @@
 #
 # You should have received a copy of the GNU General Public License along with
 # AXE. If not, see <https://www.gnu.org/licenses/>.
-#}
+-#}
 <?xml version="1.0" encoding="utf-8"?>
 <acf:data xmlns:acf="http://www.acf.hhs.gov"
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -33,7 +33,7 @@
                 {%- if ooh.tribes %}
                 <E9_recognized_tribes>
                     {%- for recognized_tribe in ooh.tribes %}
-                    <E9_recognized_tribe>{{ recognized_tribe.e9 }}</E9_recognized_tribe>
+                    <E9_recognized_tribe>{{ "%03d"|format(recognized_tribe.e9) }}</E9_recognized_tribe>
                     {%- endfor %}
                 </E9_recognized_tribes>
                 {%- else %}
