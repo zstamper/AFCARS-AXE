@@ -69,8 +69,4 @@ def migration_4(migrator) -> None:
     )
     from model import ContextTable
     for context in ContextTable.select():
-        if hasattr(context, 'data') and hasattr(context.data, 'a') and context.data.a is not None:
-            context.a_error = context.data.a.validate_structure()
-        if hasattr(context, 'data') and hasattr(context.data, 'ooh') and context.data.ooh is not None:
-            context.ooh_error = context.data.ooh.validate_structure()
         context.save()
