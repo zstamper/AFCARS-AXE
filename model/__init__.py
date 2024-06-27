@@ -12,7 +12,7 @@
 #
 # You should have received a copy of the GNU General Public License along with
 # AXE. If not, see <https://www.gnu.org/licenses/>.
-
+import logging
 from pathlib import Path
 from sqlite3 import OperationalError
 
@@ -25,7 +25,7 @@ from .models import (BaseChild, Context, Child, OOHRecord, RecognizedTribe, Seco
 from .tables import (database, BaseChildTable, ConfigTable, ContextTable, StateTable, TribeTable, TribeStateTable,
                      Version)
 
-DATABASE_VERSION: int = 3
+DATABASE_VERSION: int = 4
 
 
 def open_database(database_name: str, testing: bool = False):
@@ -57,6 +57,7 @@ def create_tables():
 
 
 def apply_migrations(connection) -> None:
+    logging.debug('Applying migrations')
     cursor = connection.cursor()
     try:
         result = cursor.execute('SELECT database_version FROM version WHERE id=1')

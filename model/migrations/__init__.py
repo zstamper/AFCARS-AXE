@@ -12,8 +12,9 @@
 #
 # You should have received a copy of the GNU General Public License along with
 # AXE. If not, see <https://www.gnu.org/licenses/>.
+import logging
 
-from peewee import DateField
+from peewee import DateField, TextField
 from playhouse.migrate import migrate
 
 
@@ -55,3 +56,21 @@ def migration_3(migrator) -> None:
                     p.number = i
                     i += 1
             context.save()
+
+
+def migration_4(migrator) -> None:
+    """Adds the a_error and ooh_error fields to the context table and runs the 'save' check to set the field values"""
+    logging.debug('running migration_4')
+    a_error_field = TextField(null=True, default=None)
+    ooh_error_field = TextField(null=True, default=None)
+    migrate(
+        migrator.add_column('contexttable', 'a_error', a_error_field),
+        migrator.add_column('contexttable', 'ooh_error', ooh_error_field)
+    )
+    from model import ContextTable
+    for context in ContextTable.select():
+        if hasattr(context, 'data') and hasattr(context.data, 'a') and context.data.a is not None:
+            context.a_error = context.data.a.validate_structure()
+        if hasattr(context, 'data') and hasattr(context.data, 'ooh') and context.data.ooh is not None:
+            context.ooh_error = context.data.ooh.validate_structure()
+        context.save()

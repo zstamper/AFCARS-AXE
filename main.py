@@ -16,6 +16,7 @@
 import datetime
 import traceback
 from threading import Event, Timer
+import logging
 
 import utils
 from controllers.main_window2_controller import MainWindow2Controller
@@ -37,6 +38,11 @@ try:
     import model
     from model import TribeTable, OOHRecord, Child, Context, ContextTable, StateTable, TribeStateTable, BaseChildTable, \
         ConfigTable
+
+
+    def initialize_logging() -> None:
+        logging.basicConfig(level=logging.WARNING)
+        logging.getLogger('peewee').setLevel(logging.WARNING)
 
 
     def initialize_database() -> None:
@@ -119,6 +125,7 @@ try:
 
 
     if __name__ == '__main__':
+        initialize_logging()
         main()
 
 except Exception as e:

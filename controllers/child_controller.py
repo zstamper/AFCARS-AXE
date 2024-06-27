@@ -14,6 +14,7 @@
 # AXE. If not, see <https://www.gnu.org/licenses/>.
 
 import datetime
+import logging
 
 from PySide6.QtWidgets import QMainWindow, QMessageBox
 from peewee import DoesNotExist
@@ -88,6 +89,7 @@ class ChildController:
             # the child's birthdate needs to bubble up to the base child table so that it can show up
             # in the child listing. Don't forget, e5 in the child model is an int, while in the base_child
             # table it's a date.
+            logging.debug("save(): context=%s", context)
             base_child = controller.base_child
             if controller.base_child_rec_id != 0 and controller.context_rec_id != 0:
                 context_rec = ContextTable.get_by_id(controller.context_rec_id)
@@ -134,6 +136,7 @@ class ChildController:
     def do_edit_save(self, base_child: BaseChild, controller: OOHController | AController, context_rec: ContextTable):
         # the child's birthdate needs to bubble up to the base child table so that it can show up
         # in the child listing.
+        logging.debug("do_edit_save(base_child=[%s], controller, context_rec=[%s])", base_child, context_rec)
         refresh_dates(base_child, controller.child, self.report_type)
         base_child.e5 = datetime.datetime.strptime(str(controller.child.e5),
                                                    "%Y%m%d") if controller.child.e5 else None

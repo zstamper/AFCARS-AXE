@@ -14,6 +14,7 @@
 # AXE. If not, see <https://www.gnu.org/licenses/>.
 
 import datetime
+import logging
 
 from peewee import Model, SqliteDatabase, TextField, ForeignKeyField, AutoField, Field, DateField, IntegerField
 from playhouse.sqlite_ext import JSONField
@@ -40,6 +41,10 @@ database = SqliteDatabase(None, pragmas={
 #
 def python_value(self, value):
     return None if value is None else datetime.datetime.strptime(value, "%Y-%m-%d").date()
+
+
+class StructureValidationError(Exception):
+    pass
 
 
 class ReportTypeField(Field):
@@ -144,16 +149,49 @@ class ContextTable(BaseModel):
     e2 = TextField(index=True)  # reporting_period
     file_type = FileTypeField(index=True)
     data = JSONField(null=True, json_dumps=child_dict_dumps, json_loads=child_dict_loads)
+    a_error = TextField(null=True, default=None)
+    ooh_error = TextField(null=True, default=None)
 
     def to_model(self) -> Context:
-        context_model = Context(e2=self.e2, file_type=self.file_type, data=self.data)
+        context_model = Context(e2=self.e2, file_type=self.file_type, data=self.data, a_error=self.a_error,
+                                ooh_error=self.ooh_error)
         return context_model
 
     @staticmethod
     def persist_model(model: Context):
-        context = ContextTable(id=model.id, e2=model.e2, file_type=model.file_type, data=model.data)
+        logging.info("persisting context model...")
+        context = ContextTable(id=model.id, e2=model.e2, file_type=model.file_type, data=model.data,
+                               a_error=model.a_error, ooh_error=model.ooh_error)
         context.save()
         model.id = context.id
+
+    def save(self, *args, **kwargs):
+        self.validate()
+        super().save(*args, **kwargs)
+
+    def validate(self) -> None:
+        # structural validation rules for A:
+        #   None.
+        self.a_error = None
+
+        # structural validation rules for OOH:
+        #   Each record is required to contain at least one Removal2020 element.
+        #   Each Removal2020 element is required to contain at least one Living Arrangement.
+        try:
+            data = self.data
+            ooh = getattr(data, 'ooh', False)
+            if ooh:
+                removals2020 = getattr(ooh, 'removals2020', [])
+                if not removals2020:
+                    raise StructureValidationError('At least one removal after October 1, 2022 is required.')
+                for removal in removals2020:
+                    living_arrangements = getattr(removal, 'living_arrangements', False)
+                    if not living_arrangements:
+                        raise StructureValidationError(
+                            'Each removal after October 1, 2022 must have at least one Living Arrangement.')
+            self.ooh_error = None
+        except StructureValidationError as sve:
+            self.ooh_error = sve.args[0]
 
 
 # class ChildTable(BaseModel):

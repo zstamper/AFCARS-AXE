@@ -59,7 +59,7 @@ def refresh_dates(base_child: BaseChild, child: Child, report_type: ReportType):
         base_child.e5 = afcars_to_date(data.e5)
         removal = None
         if hasattr(data.ooh, 'removals2020'):
-            removal = sorted(data.ooh.removals2020, key=lambda x: x.e69, reverse=True)
+            removal = sorted(data.ooh.removals2020, key=lambda x: x.e69 if x.e69 else 0, reverse=True)
         if removal:
             try:
                 base_child.last_removal = afcars_to_date(removal[0].e69)

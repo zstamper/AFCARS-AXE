@@ -59,9 +59,9 @@ class ExportController:
             # Golly, so this was subtle... The filter for the context table records was originally in the query
             # above. But it so happens that with PeeWee, when accessing foreign table, you're given an unfiltered
             # list of child records. Therefore, we have to filter them here.
-            child_data = [(row.base_child.to_model(), row.data) for row in query if
+            child_data = [(row.base_child.to_model(), row.data, row.ooh_error) for row in query if
                           hasattr(row.data, 'ooh') and row.data.ooh]
         elif self.report_type == ReportType.A:
-            child_data = [(row.base_child.to_model(), row.data) for row in query if
+            child_data = [(row.base_child.to_model(), row.data, row.a_error) for row in query if
                           hasattr(row.data, 'a') and row.data.a]
         return child_data

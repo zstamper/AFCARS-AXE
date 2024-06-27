@@ -30,7 +30,8 @@ class ExportDialog(BaseDialog):
         self._wire_ui()
         self._report_type: Optional[ReportType] = None
         self.setLayout(self.ui.layout())
-        self.setFixedSize(self.ui.size())
+        # self.setFixedSize(self.ui.size())
+        self.setMinimumSize(self.ui.size())
         self._child_data: list[tuple[BaseChild, Child]] = []
 
     def _wire_ui(self):
@@ -92,9 +93,12 @@ class ExportDialog(BaseDialog):
             self.ui.child_table.removeRow(0)
         for row, child in enumerate(self.child_data):
             self.ui.child_table.insertRow(row)
-            item = QTableWidgetItem(child[0].e4)
-            item.setFlags(item.flags() | Qt.ItemIsUserCheckable)
-            item.setCheckState(Qt.Unchecked)
+            if child[2] is None:
+                item = QTableWidgetItem(child[0].e4)
+                item.setFlags(item.flags() | Qt.ItemIsUserCheckable)
+                item.setCheckState(Qt.Unchecked)
+            else:
+                item = QTableWidgetItem(f"🚫   {child[0].e4}")
             self.ui.child_table.setItem(row, 0, item)
             self.ui.child_table.setItem(row, 1, QTableWidgetItem(child[0].last_name))
             self.ui.child_table.setItem(row, 2, QTableWidgetItem(child[0].first_name))
@@ -110,6 +114,9 @@ class ExportDialog(BaseDialog):
                     child[0].last_adoption.strftime("%m/%d/%Y") if child[0].last_adoption else ""))
                 self.ui.child_table.setItem(row, 5, QTableWidgetItem(
                     child[0].last_termination.strftime("%m/%d/%Y") if child[0].last_termination else ""))
+            if child[2]:
+                self.ui.child_table.setItem(row, 6, QTableWidgetItem(child[2]))
+        self.ui.child_table.resizeColumnsToContents()
         self.refresh_select_button_label()
 
     @property
