@@ -64,7 +64,7 @@ class BaseExporter:
         env.filters['e40'] = self.e40
         env.filters['e58'] = self.e58
         ooh_template = env.get_template(self.TEMPLATE)
-        data = [{'e4': base_child.e4, 'data': child} for base_child, child in children]
+        data = [{'e4': base_child.e4, 'data': child} for base_child, child, error_flag in children]
         self.outf.write(ooh_template.render(data=data, e1=e1, e2=e2))
 
 

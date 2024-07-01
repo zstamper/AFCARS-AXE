@@ -46,10 +46,12 @@ class ExportDialog(BaseDialog):
 
     def select_button_clicked(self) -> None:
         checked = not any(
-            [self.ui.child_table.item(row, 0).checkState() == Qt.Checked for row in
-             range(self.ui.child_table.rowCount())])
+            [self.ui.child_table.item(row, 0).flags() & Qt.ItemIsUserCheckable
+             and self.ui.child_table.item(row,0).checkState() == Qt.Checked
+             for row in range(self.ui.child_table.rowCount())])
         for row in range(self.ui.child_table.rowCount()):
-            self.ui.child_table.item(row, 0).setCheckState(Qt.Checked if checked else Qt.Unchecked)
+            if self.ui.child_table.item(row, 0).flags() & Qt.ItemIsUserCheckable:
+                self.ui.child_table.item(row, 0).setCheckState(Qt.Checked if checked else Qt.Unchecked)
         self.refresh_select_button_label()
 
     def refresh_select_button_label(self) -> None:
@@ -99,6 +101,7 @@ class ExportDialog(BaseDialog):
                 item.setCheckState(Qt.Unchecked)
             else:
                 item = QTableWidgetItem(f"🚫   {child[0].e4}")
+                item.setFlags(item.flags() & ~(Qt.ItemIsUserCheckable | Qt.ItemIsEditable))
             self.ui.child_table.setItem(row, 0, item)
             self.ui.child_table.setItem(row, 1, QTableWidgetItem(child[0].last_name))
             self.ui.child_table.setItem(row, 2, QTableWidgetItem(child[0].first_name))
