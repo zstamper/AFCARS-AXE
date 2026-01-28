@@ -61,11 +61,13 @@ class ChildController:
         reporting_period = self.dialog.reporting_period_filter
         if reporting_period != 'Any':
             reporting_period = f"{reporting_period[0:4]}{'03' if reporting_period.endswith('A') else '09'}"
-        query = (BaseChildTable
-                 .select()
-                 .join(ContextTable)
-                 .where(BaseChildTable.e1 == self.e1)
-                 .order_by(BaseChildTable.last_name, BaseChildTable.first_name).distinct())
+        query = (
+            BaseChildTable
+            .select()
+            .join(ContextTable)
+            .where(BaseChildTable.e1 == self.e1)
+            .order_by(BaseChildTable.last_name, BaseChildTable.first_name)
+            .distinct())
         query = query.where(ContextTable.file_type == self.file_type)
         if report_type == ReportType.A:
             query = query.where(ContextTable.data['a'].is_null(False))
@@ -95,16 +97,23 @@ class ChildController:
                 context_rec = ContextTable.get_by_id(controller.context_rec_id)
                 self.do_edit_save(base_child, controller, context_rec)
                 return
-
-            base_child.e5 = datetime.datetime.strptime(str(controller.child.e5),
-                                                       "%Y%m%d") if controller.child.e5 else None
+            base_child.e5 = datetime.datetime.strptime(str(controller.child.e5), "%Y%m%d") if controller.child.e5 else None
             refresh_dates(base_child, controller.child, self.report_type)
-            base_child_rec = BaseChildTable.create(e1=base_child.e1, e4=base_child.e4, e5=base_child.e5,
-                                                   first_name=base_child.first_name, last_name=base_child.last_name,
-                                                   date_created=datetime.date.today(), last_exit=base_child.last_exit,
-                                                   last_removal=base_child.last_removal,
-                                                   last_adoption=base_child.last_adoption,
-                                                   last_termination=base_child.last_termination)
+            last_updated_ooh = datetime.datetime.now() if self.report_type == ReportType.OOH else None
+            last_updated_a = datetime.datetime.now() if self.report_type == ReportType.A else None
+            base_child_rec = BaseChildTable.create(
+                e1=base_child.e1,
+                e4=base_child.e4,
+                e5=base_child.e5,
+                first_name=base_child.first_name,
+                last_name=base_child.last_name,
+                date_created=datetime.date.today(),
+                last_exit=base_child.last_exit,
+                last_removal=base_child.last_removal,
+                last_adoption=base_child.last_adoption,
+                last_termination=base_child.last_termination,
+                last_updated_ooh=last_updated_ooh,
+                last_updated_a=last_updated_a)
             controller.base_child_rec_id = base_child_rec.id
             base_child.id = base_child_rec.id
             context.data = controller.child
@@ -140,6 +149,10 @@ class ChildController:
         refresh_dates(base_child, controller.child, self.report_type)
         base_child.e5 = datetime.datetime.strptime(str(controller.child.e5),
                                                    "%Y%m%d") if controller.child.e5 else None
+        if self.report_type == ReportType.OOH:
+            base_child.last_updated_ooh = datetime.datetime.now()
+        elif self.report_type == ReportType.A:
+            base_child.last_updated_a = datetime.datetime.now()
         BaseChildTable.persist_model(base_child)
         context_rec.base_child = base_child.id
         context_rec.data = controller.child

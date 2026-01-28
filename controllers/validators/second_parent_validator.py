@@ -60,7 +60,7 @@ class SecondParentValidators(SecondParentBaseValidator):
             # if self.dialog.e64 == 0:
             #     raise ValueError("Date of Petition for Termination (E66) should be blank when E64 is not applicable.")
             if afcars_to_date(self.dialog.e66) > e2_end_date():
-                raise ValueError("Date of Petition for Termination (E66) can't be after current period.")
+                raise ValueError("Date of Petition for Termination (E66) cannot be after current period.")
 
     def validate_e68(self):
         if self.dialog.ui.e68.text():
@@ -75,7 +75,7 @@ class SecondParentValidators(SecondParentBaseValidator):
             # if self.dialog.e64 == 0:
             #     raise ValueError("Date of Termination (E68) should be blank when E64 is not applicable.")
             if afcars_to_date(self.dialog.e68) > e2_end_date():
-                raise ValueError("Date of Termination (E68) can't be after current period.")
+                raise ValueError("Date of Termination (E68) cannot be after current period.")
 
 
 class SecondParentValidator(AbstractValidator):

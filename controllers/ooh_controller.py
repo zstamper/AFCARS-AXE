@@ -14,8 +14,10 @@
 # AXE. If not, see <https://www.gnu.org/licenses/>.
 
 from typing import Optional, Callable
+from datetime import datetime
 
 from PySide6.QtWidgets import QMessageBox
+from PySide6.QtCore import Qt
 from pydantic import ValidationError
 
 from controllers.removal1993_controller import Removal1993Controller
@@ -137,7 +139,15 @@ class OOHController:
             if hasattr(self.dialog, key):
                 if getattr(self.dialog, key) != getattr(self.child.ooh, key):
                     return True
-        return False
+        if len(self.dialog.removals1993) < self._initial_removals1993_count:
+            return True
+        if len(self.dialog.removals2020) < self._initial_removals2020_count:
+            return True
+        if len(self.dialog.second_parents) < self._initial_second_parents_count:
+            return True
+        current_tribe_ids = {tribe.e9 for tribe in self.dialog.tribes}
+        if current_tribe_ids != self._initial_tribe_ids:
+            return True
 
     def serialize(self) -> bool:
         try:
@@ -162,6 +172,7 @@ class OOHController:
         # gather model fields from the view
         # bubble the save operation up the call stack until the record is saved in the database
         if self.serialize():
+            self.base_child.last_updated_ooh = datetime.now()
             if self.on_save:
                 self.on_save()
 
@@ -174,6 +185,10 @@ class OOHController:
     def exec(self):
         self.dialog.settle()
         self.dialog.enable_icwa(not self.is_tribe())
+        self._initial_removals1993_count = len(self.dialog.removals1993)
+        self._initial_removals2020_count = len(self.dialog.removals2020)
+        self._initial_second_parents_count = len(self.dialog.second_parents)
+        self._initial_tribe_ids = {tribe.e9 for tribe in self.dialog.tribes}
         self.dialog.exec()
 
     def clear(self):
@@ -219,24 +234,25 @@ class OOHController:
         controller.exec()
 
     def do_edit_removal1993(self) -> None:
-
         def save():
             self.dialog.refresh_removals1993()
             self.do_save()
-
         current_row = self.dialog.current_removal1993_row()
-        if current_row >= 0:
-            controller: Removal1993Controller = Removal1993Controller(self.dialog, self.dialog.child_name,
-                                                                      self.dialog.removals1993[current_row],
-                                                                      file_type=self.file_type)
+        item = self.dialog.ui.removal_1993_table.item(current_row, 0)
+        selected_removal = item.data(Qt.UserRole) if item is not None else None
+        if selected_removal:
+            controller = Removal1993Controller(self.dialog, self.dialog.child_name,
+                selected_removal, file_type=self.file_type)
             controller.on_save = save
             controller.child = self.child
             controller.exec()
 
     def do_delete_removal1993(self) -> None:
         current_row = self.dialog.current_removal1993_row()
-        if 0 <= current_row < len(self.dialog.removals1993):
-            del self.dialog.removals1993[current_row]
+        item = self.dialog.ui.removal_1993_table.item(current_row, 0)
+        selected_removal = item.data(Qt.UserRole) if item is not None else None
+        if selected_removal in self.dialog.removals1993:
+            self.dialog.removals1993.remove(selected_removal)
             self.dialog.refresh_removals1993()
 
     def do_add_removal2020(self) -> None:
@@ -266,12 +282,16 @@ class OOHController:
         def save():
             self.dialog.refresh_removals2020()
             self.do_save()
-
         current_row = self.dialog.current_removal2020_row()
-        if current_row >= 0:
-            controller: Removal2020Controller = Removal2020Controller(self.dialog, self.dialog.child_name,
-                                                                      self.dialog.removals2020[current_row],
-                                                                      file_type=self.file_type)
+        item = self.dialog.ui.removal_2020_table.item(current_row, 0)
+        selected_removal = item.data(Qt.UserRole) if item is not None else None
+        if selected_removal:
+            controller = Removal2020Controller(
+                self.dialog,
+                self.dialog.child_name,
+                selected_removal,
+                file_type=self.file_type
+            )
             controller.on_save = save
             controller.child = self.child
             controller.parent_data = self.dialog
@@ -279,8 +299,10 @@ class OOHController:
 
     def do_delete_removal2020(self) -> None:
         current_row = self.dialog.current_removal2020_row()
-        if 0 <= current_row < len(self.dialog.removals2020):
-            del self.dialog.removals2020[current_row]
+        item = self.dialog.ui.removal_2020_table.item(current_row, 0)
+        selected_removal = item.data(Qt.UserRole) if item is not None else None
+        if selected_removal in self.dialog.removals2020:
+            self.dialog.removals2020.remove(selected_removal)
             self.dialog.refresh_removals2020()
 
     # ===== SecondParent ======================================================
@@ -315,11 +337,13 @@ class OOHController:
         def save():
             self.dialog.refresh_second_parents()
             self.do_save()
-
         current_row = self.dialog.current_second_parents_row()
         if current_row >= 0:
-            controller = SecondParentController(self.dialog, child_name=self.dialog.child_name,
-                                                data=self.dialog.second_parents[current_row + 1])
+            item = self.dialog.ui.parent2tpr.item(current_row, 0)
+            selected_parent = item.data(Qt.UserRole) if item is not None else None
+            if selected_parent:
+                controller = SecondParentController(self.dialog, child_name=self.dialog.child_name,
+                    data=selected_parent)
             controller.on_save = save
             controller.child = self.child
             controller.e60 = self.dialog.e60
@@ -328,15 +352,26 @@ class OOHController:
 
     def do_delete_putative_parent(self) -> None:
         current_row = self.dialog.current_second_parents_row()
-        if 0 <= current_row < len(self.dialog.second_parents):
-            del self.dialog.second_parents[current_row]
+        item = self.dialog.ui.parent2tpr.item(current_row, 0)
+        selected_parent = item.data(Qt.UserRole) if item is not None else None
+        if selected_parent in self.dialog.second_parents:
+            self.dialog.second_parents.remove(selected_parent)
+            skip = True
+            number = 3
+            for parent in self.dialog.second_parents:
+                if skip:
+                    skip = False
+                    continue
+                parent.number = number
+                number += 1
             self.dialog.refresh_second_parents()
 
     def do_add_tribe(self):
         row: int = self.dialog.current_epa_tribe_row()
         if row >= 0:
             if self.dialog.epa_tribes[row].id not in [tribe.e9 for tribe in self.dialog.tribes]:
-                self.dialog.tribes.append(RecognizedTribe(id=None, ooh_id=None, e9=self.dialog.epa_tribes[row].id))
+                self.dialog.tribes.append(RecognizedTribe(id=None, ooh_id=None, e9=int(self.dialog.epa_tribes[row].epa_code)
+))
                 self.dialog.refresh_tribes()
 
     def do_remove_tribe(self):

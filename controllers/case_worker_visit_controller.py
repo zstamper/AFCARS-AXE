@@ -13,6 +13,7 @@
 # You should have received a copy of the GNU General Public License along with
 # AXE. If not, see <https://www.gnu.org/licenses/>.
 
+import datetime
 from typing import Optional, Callable
 
 from PySide6.QtWidgets import QDialog, QMessageBox
@@ -26,7 +27,8 @@ from model.models import CaseVisit, Removal2020, FileType, Child, ChildName
 
 class CaseWorkerVisitController:
 
-    def __init__(self, parent, child_name: ChildName, data: CaseVisit, /, file_type: FileType = FileType.PRODUCTION):
+    def __init__(self, parent, child_name: ChildName, data: CaseVisit, /, file_type: FileType = FileType.PRODUCTION, removal_controller=None):
+        self.removal_controller = removal_controller
         self._data = None
         self.on_save: Optional[Callable] = None
         self.dialog = CaseVisitDialog(parent)
@@ -37,6 +39,7 @@ class CaseWorkerVisitController:
         self.parent_data: Optional[Removal2020] = None
         self.dialog.on_validate = self.do_validate
         self.dialog.on_save = self.do_save
+        self.on_save_and_add: Optional[Callable] = None
         self.dialog.on_close = self.do_close
         self.data = data
 
@@ -83,10 +86,11 @@ class CaseWorkerVisitController:
             show_error_dialog(self.dialog, messages=self.validator.messages())
         return tab_ok
 
-    def do_save(self):
-        self.serialize()
-        if self.on_save:
-            self.on_save()
+    def do_save(self) -> None:
+        if self.serialize():
+            self.data.last_updated = datetime.datetime.now()
+            if self.on_save:
+                self.on_save()
 
     def do_close(self) -> bool:
         if self.is_dirty():
@@ -105,6 +109,8 @@ class CaseWorkerVisitController:
 
     def is_dirty(self) -> bool:
         for key in vars(self.data).keys():
+            if key == "last_updated":
+                continue
             if hasattr(self.dialog, key):
                 if getattr(self.dialog, key) != getattr(self.data, key):
                     return True

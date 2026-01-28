@@ -14,6 +14,7 @@
 # AXE. If not, see <https://www.gnu.org/licenses/>.
 
 from typing import Optional, Callable
+from datetime import datetime
 
 from PySide6.QtWidgets import QMessageBox
 from pydantic import ValidationError
@@ -90,6 +91,7 @@ class AController:
 
     def do_save(self) -> bool:
         if self.serialize():
+            self.base_child.last_updated_a = datetime.now()
             if self.on_save:
                 return self.on_save()
         return False

@@ -13,6 +13,7 @@
 # You should have received a copy of the GNU General Public License along with
 # AXE. If not, see <https://www.gnu.org/licenses/>.
 
+import datetime
 from typing import Optional, Callable
 
 from PySide6.QtWidgets import QMessageBox
@@ -92,6 +93,7 @@ class PeriodicReviewController:
 
     def do_save(self) -> None:
         if self.serialize():
+            self.data.last_updated = datetime.datetime.now()
             if self.on_save:
                 self.on_save()
 
@@ -103,6 +105,8 @@ class PeriodicReviewController:
 
     def is_dirty(self) -> bool:
         for key in vars(self.data).keys():
+            if key == "last_updated":
+                continue
             if hasattr(self.dialog, key):
                 if getattr(self.dialog, key) != getattr(self.data, key):
                     return True

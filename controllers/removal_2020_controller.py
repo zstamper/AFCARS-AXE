@@ -14,8 +14,10 @@
 # AXE. If not, see <https://www.gnu.org/licenses/>.
 
 from typing import Optional, Callable
+from datetime import datetime
 
 from PySide6.QtWidgets import QMessageBox
+from PySide6.QtCore import Qt
 from pydantic import ValidationError
 
 from controllers.case_worker_visit_controller import CaseWorkerVisitController
@@ -67,6 +69,7 @@ class Removal2020Controller:
         self.previous_tab = 0
 
     def exec(self):
+        self.reset_dialog_state()
         self.dialog.exec()
 
     @property
@@ -101,9 +104,9 @@ class Removal2020Controller:
         self.dialog.file_type = v
 
     def do_save(self) -> None:
-        # gather model fields from the view
-        # bubble the save operation up the call stack until the record is saved in the database
         if self.serialize():
+            self.data.last_updated = datetime.now()
+            self.data.gather(self.dialog, ignore=["last_updated"])
             if self.on_save:
                 self.on_save()
 
@@ -124,6 +127,8 @@ class Removal2020Controller:
 
     def is_dirty(self) -> bool:
         for key in vars(self.data).keys():
+            if key == "last_updated":  # ✅ Ignore timestamp
+                continue
             if hasattr(self.dialog, key):
                 if getattr(self.dialog, key) != getattr(self.data, key):
                     return True
@@ -134,11 +139,10 @@ class Removal2020Controller:
             if hasattr(self.dialog, 'validate_on_accept') and self.dialog.validate_on_accept:
                 if not self.do_validate_clicked():
                     return False
-            self.data.gather(self.dialog)
             return True
         except ValidationError as ve:
             show_error_dialog(self.dialog, ve=ve)
-        return False
+            return False
 
     def _update_tab_labels(self, tab: int, warning: bool):
         if hasattr(self.dialog, 'tab_label') and hasattr(self.dialog, 'set_tab_label'):
@@ -160,6 +164,18 @@ class Removal2020Controller:
         if not tab_ok:
             show_error_dialog(self.dialog, messages=self.validator.messages)
         return tab_ok
+    
+    def reset_dialog_state(self):
+        self.dialog.living_arrangements = list(self.data.living_arrangements)
+        self.dialog.permanency_plans = list(self.data.permanency_plans)
+        self.dialog.case_worker_visits = list(self.data.case_worker_visits)
+        self.dialog.permanency_hearings = list(self.data.permanency_hearings)
+        self.dialog.periodic_reviews = list(self.data.periodic_reviews)
+        self.dialog.refresh_living_arrangements()
+        self.dialog.refresh_permanency_plans()
+        self.dialog.refresh_case_worker_visits()
+        self.dialog.refresh_permanency_hearings()
+        self.dialog.refresh_periodic_reviews()
 
     def do_add_living_arrangement(self, *args, **kwargs):
         is_new = True
@@ -194,7 +210,8 @@ class Removal2020Controller:
         # if the living_arrangement_table has a current row, pass the corresponding obj item to the dialog
         current_row = self.dialog.living_arrangements_current_row
         if current_row >= 0:
-            data = self.dialog.living_arrangements[current_row]
+            item = self.dialog.ui.living_arrangements_table.item(current_row, 0)
+            data = item.data(Qt.UserRole) if item else None
             controller = LivingArrangementController(self.dialog,
                                                      self.dialog.child_name,
                                                      data,
@@ -209,8 +226,10 @@ class Removal2020Controller:
 
     def do_delete_living_arrangement(self, *args, **kwargs):
         current_row = self.dialog.living_arrangements_current_row
-        if 0 <= current_row < len(self.dialog.living_arrangements):
-            del self.dialog.living_arrangements[current_row]
+        item = self.dialog.ui.living_arrangements_table.item(current_row, 0)
+        data = item.data(Qt.UserRole) if item else None
+        if data in self.dialog.living_arrangements:
+            self.dialog.living_arrangements.remove(data)
             self.dialog.refresh_living_arrangements()
 
     def do_add_permanency_plan(self, *args, **kwargs):
@@ -238,9 +257,11 @@ class Removal2020Controller:
             self.do_save()
 
         current_row = self.dialog.permanency_plan_current_row
-        if current_row >= 0:
-            controller = PermanencyPlanController(self.dialog, self.dialog.child_name,
-                                                  self.dialog.permanency_plans[current_row], file_type=self.file_type)
+        item = self.dialog.ui.permanency_plans_table.item(current_row, 0)
+        data = item.data(Qt.UserRole) if item else None
+        if data:
+            controller = PermanencyPlanController(
+                self.dialog, self.dialog.child_name, data, file_type=self.file_type)
             controller.on_save = save
             controller.child = self.child
             controller.parent_data = self.dialog
@@ -249,8 +270,12 @@ class Removal2020Controller:
     def do_delete_permanency_plan(self, *args, **kwargs):
         current_row = self.dialog.permanency_plan_current_row
         if 0 <= current_row <= len(self.dialog.permanency_plans):
-            del self.dialog.permanency_plans[current_row]
-            self.dialog.refresh_permanency_plans()
+            current_row = self.dialog.permanency_plan_current_row
+            item = self.dialog.ui.permanency_plans_table.item(current_row, 0)
+            data = item.data(Qt.UserRole) if item else None
+            if data in self.dialog.permanency_plans:
+                self.dialog.permanency_plans.remove(data)
+                self.dialog.refresh_permanency_plans()
 
     def do_add_case_worker_visit(self, *args, **kwargs):
         is_new = True
@@ -263,10 +288,17 @@ class Removal2020Controller:
                 is_new = False
             self.dialog.refresh_case_worker_visits()
             self.do_save()
+        
+        def save_and_add():
+            controller.do_save()
+            controller.dialog.accept() 
+            self.do_add_case_worker_visit()
 
         controller: CaseWorkerVisitController = CaseWorkerVisitController(self.dialog, self.dialog.child_name, data,
-                                                                          file_type=self.file_type)
+                                                                          file_type=self.file_type, removal_controller=self)
         controller.on_save = save
+        controller.on_save_and_add = save_and_add
+        controller.dialog.on_save_and_add = save_and_add
         controller.child = self.child
         controller.parent_data = self.dialog
         controller.exec()
@@ -276,14 +308,21 @@ class Removal2020Controller:
             self.dialog.refresh_case_worker_visits()
             self.do_save()
 
-        # if the case_worker_visit_table has a current row, pass the corresponding obj item to the dialog
-        current_row: int = self.dialog.case_worker_visit_current_row
-        if current_row >= 0:
-            controller: CaseWorkerVisitController = CaseWorkerVisitController(self.dialog, self.dialog.child_name,
-                                                                              self.dialog.case_worker_visits[
-                                                                                  current_row],
-                                                                              file_type=self.file_type)
+        def save_and_add():
+            controller.do_save()
+            controller.dialog.accept()
+            self.do_add_case_worker_visit()
+
+        current_row = self.dialog.case_worker_visit_current_row
+        item = self.dialog.ui.case_visits_table.item(current_row, 0)
+        data = item.data(Qt.UserRole) if item else None
+        if data:
+            controller = CaseWorkerVisitController(
+                self.dialog, self.dialog.child_name, data, file_type=self.file_type
+            )
             controller.on_save = save
+            controller.on_save_and_add = save_and_add
+            controller.dialog.on_save_and_add = save_and_add
             controller.child = self.child
             controller.parent_data = self.dialog
             controller.exec()
@@ -292,8 +331,12 @@ class Removal2020Controller:
         # if the case_worker_visit_table has a current row, delete it from the obj and refresh the table
         current_row: int = self.dialog.case_worker_visit_current_row
         if 0 <= current_row < len(self.dialog.case_worker_visits):
-            del self.dialog.case_worker_visits[current_row]
-            self.dialog.refresh_case_worker_visits()
+            current_row = self.dialog.case_worker_visit_current_row
+            item = self.dialog.ui.case_visits_table.item(current_row, 0)
+            data = item.data(Qt.UserRole) if item else None
+            if data in self.dialog.case_worker_visits:
+                self.dialog.case_worker_visits.remove(data)
+                self.dialog.refresh_case_worker_visits()
 
     def do_add_permanency_hearing(self) -> None:
         is_new = True
@@ -319,12 +362,12 @@ class Removal2020Controller:
             self.dialog.refresh_permanency_hearings()
             self.do_save()
 
-        # if the permanency_hearing_table has a current row, pass the corresponding obj item to the dialog
-        current_row: int = self.dialog.permanency_hearings_current_row
-        if current_row >= 0:
-            controller = PermanencyHearingController(self.dialog, self.dialog.child_name,
-                                                     self.dialog.permanency_hearings[current_row],
-                                                     file_type=self.file_type)
+        current_row = self.dialog.permanency_hearings_current_row
+        item = self.dialog.ui.permanency_hearings_table.item(current_row, 0)
+        data = item.data(Qt.UserRole) if item else None
+        if data:
+            controller = PermanencyHearingController(
+                self.dialog, self.dialog.child_name, data, file_type=self.file_type)
             controller.on_save = save
             controller.child = self.child
             controller.parent_data = self.dialog
@@ -333,8 +376,12 @@ class Removal2020Controller:
     def do_delete_permanency_hearing(self):
         current_row = self.dialog.permanency_hearings_current_row
         if 0 <= current_row < len(self.dialog.permanency_hearings):
-            del self.dialog.permanency_hearings[current_row]
-            self.dialog.refresh_permanency_hearings()
+            current_row = self.dialog.permanency_hearings_current_row
+            item = self.dialog.ui.permanency_hearings_table.item(current_row, 0)
+            data = item.data(Qt.UserRole) if item else None
+            if data in self.dialog.permanency_hearings:
+                self.dialog.permanency_hearings.remove(data)
+                self.dialog.refresh_permanency_hearings()
 
     def do_add_periodic_review(self):
         is_new = True
@@ -359,13 +406,12 @@ class Removal2020Controller:
         def save():
             self.dialog.refresh_periodic_reviews()
             self.do_save()
-
-        current_row: int = self.dialog.periodic_reviews_current_row
-        if current_row >= 0:
-            controller: PeriodicReviewController = PeriodicReviewController(self.dialog, self.dialog.child_name,
-                                                                            self.dialog.periodic_reviews[
-                                                                                current_row],
-                                                                            file_type=self.file_type)
+        current_row = self.dialog.periodic_reviews_current_row
+        item = self.dialog.ui.periodic_reviews_table.item(current_row, 0)
+        data = item.data(Qt.UserRole) if item else None
+        if data:
+            controller = PeriodicReviewController(
+                self.dialog, self.dialog.child_name, data, file_type=self.file_type)
             controller.on_save = save
             controller.child = self.child
             controller.parent_data = self.dialog
@@ -374,5 +420,9 @@ class Removal2020Controller:
     def do_delete_periodic_review(self):
         current_row: int = self.dialog.periodic_reviews_current_row
         if 0 <= current_row < len(self.dialog.periodic_reviews):
-            del self.dialog.periodic_reviews[current_row]
-            self.dialog.refresh_periodic_reviews()
+            current_row = self.dialog.periodic_reviews_current_row
+            item = self.dialog.ui.periodic_reviews_table.item(current_row, 0)
+            data = item.data(Qt.UserRole) if item else None
+            if data in self.dialog.periodic_reviews:
+                self.dialog.periodic_reviews.remove(data)
+                self.dialog.refresh_periodic_reviews()

@@ -14,6 +14,7 @@
 # AXE. If not, see <https://www.gnu.org/licenses/>.
 
 from typing import Optional, Callable
+from datetime import datetime
 
 from PySide6.QtWidgets import QMessageBox
 from pydantic import ValidationError
@@ -69,9 +70,8 @@ class Removal1993Controller:
         self.dialog.exec()
 
     def do_save(self) -> None:
-        # gather model fields from the view
-        # bubble the save operation up the call stack until the record is saved in the database
         if self.serialize():
+            self.data.last_updated = datetime.now()
             if self.on_save:
                 self.on_save()
 
@@ -92,6 +92,8 @@ class Removal1993Controller:
 
     def is_dirty(self) -> bool:
         for key in vars(self.data).keys():
+            if key == "last_updated":  # ✅ Ignore timestamp
+                continue
             if hasattr(self.dialog, key):
                 if getattr(self.dialog, key) != getattr(self.data, key):
                     return True

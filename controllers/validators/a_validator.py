@@ -46,10 +46,9 @@ class AValidators(ABaseValidator, CommonValidators):
         if not is_valid_date(self.dialog.a17):
             raise ValueError("Adoption Finalization or Guardianship Legalization Date (A17) is invalid.")
         if is_future_date(self.dialog.a17):
-            raise ValueError("Adoption Finalization or Guardianship Legalization Date (A17) can't be in the future.")
+            raise ValueError("Adoption Finalization or Guardianship Legalization Date (A17) cannot be in the future.")
         if afcars_to_date(self.dialog.a17) > e2_end_date():
-            raise ValueError(
-                "Adoption Finalization or Guardianship Legalization Date (A17) can't be after reporting period end.")
+            raise ValueError("Adoption Finalization or Guardianship Legalization Date (A17) cannot be after reporting period end.")
         if is_way_past_date(self.dialog.a17):
             raise ValueError("Adoption Finalization or Guardianship Legalization Date (A17) is too far in the past.")
 
@@ -60,13 +59,12 @@ class AValidators(ABaseValidator, CommonValidators):
             raise ValueError("Agreement Termination Date (A18) is not valid.")
         if not is_valid_date(self.dialog.a18):
             raise ValueError("Agreement Termination Date (A18) is not valid.")
-        if self.dialog.a18 < self.dialog.a17:
-            raise ValueError(
-                "Agreement Termination Date (A18) can't be before Adoption Finalization or Guardianship Legalization Date (A17).")
-        if is_way_past_date(self.dialog.a17):
+        if self.dialog.a17 is not None and self.dialog.a18 < self.dialog.a17:
+            raise ValueError("Agreement Termination Date (A18) cannot be before Adoption Finalization or Guardianship Legalization Date (A17).")
+        if is_way_past_date(self.dialog.a18):
             raise ValueError("Agreement Termination Date (A18) is too far in the past.")
-        if is_future_date(self.dialog.e18):
-            raise ValueError('Agreement Termination Date (A18) cannot be in the future.')
+        if is_future_date(self.dialog.a18):
+            raise ValueError("Agreement Termination Date (A18) cannot be in the future.")
 
     def validate_a19(self):
         if self.dialog.a19 not in [1, 2, 3]:

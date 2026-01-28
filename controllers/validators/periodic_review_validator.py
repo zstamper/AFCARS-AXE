@@ -40,7 +40,7 @@ class PeriodicReviewValidators(PeriodicReviewBaseValidator):
             raise ValueError("Periodic Review Date (E149) is invalid.")
         if is_future_date(self.dialog.e149):
             raise ValueError("Periodic Review Date (E149) cannot be in the future.")
-        if self.dialog.e149 < self.parent_data.e69:
+        if self.parent_data.e69 is not None and self.dialog.e149 < self.parent_data.e69:
             raise ValueError("Periodic Review Data (E149) cannot be before Removal Date (E69).")
 
 

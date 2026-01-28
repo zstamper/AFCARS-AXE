@@ -85,22 +85,42 @@ class DemographicsValidator(OOHBaseValidator, CommonValidators):
                 raise ValueError("Prior Adoption Date (E42) may not be in the future.")
             if is_way_past_year_month(self.dialog.e42):
                 raise ValueError("Prior Adoption Date (E42) is too far in the past.")
+            if self.dialog.e42 and self.dialog.e5:
+                dob_year_month = self.dialog.e5 // 100
+                if self.dialog.e42 < dob_year_month:
+                    raise ValueError("Prior Adoption Date (E42) cannot be before Child's Date of Birth (E5).")
+            for removal in (self.dialog.removals1993 + self.dialog.removals2020):
+                        if removal.e69:
+                            removal_year_month = removal.e69 // 100
+                            if self.dialog.e42 > removal_year_month:
+                                raise ValueError("Prior Adoption Date (E42) cannot be after the most recent removal date (E69).")
+
 
     def validate_e42_e43(self) -> None:
         if self.dialog.e42 is not None and self.dialog.e43 not in [0, 1]:
             raise ValueError(
                 f"Inter-country prior adoption (E43) is required if prior adoption date is specified (E42).")
 
-    def validate_ee45(self) -> None:
-        if self.dialog.ui.e45.text():
-            if not re.match(r'\d+', self.dialog.ui.e45.text()):
-                raise ValueError("Prior Guardianship Date (E45) is invalid.")
+    def validate_e45(self):
+        if bool(self.dialog.ui.e45.text()) and not re.match(r'\d+', self.dialog.ui.e45.text()):
+            raise ValueError("Prior Guardianship Date (E45) is invalid.")
+        if self.dialog.e44 == 1:
             if not is_valid_year_month(self.dialog.e45):
                 raise ValueError("Prior Guardianship Date (E45) is invalid.")
             if is_future_year_month(self.dialog.e45):
                 raise ValueError("Prior Guardianship Date (E45) may not be in the future.")
             if is_way_past_year_month(self.dialog.e45):
                 raise ValueError("Prior Guardianship Date (E45) is too far in the past.")
+            if self.dialog.e45 and self.dialog.e5:
+                dob_year_month = self.dialog.e5 // 100
+                if self.dialog.e45 < dob_year_month:
+                    raise ValueError("Prior Guardianship Date (E45) cannot be before Child's Date of Birth (E5).")
+            for removal in (self.dialog.removals1993 + self.dialog.removals2020):
+                        if removal.e69:
+                            removal_year_month = removal.e69 // 100
+                            if self.dialog.e45 > removal_year_month:
+                                raise ValueError("Prior Guardianship Date (E45) cannot be after the most recent removal date (E69).")
+
 
     def validate_e56(self) -> None:
         if not self.dialog.ui.e56.text():
@@ -241,8 +261,9 @@ class ParentGuardianValidator(OOHBaseValidator, CommonValidators):
         # So If there's a mother or if E1 is a state or E104 is not checked, this field is required.
 
         def e104() -> int:
-            if len(self.dialog.removals2020):
-                removals = sorted(self.dialog.removals2020, key=lambda x: x.e69, reverse=True)
+            valid_removals = [r for r in self.dialog.removals2020 if r.e69 is not None]
+            if valid_removals:
+                removals = sorted(valid_removals, key=lambda x: x.e69, reverse=True)
                 return removals[0].e104
             return 0
 
@@ -269,8 +290,9 @@ class ParentGuardianValidator(OOHBaseValidator, CommonValidators):
         # So If there's a mother or if E1 is a state or E104 is not checked, this field is required.
 
         def e104() -> int:
-            if len(self.dialog.removals2020):
-                removals = sorted(self.dialog.removals2020, key=lambda x: x.e69, reverse=True)
+            valid_removals = [r for r in self.dialog.removals2020 if r.e69 is not None]
+            if valid_removals:
+                removals = sorted(valid_removals, key=lambda x: x.e69, reverse=True)
                 return removals[0].e104
             return 0
 
@@ -321,7 +343,7 @@ class ParentGuardianValidator(OOHBaseValidator, CommonValidators):
             # if self.dialog.e64 == 0:
             #     raise ValueError("Date of Petition for Termination (E66) should be blank when E64 is not applicable.")
             if afcars_to_date(self.dialog.e66) > e2_end_date():
-                raise ValueError("Date of Petition for Termination (E66) can't be after current period.")
+                raise ValueError("Date of Petition for Termination (E66) cannot be after current period.")
 
     def validate_e67(self) -> None:
         if self.dialog.ui.e67.text():
@@ -351,7 +373,7 @@ class ParentGuardianValidator(OOHBaseValidator, CommonValidators):
             # if self.dialog.e64 == 0:
             #     raise ValueError("Date of Termination (E68) should be blank when E64 is not applicable.")
             if afcars_to_date(self.dialog.e68) > e2_end_date():
-                raise ValueError("Date of Termination (E68) can't be after current period.")
+                raise ValueError("Date of Termination (E68) cannot be after current period.")
 
 
 class EducationValidator(OOHBaseValidator, CommonValidators):
@@ -411,14 +433,16 @@ class TraffickingValidator(OOHBaseValidator, CommonValidators):
 
     def validate_e111(self) -> None:
         def e69() -> int | None:
-            removals = sorted(self.dialog.removals2020, key=lambda x: x.e69, reverse=True)
-            if len(removals) > 0:
+            # Filter out None values before sorting
+            valid_removals_2020 = [r for r in self.dialog.removals2020 if r.e69 is not None]
+            if valid_removals_2020:
+                removals = sorted(valid_removals_2020, key=lambda x: x.e69, reverse=True)
                 return removals[0].e69
-            removals = sorted(self.dialog.removals1993, key=lambda x: x.e69, reverse=True)
-            if len(removals) > 0:
+            valid_removals_1993 = [r for r in self.dialog.removals1993 if r.e69 is not None]
+            if valid_removals_1993:
+                removals = sorted(valid_removals_1993, key=lambda x: x.e69, reverse=True)
                 return removals[0].e69
             return None
-
         if self.dialog.e110 == 1:
             if not self.dialog.ui.e111.text():
                 raise ValueError("Date Reported to Law Enforcement (E111) is required.")
@@ -427,13 +451,12 @@ class TraffickingValidator(OOHBaseValidator, CommonValidators):
             if not is_valid_date(self.dialog.e111):
                 raise ValueError("Date Reported to Law Enforcement (E111) is invalid.")
             if is_way_past_date(self.dialog.e111):
-                raise ValueError("Date Reported to Law Enforcement (E111) is to far in the past.")
+                raise ValueError("Date Reported to Law Enforcement (E111) is too far in the past.")
             if is_future_date(self.dialog.e111):
                 raise ValueError("Date Reported to Law Enforcement (E111) cannot be in the future.")
             _e69 = e69()
             if _e69 is not None and self.dialog.e111 < _e69:
-                raise ValueError(
-                    "Date law enforcement was contacted (E111) must be after date of most recent removal (E69).")
+                raise ValueError("Date law enforcement was contacted (E111) must be after date of most recent removal (E69).")
 
 
 class FinancialValidator(OOHBaseValidator, CommonValidators):

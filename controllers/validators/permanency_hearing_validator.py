@@ -40,7 +40,7 @@ class PermanencyHearingValidators(PermanencyHearingBaseValidator):
             raise ValueError("Permanency Hearing Date (E150) is invalid.")
         if is_future_date(self.dialog.e150):
             raise ValueError("Permanency Hearing Date (E150) may not be in the future.")
-        if self.dialog.e150 < self.parent_data.e69:
+        if self.parent_data.e69 is not None and self.dialog.e150 < self.parent_data.e69:
             raise ValueError("Permanency Hearing Date (E150) may not be before Removal Date (E69).")
         if afcars_to_date(self.dialog.e150) > e2_end_date():
             raise ValueError("Permanency Hearing Date (E150) must be before end of current reporting period (E2).")
