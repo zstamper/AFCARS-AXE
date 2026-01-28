@@ -1,0 +1,1320 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>LivingArrangementDialog</class>
+ <widget class="QDialog" name="LivingArrangementDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1006</width>
+    <height>785</height>
+   </rect>
+  </property>
+  <property name="font">
+   <font>
+    <family>Arial</family>
+   </font>
+  </property>
+  <property name="windowTitle">
+   <string>Living Arrangement</string>
+  </property>
+  <property name="modal">
+   <bool>true</bool>
+  </property>
+  <layout class="QHBoxLayout" name="horizontalLayout">
+   <item>
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="QGroupBox" name="living_arrangement_group_box">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="title">
+        <string>Living Arrangement</string>
+       </property>
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_5">
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_3">
+            <item>
+             <widget class="QLabel" name="label_5">
+              <property name="text">
+               <string>Living Arrangement Start Date (E112)</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="e112">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="inputMask">
+               <string/>
+              </property>
+              <property name="maxLength">
+               <number>8</number>
+              </property>
+              <property name="placeholderText">
+               <string>YYYYMMDD</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <spacer name="verticalSpacer">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_4">
+            <item>
+             <spacer name="verticalSpacer">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>40</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_8">
+              <property name="text">
+               <string>Living Arrangement Type (E113, E120)</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QComboBox" name="e120">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="currentIndex">
+               <number>-1</number>
+              </property>
+              <property name="placeholderText">
+               <string>Select</string>
+              </property>
+              <item>
+               <property name="text">
+                <string>Foster Family Home</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Group home-family operated</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Group home-staff operated</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Group home-shelter care</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Residential treatment center</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Qualified residential treatment program</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Child care institution</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Child care institution-shelter care</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Supervised independent living</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Juvenile justice facility</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Medical or rehabilitative facility</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Psychiatric hospital</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Runaway</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Whereabouts unknown</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Placed at home</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer_12">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>37</width>
+            <height>17</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_17">
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_7">
+            <item>
+             <widget class="QLabel" name="e58_label">
+              <property name="text">
+               <string>Total number of siblings placed with this child (E58)</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="e58">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="inputMask">
+               <string/>
+              </property>
+              <property name="maxLength">
+               <number>2</number>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <spacer name="verticalSpacer_3">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_8">
+            <item>
+             <spacer name="verticalSpacer_3">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>40</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_9">
+              <property name="text">
+               <string>Location of Living Arrangement (E121)</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QComboBox" name="e121">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="placeholderText">
+               <string>Select</string>
+              </property>
+              <item>
+               <property name="text">
+                <string>In-state or in-tribal service area</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Out-of-state or out-of-tribal service area</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Out-of-country</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Runaway or whereabouts unknown</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer_13">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>37</width>
+            <height>17</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_19">
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_6">
+            <item>
+             <widget class="QLabel" name="e40_label">
+              <property name="text">
+               <string>Is this youth placed with their child? (E40)</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_3">
+              <item>
+               <widget class="QCheckBox" name="e40_y">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="text">
+                 <string>Yes</string>
+                </property>
+                <attribute name="buttonGroup">
+                 <string notr="true">e40</string>
+                </attribute>
+               </widget>
+              </item>
+              <item>
+               <widget class="QCheckBox" name="e40_n">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="text">
+                 <string>No</string>
+                </property>
+                <attribute name="buttonGroup">
+                 <string notr="true">e40</string>
+                </attribute>
+               </widget>
+              </item>
+              <item>
+               <widget class="QCheckBox" name="e40_na">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="text">
+                 <string>Not Applicable</string>
+                </property>
+                <attribute name="buttonGroup">
+                 <string notr="true">e40</string>
+                </attribute>
+               </widget>
+              </item>
+              <item>
+               <spacer name="horizontalSpacer">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <spacer name="verticalSpacer_4">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_18">
+            <item>
+             <widget class="QLabel" name="e122_label">
+              <property name="text">
+               <string>State, Tribe, or Country Code (E122)</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="e122">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="inputMask">
+               <string/>
+              </property>
+              <property name="maxLength">
+               <number>3</number>
+              </property>
+              <property name="placeholderText">
+               <string>###</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <widget class="QGroupBox" name="family_setting_provider_group_box">
+       <property name="title">
+        <string>Family Setting Provider Data</string>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_16">
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_15">
+          <item>
+           <widget class="QLabel" name="label_11">
+            <property name="text">
+             <string>&lt;i&gt;Check all that apply&lt;/i&gt;</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_5">
+            <item>
+             <widget class="QCheckBox" name="e114">
+              <property name="text">
+               <string>Licensed Family Foster Home (E114)</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="e115">
+              <property name="text">
+               <string>Therapeutic Foster Home (E115)</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="e116">
+              <property name="text">
+               <string>Shelter Care Foster Home (E116)</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="e118">
+              <property name="text">
+               <string>Pre-Adopt Home (E118)</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="Line" name="line">
+            <property name="frameShadow">
+             <enum>QFrame::Plain</enum>
+            </property>
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_20">
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_11">
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_12">
+              <item>
+               <widget class="QLabel" name="label_12">
+                <property name="text">
+                 <string>Marital Status of Foster Parent (E123)</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QComboBox" name="e123">
+                <property name="currentIndex">
+                 <number>-1</number>
+                </property>
+                <property name="placeholderText">
+                 <string>Select</string>
+                </property>
+                <item>
+                 <property name="text">
+                  <string>Married Couple</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Unmarried Couple</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Separated</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Single Adult</string>
+                 </property>
+                </item>
+               </widget>
+              </item>
+              <item>
+               <spacer name="horizontalSpacer_6">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <widget class="QGroupBox" name="foster_parent_1_group_box">
+              <property name="title">
+               <string>Foster Parent 1</string>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_12">
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout_10">
+                 <item>
+                  <widget class="QLabel" name="label_14">
+                   <property name="text">
+                    <string>Year of Birth (E125)</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLineEdit" name="e125">
+                   <property name="inputMask">
+                    <string/>
+                   </property>
+                   <property name="maxLength">
+                    <number>4</number>
+                   </property>
+                   <property name="placeholderText">
+                    <string>YYYY</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <spacer name="horizontalSpacer_8">
+                   <property name="orientation">
+                    <enum>Qt::Horizontal</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>40</width>
+                     <height>20</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                </layout>
+               </item>
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout_9">
+                 <item>
+                  <widget class="QLabel" name="label_15">
+                   <property name="text">
+                    <string>Sex (E135)</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <layout class="QHBoxLayout" name="horizontalLayout_8">
+                   <item>
+                    <widget class="QCheckBox" name="e135_m">
+                     <property name="text">
+                      <string>Male</string>
+                     </property>
+                     <attribute name="buttonGroup">
+                      <string notr="true">e135</string>
+                     </attribute>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QCheckBox" name="e135_f">
+                     <property name="text">
+                      <string>Female</string>
+                     </property>
+                     <attribute name="buttonGroup">
+                      <string notr="true">e135</string>
+                     </attribute>
+                    </widget>
+                   </item>
+                   <item>
+                    <spacer name="horizontalSpacer_9">
+                     <property name="orientation">
+                      <enum>Qt::Horizontal</enum>
+                     </property>
+                     <property name="sizeHint" stdset="0">
+                      <size>
+                       <width>40</width>
+                       <height>20</height>
+                      </size>
+                     </property>
+                    </spacer>
+                   </item>
+                  </layout>
+                 </item>
+                </layout>
+               </item>
+               <item>
+                <widget class="QLabel" name="label_16">
+                 <property name="text">
+                  <string>Race&lt;br/&gt;&lt;i&gt;Check all that apply&lt;/i&gt;</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <layout class="QVBoxLayout" name="verticalLayout_9">
+                 <item>
+                  <widget class="QCheckBox" name="e127">
+                   <property name="text">
+                    <string>American Indian or Alaska Native (E127)</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QCheckBox" name="e128">
+                   <property name="text">
+                    <string>Asian (E128)</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QCheckBox" name="e129">
+                   <property name="text">
+                    <string>Black or African American (E129)</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QCheckBox" name="e130">
+                   <property name="text">
+                    <string>Native Hawaiian or Other Pacific Islander (E130)</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QCheckBox" name="e131">
+                   <property name="text">
+                    <string>White (E131)</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QCheckBox" name="e132">
+                   <property name="text">
+                    <string>Unknown (E132)</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QCheckBox" name="e133">
+                   <property name="text">
+                    <string>Declined (E133)</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+               <item>
+                <widget class="QLabel" name="label_17">
+                 <property name="text">
+                  <string>Parent is of Hispanic or Latino Origin? (E134)</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout_6">
+                 <item>
+                  <widget class="QCheckBox" name="e134_y">
+                   <property name="text">
+                    <string>Yes</string>
+                   </property>
+                   <attribute name="buttonGroup">
+                    <string notr="true">e134</string>
+                   </attribute>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QCheckBox" name="e134_n">
+                   <property name="text">
+                    <string>No</string>
+                   </property>
+                   <attribute name="buttonGroup">
+                    <string notr="true">e134</string>
+                   </attribute>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QCheckBox" name="e134_u">
+                   <property name="text">
+                    <string>Unknown</string>
+                   </property>
+                   <attribute name="buttonGroup">
+                    <string notr="true">e134</string>
+                   </attribute>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QCheckBox" name="e134_d">
+                   <property name="text">
+                    <string>Declined</string>
+                   </property>
+                   <attribute name="buttonGroup">
+                    <string notr="true">e134</string>
+                   </attribute>
+                  </widget>
+                 </item>
+                 <item>
+                  <spacer name="horizontalSpacer_2">
+                   <property name="orientation">
+                    <enum>Qt::Horizontal</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>40</width>
+                     <height>20</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                </layout>
+               </item>
+               <item>
+                <widget class="QLabel" name="label_18">
+                 <property name="text">
+                  <string>Tribal Membership (E126)</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout_7">
+                 <item>
+                  <widget class="QCheckBox" name="e126_y">
+                   <property name="text">
+                    <string>Yes</string>
+                   </property>
+                   <attribute name="buttonGroup">
+                    <string notr="true">e126</string>
+                   </attribute>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QCheckBox" name="e126_n">
+                   <property name="text">
+                    <string>No</string>
+                   </property>
+                   <attribute name="buttonGroup">
+                    <string notr="true">e126</string>
+                   </attribute>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QCheckBox" name="e126_u">
+                   <property name="text">
+                    <string>Unknown</string>
+                   </property>
+                   <attribute name="buttonGroup">
+                    <string notr="true">e126</string>
+                   </attribute>
+                  </widget>
+                 </item>
+                 <item>
+                  <spacer name="horizontalSpacer_3">
+                   <property name="orientation">
+                    <enum>Qt::Horizontal</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>40</width>
+                     <height>20</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_14">
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_13">
+              <item>
+               <widget class="QLabel" name="label_13">
+                <property name="text">
+                 <string>Relationship to Child (E117, E119, E124)</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QComboBox" name="e124">
+                <property name="currentIndex">
+                 <number>-1</number>
+                </property>
+                <property name="placeholderText">
+                 <string>Select</string>
+                </property>
+                <item>
+                 <property name="text">
+                  <string>Relative</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Non-relative</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Kin</string>
+                 </property>
+                </item>
+               </widget>
+              </item>
+              <item>
+               <spacer name="horizontalSpacer_7">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <widget class="QGroupBox" name="foster_parent_2_group_box">
+              <property name="title">
+               <string>Foster Parent 2</string>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_13">
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout_16">
+                 <item>
+                  <widget class="QLabel" name="label_19">
+                   <property name="text">
+                    <string>Year of Birth (E136)</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLineEdit" name="e136">
+                   <property name="inputMask">
+                    <string/>
+                   </property>
+                   <property name="maxLength">
+                    <number>4</number>
+                   </property>
+                   <property name="placeholderText">
+                    <string>YYYY</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <spacer name="horizontalSpacer_11">
+                   <property name="orientation">
+                    <enum>Qt::Horizontal</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>40</width>
+                     <height>20</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                </layout>
+               </item>
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout_17">
+                 <item>
+                  <widget class="QLabel" name="label_20">
+                   <property name="text">
+                    <string>Sex (E146)</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <layout class="QHBoxLayout" name="horizontalLayout_18">
+                   <item>
+                    <widget class="QCheckBox" name="e146_m">
+                     <property name="text">
+                      <string>Male</string>
+                     </property>
+                     <attribute name="buttonGroup">
+                      <string notr="true">e146</string>
+                     </attribute>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QCheckBox" name="e146_f">
+                     <property name="text">
+                      <string>Female</string>
+                     </property>
+                     <attribute name="buttonGroup">
+                      <string notr="true">e146</string>
+                     </attribute>
+                    </widget>
+                   </item>
+                  </layout>
+                 </item>
+                 <item>
+                  <spacer name="horizontalSpacer_10">
+                   <property name="orientation">
+                    <enum>Qt::Horizontal</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>40</width>
+                     <height>20</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                </layout>
+               </item>
+               <item>
+                <widget class="QLabel" name="label_23">
+                 <property name="text">
+                  <string>Race&lt;br/&gt;&lt;i&gt;Check all that apply&lt;/i&gt;</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <layout class="QVBoxLayout" name="verticalLayout_10">
+                 <item>
+                  <widget class="QCheckBox" name="e138">
+                   <property name="text">
+                    <string>American Indian or Alaska Native (E138)</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QCheckBox" name="e139">
+                   <property name="text">
+                    <string>Asian (E139)</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QCheckBox" name="e140">
+                   <property name="text">
+                    <string>Black or African American (E140)</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QCheckBox" name="e141">
+                   <property name="text">
+                    <string>Native Hawaiian or Other Pacific Islander (E141)</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QCheckBox" name="e142">
+                   <property name="text">
+                    <string>White (E142)</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QCheckBox" name="e143">
+                   <property name="text">
+                    <string>Unknown (E143)</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QCheckBox" name="e144">
+                   <property name="text">
+                    <string>Declined (E144)</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+               <item>
+                <widget class="QLabel" name="label_22">
+                 <property name="text">
+                  <string>2nd parent is of Hispanic or Latino Origin? (E145)</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout_14">
+                 <item>
+                  <widget class="QCheckBox" name="e145_y">
+                   <property name="text">
+                    <string>Yes</string>
+                   </property>
+                   <attribute name="buttonGroup">
+                    <string notr="true">e145</string>
+                   </attribute>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QCheckBox" name="e145_n">
+                   <property name="text">
+                    <string>No</string>
+                   </property>
+                   <attribute name="buttonGroup">
+                    <string notr="true">e145</string>
+                   </attribute>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QCheckBox" name="e145_u">
+                   <property name="text">
+                    <string>Unknown</string>
+                   </property>
+                   <attribute name="buttonGroup">
+                    <string notr="true">e145</string>
+                   </attribute>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QCheckBox" name="e145_d">
+                   <property name="text">
+                    <string>Declined</string>
+                   </property>
+                   <attribute name="buttonGroup">
+                    <string notr="true">e145</string>
+                   </attribute>
+                  </widget>
+                 </item>
+                 <item>
+                  <spacer name="horizontalSpacer_4">
+                   <property name="orientation">
+                    <enum>Qt::Horizontal</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>40</width>
+                     <height>20</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                </layout>
+               </item>
+               <item>
+                <widget class="QLabel" name="label_21">
+                 <property name="text">
+                  <string>Tribal Membership (E137)</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout_19">
+                 <item>
+                  <widget class="QCheckBox" name="e137_y">
+                   <property name="text">
+                    <string>Yes</string>
+                   </property>
+                   <attribute name="buttonGroup">
+                    <string notr="true">e137</string>
+                   </attribute>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QCheckBox" name="e137_n">
+                   <property name="text">
+                    <string>No</string>
+                   </property>
+                   <attribute name="buttonGroup">
+                    <string notr="true">e137</string>
+                   </attribute>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QCheckBox" name="e137_u">
+                   <property name="text">
+                    <string>Unknown</string>
+                   </property>
+                   <attribute name="buttonGroup">
+                    <string notr="true">e137</string>
+                   </attribute>
+                  </widget>
+                 </item>
+                 <item>
+                  <spacer name="horizontalSpacer_5">
+                   <property name="orientation">
+                    <enum>Qt::Horizontal</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>40</width>
+                     <height>20</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <spacer name="verticalSpacer_5">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QVBoxLayout" name="verticalLayout_2">
+     <item>
+      <widget class="QPushButton" name="validate_button">
+       <property name="text">
+        <string>Validate</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="save_button">
+       <property name="text">
+        <string>Save</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="close_button">
+       <property name="text">
+        <string>Close</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="verticalSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <tabstops>
+  <tabstop>e112</tabstop>
+  <tabstop>e120</tabstop>
+  <tabstop>e58</tabstop>
+  <tabstop>e121</tabstop>
+  <tabstop>e40_y</tabstop>
+  <tabstop>e40_n</tabstop>
+  <tabstop>e40_na</tabstop>
+  <tabstop>e122</tabstop>
+  <tabstop>e114</tabstop>
+  <tabstop>e115</tabstop>
+  <tabstop>e116</tabstop>
+  <tabstop>e118</tabstop>
+  <tabstop>e123</tabstop>
+  <tabstop>e125</tabstop>
+  <tabstop>e135_m</tabstop>
+  <tabstop>e135_f</tabstop>
+  <tabstop>e127</tabstop>
+  <tabstop>e128</tabstop>
+  <tabstop>e129</tabstop>
+  <tabstop>e130</tabstop>
+  <tabstop>e131</tabstop>
+  <tabstop>e132</tabstop>
+  <tabstop>e133</tabstop>
+  <tabstop>e134_y</tabstop>
+  <tabstop>e134_n</tabstop>
+  <tabstop>e134_u</tabstop>
+  <tabstop>e134_d</tabstop>
+  <tabstop>e126_y</tabstop>
+  <tabstop>e126_n</tabstop>
+  <tabstop>e126_u</tabstop>
+  <tabstop>e124</tabstop>
+  <tabstop>e136</tabstop>
+  <tabstop>e146_m</tabstop>
+  <tabstop>e146_f</tabstop>
+  <tabstop>e138</tabstop>
+  <tabstop>e139</tabstop>
+  <tabstop>e140</tabstop>
+  <tabstop>e141</tabstop>
+  <tabstop>e142</tabstop>
+  <tabstop>e143</tabstop>
+  <tabstop>e144</tabstop>
+  <tabstop>e145_y</tabstop>
+  <tabstop>e145_n</tabstop>
+  <tabstop>e145_u</tabstop>
+  <tabstop>e145_d</tabstop>
+  <tabstop>e137_y</tabstop>
+  <tabstop>e137_n</tabstop>
+  <tabstop>e137_u</tabstop>
+  <tabstop>validate_button</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+ <buttongroups>
+  <buttongroup name="e126">
+   <property name="exclusive">
+    <bool>false</bool>
+   </property>
+  </buttongroup>
+  <buttongroup name="e145">
+   <property name="exclusive">
+    <bool>false</bool>
+   </property>
+  </buttongroup>
+  <buttongroup name="e137">
+   <property name="exclusive">
+    <bool>false</bool>
+   </property>
+  </buttongroup>
+  <buttongroup name="e40">
+   <property name="exclusive">
+    <bool>false</bool>
+   </property>
+  </buttongroup>
+  <buttongroup name="e134">
+   <property name="exclusive">
+    <bool>false</bool>
+   </property>
+  </buttongroup>
+  <buttongroup name="e146">
+   <property name="exclusive">
+    <bool>false</bool>
+   </property>
+  </buttongroup>
+  <buttongroup name="e135">
+   <property name="exclusive">
+    <bool>false</bool>
+   </property>
+  </buttongroup>
+ </buttongroups>
+</ui>

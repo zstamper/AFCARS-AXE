@@ -16,33 +16,33 @@
 from typing import Optional, Callable
 
 from PySide6.QtWidgets import QWidget, QTableWidgetItem
+from PySide6.QtCore import Qt
+from PySide6.QtWidgets import QAbstractItemView
 
 from model.models import FileType, Child, ChildName
 from . import BaseDialog
 
-
 def e120_to_str(v: int | None) -> str:
-    # FIXME: hmm... wonder if this should just be captured from the form?
-    mapper: dict = {0: 'Foster Family Home',
-                    1: 'Group home-family operated',
-                    2: 'Group home-staff operated',
-                    3: 'Group home-shelter care',
-                    4: 'Residential treatment center',
-                    5: 'Qualified residential treatment program',
-                    6: 'Child care institution',
-                    7: 'Child care institution-shelter care',
-                    8: 'Supervised independent living',
-                    9: 'Juvenile justice facility',
-                    10: 'Medical or rehabilitative facility',
-                    11: 'Psychiatric hospital',
-                    12: 'Runaway',
-                    13: 'Whereabouts unknown',
-                    14: 'Placed at home'
-                    }
+    mapper = {
+        0: 'Foster Family Home',
+        1: 'Group home-family operated',
+        2: 'Group home-staff operated',
+        3: 'Group home-shelter care',
+        4: 'Residential treatment center',
+        5: 'Qualified residential treatment program',
+        6: 'Child care institution',
+        7: 'Child care institution-shelter care',
+        8: 'Supervised independent living',
+        9: 'Juvenile justice facility',
+        10: 'Medical or rehabilitative facility',
+        11: 'Psychiatric hospital',
+        12: 'Runaway',
+        13: 'Whereabouts unknown',
+        14: 'Placed at home'
+    }
     if v is None or v not in mapper:
-        return mapper[0]
+        return ""
     return mapper[v]
-
 
 def e148_to_str(v: int | None) -> str:
     mapper: dict = {1: "Reunify with parent(s) or legal guardian(s)",
@@ -52,7 +52,7 @@ def e148_to_str(v: int | None) -> str:
                     5: "Planned permanent living arrangement"
                     }
     if v is None or v not in mapper:
-        return "unknown"
+        return "Unknown"
     return mapper[v]
 
 
@@ -104,6 +104,11 @@ class Removal2020Dialog(BaseDialog):
         self.on_edit_periodic_review: Optional[Callable] = None
         self.on_delete_periodic_review: Optional[Callable] = None
         self.settled: bool = False
+        self._has_sorted_living_arrangements = False
+        self._has_sorted_permanency_plans = False
+        self._has_sorted_case_worker_visits = False
+        self._has_sorted_periodic_reviews = False
+        self._has_sorted_permanency_hearings = False
 
     # ------------------------------------------------------------------------
 
@@ -209,16 +214,31 @@ class Removal2020Dialog(BaseDialog):
         self.ui.living_arrangements_table.setCurrentRow(v)
 
     def refresh_living_arrangements(self):
+        header = self.ui.living_arrangements_table.horizontalHeader()
+        sort_column = header.sortIndicatorSection()
+        sort_order = header.sortIndicatorOrder()
+        self.ui.living_arrangements_table.setSortingEnabled(False)
         while self.ui.living_arrangements_table.rowCount() > 0:
             self.ui.living_arrangements_table.removeRow(0)
         row = 0
         for data in self.living_arrangements:
             self.ui.living_arrangements_table.insertRow(row)
-            self.ui.living_arrangements_table.setItem(row, 0, QTableWidgetItem(str(data.e112)))
+            item = QTableWidgetItem(str(data.e112) if data.e112 not in [None] else '')
+            item.setData(Qt.UserRole, data)
+            self.ui.living_arrangements_table.setItem(row, 0, item)
             self.ui.living_arrangements_table.setItem(row, 1, QTableWidgetItem(e120_to_str(data.e120)))
-            self.ui.living_arrangements_table.setItem(row, 2, QTableWidgetItem(
-                data.last_updated.strftime("%m/%d/%Y %H:%M") if data.last_updated else ""))
+            self.ui.living_arrangements_table.setItem(
+                row, 2,
+                QTableWidgetItem(data.last_updated.strftime("%m/%d/%Y %H:%M") if data.last_updated else ""))
             row += 1
+        self.ui.living_arrangements_table.setSortingEnabled(True)
+        if not self._has_sorted_living_arrangements:
+            header.setSortIndicator(0, Qt.DescendingOrder)
+            self._has_sorted_living_arrangements = True
+        else:
+            header.setSortIndicator(sort_column, sort_order)
+        self.ui.living_arrangements_table.setColumnWidth(1, 250)
+        self.ui.living_arrangements_table.setColumnWidth(2, 130)
 
     # ----- Permanency Plan Automation ----------------------------------------
 
@@ -235,14 +255,31 @@ class Removal2020Dialog(BaseDialog):
             self.on_delete_permanency_plan(*args, **kwargs)
 
     def refresh_permanency_plans(self):
+        header = self.ui.permanency_plans_table.horizontalHeader()
+        sort_column = header.sortIndicatorSection()
+        sort_order = header.sortIndicatorOrder()
+        self.ui.permanency_plans_table.setSortingEnabled(False)
         while self.ui.permanency_plans_table.rowCount() > 0:
             self.ui.permanency_plans_table.removeRow(0)
-        row: int = 0
+        row = 0
         for data in self.permanency_plans:
             self.ui.permanency_plans_table.insertRow(row)
-            self.ui.permanency_plans_table.setItem(row, 0, QTableWidgetItem(str(data.e147)))
+            item = QTableWidgetItem(str(data.e147) if data.e147 not in [None] else '')
+            item.setData(Qt.UserRole, data)
+            self.ui.permanency_plans_table.setItem(row, 0, item)
             self.ui.permanency_plans_table.setItem(row, 1, QTableWidgetItem(e148_to_str(data.e148)))
+            self.ui.permanency_plans_table.setItem(
+                row, 2,
+                QTableWidgetItem(data.last_updated.strftime("%m/%d/%Y %H:%M") if data.last_updated else ""))
             row += 1
+        self.ui.permanency_plans_table.setSortingEnabled(True)
+        if not self._has_sorted_permanency_plans:
+            header.setSortIndicator(0, Qt.DescendingOrder)
+            self._has_sorted_permanency_plans = True
+        else:
+            header.setSortIndicator(sort_column, sort_order)
+        self.ui.permanency_plans_table.setColumnWidth(1, 260)
+        self.ui.permanency_plans_table.setColumnWidth(2, 130)
 
     @property
     def permanency_plan_current_row(self) -> int:
@@ -252,7 +289,7 @@ class Removal2020Dialog(BaseDialog):
     def permanency_plan_current_row(self, v: int) -> None:
         self.ui.permanency_plans_table.setCurrentRow(v)
 
-    # ----- Case Visit Automation ---------------------------------------------
+    # ----- Caseworker Visit Automation ---------------------------------------------
 
     def _on_add_case_worker_visit(self, *args, **kwargs) -> None:
         if self.on_add_case_worker_visit:
@@ -267,14 +304,31 @@ class Removal2020Dialog(BaseDialog):
             self.on_delete_case_worker_visit(*args, **kwargs)
 
     def refresh_case_worker_visits(self):
+        header = self.ui.case_visits_table.horizontalHeader()
+        sort_column = header.sortIndicatorSection()
+        sort_order = header.sortIndicatorOrder()
+        self.ui.case_visits_table.setSortingEnabled(False)
         while self.ui.case_visits_table.rowCount() > 0:
             self.ui.case_visits_table.removeRow(0)
-        row: int = 0
+        row = 0
         for data in self.case_worker_visits:
             self.ui.case_visits_table.insertRow(row)
-            self.ui.case_visits_table.setItem(row, 0, QTableWidgetItem(str(data.e151)))
+            item = QTableWidgetItem(str(data.e151) if data.e151 not in [None] else '')
+            item.setData(Qt.UserRole, data)
+            self.ui.case_visits_table.setItem(row, 0, item)
             self.ui.case_visits_table.setItem(row, 1, QTableWidgetItem(e152_to_str(data.e152)))
+            self.ui.case_visits_table.setItem(
+                row, 2,
+                QTableWidgetItem(data.last_updated.strftime("%m/%d/%Y %H:%M") if data.last_updated else ""))
             row += 1
+        self.ui.case_visits_table.setSortingEnabled(True)
+        if not self._has_sorted_case_worker_visits:
+            header.setSortIndicator(0, Qt.DescendingOrder)
+            self._has_sorted_case_worker_visits = True
+        else:
+            header.setSortIndicator(sort_column, sort_order)
+        self.ui.case_visits_table.setColumnWidth(1, 130)
+        self.ui.case_visits_table.setColumnWidth(2, 130)
 
     @property
     def case_worker_visit_current_row(self) -> int:
@@ -299,13 +353,30 @@ class Removal2020Dialog(BaseDialog):
             self.on_delete_permanency_hearing(*args, **kwargs)
 
     def refresh_permanency_hearings(self):
+        header = self.ui.permanency_hearings_table.horizontalHeader()
+        sort_column = header.sortIndicatorSection()
+        sort_order = header.sortIndicatorOrder()
+        self.ui.permanency_hearings_table.setSortingEnabled(False)
         while self.ui.permanency_hearings_table.rowCount() > 0:
             self.ui.permanency_hearings_table.removeRow(0)
-        row: int = 0
+        row = 0
         for data in self.permanency_hearings:
             self.ui.permanency_hearings_table.insertRow(row)
-            self.ui.permanency_hearings_table.setItem(row, 0, QTableWidgetItem(str(data.e150)))
+            item = QTableWidgetItem(str(data.e150) if data.e150 not in [None] else '')
+            item.setData(Qt.UserRole, data)
+            self.ui.permanency_hearings_table.setItem(row, 0, item)
+            self.ui.permanency_hearings_table.setItem(
+                row, 1,
+                QTableWidgetItem(data.last_updated.strftime("%m/%d/%Y %H:%M") if data.last_updated else ""))
             row += 1
+        self.ui.permanency_hearings_table.setSortingEnabled(True)
+        if not self._has_sorted_permanency_hearings:
+            header.setSortIndicator(0, Qt.DescendingOrder)
+            self._has_sorted_permanency_hearings = True
+        else:
+            header.setSortIndicator(sort_column, sort_order)
+        self.ui.permanency_hearings_table.setColumnWidth(0, 130)
+        self.ui.permanency_hearings_table.setColumnWidth(1, 130)
 
     @property
     def permanency_hearings_current_row(self) -> int:
@@ -315,7 +386,7 @@ class Removal2020Dialog(BaseDialog):
     def permanency_hearings_current_row(self, v: int) -> None:
         self.ui.permanency_hearings_table.setCurrentRow(v)
 
-    # ----- Period Review Automation ------------------------------------------
+    # ----- Periodic Review Automation ------------------------------------------
 
     def _on_add_periodic_review(self, *args, **kwargs):
         if self.on_add_periodic_review:
@@ -330,13 +401,30 @@ class Removal2020Dialog(BaseDialog):
             self.on_delete_periodic_review(*args, **kwargs)
 
     def refresh_periodic_reviews(self):
+        header = self.ui.periodic_reviews_table.horizontalHeader()
+        sort_column = header.sortIndicatorSection()
+        sort_order = header.sortIndicatorOrder()
+        self.ui.periodic_reviews_table.setSortingEnabled(False)
         while self.ui.periodic_reviews_table.rowCount() > 0:
             self.ui.periodic_reviews_table.removeRow(0)
-        row: int = 0
+        row = 0
         for data in self.periodic_reviews:
             self.ui.periodic_reviews_table.insertRow(row)
-            self.ui.periodic_reviews_table.setItem(row, 0, QTableWidgetItem(str(data.e149)))
+            item = QTableWidgetItem(str(data.e149) if data.e149 not in [None] else '')
+            item.setData(Qt.UserRole, data)
+            self.ui.periodic_reviews_table.setItem(row, 0, item)
+            self.ui.periodic_reviews_table.setItem(
+                row, 1,
+                QTableWidgetItem(data.last_updated.strftime("%m/%d/%Y %H:%M") if data.last_updated else ""))
             row += 1
+        self.ui.periodic_reviews_table.setSortingEnabled(True)
+        if not self._has_sorted_periodic_reviews:
+            header.setSortIndicator(0, Qt.DescendingOrder)
+            self._has_sorted_periodic_reviews = True
+        else:
+            header.setSortIndicator(sort_column, sort_order)
+        self.ui.periodic_reviews_table.setColumnWidth(0, 130)
+        self.ui.periodic_reviews_table.setColumnWidth(1, 130)
 
     @property
     def periodic_reviews_current_row(self) -> int:
@@ -732,32 +820,32 @@ class Removal2020Dialog(BaseDialog):
         self._set_combobox_selection(self.ui.e157, v, -1)
 
     @property
-    def e158(self) -> int:
-        return 1 if self.ui.e158.isChecked() else 0
+    def e158(self) -> int | None:
+        return None if not self.ui.e158.isEnabled() else 1 if self.ui.e158.isChecked() else 0
 
     @e158.setter
     def e158(self, v: int) -> None:
         self.ui.e158.setChecked(v == 1)
 
     @property
-    def e159(self) -> int:
-        return 1 if self.ui.e159.isChecked() else 0
+    def e159(self) -> int | None:
+        return None if not self.ui.e159.isEnabled() else 1 if self.ui.e159.isChecked() else 0
 
     @e159.setter
     def e159(self, v: int) -> None:
         self.ui.e159.setChecked(v == 1)
 
     @property
-    def e160(self) -> int:
-        return 1 if self.ui.e160.isChecked() else 0
+    def e160(self) -> int | None:
+        return None if not self.ui.e160.isEnabled() else 1 if self.ui.e160.isChecked() else 0
 
     @e160.setter
     def e160(self, v: int) -> None:
         self.ui.e160.setChecked(v == 1)
 
     @property
-    def e161(self) -> int:
-        return 1 if self.ui.e161.isChecked() else 0
+    def e161(self) -> int | None:
+        return None if not self.ui.e161.isEnabled() else 1 if self.ui.e161.isChecked() else 0
 
     @e161.setter
     def e161(self, v: int) -> None:
@@ -778,58 +866,58 @@ class Removal2020Dialog(BaseDialog):
     @e163.setter
     def e163(self, v: int) -> None:
         self._set_radio_button(self.ui.e163, v)
-
+   
     @property
-    def e164(self) -> int:
-        return 1 if self.ui.e164.isChecked() else 0
+    def e164(self) -> int | None:
+        return None if not self.ui.e164.isEnabled() else 1 if self.ui.e164.isChecked() else 0
 
     @e164.setter
     def e164(self, v: int) -> None:
         self.ui.e164.setChecked(v == 1)
 
     @property
-    def e165(self) -> int:
-        return 1 if self.ui.e165.isChecked() else 0
+    def e165(self) -> int | None:
+        return None if not self.ui.e165.isEnabled() else 1 if self.ui.e165.isChecked() else 0
 
     @e165.setter
     def e165(self, v: int) -> None:
         self.ui.e165.setChecked(v == 1)
 
     @property
-    def e166(self) -> int:
-        return 1 if self.ui.e166.isChecked() else 0
+    def e166(self) -> int | None:
+        return None if not self.ui.e166.isEnabled() else 1 if self.ui.e166.isChecked() else 0
 
     @e166.setter
     def e166(self, v: int) -> None:
         self.ui.e166.setChecked(v == 1)
 
     @property
-    def e167(self) -> int:
-        return 1 if self.ui.e167.isChecked() else 0
+    def e167(self) -> int | None:
+        return None if not self.ui.e167.isEnabled() else 1 if self.ui.e167.isChecked() else 0
 
     @e167.setter
     def e167(self, v: int) -> None:
         self.ui.e167.setChecked(v == 1)
 
     @property
-    def e168(self) -> int:
-        return 1 if self.ui.e168.isChecked() else 0
+    def e168(self) -> int | None:
+        return None if not self.ui.e168.isEnabled() else 1 if self.ui.e168.isChecked() else 0
 
     @e168.setter
     def e168(self, v: int) -> None:
         self.ui.e168.setChecked(v == 1)
 
     @property
-    def e169(self) -> int:
-        return 1 if self.ui.e169.isChecked() else 0
+    def e169(self) -> int | None:
+        return None if not self.ui.e169.isEnabled() else 1 if self.ui.e169.isChecked() else 0
 
     @e169.setter
     def e169(self, v: int) -> None:
         self.ui.e169.setChecked(v == 1)
 
     @property
-    def e170(self) -> int:
-        return 1 if self.ui.e170.isChecked() else 0
+    def e170(self) -> int | None:
+        return None if not self.ui.e170.isEnabled() else 1 if self.ui.e170.isChecked() else 0
 
     @e170.setter
     def e170(self, v: int) -> None:

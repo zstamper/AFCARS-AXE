@@ -565,7 +565,7 @@
      </widget>
      <widget class="QWidget" name="permanency_tab">
       <attribute name="title">
-       <string>Permanency Plans</string>
+       <string>Permanency Plan</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_4">
        <item row="0" column="0">
@@ -593,11 +593,6 @@
             <column>
              <property name="text">
               <string>Goal</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>Last Updated</string>
              </property>
             </column>
            </widget>
@@ -656,7 +651,7 @@
      </widget>
      <widget class="QWidget" name="tab_2">
       <attribute name="title">
-       <string>Caseworker Visits</string>
+       <string>Caseworker Visit</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_5">
        <item row="0" column="0">
@@ -684,11 +679,6 @@
             <column>
              <property name="text">
               <string>Location</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>Last Updated</string>
              </property>
             </column>
            </widget>
@@ -747,7 +737,7 @@
      </widget>
      <widget class="QWidget" name="tab_3">
       <attribute name="title">
-       <string>Permanency Hearings</string>
+       <string>Permanency Hearing</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_6">
        <item row="0" column="0">
@@ -770,11 +760,6 @@
             <column>
              <property name="text">
               <string>Hearing Date</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>Last Updated</string>
              </property>
             </column>
            </widget>
@@ -833,7 +818,7 @@
      </widget>
      <widget class="QWidget" name="tab_4">
       <attribute name="title">
-       <string>Periodic Reviews</string>
+       <string>Periodic Review</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_7">
        <item row="0" column="0">
@@ -856,11 +841,6 @@
             <column>
              <property name="text">
               <string>Review Date</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>Last Updated</string>
              </property>
             </column>
            </widget>

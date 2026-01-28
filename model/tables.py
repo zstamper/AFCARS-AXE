@@ -16,7 +16,7 @@
 import datetime
 import logging
 
-from peewee import Model, SqliteDatabase, TextField, ForeignKeyField, AutoField, Field, DateField, IntegerField
+from peewee import Model, SqliteDatabase, TextField, ForeignKeyField, AutoField, Field, DateField, IntegerField, DateTimeField
 from playhouse.sqlite_ext import JSONField
 
 from .models import (Child, Context, Tribe, State, FileType, BaseChild, ReportType)
@@ -124,6 +124,8 @@ class BaseChildTable(BaseModel):
     last_removal = DateField(null=True, formats=['%Y%m%d', '%m/%d/%Y', '%Y-%m-%d'])
     last_adoption = DateField(null=True, formats=['%Y%m%d', '%m/%d/%Y', '%Y-%m-%d'])
     last_termination = DateField(null=True, formats=['%Y%m%d', '%m/%d/%Y', '%Y-%m-%d'])
+    last_updated_ooh = DateTimeField(null=True)
+    last_updated_a = DateTimeField(null=True)
 
     # contexts = JSONField(json_loads=context_dict_loads, json_dumps=context_dict_dumps)
 
@@ -183,14 +185,15 @@ class ContextTable(BaseModel):
             if ooh:
                 removals2020 = getattr(ooh, 'removals2020', [])
                 if not removals2020:
-                    raise StructureValidationError('At least one removal after October 1, 2022 is required.')
+                    raise StructureValidationError('At least one removal after October 1, 2022 (2020 Removal) is required.')
                 for removal in removals2020:
                     living_arrangements = getattr(removal, 'living_arrangements', False)
                     if not living_arrangements:
                         raise StructureValidationError(
-                            'Each removal after October 1, 2022 must have at least one Living Arrangement.')
+                            'Each removal after October 1, 2022 (2020 Removal) must have at least one Living Arrangement.')
             self.ooh_error = None
         except StructureValidationError as sve:
+            print("Validation error triggered:", sve.args[0])
             self.ooh_error = sve.args[0]
 
 

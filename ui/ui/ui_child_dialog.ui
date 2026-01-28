@@ -179,11 +179,6 @@
          <string>Last Exit</string>
         </property>
        </column>
-       <column>
-        <property name="text">
-         <string>Last Updated</string>
-        </property>
-       </column>
       </widget>
      </item>
     </layout>

@@ -13,6 +13,7 @@
 # You should have received a copy of the GNU General Public License along with
 # AXE. If not, see <https://www.gnu.org/licenses/>.
 
+import datetime
 from typing import Optional, Callable
 
 from dialogs import BaseDialog
@@ -35,6 +36,7 @@ class Parent2Dialog(BaseDialog):
         self.ooh_id: int | None = None
         self.relaxed_rules: bool = relaxed_rules
         self.ui = self.load_ui('ui_parent2tpr.ui')
+        self.last_updated: Optional[datetime.datetime] = None
 
         self._wire_ui()
         self.ui.adjustSize()

@@ -29,7 +29,7 @@ class LivingArrangementDialog(BaseDialog):
         self._e113 = None
         self._e39 = None
         self.file_type: FileType = FileType.PRODUCTION
-        self.last_updated: Optional[datetime.datetime] = None
+        self.last_updated: Optional[datetime.datetime] = None #Now handled in living arrangement controller
         self._wire_ui()
         self.setLayout(self.ui.layout())
         self.setFixedSize(self.ui.size())
@@ -164,7 +164,6 @@ class LivingArrangementDialog(BaseDialog):
             self.on_validate()
 
     def save_button_clicked(self):
-        self.last_updated = datetime.datetime.now()
         if self.on_save:
             self.on_save()
 
@@ -181,6 +180,11 @@ class LivingArrangementDialog(BaseDialog):
         self._e39 = v
         if v == 0:
             self.e40 = 9
+            for button in self.ui.e40.buttons():
+                button.setEnabled(False)
+            self.ui.e40_label.setEnabled(False)
+        elif v is None:
+            self.e40 = None
             for button in self.ui.e40.buttons():
                 button.setEnabled(False)
             self.ui.e40_label.setEnabled(False)
@@ -215,7 +219,9 @@ class LivingArrangementDialog(BaseDialog):
         self.setWindowTitle(f"Living Arrangement: {str(self._child_name)}")
 
     @property
-    def e40(self) -> int:
+    def e40(self) -> int | None:
+        if self.e39 is None:
+            return None
         return self._get_radio_button(self.ui.e40)
 
     @e40.setter
@@ -242,8 +248,11 @@ class LivingArrangementDialog(BaseDialog):
         self._set_int_field(self.ui.e112, v)
 
     @property
-    def e113(self) -> int:
-        return 1 if self._get_combobox_selection(self.ui.e120) == 0 else 0
+    def e113(self) -> int | None:
+        idx = self._get_combobox_selection(self.ui.e120)
+        if idx is None:
+            return None
+        return 1 if idx == 0 else 0
 
     @e113.setter
     def e113(self, v: int) -> None:
@@ -253,31 +262,33 @@ class LivingArrangementDialog(BaseDialog):
         self._e113_changed()
 
     @property
-    def e114(self) -> int:
-        return 1 if self.ui.e114.isChecked() else 0
+    def e114(self) -> int | None:
+        return None if not self.ui.e114.isEnabled() else 1 if self.ui.e114.isChecked() else 0
 
     @e114.setter
     def e114(self, v: int):
         self.ui.e114.setChecked(v == 1)
 
     @property
-    def e115(self) -> int:
-        return 1 if self.ui.e115.isChecked() else 0
+    def e115(self) -> int | None:
+        return None if not self.ui.e115.isEnabled() else 1 if self.ui.e115.isChecked() else 0
 
     @e115.setter
     def e115(self, v: int):
         self.ui.e115.setChecked(v == 1)
 
     @property
-    def e116(self) -> int:
-        return 1 if self.ui.e116.isChecked() else 0
+    def e116(self) -> int | None:
+        return None if not self.ui.e116.isEnabled() else 1 if self.ui.e116.isChecked() else 0
 
     @e116.setter
     def e116(self, v: int):
         self.ui.e116.setChecked(v == 1)
 
     @property
-    def e117(self) -> int:
+    def e117(self) -> int | None:
+        if not self.ui.e124.isEnabled():
+            return None
         return 1 if self.ui.e124.currentText() == 'Relative' else 0
 
     @e117.setter
@@ -287,15 +298,17 @@ class LivingArrangementDialog(BaseDialog):
         pass
 
     @property
-    def e118(self) -> int:
-        return 1 if self.ui.e118.isChecked() else 0
+    def e118(self) -> int | None:
+        return None if not self.ui.e118.isEnabled() else 1 if self.ui.e118.isChecked() else 0
 
     @e118.setter
     def e118(self, v: int) -> None:
         self.ui.e118.setChecked(v == 1)
 
     @property
-    def e119(self) -> int:
+    def e119(self) -> int | None:
+        if not self.ui.e124.isEnabled():
+            return None
         return 1 if self.ui.e124.currentText() == 'Kin' else 0
 
     @e119.setter
@@ -304,8 +317,7 @@ class LivingArrangementDialog(BaseDialog):
 
     @property
     def e120(self) -> int | None:
-        idx = self._get_combobox_selection(self.ui.e120)
-        return idx if idx is not None and idx > 0 else None
+        return self._get_combobox_selection(self.ui.e120)
 
     @e120.setter
     def e120(self, v: int) -> None:
@@ -368,56 +380,56 @@ class LivingArrangementDialog(BaseDialog):
         self._set_radio_button(self.ui.e126, v)
 
     @property
-    def e127(self) -> int:
-        return 1 if self.ui.e127.isChecked() else 0
+    def e127(self) -> int | None:
+        return None if not self.ui.e127.isEnabled() else 1 if self.ui.e127.isChecked() else 0
 
     @e127.setter
     def e127(self, v: int) -> None:
         self.ui.e127.setChecked(v == 1)
 
     @property
-    def e128(self) -> int:
-        return 1 if self.ui.e128.isChecked() else 0
+    def e128(self) -> int | None:
+        return None if not self.ui.e128.isEnabled() else 1 if self.ui.e128.isChecked() else 0
 
     @e128.setter
     def e128(self, v: int) -> None:
         self.ui.e128.setChecked(v == 1)
 
     @property
-    def e129(self) -> int:
-        return 1 if self.ui.e129.isChecked() else 0
+    def e129(self) -> int | None:
+        return None if not self.ui.e129.isEnabled() else 1 if self.ui.e129.isChecked() else 0
 
     @e129.setter
     def e129(self, v: int) -> None:
         self.ui.e129.setChecked(v == 1)
 
     @property
-    def e130(self) -> int:
-        return 1 if self.ui.e130.isChecked() else 0
+    def e130(self) -> int | None:
+        return None if not self.ui.e130.isEnabled() else 1 if self.ui.e130.isChecked() else 0
 
     @e130.setter
     def e130(self, v: int) -> None:
         self.ui.e130.setChecked(v == 1)
 
     @property
-    def e131(self) -> int:
-        return 1 if self.ui.e131.isChecked() else 0
+    def e131(self) -> int | None:
+        return None if not self.ui.e131.isEnabled() else 1 if self.ui.e131.isChecked() else 0
 
     @e131.setter
     def e131(self, v: int) -> None:
         self.ui.e131.setChecked(v == 1)
 
     @property
-    def e132(self) -> int:
-        return 1 if self.ui.e132.isChecked() else 0
+    def e132(self) -> int | None:
+        return None if not self.ui.e132.isEnabled() else 1 if self.ui.e132.isChecked() else 0
 
     @e132.setter
     def e132(self, v: int) -> None:
         self.ui.e132.setChecked(v == 1)
 
     @property
-    def e133(self) -> int:
-        return 1 if self.ui.e133.isChecked() else 0
+    def e133(self) -> int | None:
+        return None if not self.ui.e133.isEnabled() else 1 if self.ui.e133.isChecked() else 0
 
     @e133.setter
     def e133(self, v: int) -> None:
@@ -456,56 +468,56 @@ class LivingArrangementDialog(BaseDialog):
         self._set_radio_button(self.ui.e137, v)
 
     @property
-    def e138(self) -> int:
-        return 1 if self.ui.e138.isChecked() else 0
+    def e138(self) -> int | None:
+        return None if not self.ui.e138.isEnabled() else 1 if self.ui.e138.isChecked() else 0
 
     @e138.setter
     def e138(self, v: int) -> None:
         self.ui.e138.setChecked(v == 1)
 
     @property
-    def e139(self) -> int:
-        return 1 if self.ui.e139.isChecked() else 0
+    def e139(self) -> int | None:
+        return None if not self.ui.e139.isEnabled() else 1 if self.ui.e139.isChecked() else 0
 
     @e139.setter
     def e139(self, v: int) -> None:
         self.ui.e139.setChecked(v == 1)
 
     @property
-    def e140(self) -> int:
-        return 1 if self.ui.e140.isChecked() else 0
+    def e140(self) -> int | None:
+        return None if not self.ui.e140.isEnabled() else 1 if self.ui.e140.isChecked() else 0
 
     @e140.setter
     def e140(self, v: int) -> None:
         self.ui.e140.setChecked(v == 1)
 
     @property
-    def e141(self) -> int:
-        return 1 if self.ui.e141.isChecked() else 0
+    def e141(self) -> int | None:
+        return None if not self.ui.e141.isEnabled() else 1 if self.ui.e141.isChecked() else 0
 
     @e141.setter
     def e141(self, v: int) -> None:
         self.ui.e141.setChecked(v == 1)
 
     @property
-    def e142(self) -> int:
-        return 1 if self.ui.e142.isChecked() else 0
+    def e142(self) -> int | None:
+        return None if not self.ui.e142.isEnabled() else 1 if self.ui.e142.isChecked() else 0
 
     @e142.setter
     def e142(self, v: int) -> None:
         self.ui.e142.setChecked(v == 1)
 
     @property
-    def e143(self) -> int:
-        return 1 if self.ui.e143.isChecked() else 0
+    def e143(self) -> int | None:
+        return None if not self.ui.e143.isEnabled() else 1 if self.ui.e143.isChecked() else 0
 
     @e143.setter
     def e143(self, v: int) -> None:
         self.ui.e143.setChecked(v == 1)
 
     @property
-    def e144(self) -> int:
-        return 1 if self.ui.e144.isChecked() else 0
+    def e144(self) -> int | None:
+        return None if not self.ui.e144.isEnabled() else 1 if self.ui.e144.isChecked() else 0
 
     @e144.setter
     def e144(self, v: int) -> None:

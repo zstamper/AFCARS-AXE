@@ -2340,12 +2340,7 @@
               </column>
               <column>
                <property name="text">
-                <string>Terminated or Modified Date</string>
-               </property>
-              </column>
-              <column>
-               <property name="text">
-                <string>Last Updated</string>
+                <string>Modified Date</string>
                </property>
               </column>
              </widget>
@@ -3343,6 +3338,12 @@ Leave blank if law enforcement was not notified.&lt;/i&gt;</string>
               <property name="selectionBehavior">
                <enum>QAbstractItemView::SelectRows</enum>
               </property>
+              <attribute name="verticalHeaderVisible">
+               <bool>false</bool>
+              </attribute>
+              <attribute name="verticalHeaderHighlightSections">
+               <bool>false</bool>
+              </attribute>
               <column>
                <property name="text">
                 <string>Date of Removal</string>
@@ -3356,11 +3357,6 @@ Leave blank if law enforcement was not notified.&lt;/i&gt;</string>
               <column>
                <property name="text">
                 <string>Exit Reason</string>
-               </property>
-              </column>
-              <column>
-               <property name="text">
-                <string>Last Updated</string>
                </property>
               </column>
              </widget>
@@ -3448,11 +3444,6 @@ Leave blank if law enforcement was not notified.&lt;/i&gt;</string>
               <column>
                <property name="text">
                 <string>Exit Reason</string>
-               </property>
-              </column>
-              <column>
-               <property name="text">
-                <string>Last Updated</string>
                </property>
               </column>
              </widget>

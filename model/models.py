@@ -106,9 +106,9 @@ class MyBaseModel(BaseModel):
         d = {}
         for fld in cls.model_fields:
             try:
-                if hasattr(obj, fld) and isinstance(getattr(obj, fld), list) or isinstance(getattr(obj, fld),
+                if hasattr(obj, fld) and (isinstance(getattr(obj, fld), list) or isinstance(getattr(obj, fld),
                                                                                            cls.model_fields[
-                                                                                               fld].annotation):
+                                                                                               fld].annotation)):
                     d[fld] = getattr(obj, fld)
             except TypeError as te:
                 print(f"crib error: {te}, {te.args}, {fld}, {cls.model_fields[fld].annotation}")
@@ -147,6 +147,7 @@ class State(MyBaseModel):
 class Removal1993(MyBaseModel):
     # id: int | None = Field(default=None)
     # ooh_id: int | None
+    last_updated: datetime | None = Field(default=None)
     e69: int | None = Field(default=None)
     e153: int | None = Field(default=None)
     e155: int | None = Field(default=None)
@@ -186,6 +187,7 @@ class Removal1993(MyBaseModel):
 class PermanencyPlan(MyBaseModel):
     # id: int | None = Field(default=None)
     # removal_id: int | None
+    last_updated: datetime | None = Field(default=None)
     e147: int | None = Field(default=None)
     e148: int | None = Field(default=None)
 
@@ -193,18 +195,21 @@ class PermanencyPlan(MyBaseModel):
 class PermanencyHearing(MyBaseModel):
     # id: int | None = Field(default=None)
     # removal_id: int | None
+    last_updated: datetime | None = Field(default=None)
     e150: int | None = Field(default=None)
 
 
 class PeriodicReview(MyBaseModel):
     # id: int | None = Field(default=None)
     # removal_id: int | None
+    last_updated: datetime | None = Field(default=None)
     e149: int | None = Field(default=None)
 
 
 class CaseVisit(MyBaseModel):
     # id: int | None
     # removal_id: int | None
+    last_updated: datetime | None = Field(default=None)
     e151: int | None = Field(default=None)
     e152: int | None = Field(default=None)
 
@@ -255,6 +260,7 @@ class LivingArrangement(MyBaseModel):
 class Removal2020(MyBaseModel):
     # id: int | None = Field(default=None)
     # ooh_id: int | None
+    last_updated: datetime | None = Field(default=None)
     e3: str | None = Field(default=None)
     e69: int | None = Field(default=None)
     e70: int | None = Field(default=None)
@@ -337,6 +343,7 @@ class Removal2020(MyBaseModel):
 class SecondParent(MyBaseModel):
     # id: int | None = Field(default=None)
     # ooh_id: int | None
+    last_updated: datetime | None = Field(default=None)
     number: int = Field(default=0)
     e64: int | None = Field(default=None)
     e66: int | None = Field(default=None)
@@ -346,7 +353,7 @@ class SecondParent(MyBaseModel):
         super().__init__(**data)
 
     def e64_as_str(self) -> str:
-        return {0: 'Not Applicable', 1: 'Voluntary', 2: 'Involuntary'}[self.e64]
+        return {0: 'Not Applicable', 1: 'Voluntary', 2: 'Involuntary'}.get(self.e64, '')
 
 
 class RecognizedTribe(MyBaseModel):
@@ -471,6 +478,8 @@ class BaseChild(MyBaseModel):
     last_adoption: date | None = Field(default=None)
     last_exit: date | None = Field(default=None)
     last_termination: date | None = Field(default=None)
+    last_updated_ooh: datetime | None = Field(default=None)
+    last_updated_a: datetime | None = Field(default=None)
     e1: str | None = Field(default=None)
     e4: str | None = Field(default=None)
     e5: date | None = Field(default=None)

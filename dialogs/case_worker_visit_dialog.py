@@ -13,6 +13,7 @@
 # You should have received a copy of the GNU General Public License along with
 # AXE. If not, see <https://www.gnu.org/licenses/>.
 
+import datetime
 from typing import Optional, Callable
 
 from PySide6.QtWidgets import QWidget
@@ -31,11 +32,13 @@ class CaseVisitDialog(BaseDialog):
         self.setLayout(self.ui.layout())
         self.setFixedSize(self.ui.size())
         self.file_type: FileType = FileType.PRODUCTION
+        self.last_updated: Optional[datetime.datetime] = None
         self.id: int | None = None
         self.removal_id: int | None = None
         self._child_name: ChildName = ChildName()
         self.on_validate: Optional[Callable] = None
         self.on_save: Optional[Callable] = None
+        self.on_save_and_add: Optional[Callable] = None
         self.on_close: Optional[Callable] = None
 
     def clear(self, exclude: list[str] = None) -> None:
@@ -46,6 +49,7 @@ class CaseVisitDialog(BaseDialog):
         self.setModal(True)
         self.ui.validate_button.clicked.connect(self.validate_button_clicked)
         self.ui.save_button.clicked.connect(self.save_button_clicked)
+        self.ui.save_and_add_button.clicked.connect(self.save_and_add_button_clicked)
         self.ui.close_button.clicked.connect(self.close_button_clicked)
 
     def validate_button_clicked(self):
@@ -53,6 +57,10 @@ class CaseVisitDialog(BaseDialog):
 
     def save_button_clicked(self):
         self.on_save() if self.on_save else None
+
+    def save_and_add_button_clicked(self):
+        if self.on_save_and_add:
+            self.on_save_and_add()
 
     def close_button_clicked(self):
         if self.on_close and not self.on_close():
@@ -66,7 +74,7 @@ class CaseVisitDialog(BaseDialog):
     @child_name.setter
     def child_name(self, v: ChildName) -> None:
         self._child_name = v
-        self.setWindowTitle(f"Case Worker Visit: {str(self._child_name)}")
+        self.setWindowTitle(f"Caseworker Visit: {str(self._child_name)}")
 
     @property
     def e151(self) -> int | None:

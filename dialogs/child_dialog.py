@@ -14,7 +14,7 @@
 # AXE. If not, see <https://www.gnu.org/licenses/>.
 
 from typing import Callable, Optional
-
+from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QTableWidgetItem, QWidget
 
 from dialogs import BaseDialog
@@ -44,6 +44,7 @@ class ChildDialog(BaseDialog):
         self.on_edit: Optional[Callable] = None
         self.on_delete: Optional[Callable] = None
         self.on_refresh_data: Optional[Callable] = None
+        self._child_table_sorted_once = False
 
     def _wire_ui(self):
         self.ui.add_child.clicked.connect(self._on_add_clicked)
@@ -55,6 +56,7 @@ class ChildDialog(BaseDialog):
         self.ui.filter_all.clicked.connect(self._refresh_data)
         self.ui.filter_ooh.clicked.connect(self._refresh_data)
         self.ui.close_button.clicked.connect(self.close)
+        self.ui.child_table.setSortingEnabled(True)
 
     def _on_add_clicked(self, *args, **kwargs):
         if self.on_add:
@@ -163,18 +165,24 @@ class ChildDialog(BaseDialog):
     @property
     def current_child(self) -> BaseChild:
         current_row = self.ui.child_table.currentRow()
-        if 0 <= current_row < len(self.child_data):
-            return self.child_data[self.ui.child_table.currentRow()]
+        item = self.ui.child_table.item(current_row, 0)
+        if item is not None:
+            return item.data(Qt.UserRole)
 
     def refresh_child_data(self):
+        header = self.ui.child_table.horizontalHeader()
+        sort_column = header.sortIndicatorSection()
+        sort_order = header.sortIndicatorOrder()
+        self.ui.child_table.setSortingEnabled(False)
         self.ui.child_table.clearContents()
-
         for _ in range(self.ui.child_table.rowCount()):
             self.ui.child_table.removeRow(0)
         row = 0
         for row, data in enumerate(self.child_data):
             self.ui.child_table.insertRow(row)
-            self.ui.child_table.setItem(row, 0, QTableWidgetItem(str(data.e4 if data.e4 else "")))
+            item = QTableWidgetItem(str(data.e4 if data.e4 else ""))
+            item.setData(Qt.UserRole, data)
+            self.ui.child_table.setItem(row, 0, item)
             self.ui.child_table.setItem(row, 1, QTableWidgetItem(str(data.last_name if data.last_name else "")))
             self.ui.child_table.setItem(row, 2, QTableWidgetItem(str(data.first_name if data.first_name else "")))
             self.ui.child_table.setItem(row, 3, QTableWidgetItem(data.e5.strftime("%m/%d/%Y") if data.e5 else ""))
@@ -193,3 +201,22 @@ class ChildDialog(BaseDialog):
                                             QTableWidgetItem(
                                                 data.last_termination.strftime(
                                                     "%m/%d/%Y") if data.last_termination else ""))
+            if self.report_type == ReportType.OOH:
+                timestamp = data.last_updated_ooh
+            else:
+                timestamp = data.last_updated_a
+            self.ui.child_table.setItem(row, 7, QTableWidgetItem(timestamp.strftime("%m/%d/%Y %H:%M") if timestamp else ""))
+        self.ui.child_table.setSortingEnabled(True)
+        if not self._child_table_sorted_once:
+            header.setSortIndicator(1, Qt.AscendingOrder)
+            self.ui.child_table.sortItems(1, Qt.AscendingOrder)
+            self._child_table_sorted_once = True
+        else:
+            header.setSortIndicator(sort_column, sort_order)
+        self.ui.child_table.setColumnWidth(0, 120)
+        self.ui.child_table.setColumnWidth(2, 105)
+        self.ui.child_table.setColumnWidth(3, 80)
+        self.ui.child_table.setColumnWidth(4, 80)
+        self.ui.child_table.setColumnWidth(5, 120)
+        self.ui.child_table.setColumnWidth(6, 120)
+        self.ui.child_table.setColumnWidth(7, 120)

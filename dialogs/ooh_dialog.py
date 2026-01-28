@@ -19,7 +19,8 @@ from typing import Optional, Callable, Any
 # from .childform import Ui_ChildForm
 from PySide6.QtCore import (QRegularExpression)
 from PySide6.QtGui import (QRegularExpressionValidator)
-from PySide6.QtWidgets import (QAbstractButton, QWidget, QListWidgetItem, QTableWidgetItem)
+from PySide6.QtWidgets import (QAbstractButton, QWidget, QListWidgetItem, QTableWidgetItem, QAbstractItemView)
+from PySide6.QtCore import Qt
 
 from model import SecondParent, Removal1993, Removal2020, RecognizedTribe, ARecord
 from model.models import Tribe, FileType, Child, ChildName
@@ -81,6 +82,9 @@ class OOHDialog(BaseDialog):
         self.setFixedSize(self.ui.size())
 
         self.settled: bool = False
+        self._has_sorted_second_parents = False
+        self._has_sorted_removals1993 = False
+        self._has_sorted_removals2020 = False
 
     def settle(self):
         self.settled = True
@@ -173,6 +177,7 @@ class OOHDialog(BaseDialog):
         ui.parent2_edit_button.clicked.connect(self._on_edit_second_parent)
         ui.parent2_delete_button.clicked.connect(self._on_delete_second_parent)
         ui.parent2tpr.cellDoubleClicked.connect(self._on_edit_second_parent)
+        self.ui.parent2tpr.setSelectionMode(QAbstractItemView.SingleSelection)
 
         ui.removal_1993_add_button.clicked.connect(self._on_add_removal1993_clicked)
         ui.removal_1993_edit_button.clicked.connect(self._on_edit_removal1993_clicked)
@@ -647,7 +652,7 @@ class OOHDialog(BaseDialog):
 
     def refresh_tribes(self) -> None:
         self.ui.tribes.clear()
-        lookup = {tribe.id: str(tribe) for tribe in self.epa_tribes}
+        lookup = {int(tribe.epa_code): str(tribe) for tribe in self.epa_tribes}
         for tribe in self.tribes:
             self.ui.tribes.addItem(lookup[tribe.e9])
 
@@ -697,10 +702,10 @@ class OOHDialog(BaseDialog):
     @e12.setter
     def e12(self, v: int) -> None:
         self._set_radio_button(self.ui.e12, v)
-
+    
     @property
     def e13(self) -> int:
-        return 1 if self.ui.e13.isChecked() else 0
+        return None if not self.ui.e13.isEnabled() else 1 if self.ui.e13.isChecked() else 0
 
     @e13.setter
     def e13(self, v: int) -> None:
@@ -708,7 +713,7 @@ class OOHDialog(BaseDialog):
 
     @property
     def e14(self) -> int:
-        return 1 if self.ui.e14.isChecked() else 0
+        return None if not self.ui.e14.isEnabled() else 1 if self.ui.e14.isChecked() else 0
 
     @e14.setter
     def e14(self, v: int) -> None:
@@ -716,15 +721,15 @@ class OOHDialog(BaseDialog):
 
     @property
     def e15(self) -> int:
-        return 1 if self.ui.e15.isChecked() else 0
+        return None if not self.ui.e15.isEnabled() else 1 if self.ui.e15.isChecked() else 0
 
     @e15.setter
     def e15(self, v: int) -> None:
         self.ui.e15.setChecked(v == 1)
 
     @property
-    def e16(self) -> int:
-        return 1 if self.ui.e16.isChecked() else 0
+    def e16(self) -> int: 
+        return None if not self.ui.e16.isEnabled() else 1 if self.ui.e16.isChecked() else 0
 
     @e16.setter
     def e16(self, v: int) -> None:
@@ -732,7 +737,7 @@ class OOHDialog(BaseDialog):
 
     @property
     def e17(self) -> int:
-        return 1 if self.ui.e17.isChecked() else 0
+        return None if not self.ui.e17.isEnabled() else 1 if self.ui.e17.isChecked() else 0
 
     @e17.setter
     def e17(self, v: int) -> None:
@@ -740,7 +745,7 @@ class OOHDialog(BaseDialog):
 
     @property
     def e18(self) -> int:
-        return 1 if self.ui.e18.isChecked() else 0
+        return None if not self.ui.e18.isEnabled() else 1 if self.ui.e18.isChecked() else 0
 
     @e18.setter
     def e18(self, v: int) -> None:
@@ -748,7 +753,7 @@ class OOHDialog(BaseDialog):
 
     @property
     def e19(self) -> int:
-        return 1 if self.ui.e19.isChecked() else 0
+        return None if not self.ui.e19.isEnabled() else 1 if self.ui.e19.isChecked() else 0
 
     @e19.setter
     def e19(self, v: int) -> None:
@@ -756,7 +761,7 @@ class OOHDialog(BaseDialog):
 
     @property
     def e20(self) -> int | None:
-        return 1 if self.ui.e20.isChecked() else 0
+        return None if not self.ui.e20.isEnabled() else 1 if self.ui.e20.isChecked() else 0
 
     @e20.setter
     def e20(self, v: int) -> None:
@@ -985,7 +990,7 @@ class OOHDialog(BaseDialog):
 
     @property
     def e47(self) -> int:
-        return 1 if self.ui.e47.isChecked() else 0
+        return None if not self.ui.e47.isEnabled() else 1 if self.ui.e47.isChecked() else 0
 
     @e47.setter
     def e47(self, v: int) -> None:
@@ -993,7 +998,7 @@ class OOHDialog(BaseDialog):
 
     @property
     def e48(self) -> int:
-        return 1 if self.ui.e48.isChecked() else 0
+        return None if not self.ui.e48.isEnabled() else 1 if self.ui.e48.isChecked() else 0
 
     @e48.setter
     def e48(self, v: int) -> None:
@@ -1001,7 +1006,7 @@ class OOHDialog(BaseDialog):
 
     @property
     def e49(self) -> int:
-        return 1 if self.ui.e49.isChecked() else 0
+        return None if not self.ui.e49.isEnabled() else 1 if self.ui.e49.isChecked() else 0
 
     @e49.setter
     def e49(self, v: int) -> None:
@@ -1009,7 +1014,7 @@ class OOHDialog(BaseDialog):
 
     @property
     def e50(self) -> int:
-        return 1 if self.ui.e50.isChecked() else 0
+        return None if not self.ui.e50.isEnabled() else 1 if self.ui.e50.isChecked() else 0
 
     @e50.setter
     def e50(self, v: int) -> None:
@@ -1017,7 +1022,7 @@ class OOHDialog(BaseDialog):
 
     @property
     def e51(self) -> int:
-        return 1 if self.ui.e51.isChecked() else 0
+        return None if not self.ui.e51.isEnabled() else 1 if self.ui.e51.isChecked() else 0
 
     @e51.setter
     def e51(self, v: int) -> None:
@@ -1025,7 +1030,7 @@ class OOHDialog(BaseDialog):
 
     @property
     def e52(self) -> int:
-        return 1 if self.ui.e52.isChecked() else 0
+        return None if not self.ui.e52.isEnabled() else 1 if self.ui.e52.isChecked() else 0
 
     @e52.setter
     def e52(self, v: int) -> None:
@@ -1033,7 +1038,7 @@ class OOHDialog(BaseDialog):
 
     @property
     def e53(self) -> int:
-        return 1 if self.ui.e53.isChecked() else 0
+        return None if not self.ui.e53.isEnabled() else 1 if self.ui.e53.isChecked() else 0
 
     @e53.setter
     def e53(self, v: int) -> None:
@@ -1041,7 +1046,7 @@ class OOHDialog(BaseDialog):
 
     @property
     def e54(self) -> int:
-        return 1 if self.ui.e54.isChecked() else 0
+        return None if not self.ui.e54.isEnabled() else 1 if self.ui.e54.isChecked() else 0
 
     @e54.setter
     def e54(self, v: int) -> None:
@@ -1049,8 +1054,8 @@ class OOHDialog(BaseDialog):
 
     @property
     def e55(self) -> int:
-        return 1 if self.ui.e55.isChecked() else 0
-
+        return None if not self.ui.e55.isEnabled() else 1 if self.ui.e55.isChecked() else 0
+    
     @e55.setter
     def e55(self, v: int) -> None:
         self.ui.e55.setChecked(v == 1)
@@ -1224,16 +1229,34 @@ class OOHDialog(BaseDialog):
         self.refresh_removals1993()
 
     def refresh_removals1993(self) -> None:
+        header = self.ui.removal_1993_table.horizontalHeader()
+        sort_column = header.sortIndicatorSection()
+        sort_order = header.sortIndicatorOrder()
+        self.ui.removal_1993_table.setSortingEnabled(False)
         self.ui.removal_1993_table.clearContents()
         for _ in range(self.ui.removal_1993_table.rowCount()):
             self.ui.removal_1993_table.removeRow(0)
         for data in self._removals1993:
-            row: int = self.ui.removal_1993_table.rowCount()
+            row = self.ui.removal_1993_table.rowCount()
             self.ui.removal_1993_table.insertRow(row)
-            self.ui.removal_1993_table.setItem(row, 0, QTableWidgetItem(str(data.e69)))
-            self.ui.removal_1993_table.setItem(row, 1, QTableWidgetItem(str(data.e153)))
+            item = QTableWidgetItem(str(data.e69) if data.e69 not in [None] else '')
+            item.setData(Qt.UserRole, data)
+            self.ui.removal_1993_table.setItem(row, 0, item)
+            self.ui.removal_1993_table.setItem(row, 1, QTableWidgetItem(str(data.e153) if data.e153 not in [None] else ''))
             self.ui.removal_1993_table.setItem(row, 2, QTableWidgetItem(
                 self.E155_MESSAGES[data.e155] if data.e155 in self.E155_MESSAGES else ''))
+            self.ui.removal_1993_table.setItem(
+                row, 3,
+                QTableWidgetItem(data.last_updated.strftime("%m/%d/%Y %H:%M") if data.last_updated else ""))
+        self.ui.removal_1993_table.setSortingEnabled(True)
+        if not self._has_sorted_removals1993:
+            header.setSortIndicator(0, Qt.DescendingOrder)
+            self._has_sorted_removals1993 = True
+        else:
+            header.setSortIndicator(sort_column, sort_order)
+        self.ui.removal_1993_table.setColumnWidth(0, 130)
+        self.ui.removal_1993_table.setColumnWidth(2, 250)
+        self.ui.removal_1993_table.setColumnWidth(3, 130)
 
     def current_removal1993_row(self) -> int:
         return self.ui.removal_1993_table.currentRow()
@@ -1247,17 +1270,35 @@ class OOHDialog(BaseDialog):
         self._removals2020 = data
         self.refresh_removals2020()
 
-    def refresh_removals2020(self):
+    def refresh_removals2020(self) -> None:
+        header = self.ui.removal_2020_table.horizontalHeader()
+        sort_column = header.sortIndicatorSection()
+        sort_order = header.sortIndicatorOrder()
+        self.ui.removal_2020_table.setSortingEnabled(False)
         self.ui.removal_2020_table.clearContents()
-        for row in range(self.ui.removal_2020_table.rowCount()):
+        for _ in range(self.ui.removal_2020_table.rowCount()):
             self.ui.removal_2020_table.removeRow(0)
         for data in self.removals2020:
             row: int = self.ui.removal_2020_table.rowCount()
             self.ui.removal_2020_table.insertRow(row)
-            self.ui.removal_2020_table.setItem(row, 0, QTableWidgetItem(str(data.e69)))
-            self.ui.removal_2020_table.setItem(row, 1, QTableWidgetItem(str(data.e153)))
+            item = QTableWidgetItem(str(data.e69) if data.e69 not in [None] else '')
+            item.setData(Qt.UserRole, data)
+            self.ui.removal_2020_table.setItem(row, 0, item)
+            self.ui.removal_2020_table.setItem(row, 1, QTableWidgetItem(str(data.e153) if data.e153 not in [None] else ''))
             self.ui.removal_2020_table.setItem(row, 2, QTableWidgetItem(
                 self.E155_MESSAGES[data.e155] if data.e155 in self.E155_MESSAGES else ''))
+            self.ui.removal_2020_table.setItem(
+                row, 3,
+                QTableWidgetItem(data.last_updated.strftime("%m/%d/%Y %H:%M") if data.last_updated else ""))
+        self.ui.removal_2020_table.setSortingEnabled(True)
+        if not self._has_sorted_removals2020:
+            header.setSortIndicator(0, Qt.DescendingOrder)
+            self._has_sorted_removals2020 = True
+        else:
+            header.setSortIndicator(sort_column, sort_order)
+        self.ui.removal_2020_table.setColumnWidth(0, 130)
+        self.ui.removal_2020_table.setColumnWidth(2, 250)
+        self.ui.removal_2020_table.setColumnWidth(3, 130)
 
     def current_removal2020_row(self) -> int:
         return self.ui.removal_2020_table.currentRow()
@@ -1280,6 +1321,10 @@ class OOHDialog(BaseDialog):
         return self.ui.parent2tpr.currentRow()
 
     def refresh_second_parents(self) -> None:
+        header = self.ui.parent2tpr.horizontalHeader()
+        sort_column = header.sortIndicatorSection()
+        sort_order = header.sortIndicatorOrder()
+        self.ui.parent2tpr.setSortingEnabled(False)
         self.ui.parent2tpr.clearContents()
         for _ in range(self.ui.parent2tpr.rowCount()):
             self.ui.parent2tpr.removeRow(0)
@@ -1290,10 +1335,23 @@ class OOHDialog(BaseDialog):
                 continue
             if row - 1 >= self.ui.parent2tpr.rowCount():
                 self.ui.parent2tpr.insertRow(row - 1)
-            self.ui.parent2tpr.setItem(row - 1, 0, QTableWidgetItem(str(data.number)))
+            item = QTableWidgetItem(str(data.number))
+            item.setData(Qt.UserRole, data)
+            self.ui.parent2tpr.setItem(row - 1, 0, item)
             self.ui.parent2tpr.setItem(row - 1, 1, QTableWidgetItem(str(data.e64_as_str())))
             self.ui.parent2tpr.setItem(row - 1, 2, QTableWidgetItem(str(data.e66) if data.e66 else ''))
             self.ui.parent2tpr.setItem(row - 1, 3, QTableWidgetItem(str(data.e68) if data.e68 else ''))
+            self.ui.parent2tpr.setItem(
+                row -1, 4,
+                QTableWidgetItem(data.last_updated.strftime("%m/%d/%Y %H:%M") if data.last_updated else ""))
             row += 1
         while self.ui.parent2tpr.rowCount() > len(self.second_parents):
             self.ui.parent2tpr.removeRow(self.ui.parent2tpr.rowCount() - 1)
+        self.ui.parent2tpr.setSortingEnabled(True)
+        if not self._has_sorted_second_parents:
+            header.setSortIndicator(0, Qt.AscendingOrder)
+            self._has_sorted_second_parents = True
+        else:
+            header.setSortIndicator(sort_column, sort_order)
+        self.ui.parent2tpr.setColumnWidth(3, 200)
+        self.ui.parent2tpr.setColumnWidth(4, 130)

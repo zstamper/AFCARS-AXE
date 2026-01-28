@@ -13,6 +13,7 @@
 # You should have received a copy of the GNU General Public License along with
 # AXE. If not, see <https://www.gnu.org/licenses/>.
 
+import datetime
 from typing import Optional, Callable
 
 from PySide6.QtWidgets import QWidget
@@ -33,6 +34,7 @@ class PermanencyPlanDialog(BaseDialog):
         self.setFixedSize(self.ui.size())
         self.child = None
         self.file_type: FileType = FileType.PRODUCTION
+        self.last_updated: Optional[datetime.datetime] = None
         self.id: int | None = None
         self.removal_id: int | None = None
         self._child_name: ChildName = ChildName()

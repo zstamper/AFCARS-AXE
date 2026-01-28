@@ -13,6 +13,7 @@
 # You should have received a copy of the GNU General Public License along with
 # AXE. If not, see <https://www.gnu.org/licenses/>.
 
+import datetime
 from typing import Optional, Callable
 
 from PySide6.QtWidgets import QWidget
@@ -28,6 +29,7 @@ class PeriodicReviewDialog(BaseDialog):
         self._child_name: ChildName = ChildName()
         self.child = None
         self.file_type: FileType = FileType.PRODUCTION
+        self.last_updated: Optional[datetime.datetime] = None
         self.on_validate: Optional[Callable] = None
         self.on_save: Optional[Callable] = None
         self.on_close: Optional[Callable] = None

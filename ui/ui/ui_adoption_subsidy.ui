@@ -26,47 +26,6 @@
     <layout class="QVBoxLayout" name="verticalLayout_7">
      <item>
       <layout class="QGridLayout" name="row1_layout">
-       <item row="0" column="1">
-        <widget class="QLineEdit" name="last_name">
-         <property name="maxLength">
-          <number>50</number>
-         </property>
-         <property name="frame">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="3">
-        <widget class="QLineEdit" name="first_name">
-         <property name="maxLength">
-          <number>50</number>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="5">
-        <layout class="QHBoxLayout" name="horizontalLayout_25">
-         <item>
-          <widget class="QLineEdit" name="e4">
-           <property name="maxLength">
-            <number>12</number>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="e4_generate">
-           <property name="text">
-            <string>Generate</string>
-           </property>
-           <property name="autoDefault">
-            <bool>false</bool>
-           </property>
-           <property name="default">
-            <bool>false</bool>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
        <item row="0" column="4">
         <widget class="QLabel" name="iDLabel">
          <property name="text">
@@ -121,6 +80,47 @@
          </item>
         </layout>
        </item>
+       <item row="0" column="1">
+        <widget class="QLineEdit" name="last_name">
+         <property name="maxLength">
+          <number>50</number>
+         </property>
+         <property name="frame">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="2">
+        <widget class="QLabel" name="firstNameLabel">
+         <property name="text">
+          <string>First Name</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="5">
+        <layout class="QHBoxLayout" name="horizontalLayout_25">
+         <item>
+          <widget class="QLineEdit" name="e4">
+           <property name="maxLength">
+            <number>12</number>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="e4_generate">
+           <property name="text">
+            <string>Generate</string>
+           </property>
+           <property name="autoDefault">
+            <bool>false</bool>
+           </property>
+           <property name="default">
+            <bool>false</bool>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
        <item row="1" column="2">
         <widget class="QLabel" name="e6_label">
          <property name="frameShape">
@@ -144,10 +144,10 @@
          </property>
         </widget>
        </item>
-       <item row="0" column="2">
-        <widget class="QLabel" name="firstNameLabel">
-         <property name="text">
-          <string>First Name</string>
+       <item row="0" column="3">
+        <widget class="QLineEdit" name="first_name">
+         <property name="maxLength">
+          <number>50</number>
          </property>
         </widget>
        </item>
