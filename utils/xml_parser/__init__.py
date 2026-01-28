@@ -50,6 +50,8 @@ def _date_from(element: Element, path: str) -> int | None:
         value = element.find(path).text
         if value == "":
             value = None
+        if value == "66666666":
+            return int(value)
         if is_valid_date(int(value)):
             return int(value)
         return None
