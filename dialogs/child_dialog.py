@@ -213,6 +213,9 @@ class ChildDialog(BaseDialog):
             self._child_table_sorted_once = True
         else:
             header.setSortIndicator(sort_column, sort_order)
+        self._set_column_widths()
+
+    def _set_column_widths(self) -> None:
         self.ui.child_table.setColumnWidth(0, 120)
         self.ui.child_table.setColumnWidth(2, 105)
         self.ui.child_table.setColumnWidth(3, 80)
