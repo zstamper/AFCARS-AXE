@@ -223,7 +223,7 @@ class Removal2020Dialog(BaseDialog):
         row = 0
         for data in self.living_arrangements:
             self.ui.living_arrangements_table.insertRow(row)
-            item = QTableWidgetItem(str(data.e112) if data.e112 not in [None] else '')
+            item = QTableWidgetItem(str(data.e112) if data.e112 is not None else '')
             item.setData(Qt.UserRole, data)
             self.ui.living_arrangements_table.setItem(row, 0, item)
             self.ui.living_arrangements_table.setItem(row, 1, QTableWidgetItem(e120_to_str(data.e120)))
@@ -264,7 +264,7 @@ class Removal2020Dialog(BaseDialog):
         row = 0
         for data in self.permanency_plans:
             self.ui.permanency_plans_table.insertRow(row)
-            item = QTableWidgetItem(str(data.e147) if data.e147 not in [None] else '')
+            item = QTableWidgetItem(str(data.e147) if data.e147 is not None else '')
             item.setData(Qt.UserRole, data)
             self.ui.permanency_plans_table.setItem(row, 0, item)
             self.ui.permanency_plans_table.setItem(row, 1, QTableWidgetItem(e148_to_str(data.e148)))
@@ -313,7 +313,7 @@ class Removal2020Dialog(BaseDialog):
         row = 0
         for data in self.case_worker_visits:
             self.ui.case_visits_table.insertRow(row)
-            item = QTableWidgetItem(str(data.e151) if data.e151 not in [None] else '')
+            item = QTableWidgetItem(str(data.e151) if data.e151 is not None else '')
             item.setData(Qt.UserRole, data)
             self.ui.case_visits_table.setItem(row, 0, item)
             self.ui.case_visits_table.setItem(row, 1, QTableWidgetItem(e152_to_str(data.e152)))
@@ -362,7 +362,7 @@ class Removal2020Dialog(BaseDialog):
         row = 0
         for data in self.permanency_hearings:
             self.ui.permanency_hearings_table.insertRow(row)
-            item = QTableWidgetItem(str(data.e150) if data.e150 not in [None] else '')
+            item = QTableWidgetItem(str(data.e150) if data.e150 is not None else '')
             item.setData(Qt.UserRole, data)
             self.ui.permanency_hearings_table.setItem(row, 0, item)
             self.ui.permanency_hearings_table.setItem(
@@ -410,7 +410,7 @@ class Removal2020Dialog(BaseDialog):
         row = 0
         for data in self.periodic_reviews:
             self.ui.periodic_reviews_table.insertRow(row)
-            item = QTableWidgetItem(str(data.e149) if data.e149 not in [None] else '')
+            item = QTableWidgetItem(str(data.e149) if data.e149 is not None else '')
             item.setData(Qt.UserRole, data)
             self.ui.periodic_reviews_table.setItem(row, 0, item)
             self.ui.periodic_reviews_table.setItem(
