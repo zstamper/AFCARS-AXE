@@ -163,7 +163,7 @@ class ChildDialog(BaseDialog):
         self.refresh_child_data()
 
     @property
-    def current_child(self) -> BaseChild:
+    def current_child(self) -> BaseChild | None:
         current_row = self.ui.child_table.currentRow()
         item = self.ui.child_table.item(current_row, 0)
         if item is not None:
