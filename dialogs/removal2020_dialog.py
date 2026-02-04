@@ -64,6 +64,28 @@ def e152_to_str(v: int | None) -> str:
         return ""
     return mapper[v]
 
+# Column indices for Living Arrangements table
+E112 = 0
+E113E120 = 1
+LA_Updated = 2
+
+# Column indices for Permanency Plans table
+E147 = 0
+E148 = 1
+PP_Updated = 2
+
+# Column indices for Caseworker Visits table
+E151 = 0
+E152 = 1
+CV_Updated = 2
+
+# Column indices for Permanency Hearings table
+E150 = 0
+PH_Updated = 1
+
+# Column indices for Periodic Reviews table
+E149 = 0
+PR_Updated = 1
 
 class Removal2020Dialog(BaseDialog):
 
@@ -225,10 +247,10 @@ class Removal2020Dialog(BaseDialog):
             self.ui.living_arrangements_table.insertRow(row)
             item = QTableWidgetItem(str(data.e112) if data.e112 is not None else '')
             item.setData(Qt.UserRole, data)
-            self.ui.living_arrangements_table.setItem(row, 0, item)
-            self.ui.living_arrangements_table.setItem(row, 1, QTableWidgetItem(e120_to_str(data.e120)))
+            self.ui.living_arrangements_table.setItem(row, E112, item)
+            self.ui.living_arrangements_table.setItem(row, E113E120, QTableWidgetItem(e120_to_str(data.e120)))
             self.ui.living_arrangements_table.setItem(
-                row, 2,
+                row, LA_Updated,
                 QTableWidgetItem(data.last_updated.strftime("%m/%d/%Y %H:%M") if data.last_updated else ""))
             row += 1
         self.ui.living_arrangements_table.setSortingEnabled(True)
@@ -266,10 +288,10 @@ class Removal2020Dialog(BaseDialog):
             self.ui.permanency_plans_table.insertRow(row)
             item = QTableWidgetItem(str(data.e147) if data.e147 is not None else '')
             item.setData(Qt.UserRole, data)
-            self.ui.permanency_plans_table.setItem(row, 0, item)
-            self.ui.permanency_plans_table.setItem(row, 1, QTableWidgetItem(e148_to_str(data.e148)))
+            self.ui.permanency_plans_table.setItem(row, E147, item)
+            self.ui.permanency_plans_table.setItem(row, E148, QTableWidgetItem(e148_to_str(data.e148)))
             self.ui.permanency_plans_table.setItem(
-                row, 2,
+                row, PP_Updated,
                 QTableWidgetItem(data.last_updated.strftime("%m/%d/%Y %H:%M") if data.last_updated else ""))
             row += 1
         self.ui.permanency_plans_table.setSortingEnabled(True)
@@ -315,10 +337,10 @@ class Removal2020Dialog(BaseDialog):
             self.ui.case_visits_table.insertRow(row)
             item = QTableWidgetItem(str(data.e151) if data.e151 is not None else '')
             item.setData(Qt.UserRole, data)
-            self.ui.case_visits_table.setItem(row, 0, item)
-            self.ui.case_visits_table.setItem(row, 1, QTableWidgetItem(e152_to_str(data.e152)))
+            self.ui.case_visits_table.setItem(row, E151, item)
+            self.ui.case_visits_table.setItem(row, E152, QTableWidgetItem(e152_to_str(data.e152)))
             self.ui.case_visits_table.setItem(
-                row, 2,
+                row, CV_Updated,
                 QTableWidgetItem(data.last_updated.strftime("%m/%d/%Y %H:%M") if data.last_updated else ""))
             row += 1
         self.ui.case_visits_table.setSortingEnabled(True)
@@ -364,9 +386,9 @@ class Removal2020Dialog(BaseDialog):
             self.ui.permanency_hearings_table.insertRow(row)
             item = QTableWidgetItem(str(data.e150) if data.e150 is not None else '')
             item.setData(Qt.UserRole, data)
-            self.ui.permanency_hearings_table.setItem(row, 0, item)
+            self.ui.permanency_hearings_table.setItem(row, E150, item)
             self.ui.permanency_hearings_table.setItem(
-                row, 1,
+                row, PH_Updated,
                 QTableWidgetItem(data.last_updated.strftime("%m/%d/%Y %H:%M") if data.last_updated else ""))
             row += 1
         self.ui.permanency_hearings_table.setSortingEnabled(True)
@@ -412,9 +434,9 @@ class Removal2020Dialog(BaseDialog):
             self.ui.periodic_reviews_table.insertRow(row)
             item = QTableWidgetItem(str(data.e149) if data.e149 is not None else '')
             item.setData(Qt.UserRole, data)
-            self.ui.periodic_reviews_table.setItem(row, 0, item)
+            self.ui.periodic_reviews_table.setItem(row, E149, item)
             self.ui.periodic_reviews_table.setItem(
-                row, 1,
+                row, PR_Updated,
                 QTableWidgetItem(data.last_updated.strftime("%m/%d/%Y %H:%M") if data.last_updated else ""))
             row += 1
         self.ui.periodic_reviews_table.setSortingEnabled(True)
