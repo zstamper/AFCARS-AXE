@@ -344,11 +344,11 @@ class OOHController:
             if selected_parent:
                 controller = SecondParentController(self.dialog, child_name=self.dialog.child_name,
                     data=selected_parent)
-            controller.on_save = save
-            controller.child = self.child
-            controller.e60 = self.dialog.e60
-            controller.file_type = self.file_type
-            controller.exec()
+                controller.on_save = save
+                controller.child = self.child
+                controller.e60 = self.dialog.e60
+                controller.file_type = self.file_type
+                controller.exec()
 
     def do_delete_putative_parent(self) -> None:
         current_row = self.dialog.current_second_parents_row()
