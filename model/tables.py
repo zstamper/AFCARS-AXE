@@ -193,7 +193,6 @@ class ContextTable(BaseModel):
                             'Each removal after October 1, 2022 (2020 Removal) must have at least one Living Arrangement.')
             self.ooh_error = None
         except StructureValidationError as sve:
-            print("Validation error triggered:", sve.args[0])
             self.ooh_error = sve.args[0]
 
 
