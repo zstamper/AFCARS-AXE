@@ -29,7 +29,7 @@ try:
     import sys
     from pathlib import Path
 
-    from PySide6.QtCore import QFile, QCoreApplication
+    from PySide6.QtCore import QFile, QCoreApplication, Qt
     from PySide6.QtGui import QAction, QPixmap, QColor, QIcon
     from PySide6.QtUiTools import QUiLoader
     from PySide6.QtWidgets import QApplication, QMainWindow, QFileDialog, QToolButton, QPushButton, QTableWidgetItem, \
@@ -80,6 +80,7 @@ try:
         t = Timer(SPLASH_DELAY, e.set)
         app_dir, bundle_dir = utils.file_system_directories()
         try:
+            QCoreApplication.setAttribute(Qt.AA_ShareOpenGLContexts)
             app = QApplication()
             app.setApplicationName('AXE')
             app.setApplicationDisplayName('AXE')
