@@ -278,30 +278,95 @@ class Removal2020Controller:
                 self.dialog.refresh_permanency_plans()
 
     def do_add_case_worker_visit(self, *args, **kwargs):
-        is_new = True
-        data = CaseVisit()
+    # Open the Case Worker Visit dialog to add one or more new visits.
+    # Uses a loop (no recursion) so 'Save + Add' can open another dialog
+    # without calling do_add_case_worker_visit() from inside itself.
 
-        def save():
-            nonlocal is_new, data
-            if is_new:
-                self.dialog.case_worker_visits.append(data)
-                is_new = False
-            self.dialog.refresh_case_worker_visits()
-            self.do_save()
-        
-        def save_and_add():
-            controller.do_save()
-            controller.dialog.accept() 
-            self.do_add_case_worker_visit()
+        while True:
+            # This flag indicates whether the user clicked 'Save + Add'
+            # on THIS particular visit dialog.
+            add_another = False
 
-        controller: CaseWorkerVisitController = CaseWorkerVisitController(self.dialog, self.dialog.child_name, data,
-                                                                          file_type=self.file_type, removal_controller=self)
-        controller.on_save = save
-        controller.on_save_and_add = save_and_add
-        controller.dialog.on_save_and_add = save_and_add
-        controller.child = self.child
-        controller.parent_data = self.dialog
-        controller.exec()
+            # Create a new CaseVisit for this iteration
+            is_new = True
+            data = CaseVisit()
+
+            def save():
+                """
+                Called when the user clicks 'Save' in the CaseVisitDialog.
+                Saves this visit and updates the parent Removal2020 record,
+                but does NOT automatically open another dialog.
+                """
+                nonlocal is_new, data
+
+                if is_new:
+                    # First save for this new visit: add it to the list
+                    self.dialog.case_worker_visits.append(data)
+                    is_new = False
+
+                # Refresh the Case Worker Visits table in the Removal2020Dialog
+                self.dialog.refresh_case_worker_visits()
+
+                # Save the Removal2020 record itself
+                self.do_save()
+
+                # Note: we do NOT close the dialog here.
+                # The user can choose to close it, or click 'Save + Add', or keep editing.
+
+            def save_and_add():
+                """
+                Called when the user clicks 'Save + Add'.
+
+                We reuse the controller's do_save() method, which:
+                - Validates and serializes dialog data into `data`
+                - Sets data.last_updated
+                - Calls our `save()` callback above (append + refresh + parent save).
+
+                Then we mark that the user wants another visit and close this dialog.
+                """
+                nonlocal add_another
+
+                # Perform the same save logic as the 'Save' button:
+                # serialize the dialog into `data`, set last_updated, and invoke `save()`.
+                controller.do_save()
+
+                # Indicate that the user requested another visit
+                add_another = True
+
+                # Close the CaseVisitDialog, allowing controller.exec() to finish
+                controller.dialog.accept()
+
+            # Create a controller for this one CaseVisitDialog
+            controller: CaseWorkerVisitController = CaseWorkerVisitController(
+                self.dialog,
+                self.dialog.child_name,
+                data,
+                file_type=self.file_type,
+                removal_controller=self
+            )
+
+            # Wire up callbacks
+            controller.on_save = save
+            controller.dialog.on_save_and_add = save_and_add
+
+            controller.child = self.child
+            controller.parent_data = self.dialog
+
+            # Open the CaseVisitDialog and wait until it is closed
+            controller.exec()
+
+            # At this point, the CaseVisitDialog is closed.
+            # Decide whether to open another visit dialog.
+            if not add_another:
+                # User did NOT click 'Save + Add' on this dialog.
+                # They either:
+                #  - Saved and then closed, or
+                #  - Closed without saving, etc.
+                # Either way, we stop adding new visits.
+                break
+
+            # If add_another is True, the loop continues and we go back
+            # to the top, creating a fresh CaseVisit and opening another dialog.
 
     def do_edit_case_worker_visit(self, *args, **kwargs):
         def save():
