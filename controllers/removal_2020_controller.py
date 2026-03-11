@@ -347,7 +347,7 @@ class Removal2020Controller:
 
             # Wire up callbacks
             controller.on_save = save
-            controller.dialog.on_save_and_add = save_and_add
+            controller.on_save_and_add = save_and_add
 
             controller.child = self.child
             controller.parent_data = self.dialog
@@ -387,7 +387,6 @@ class Removal2020Controller:
             )
             controller.on_save = save
             controller.on_save_and_add = save_and_add
-            controller.dialog.on_save_and_add = save_and_add
             controller.child = self.child
             controller.parent_data = self.dialog
             controller.exec()

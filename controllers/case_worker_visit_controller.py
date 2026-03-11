@@ -39,9 +39,27 @@ class CaseWorkerVisitController:
         self.parent_data: Optional[Removal2020] = None
         self.dialog.on_validate = self.do_validate
         self.dialog.on_save = self.do_save
-        self.on_save_and_add: Optional[Callable] = None
+        self._on_save_and_add: Optional[Callable] = None
+        if hasattr(self.dialog, "on_save_and_add"):
+            self.dialog.on_save_and_add = self._handle_save_and_add
         self.dialog.on_close = self.do_close
         self.data = data
+    
+    def _handle_save_and_add(self):
+        # perform same save logic as clicking "Save"
+        self.do_save()
+
+        # delegate to parent controller
+        if self._on_save_and_add:
+            self._on_save_and_add()
+
+    @property
+    def on_save_and_add(self) -> Optional[Callable]:
+        return self._on_save_and_add
+
+    @on_save_and_add.setter
+    def on_save_and_add(self, cb: Optional[Callable]) -> None:
+        self._on_save_and_add = cb
 
     @property
     def child(self) -> Child:
