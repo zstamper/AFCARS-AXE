@@ -116,10 +116,10 @@ class DemographicsValidator(OOHBaseValidator, CommonValidators):
                 if self.dialog.e45 < dob_year_month:
                     raise ValueError("Prior Guardianship Date (E45) cannot be before Child's Date of Birth (E5).")
             for removal in (self.dialog.removals1993 + self.dialog.removals2020):
-                        if removal.e69:
-                            removal_year_month = removal.e69 // 100
-                            if self.dialog.e45 > removal_year_month:
-                                raise ValueError("Prior Guardianship Date (E45) cannot be after the most recent removal date (E69).")
+                if removal.e69:
+                    removal_year_month = removal.e69 // 100
+                    if self.dialog.e45 > removal_year_month:
+                        raise ValueError("Prior Guardianship Date (E45) cannot be after the most recent removal date (E69).")
 
 
     def validate_e56(self) -> None:
