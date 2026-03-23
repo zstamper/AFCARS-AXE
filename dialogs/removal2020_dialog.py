@@ -98,10 +98,25 @@ class Removal2020Dialog(BaseDialog):
         # self.on_accept: Optional[Callable] = None
         self.child: Child | None = None
         self.living_arrangements = []
+        self._la_next_temp_id: int = 1
+        self._la_by_temp_id: dict[int, object] = {}
+        self._la_objid_to_temp_id: dict[int, int] = {}
         self.permanency_plans = []
+        self._pp_next_temp_id: int = 1
+        self._pp_by_temp_id: dict[int, object] = {}
+        self._pp_objid_to_temp_id: dict[int, int] = {}
         self.periodic_reviews = []
+        self._pr_next_temp_id: int = 1
+        self._pr_by_temp_id: dict[int, object] = {}
+        self._pr_objid_to_temp_id: dict[int, int] = {}
         self.permanency_hearings = []
+        self._ph_next_temp_id: int = 1
+        self._ph_by_temp_id: dict[int, object] = {}
+        self._ph_objid_to_temp_id: dict[int, int] = {}
         self.case_worker_visits = []
+        self._cv_next_temp_id: int = 1
+        self._cv_by_temp_id: dict[int, object] = {}
+        self._cv_objid_to_temp_id: dict[int, int] = {}
         self.id: int | None = None
         self.ooh_id: int | None = None
         self._child_name: ChildName = ChildName()
@@ -240,19 +255,32 @@ class Removal2020Dialog(BaseDialog):
         sort_column = header.sortIndicatorSection()
         sort_order = header.sortIndicatorOrder()
         self.ui.living_arrangements_table.setSortingEnabled(False)
+        self._la_by_temp_id = {}
         while self.ui.living_arrangements_table.rowCount() > 0:
             self.ui.living_arrangements_table.removeRow(0)
+        seen_obj_ids = set()
         row = 0
         for data in self.living_arrangements:
+            obj_id = id(data)
+            seen_obj_ids.add(obj_id)
+            temp_id = self._la_objid_to_temp_id.get(obj_id)
+            if temp_id is None:
+                temp_id = self._la_next_temp_id
+                self._la_next_temp_id += 1
+                self._la_objid_to_temp_id[obj_id] = temp_id
+            self._la_by_temp_id[temp_id] = data
             self.ui.living_arrangements_table.insertRow(row)
             item = QTableWidgetItem(str(data.e112) if data.e112 is not None else '')
-            item.setData(Qt.UserRole, data)
+            item.setData(Qt.UserRole, temp_id)
             self.ui.living_arrangements_table.setItem(row, E112, item)
             self.ui.living_arrangements_table.setItem(row, E113E120, QTableWidgetItem(e120_to_str(data.e120)))
             self.ui.living_arrangements_table.setItem(
-                row, LA_Updated,
+                row,
+                LA_Updated,
                 QTableWidgetItem(data.last_updated.strftime("%m/%d/%Y %H:%M") if data.last_updated else ""))
             row += 1
+        self._la_objid_to_temp_id = {
+            oid: tid for oid, tid in self._la_objid_to_temp_id.items() if oid in seen_obj_ids}
         self.ui.living_arrangements_table.setSortingEnabled(True)
         if not self._has_sorted_living_arrangements:
             header.setSortIndicator(0, Qt.DescendingOrder)
@@ -262,6 +290,16 @@ class Removal2020Dialog(BaseDialog):
         self.ui.living_arrangements_table.setColumnWidth(1, 250)
         self.ui.living_arrangements_table.setColumnWidth(2, 130)
 
+    def selected_living_arrangement(self):
+        row = self.ui.living_arrangements_table.currentRow()
+        if row < 0:
+            return None
+        item = self.ui.living_arrangements_table.item(row, 0)
+        if item is None:
+            return None
+        temp_id = item.data(Qt.UserRole)
+        return self._la_by_temp_id.get(temp_id)
+    
     # ----- Permanency Plan Automation ----------------------------------------
 
     def _on_add_permanency_plan(self, *args, **kwargs) -> None:
@@ -281,19 +319,32 @@ class Removal2020Dialog(BaseDialog):
         sort_column = header.sortIndicatorSection()
         sort_order = header.sortIndicatorOrder()
         self.ui.permanency_plans_table.setSortingEnabled(False)
+        self._pp_by_temp_id = {}
         while self.ui.permanency_plans_table.rowCount() > 0:
             self.ui.permanency_plans_table.removeRow(0)
+        seen_obj_ids = set()
         row = 0
         for data in self.permanency_plans:
+            obj_id = id(data)
+            seen_obj_ids.add(obj_id)
+            temp_id = self._pp_objid_to_temp_id.get(obj_id)
+            if temp_id is None:
+                temp_id = self._pp_next_temp_id
+                self._pp_next_temp_id += 1
+                self._pp_objid_to_temp_id[obj_id] = temp_id
+            self._pp_by_temp_id[temp_id] = data
             self.ui.permanency_plans_table.insertRow(row)
             item = QTableWidgetItem(str(data.e147) if data.e147 is not None else '')
-            item.setData(Qt.UserRole, data)
+            item.setData(Qt.UserRole, temp_id)
             self.ui.permanency_plans_table.setItem(row, E147, item)
             self.ui.permanency_plans_table.setItem(row, E148, QTableWidgetItem(e148_to_str(data.e148)))
             self.ui.permanency_plans_table.setItem(
-                row, PP_Updated,
+                row,
+                PP_Updated,
                 QTableWidgetItem(data.last_updated.strftime("%m/%d/%Y %H:%M") if data.last_updated else ""))
             row += 1
+        self._pp_objid_to_temp_id = {
+            oid: tid for oid, tid in self._pp_objid_to_temp_id.items() if oid in seen_obj_ids}
         self.ui.permanency_plans_table.setSortingEnabled(True)
         if not self._has_sorted_permanency_plans:
             header.setSortIndicator(0, Qt.DescendingOrder)
@@ -302,6 +353,16 @@ class Removal2020Dialog(BaseDialog):
             header.setSortIndicator(sort_column, sort_order)
         self.ui.permanency_plans_table.setColumnWidth(1, 260)
         self.ui.permanency_plans_table.setColumnWidth(2, 130)
+
+    def selected_permanency_plan(self):
+        row = self.ui.permanency_plans_table.currentRow()
+        if row < 0:
+            return None
+        item = self.ui.permanency_plans_table.item(row, 0)
+        if item is None:
+            return None
+        temp_id = item.data(Qt.UserRole)
+        return self._pp_by_temp_id.get(temp_id)
 
     @property
     def permanency_plan_current_row(self) -> int:
@@ -330,19 +391,32 @@ class Removal2020Dialog(BaseDialog):
         sort_column = header.sortIndicatorSection()
         sort_order = header.sortIndicatorOrder()
         self.ui.case_visits_table.setSortingEnabled(False)
+        self._cv_by_temp_id = {}
         while self.ui.case_visits_table.rowCount() > 0:
             self.ui.case_visits_table.removeRow(0)
+        seen_obj_ids = set()
         row = 0
         for data in self.case_worker_visits:
+            obj_id = id(data)
+            seen_obj_ids.add(obj_id)
+            temp_id = self._cv_objid_to_temp_id.get(obj_id)
+            if temp_id is None:
+                temp_id = self._cv_next_temp_id
+                self._cv_next_temp_id += 1
+                self._cv_objid_to_temp_id[obj_id] = temp_id
+            self._cv_by_temp_id[temp_id] = data
             self.ui.case_visits_table.insertRow(row)
             item = QTableWidgetItem(str(data.e151) if data.e151 is not None else '')
-            item.setData(Qt.UserRole, data)
+            item.setData(Qt.UserRole, temp_id)
             self.ui.case_visits_table.setItem(row, E151, item)
             self.ui.case_visits_table.setItem(row, E152, QTableWidgetItem(e152_to_str(data.e152)))
             self.ui.case_visits_table.setItem(
-                row, CV_Updated,
+                row,
+                CV_Updated,
                 QTableWidgetItem(data.last_updated.strftime("%m/%d/%Y %H:%M") if data.last_updated else ""))
             row += 1
+        self._cv_objid_to_temp_id = {
+            oid: tid for oid, tid in self._cv_objid_to_temp_id.items() if oid in seen_obj_ids}
         self.ui.case_visits_table.setSortingEnabled(True)
         if not self._has_sorted_case_worker_visits:
             header.setSortIndicator(0, Qt.DescendingOrder)
@@ -351,6 +425,16 @@ class Removal2020Dialog(BaseDialog):
             header.setSortIndicator(sort_column, sort_order)
         self.ui.case_visits_table.setColumnWidth(1, 130)
         self.ui.case_visits_table.setColumnWidth(2, 130)
+
+    def selected_case_worker_visit(self):
+        row = self.ui.case_visits_table.currentRow()
+        if row < 0:
+            return None
+        item = self.ui.case_visits_table.item(row, 0)
+        if item is None:
+            return None
+        temp_id = item.data(Qt.UserRole)
+        return self._cv_by_temp_id.get(temp_id)
 
     @property
     def case_worker_visit_current_row(self) -> int:
@@ -379,18 +463,31 @@ class Removal2020Dialog(BaseDialog):
         sort_column = header.sortIndicatorSection()
         sort_order = header.sortIndicatorOrder()
         self.ui.permanency_hearings_table.setSortingEnabled(False)
+        self._ph_by_temp_id = {}
         while self.ui.permanency_hearings_table.rowCount() > 0:
             self.ui.permanency_hearings_table.removeRow(0)
+        seen_obj_ids = set()
         row = 0
         for data in self.permanency_hearings:
+            obj_id = id(data)
+            seen_obj_ids.add(obj_id)
+            temp_id = self._ph_objid_to_temp_id.get(obj_id)
+            if temp_id is None:
+                temp_id = self._ph_next_temp_id
+                self._ph_next_temp_id += 1
+                self._ph_objid_to_temp_id[obj_id] = temp_id
+            self._ph_by_temp_id[temp_id] = data
             self.ui.permanency_hearings_table.insertRow(row)
             item = QTableWidgetItem(str(data.e150) if data.e150 is not None else '')
-            item.setData(Qt.UserRole, data)
+            item.setData(Qt.UserRole, temp_id)
             self.ui.permanency_hearings_table.setItem(row, E150, item)
             self.ui.permanency_hearings_table.setItem(
-                row, PH_Updated,
+                row,
+                PH_Updated,
                 QTableWidgetItem(data.last_updated.strftime("%m/%d/%Y %H:%M") if data.last_updated else ""))
             row += 1
+        self._ph_objid_to_temp_id = {
+            oid: tid for oid, tid in self._ph_objid_to_temp_id.items() if oid in seen_obj_ids}
         self.ui.permanency_hearings_table.setSortingEnabled(True)
         if not self._has_sorted_permanency_hearings:
             header.setSortIndicator(0, Qt.DescendingOrder)
@@ -399,6 +496,16 @@ class Removal2020Dialog(BaseDialog):
             header.setSortIndicator(sort_column, sort_order)
         self.ui.permanency_hearings_table.setColumnWidth(0, 130)
         self.ui.permanency_hearings_table.setColumnWidth(1, 130)
+
+    def selected_permanency_hearing(self):
+        row = self.ui.permanency_hearings_table.currentRow()
+        if row < 0:
+            return None
+        item = self.ui.permanency_hearings_table.item(row, 0)
+        if item is None:
+            return None
+        temp_id = item.data(Qt.UserRole)
+        return self._ph_by_temp_id.get(temp_id)
 
     @property
     def permanency_hearings_current_row(self) -> int:
@@ -427,18 +534,31 @@ class Removal2020Dialog(BaseDialog):
         sort_column = header.sortIndicatorSection()
         sort_order = header.sortIndicatorOrder()
         self.ui.periodic_reviews_table.setSortingEnabled(False)
+        self._pr_by_temp_id = {}
         while self.ui.periodic_reviews_table.rowCount() > 0:
             self.ui.periodic_reviews_table.removeRow(0)
+        seen_obj_ids = set()
         row = 0
         for data in self.periodic_reviews:
+            obj_id = id(data)
+            seen_obj_ids.add(obj_id)
+            temp_id = self._pr_objid_to_temp_id.get(obj_id)
+            if temp_id is None:
+                temp_id = self._pr_next_temp_id
+                self._pr_next_temp_id += 1
+                self._pr_objid_to_temp_id[obj_id] = temp_id
+            self._pr_by_temp_id[temp_id] = data
             self.ui.periodic_reviews_table.insertRow(row)
             item = QTableWidgetItem(str(data.e149) if data.e149 is not None else '')
-            item.setData(Qt.UserRole, data)
+            item.setData(Qt.UserRole, temp_id)
             self.ui.periodic_reviews_table.setItem(row, E149, item)
             self.ui.periodic_reviews_table.setItem(
-                row, PR_Updated,
+                row,
+                PR_Updated,
                 QTableWidgetItem(data.last_updated.strftime("%m/%d/%Y %H:%M") if data.last_updated else ""))
             row += 1
+        self._pr_objid_to_temp_id = {
+            oid: tid for oid, tid in self._pr_objid_to_temp_id.items() if oid in seen_obj_ids}
         self.ui.periodic_reviews_table.setSortingEnabled(True)
         if not self._has_sorted_periodic_reviews:
             header.setSortIndicator(0, Qt.DescendingOrder)
@@ -447,6 +567,16 @@ class Removal2020Dialog(BaseDialog):
             header.setSortIndicator(sort_column, sort_order)
         self.ui.periodic_reviews_table.setColumnWidth(0, 130)
         self.ui.periodic_reviews_table.setColumnWidth(1, 130)
+
+    def selected_periodic_review(self):
+        row = self.ui.periodic_reviews_table.currentRow()
+        if row < 0:
+            return None
+        item = self.ui.periodic_reviews_table.item(row, 0)
+        if item is None:
+            return None
+        temp_id = item.data(Qt.UserRole)
+        return self._pr_by_temp_id.get(temp_id)
 
     @property
     def periodic_reviews_current_row(self) -> int:

@@ -210,8 +210,7 @@ class Removal2020Controller:
         # if the living_arrangement_table has a current row, pass the corresponding obj item to the dialog
         current_row = self.dialog.living_arrangements_current_row
         if current_row >= 0:
-            item = self.dialog.ui.living_arrangements_table.item(current_row, 0)
-            data = item.data(Qt.UserRole) if item else None
+            data = self.dialog.selected_living_arrangement()
             controller = LivingArrangementController(self.dialog,
                                                      self.dialog.child_name,
                                                      data,
@@ -226,8 +225,7 @@ class Removal2020Controller:
 
     def do_delete_living_arrangement(self, *args, **kwargs):
         current_row = self.dialog.living_arrangements_current_row
-        item = self.dialog.ui.living_arrangements_table.item(current_row, 0)
-        data = item.data(Qt.UserRole) if item else None
+        data = self.dialog.selected_living_arrangement()
         if data in self.dialog.living_arrangements:
             self.dialog.living_arrangements.remove(data)
             self.dialog.refresh_living_arrangements()
@@ -257,8 +255,7 @@ class Removal2020Controller:
             self.do_save()
 
         current_row = self.dialog.permanency_plan_current_row
-        item = self.dialog.ui.permanency_plans_table.item(current_row, 0)
-        data = item.data(Qt.UserRole) if item else None
+        data = self.dialog.selected_permanency_plan()
         if data:
             controller = PermanencyPlanController(
                 self.dialog, self.dialog.child_name, data, file_type=self.file_type)
@@ -271,8 +268,7 @@ class Removal2020Controller:
         current_row = self.dialog.permanency_plan_current_row
         if 0 <= current_row <= len(self.dialog.permanency_plans):
             current_row = self.dialog.permanency_plan_current_row
-            item = self.dialog.ui.permanency_plans_table.item(current_row, 0)
-            data = item.data(Qt.UserRole) if item else None
+            data = self.dialog.selected_permanency_plan()
             if data in self.dialog.permanency_plans:
                 self.dialog.permanency_plans.remove(data)
                 self.dialog.refresh_permanency_plans()
@@ -379,8 +375,7 @@ class Removal2020Controller:
             self.do_add_case_worker_visit()
 
         current_row = self.dialog.case_worker_visit_current_row
-        item = self.dialog.ui.case_visits_table.item(current_row, 0)
-        data = item.data(Qt.UserRole) if item else None
+        data = self.dialog.selected_case_worker_visit()
         if data:
             controller = CaseWorkerVisitController(
                 self.dialog, self.dialog.child_name, data, file_type=self.file_type
@@ -396,8 +391,7 @@ class Removal2020Controller:
         current_row: int = self.dialog.case_worker_visit_current_row
         if 0 <= current_row < len(self.dialog.case_worker_visits):
             current_row = self.dialog.case_worker_visit_current_row
-            item = self.dialog.ui.case_visits_table.item(current_row, 0)
-            data = item.data(Qt.UserRole) if item else None
+            data = self.dialog.selected_case_worker_visit()
             if data in self.dialog.case_worker_visits:
                 self.dialog.case_worker_visits.remove(data)
                 self.dialog.refresh_case_worker_visits()
@@ -427,8 +421,7 @@ class Removal2020Controller:
             self.do_save()
 
         current_row = self.dialog.permanency_hearings_current_row
-        item = self.dialog.ui.permanency_hearings_table.item(current_row, 0)
-        data = item.data(Qt.UserRole) if item else None
+        data = self.dialog.selected_permanency_hearing()
         if data:
             controller = PermanencyHearingController(
                 self.dialog, self.dialog.child_name, data, file_type=self.file_type)
@@ -441,8 +434,7 @@ class Removal2020Controller:
         current_row = self.dialog.permanency_hearings_current_row
         if 0 <= current_row < len(self.dialog.permanency_hearings):
             current_row = self.dialog.permanency_hearings_current_row
-            item = self.dialog.ui.permanency_hearings_table.item(current_row, 0)
-            data = item.data(Qt.UserRole) if item else None
+            data = self.dialog.selected_permanency_hearing()
             if data in self.dialog.permanency_hearings:
                 self.dialog.permanency_hearings.remove(data)
                 self.dialog.refresh_permanency_hearings()
@@ -471,8 +463,7 @@ class Removal2020Controller:
             self.dialog.refresh_periodic_reviews()
             self.do_save()
         current_row = self.dialog.periodic_reviews_current_row
-        item = self.dialog.ui.periodic_reviews_table.item(current_row, 0)
-        data = item.data(Qt.UserRole) if item else None
+        data = self.dialog.selected_periodic_review()
         if data:
             controller = PeriodicReviewController(
                 self.dialog, self.dialog.child_name, data, file_type=self.file_type)
@@ -485,8 +476,7 @@ class Removal2020Controller:
         current_row: int = self.dialog.periodic_reviews_current_row
         if 0 <= current_row < len(self.dialog.periodic_reviews):
             current_row = self.dialog.periodic_reviews_current_row
-            item = self.dialog.ui.periodic_reviews_table.item(current_row, 0)
-            data = item.data(Qt.UserRole) if item else None
+            data = self.dialog.selected_periodic_review()
             if data in self.dialog.periodic_reviews:
                 self.dialog.periodic_reviews.remove(data)
                 self.dialog.refresh_periodic_reviews()
