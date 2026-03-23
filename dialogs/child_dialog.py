@@ -39,6 +39,7 @@ class ChildDialog(BaseDialog):
         self._reporting_period: str = ""
         self._reporting_periods: list[ReportingPeriod] = []
         self._child_data: list[BaseChild] = []
+        self._child_by_id: dict[int, BaseChild] = {}
 
         self.on_add: Optional[Callable] = None
         self.on_edit: Optional[Callable] = None
@@ -165,15 +166,20 @@ class ChildDialog(BaseDialog):
     @property
     def current_child(self) -> BaseChild | None:
         current_row = self.ui.child_table.currentRow()
+        if current_row < 0:
+            return None
         item = self.ui.child_table.item(current_row, 0)
-        if item is not None:
-            return item.data(Qt.UserRole)
+        if item is None:
+            return None
+        child_id = item.data(Qt.UserRole)
+        return self._child_by_id.get(child_id)
 
     def refresh_child_data(self):
         header = self.ui.child_table.horizontalHeader()
         sort_column = header.sortIndicatorSection()
         sort_order = header.sortIndicatorOrder()
         self.ui.child_table.setSortingEnabled(False)
+        self._child_by_id = {}
         self.ui.child_table.clearContents()
         for _ in range(self.ui.child_table.rowCount()):
             self.ui.child_table.removeRow(0)
@@ -181,7 +187,9 @@ class ChildDialog(BaseDialog):
         for row, data in enumerate(self.child_data):
             self.ui.child_table.insertRow(row)
             item = QTableWidgetItem(str(data.e4 if data.e4 else ""))
-            item.setData(Qt.UserRole, data)
+            item = QTableWidgetItem(str(data.e4 if data.e4 else ""))
+            item.setData(Qt.UserRole, data.id)
+            self._child_by_id[data.id] = data
             self.ui.child_table.setItem(row, 0, item)
             self.ui.child_table.setItem(row, 1, QTableWidgetItem(str(data.last_name if data.last_name else "")))
             self.ui.child_table.setItem(row, 2, QTableWidgetItem(str(data.first_name if data.first_name else "")))
