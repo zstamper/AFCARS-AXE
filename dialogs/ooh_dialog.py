@@ -54,8 +54,17 @@ class OOHDialog(BaseDialog):
         self._epa_tribes: list[Tribe] = []
         self._recognized_tribes: list[RecognizedTribe] = []
         self._second_parents: list[SecondParent] = []
+        self._pp_next_temp_id: int = 1
+        self._pp_by_temp_id: dict[int, SecondParent] = {}
+        self._pp_objid_to_temp_id: dict[int, int] = {}
         self._removals1993: list[Removal1993] = []
+        self._r1993_next_temp_id: int = 1
+        self._r1993_by_temp_id: dict[int, Removal1993] = {}
+        self._r1993_objid_to_temp_id: dict[int, int] = {}
         self._removals2020: list[Removal2020] = []
+        self._r2020_next_temp_id: int = 1
+        self._r2020_by_temp_id: dict[int, Removal2020] = {}
+        self._r2020_objid_to_temp_id: dict[int, int] = {}
         self._child_name: ChildName = ChildName()
         self.file_type: FileType = FileType.PRODUCTION
 
@@ -1236,18 +1245,29 @@ class OOHDialog(BaseDialog):
         self.ui.removal_1993_table.clearContents()
         for _ in range(self.ui.removal_1993_table.rowCount()):
             self.ui.removal_1993_table.removeRow(0)
+        self._r1993_by_temp_id = {}
+        seen_obj_ids = set()
         for data in self._removals1993:
+            obj_id = id(data)
+            seen_obj_ids.add(obj_id)
+            temp_id = self._r1993_objid_to_temp_id.get(obj_id)
+            if temp_id is None:
+                temp_id = self._r1993_next_temp_id
+                self._r1993_next_temp_id += 1
+                self._r1993_objid_to_temp_id[obj_id] = temp_id
+            self._r1993_by_temp_id[temp_id] = data
             row = self.ui.removal_1993_table.rowCount()
             self.ui.removal_1993_table.insertRow(row)
             item = QTableWidgetItem(str(data.e69) if data.e69 not in [None] else '')
-            item.setData(Qt.UserRole, data)
+            item.setData(Qt.UserRole, temp_id)
             self.ui.removal_1993_table.setItem(row, 0, item)
             self.ui.removal_1993_table.setItem(row, 1, QTableWidgetItem(str(data.e153) if data.e153 not in [None] else ''))
-            self.ui.removal_1993_table.setItem(row, 2, QTableWidgetItem(
-                self.E155_MESSAGES[data.e155] if data.e155 in self.E155_MESSAGES else ''))
             self.ui.removal_1993_table.setItem(
-                row, 3,
-                QTableWidgetItem(data.last_updated.strftime("%m/%d/%Y %H:%M") if data.last_updated else ""))
+                row, 2, QTableWidgetItem(self.E155_MESSAGES[data.e155] if data.e155 in self.E155_MESSAGES else ''))
+            self.ui.removal_1993_table.setItem(
+                row, 3, QTableWidgetItem(data.last_updated.strftime("%m/%d/%Y %H:%M") if data.last_updated else ""))
+        self._r1993_objid_to_temp_id = {
+            oid: tid for oid, tid in self._r1993_objid_to_temp_id.items() if oid in seen_obj_ids}
         self.ui.removal_1993_table.setSortingEnabled(True)
         if not self._has_sorted_removals1993:
             header.setSortIndicator(0, Qt.DescendingOrder)
@@ -1257,6 +1277,16 @@ class OOHDialog(BaseDialog):
         self.ui.removal_1993_table.setColumnWidth(0, 130)
         self.ui.removal_1993_table.setColumnWidth(2, 250)
         self.ui.removal_1993_table.setColumnWidth(3, 130)
+
+    def selected_removal1993(self):
+        row = self.ui.removal_1993_table.currentRow()
+        if row < 0:
+            return None
+        item = self.ui.removal_1993_table.item(row, 0)
+        if item is None:
+            return None
+        temp_id = item.data(Qt.UserRole)
+        return self._r1993_by_temp_id.get(temp_id)
 
     def current_removal1993_row(self) -> int:
         return self.ui.removal_1993_table.currentRow()
@@ -1278,18 +1308,31 @@ class OOHDialog(BaseDialog):
         self.ui.removal_2020_table.clearContents()
         for _ in range(self.ui.removal_2020_table.rowCount()):
             self.ui.removal_2020_table.removeRow(0)
+        self._r2020_by_temp_id = {}
+        seen_obj_ids = set()
         for data in self.removals2020:
-            row: int = self.ui.removal_2020_table.rowCount()
+            obj_id = id(data)
+            seen_obj_ids.add(obj_id)
+            temp_id = self._r2020_objid_to_temp_id.get(obj_id)
+            if temp_id is None:
+                temp_id = self._r2020_next_temp_id
+                self._r2020_next_temp_id += 1
+                self._r2020_objid_to_temp_id[obj_id] = temp_id
+            self._r2020_by_temp_id[temp_id] = data
+            row = self.ui.removal_2020_table.rowCount()
             self.ui.removal_2020_table.insertRow(row)
             item = QTableWidgetItem(str(data.e69) if data.e69 not in [None] else '')
-            item.setData(Qt.UserRole, data)
+            item.setData(Qt.UserRole, temp_id)
             self.ui.removal_2020_table.setItem(row, 0, item)
             self.ui.removal_2020_table.setItem(row, 1, QTableWidgetItem(str(data.e153) if data.e153 not in [None] else ''))
-            self.ui.removal_2020_table.setItem(row, 2, QTableWidgetItem(
-                self.E155_MESSAGES[data.e155] if data.e155 in self.E155_MESSAGES else ''))
+            self.ui.removal_2020_table.setItem(
+                row, 2,
+                QTableWidgetItem(self.E155_MESSAGES[data.e155] if data.e155 in self.E155_MESSAGES else ''))
             self.ui.removal_2020_table.setItem(
                 row, 3,
                 QTableWidgetItem(data.last_updated.strftime("%m/%d/%Y %H:%M") if data.last_updated else ""))
+        self._r2020_objid_to_temp_id = {
+            oid: tid for oid, tid in self._r2020_objid_to_temp_id.items() if oid in seen_obj_ids}
         self.ui.removal_2020_table.setSortingEnabled(True)
         if not self._has_sorted_removals2020:
             header.setSortIndicator(0, Qt.DescendingOrder)
@@ -1299,6 +1342,16 @@ class OOHDialog(BaseDialog):
         self.ui.removal_2020_table.setColumnWidth(0, 130)
         self.ui.removal_2020_table.setColumnWidth(2, 250)
         self.ui.removal_2020_table.setColumnWidth(3, 130)
+
+    def selected_removal2020(self):
+        row = self.ui.removal_2020_table.currentRow()
+        if row < 0:
+            return None
+        item = self.ui.removal_2020_table.item(row, 0)
+        if item is None:
+            return None
+        temp_id = item.data(Qt.UserRole)
+        return self._r2020_by_temp_id.get(temp_id)
 
     def current_removal2020_row(self) -> int:
         return self.ui.removal_2020_table.currentRow()
@@ -1317,9 +1370,6 @@ class OOHDialog(BaseDialog):
         self.e68 = data[0].e68
         self.refresh_second_parents()
 
-    def current_second_parents_row(self) -> int:
-        return self.ui.parent2tpr.currentRow()
-
     def refresh_second_parents(self) -> None:
         header = self.ui.parent2tpr.horizontalHeader()
         sort_column = header.sortIndicatorSection()
@@ -1328,25 +1378,33 @@ class OOHDialog(BaseDialog):
         self.ui.parent2tpr.clearContents()
         for _ in range(self.ui.parent2tpr.rowCount()):
             self.ui.parent2tpr.removeRow(0)
-        skip = True
-        for row, data in enumerate(self.second_parents):
-            if skip:  # element 0 is the 2nd parent; 1..end are putative parents
-                skip = False
-                continue
-            if row - 1 >= self.ui.parent2tpr.rowCount():
-                self.ui.parent2tpr.insertRow(row - 1)
+        self._pp_by_temp_id = {}
+        seen_obj_ids = set()
+        row_out = 0  # row index in the table (only putative parents)
+        for idx, data in enumerate(self.second_parents):
+            if idx == 0:
+                continue  # skip the real "2nd parent" entry; table shows only putative parents
+            obj_id = id(data)
+            seen_obj_ids.add(obj_id)
+            temp_id = self._pp_objid_to_temp_id.get(obj_id)
+            if temp_id is None:
+                temp_id = self._pp_next_temp_id
+                self._pp_next_temp_id += 1
+                self._pp_objid_to_temp_id[obj_id] = temp_id
+            self._pp_by_temp_id[temp_id] = data
+            self.ui.parent2tpr.insertRow(row_out)
             item = QTableWidgetItem(str(data.number))
-            item.setData(Qt.UserRole, data)
-            self.ui.parent2tpr.setItem(row - 1, 0, item)
-            self.ui.parent2tpr.setItem(row - 1, 1, QTableWidgetItem(str(data.e64_as_str())))
-            self.ui.parent2tpr.setItem(row - 1, 2, QTableWidgetItem(str(data.e66) if data.e66 else ''))
-            self.ui.parent2tpr.setItem(row - 1, 3, QTableWidgetItem(str(data.e68) if data.e68 else ''))
+            item.setData(Qt.UserRole, temp_id)
+            self.ui.parent2tpr.setItem(row_out, 0, item)
+            self.ui.parent2tpr.setItem(row_out, 1, QTableWidgetItem(str(data.e64_as_str())))
+            self.ui.parent2tpr.setItem(row_out, 2, QTableWidgetItem(str(data.e66) if data.e66 else ''))
+            self.ui.parent2tpr.setItem(row_out, 3, QTableWidgetItem(str(data.e68) if data.e68 else ''))
             self.ui.parent2tpr.setItem(
-                row -1, 4,
+                row_out, 4,
                 QTableWidgetItem(data.last_updated.strftime("%m/%d/%Y %H:%M") if data.last_updated else ""))
-            row += 1
-        while self.ui.parent2tpr.rowCount() > len(self.second_parents):
-            self.ui.parent2tpr.removeRow(self.ui.parent2tpr.rowCount() - 1)
+            row_out += 1
+        self._pp_objid_to_temp_id = {
+            oid: tid for oid, tid in self._pp_objid_to_temp_id.items() if oid in seen_obj_ids}
         self.ui.parent2tpr.setSortingEnabled(True)
         if not self._has_sorted_second_parents:
             header.setSortIndicator(0, Qt.AscendingOrder)
@@ -1355,3 +1413,16 @@ class OOHDialog(BaseDialog):
             header.setSortIndicator(sort_column, sort_order)
         self.ui.parent2tpr.setColumnWidth(3, 200)
         self.ui.parent2tpr.setColumnWidth(4, 130)
+
+    def selected_putative_parent(self):
+        row = self.ui.parent2tpr.currentRow()
+        if row < 0:
+            return None
+        item = self.ui.parent2tpr.item(row, 0)
+        if item is None:
+            return None
+        temp_id = item.data(Qt.UserRole)
+        return self._pp_by_temp_id.get(temp_id)
+    
+    def current_second_parents_row(self) -> int:
+        return self.ui.parent2tpr.currentRow()

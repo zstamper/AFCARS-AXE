@@ -238,8 +238,7 @@ class OOHController:
             self.dialog.refresh_removals1993()
             self.do_save()
         current_row = self.dialog.current_removal1993_row()
-        item = self.dialog.ui.removal_1993_table.item(current_row, 0)
-        selected_removal = item.data(Qt.UserRole) if item is not None else None
+        selected_removal = self.dialog.selected_removal1993()
         if selected_removal:
             controller = Removal1993Controller(self.dialog, self.dialog.child_name,
                 selected_removal, file_type=self.file_type)
@@ -249,8 +248,7 @@ class OOHController:
 
     def do_delete_removal1993(self) -> None:
         current_row = self.dialog.current_removal1993_row()
-        item = self.dialog.ui.removal_1993_table.item(current_row, 0)
-        selected_removal = item.data(Qt.UserRole) if item is not None else None
+        selected_removal = self.dialog.selected_removal1993()
         if selected_removal in self.dialog.removals1993:
             self.dialog.removals1993.remove(selected_removal)
             self.dialog.refresh_removals1993()
@@ -283,8 +281,7 @@ class OOHController:
             self.dialog.refresh_removals2020()
             self.do_save()
         current_row = self.dialog.current_removal2020_row()
-        item = self.dialog.ui.removal_2020_table.item(current_row, 0)
-        selected_removal = item.data(Qt.UserRole) if item is not None else None
+        selected_removal = self.dialog.selected_removal2020()
         if selected_removal:
             controller = Removal2020Controller(
                 self.dialog,
@@ -299,8 +296,7 @@ class OOHController:
 
     def do_delete_removal2020(self) -> None:
         current_row = self.dialog.current_removal2020_row()
-        item = self.dialog.ui.removal_2020_table.item(current_row, 0)
-        selected_removal = item.data(Qt.UserRole) if item is not None else None
+        selected_removal = self.dialog.selected_removal2020()
         if selected_removal in self.dialog.removals2020:
             self.dialog.removals2020.remove(selected_removal)
             self.dialog.refresh_removals2020()
@@ -339,8 +335,7 @@ class OOHController:
             self.do_save()
         current_row = self.dialog.current_second_parents_row()
         if current_row >= 0:
-            item = self.dialog.ui.parent2tpr.item(current_row, 0)
-            selected_parent = item.data(Qt.UserRole) if item is not None else None
+            selected_parent = self.dialog.selected_putative_parent()
             if selected_parent:
                 controller = SecondParentController(self.dialog, child_name=self.dialog.child_name,
                     data=selected_parent)
@@ -353,7 +348,7 @@ class OOHController:
     def do_delete_putative_parent(self) -> None:
         current_row = self.dialog.current_second_parents_row()
         item = self.dialog.ui.parent2tpr.item(current_row, 0)
-        selected_parent = item.data(Qt.UserRole) if item is not None else None
+        selected_parent = self.dialog.selected_putative_parent()
         if selected_parent in self.dialog.second_parents:
             self.dialog.second_parents.remove(selected_parent)
             skip = True
